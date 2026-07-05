@@ -119,7 +119,7 @@ export function HeroSection() {
             <div className="space-y-4">
               <h1 className="max-w-3xl font-sans text-4xl leading-[1.15] font-bold tracking-tight text-foreground md:text-5xl lg:text-[44px]">
                 Hi, I&apos;m Ariel Batoon. <br className="hidden sm:inline" />
-                Building premium software.
+                Building Quality Software.
               </h1>
               <p className="max-w-2xl font-sans text-base leading-relaxed text-neutral-500 md:text-lg dark:text-neutral-400">
                 Full-Stack Engineer partnering with ambitious startups to design, build, and scale custom web applications, mobile apps, and AI integrations.
@@ -151,7 +151,9 @@ export function HeroSection() {
 
           {/* Right Column (Interactive 3D Stack Cards) */}
           <div className="relative flex h-[380px] w-full items-center justify-center overflow-hidden lg:overflow-visible lg:col-span-5 lg:pr-12">
-            <div 
+            <motion.div 
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="relative flex h-full w-full max-w-[250px] items-center justify-center xs:max-w-[290px] sm:max-w-[330px] lg:max-w-[340px]"
               style={{ perspective: 1200, transformStyle: "preserve-3d" }}
             >
@@ -321,7 +323,17 @@ export function HeroSection() {
                   </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
+
+            {/* Dynamic ambient shadow representing vertical float displacement */}
+            <motion.div
+              animate={{
+                scaleX: [0.9, 1.05, 0.9],
+                opacity: [0.35, 0.18, 0.35],
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute bottom-2 left-1/2 h-4 w-[60%] -translate-x-1/2 rounded-[100%] bg-neutral-900/10 blur-xl dark:bg-black/55 pointer-events-none"
+            />
           </div>
         </div>
 
