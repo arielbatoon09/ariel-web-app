@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Section } from "@/components/common/section";
-import { NAV_LINKS, SOCIALS, FOOTER_SERVICES, CONTACT_INFO } from "@/constants/navigation";
+import { NAV_LINKS, SOCIALS, CONTACT_INFO } from "@/constants/navigation";
 
 export function PublicFooter() {
   const currentYear = new Date().getFullYear();
@@ -16,29 +18,31 @@ export function PublicFooter() {
       </div>
 
       <div className="relative z-10 pt-8 pb-6 md:pt-12 md:pb-8">
-        {/* Grid container for 5 footer columns */}
+        {/* Grid container for footer columns */}
         <div className="grid grid-cols-2 gap-12 pb-12 md:grid-cols-3 lg:grid-cols-5 lg:gap-8">
           {/* Column 1: Brand & Logo */}
           <div className="col-span-2 space-y-4 pr-0 md:col-span-3 lg:col-span-1 lg:pr-4">
             <Link href="/" className="flex w-fit items-center space-x-3">
-              <div className="relative flex h-6 items-center">
+              <div className="relative flex h-5 items-center">
                 <Image
                   src="/icons/ab-logo-text-dark.png"
-                  className="block h-12 w-auto object-contain dark:hidden"
+                  className="block h-10 w-auto object-contain dark:hidden"
                   alt="ab logo"
-                  width={100}
-                  height={100}
+                  width={80}
+                  height={80}
                 />
                 <Image
                   src="/icons/ab-logo-text-white.png"
-                  className="hidden h-12 w-auto object-contain dark:block"
+                  className="hidden h-10 w-auto object-contain dark:block"
                   alt="ab logo"
-                  width={100}
-                  height={100}
+                  width={80}
+                  height={80}
                 />
               </div>
-              <div className="h-3.5 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-              <span className="text-[12px] font-medium tracking-[0.2em] uppercase">Ariel Batoon</span>
+              <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
+              <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">
+                Ariel Batoon
+              </span>
             </Link>
             <p className="max-w-sm pt-1 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
               Engineering premium digital products and experiences for ambitious businesses that refuse to settle. Built once, built right.
@@ -49,11 +53,6 @@ export function PublicFooter() {
           <div className="space-y-4">
             <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Navigation</span>
             <ul className="space-y-2.5">
-              <li>
-                <Link href="/" className="text-sm text-neutral-600 transition-colors duration-200 hover:text-foreground dark:text-neutral-400">
-                  Home
-                </Link>
-              </li>
               {NAV_LINKS.map((item) => (
                 <li key={item.label}>
                   <Link
@@ -67,21 +66,7 @@ export function PublicFooter() {
             </ul>
           </div>
 
-          {/* Column 3: Services */}
-          <div className="space-y-4">
-            <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Services</span>
-            <ul className="space-y-2.5">
-              {FOOTER_SERVICES.map((item) => (
-                <li key={item.label} className="text-sm text-neutral-600 dark:text-neutral-400">
-                  <Link href={item.href} className="transition-colors duration-200 hover:text-foreground">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 4: Socials */}
+          {/* Column 3: Socials */}
           <div className="space-y-4">
             <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Socials</span>
             <ul className="space-y-2.5">
@@ -100,10 +85,40 @@ export function PublicFooter() {
             </ul>
           </div>
 
+          {/* Column 4: Legal */}
+          <div className="space-y-4">
+            <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Legal</span>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/privacy" className="text-sm text-neutral-600 transition-colors duration-200 hover:text-foreground dark:text-neutral-400">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookies" className="text-sm text-neutral-600 transition-colors duration-200 hover:text-foreground dark:text-neutral-400">
+                  Cookies Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-sm text-neutral-600 transition-colors duration-200 hover:text-foreground dark:text-neutral-400">
+                  Terms & Conditions
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Column 5: Contact */}
           <div className="space-y-4">
             <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Contact</span>
             <ul className="space-y-2.5">
+              <li>
+                <Link
+                  href={`mailto:${CONTACT_INFO.email}`}
+                  className="block break-all text-sm text-neutral-600 transition-colors duration-200 hover:text-foreground dark:text-neutral-400 sm:break-normal"
+                >
+                  {CONTACT_INFO.email}
+                </Link>
+              </li>
               <li>
                 <Link
                   href={CONTACT_INFO.whatsapp}
@@ -122,7 +137,7 @@ export function PublicFooter() {
                   {CONTACT_INFO.phone}
                 </Link>
               </li>
-              <li className="dark:text-neutral-505 font-mono text-sm text-neutral-400">{CONTACT_INFO.location}</li>
+              <li className="font-mono text-sm text-neutral-400 dark:text-neutral-500">{CONTACT_INFO.location}</li>
             </ul>
           </div>
         </div>
@@ -132,19 +147,14 @@ export function PublicFooter() {
 
         {/* Bottom copyright/founder row */}
         <div className="flex flex-col items-center justify-between gap-4 font-mono text-[11px] text-neutral-400 sm:flex-row dark:text-neutral-500">
-          <div>&copy; {currentYear} Ariel Batoon. All rights reserved.</div>
-          <div className="flex gap-4">
-            <Link href="/privacy" className="transition-colors hover:text-foreground">
-              Privacy
-            </Link>
-            <Link href="/cookies" className="transition-colors hover:text-foreground">
-              Cookies
-            </Link>
-            <Link href="/terms" className="transition-colors hover:text-foreground">
-              Terms
-            </Link>
-          </div>
-          <div>Founded by Ariel Batoon</div>
+          <div className="order-1">&copy; {currentYear} Ariel Batoon. All rights reserved.</div>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="order-3 flex cursor-pointer items-center gap-1 transition-colors hover:text-foreground sm:order-2"
+          >
+            Back to Top &uarr;
+          </button>
+          <div className="order-2 sm:order-3">Founded by Ariel Batoon</div>
         </div>
       </div>
     </Section>

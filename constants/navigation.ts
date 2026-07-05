@@ -21,11 +21,9 @@ export const NAV_LINKS: NavLink[] = [
 ];
 
 export const SOCIALS: SocialLink[] = [
-  { label: "GitHub", href: "https://github.com" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "Twitter / X", href: "https://twitter.com" },
-  { label: "Dribbble", href: "https://dribbble.com" },
-  { label: "Read.cv", href: "https://read.cv" },
+  { label: "GitHub", href: "https://github.com/arielbatoon09?tab=repositories" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/arielbatoon" },
+  { label: "Facebook", href: "https://www.facebook.com/itsarielbatoon" },
 ];
 
 export const FOOTER_SERVICES: FooterService[] = [
@@ -37,8 +35,9 @@ export const FOOTER_SERVICES: FooterService[] = [
 ];
 
 export const CONTACT_INFO = {
-  phone: "+63 945 568 4578",
-  whatsapp: "https://wa.me/639455684578",
-  whatsappLabel: "+63 945 568 4578",
-  location: "Zamboanga City, Philippines",
+  email: "info.arielbatoon@gmail.com",
+  phone: "+63 967 421 4639",
+  whatsapp: "https://wa.me/639674214639",
+  whatsappLabel: "+63 967 421 4639",
+  location: "Cebu City, Philippines",
 };
