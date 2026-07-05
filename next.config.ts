@@ -3,12 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
+    contentDispositionType: "attachment",
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'cdn.simpleicons.org',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "cdn.simpleicons.org",
+        pathname: "/**",
       },
     ],
   },

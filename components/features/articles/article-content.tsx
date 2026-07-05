@@ -9,15 +9,13 @@ interface ArticleContentProps {
 export function ArticleContent({ article }: ArticleContentProps) {
   return (
     <Section id="article-body" showTopLine={false} showBottomLine={true}>
-      <div className="max-w-3xl mx-auto space-y-10">
+      <div className="mx-auto max-w-3xl space-y-10">
         {/* Main Article Content */}
         <div className="space-y-10">
           {article.sections.map((section, idx) => (
             <div key={idx} className="space-y-4">
-              <h2 className="text-xl md:text-2xl font-bold text-foreground font-sans tracking-tight">
-                {section.title}
-              </h2>
-              <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-455 leading-relaxed font-sans whitespace-pre-line">
+              <h2 className="font-sans text-xl font-bold tracking-tight text-foreground md:text-2xl">{section.title}</h2>
+              <p className="dark:text-neutral-455 font-sans text-sm leading-relaxed whitespace-pre-line text-neutral-600 md:text-base">
                 {section.body}
               </p>
             </div>

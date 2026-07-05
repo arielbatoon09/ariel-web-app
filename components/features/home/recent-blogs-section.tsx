@@ -13,13 +13,10 @@ export function RecentBlogsSection() {
     <Section id="blog" containerClassName="pt-8 md:pt-12 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-8">
         {/* Section Heading */}
-        <SectionHeading
-          label="Writing"
-          title="Recent articles & engineering insights."
-        />
+        <SectionHeading label="Writing" title="Recent articles & engineering insights." />
 
         {/* 3-Column Blog Grid utilizing the common GridCard */}
-        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-dashed border-neutral-300 dark:border-neutral-700">
+        <div className="grid grid-cols-1 border-t border-l border-dashed border-neutral-300 md:grid-cols-3 dark:border-neutral-700">
           {RECENT_BLOGS.map((post) => (
             <GridCard
               key={post.id}
@@ -41,10 +38,10 @@ export function RecentBlogsSection() {
         <div className="flex justify-center pt-4">
           <Link
             href="/articles"
-            className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-foreground dark:text-neutral-500 dark:hover:text-foreground transition-colors duration-200 group"
+            className="group inline-flex items-center gap-1.5 font-mono text-xs tracking-wider text-neutral-400 uppercase transition-colors duration-200 hover:text-foreground dark:text-neutral-500 dark:hover:text-foreground"
           >
             All Articles
-            <ArrowRight className="size-3.5 group-hover:translate-x-0.5 transition-transform duration-200" />
+            <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
         </div>
       </div>

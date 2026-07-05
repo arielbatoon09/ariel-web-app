@@ -19,19 +19,21 @@ interface Testimonial {
 const TESTIMONIALS: Testimonial[] = [
   {
     id: "01",
-    quote: "I'm genuinely impressed with Ariel's web development skills at such a young age. He's easy to work with, professional, and I'd happily work with him again anytime.",
+    quote:
+      "I'm genuinely impressed with Ariel's web development skills at such a young age. He's easy to work with, professional, and I'd happily work with him again anytime.",
     author: "Bea Suavengco",
     role: "CEO",
     company: "UrbanFarmer TV",
-    highlight: "Forbes 30 Under 30, 2025"
+    highlight: "Forbes 30 Under 30, 2025",
   },
   {
     id: "02",
-    quote: "Ariel brought our vision to life in record time. His technical precision and frontend styling made our dashboard look and feel incredibly premium.",
+    quote:
+      "Ariel brought our vision to life in record time. His technical precision and frontend styling made our dashboard look and feel incredibly premium.",
     author: "David Chen",
     role: "CTO",
     company: "Ventus Health",
-    highlight: "Fast-Track Seed Funded"
+    highlight: "Fast-Track Seed Funded",
   },
   {
     id: "03",
@@ -39,16 +41,17 @@ const TESTIMONIALS: Testimonial[] = [
     author: "Sarah Jenkins",
     role: "VP of Product",
     company: "Craftly",
-    highlight: "Series A Scaleup"
+    highlight: "Series A Scaleup",
   },
   {
     id: "04",
-    quote: "A professional partner from day one. Ariel doesn't just write code—he understands business requirements and designs systems to support them.",
+    quote:
+      "A professional partner from day one. Ariel doesn't just write code—he understands business requirements and designs systems to support them.",
     author: "Marcus Sterling",
     role: "Founder",
     company: "Coreflow API",
-    highlight: "Y Combinator W25"
-  }
+    highlight: "Y Combinator W25",
+  },
 ];
 
 export function TestimonialSection() {
@@ -58,7 +61,7 @@ export function TestimonialSection() {
     gap: 24,
     cardSelector: ".testimonial-card",
     autoPlay: !isHovered,
-    autoPlayInterval: 5000
+    autoPlayInterval: 5000,
   });
 
   const canScrollLeft = activeIndex > 0;
@@ -71,14 +74,14 @@ export function TestimonialSection() {
         <SectionHeading
           label="Client Feedback"
           title="What partners are saying."
-          className="px-4 md:px-8 w-full"
+          className="w-full px-4 md:px-8"
           action={
             <div className="flex items-center gap-2">
               <button
                 disabled={!canScrollLeft}
                 className={cn(
-                  "rounded-none size-10 flex items-center justify-center cursor-pointer border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 transition-all duration-300 bg-background text-foreground",
-                  !canScrollLeft && "opacity-30 pointer-events-none"
+                  "flex size-10 cursor-pointer items-center justify-center rounded-none border border-dashed border-neutral-300 bg-background text-foreground transition-all duration-300 hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-100",
+                  !canScrollLeft && "pointer-events-none opacity-30"
                 )}
                 onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
                 aria-label="Previous testimonial"
@@ -88,8 +91,8 @@ export function TestimonialSection() {
               <button
                 disabled={!canScrollRight}
                 className={cn(
-                  "rounded-none size-10 flex items-center justify-center cursor-pointer border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 transition-all duration-300 bg-background text-foreground",
-                  !canScrollRight && "opacity-30 pointer-events-none"
+                  "flex size-10 cursor-pointer items-center justify-center rounded-none border border-dashed border-neutral-300 bg-background text-foreground transition-all duration-300 hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-100",
+                  !canScrollRight && "pointer-events-none opacity-30"
                 )}
                 onClick={() => scrollToCard(Math.min(TESTIMONIALS.length - 1, activeIndex + 1))}
                 aria-label="Next testimonial"
@@ -103,8 +106,8 @@ export function TestimonialSection() {
         {/* Scrollable Container with fading edge overlays */}
         <div className="relative w-full">
           {/* Subtle fading edge highlights */}
-          <div className="hidden md:block absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="hidden md:block absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          <div className="pointer-events-none absolute top-0 bottom-0 left-0 z-10 hidden w-16 bg-gradient-to-r from-background to-transparent md:block" />
+          <div className="pointer-events-none absolute top-0 right-0 bottom-0 z-10 hidden w-16 bg-gradient-to-l from-background to-transparent md:block" />
 
           {/* Horizontal scroll track */}
           <div
@@ -112,7 +115,7 @@ export function TestimonialSection() {
             onScroll={handleScroll}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-6 px-4 md:px-8 pb-4 scroll-smooth no-scrollbar"
+            className="no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-4 pb-4 md:px-8"
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
@@ -121,39 +124,37 @@ export function TestimonialSection() {
             {TESTIMONIALS.map((item) => (
               <div
                 key={item.id}
-                className="testimonial-card group relative w-[280px] sm:w-[360px] md:w-[420px] shrink-0 snap-start p-6 md:p-8 border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-all duration-300 select-none"
+                className="testimonial-card group relative w-[280px] shrink-0 snap-start border border-dashed border-neutral-300 bg-neutral-50 p-6 transition-all duration-300 select-none hover:border-neutral-900 hover:bg-neutral-100 sm:w-[360px] md:w-[420px] md:p-8 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:border-neutral-100 dark:hover:bg-neutral-900/90"
               >
                 {/* Plus (+) Corner Markers */}
-                <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-550 dark:group-hover:text-neutral-400 group-hover:scale-125 transition-all duration-300">
+                <div className="group-hover:text-neutral-550 absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 transition-all duration-300 group-hover:scale-125 dark:text-neutral-700 dark:group-hover:text-neutral-400">
                   +
                 </div>
-                <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-550 dark:group-hover:text-neutral-400 group-hover:scale-125 transition-all duration-300">
+                <div className="group-hover:text-neutral-550 absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 text-[10px] text-neutral-300 transition-all duration-300 group-hover:scale-125 dark:text-neutral-700 dark:group-hover:text-neutral-400">
                   +
                 </div>
 
-                <div className="space-y-6 flex flex-col justify-between h-full">
+                <div className="flex h-full flex-col justify-between space-y-6">
                   <div className="space-y-4">
                     {/* Quote Icon */}
-                    <Quote className="size-6 text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-400 transition-colors" />
+                    <Quote className="size-6 text-neutral-300 transition-colors group-hover:text-neutral-400 dark:text-neutral-700" />
 
                     {/* Body Quote */}
-                    <p className="text-xs sm:text-sm md:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans min-h-[96px] md:min-h-[110px]">
+                    <p className="min-h-[96px] font-sans text-xs leading-relaxed text-neutral-600 sm:text-sm md:min-h-[110px] md:text-base dark:text-neutral-300">
                       “{item.quote}”
                     </p>
                   </div>
 
                   {/* Metadata Row */}
-                  <div className="pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-800 space-y-2">
-                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                      <span className="text-xs sm:text-sm font-bold text-foreground font-sans">
-                        {item.author}
-                      </span>
-                      <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-neutral-450 dark:text-neutral-500">
+                  <div className="space-y-2 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">
+                    <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline">
+                      <span className="font-sans text-xs font-bold text-foreground sm:text-sm">{item.author}</span>
+                      <span className="text-neutral-450 font-mono text-[9px] tracking-wider uppercase sm:text-[10px] dark:text-neutral-500">
                         {item.role}, {item.company}
                       </span>
                     </div>
                     {item.highlight && (
-                      <div className="text-[9px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 w-fit">
+                      <div className="w-fit font-mono text-[9px] tracking-wider text-emerald-600 uppercase dark:text-emerald-400">
                         {item.highlight}
                       </div>
                     )}
@@ -166,16 +167,16 @@ export function TestimonialSection() {
 
         {/* Pagination Dots (Calculated based on actual scroll pages) */}
         {TESTIMONIALS.length > 1 && (
-          <div className="flex justify-center items-center gap-3 pt-2">
+          <div className="flex items-center justify-center gap-3 pt-2">
             {TESTIMONIALS.map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToCard(index)}
                 className={cn(
-                  "h-1.5 transition-all duration-300 rounded-none cursor-pointer",
+                  "h-1.5 cursor-pointer rounded-none transition-all duration-300",
                   activeIndex === index
                     ? "w-8 bg-neutral-900 dark:bg-neutral-100"
-                    : "w-2 bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-455 dark:hover:bg-neutral-500"
+                    : "hover:bg-neutral-455 w-2 bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-500"
                 )}
                 aria-label={`Go to slide ${index + 1}`}
               />

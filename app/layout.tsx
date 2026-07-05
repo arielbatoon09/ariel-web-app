@@ -19,7 +19,8 @@ export const metadata = {
     default: "Ariel Batoon | Freelance Software Engineer & Web Developer in Cebu",
     template: "%s | Ariel Batoon - Software Engineer Cebu",
   },
-  description: "Ariel Batoon is a premium freelance Software Engineer and Full-Stack Web Developer based in Cebu City, Philippines. Building high-performance SaaS, MVPs, and custom mobile apps for local and global clients.",
+  description:
+    "Ariel Batoon is a premium freelance Software Engineer and Full-Stack Web Developer based in Cebu City, Philippines. Building high-performance SaaS, MVPs, and custom mobile apps for local and global clients.",
   keywords: [
     "Web Development Cebu",
     "AI Developer Cebu",
@@ -48,7 +49,7 @@ export const metadata = {
     "geo.region": "PH-7",
     "geo.placename": "Cebu City",
     "geo.position": "10.3157;123.8854",
-    "ICBM": "10.3157, 123.8854",
+    ICBM: "10.3157, 123.8854",
   },
   icons: {
     icon: [
@@ -56,9 +57,7 @@ export const metadata = {
       { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon/favicon.ico", sizes: "any" },
     ],
-    apple: [
-      { url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
 };
 

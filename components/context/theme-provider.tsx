@@ -10,11 +10,7 @@ export function useCircularTheme() {
     (event?: React.MouseEvent | MouseEvent) => {
       const isDark = resolvedTheme === "dark";
 
-      if (
-        typeof document === "undefined" ||
-        !document.startViewTransition ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
+      if (typeof document === "undefined" || !document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         setTheme(isDark ? "light" : "dark");
         return;
       }
@@ -28,10 +24,7 @@ export function useCircularTheme() {
         y = event.clientY;
       }
 
-      const endRadius = Math.hypot(
-        Math.max(x, window.innerWidth - x),
-        Math.max(y, window.innerHeight - y)
-      );
+      const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
 
       const transition = document.startViewTransition(() => {
         setTheme(isDark ? "light" : "dark");
@@ -40,10 +33,7 @@ export function useCircularTheme() {
       transition.ready.then(() => {
         document.documentElement.animate(
           {
-            clipPath: [
-              `circle(0px at ${x}px ${y}px)`,
-              `circle(${endRadius}px at ${x}px ${y}px)`,
-            ],
+            clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`],
           },
           {
             duration: 400,

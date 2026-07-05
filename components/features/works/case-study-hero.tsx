@@ -16,25 +16,19 @@ export function CaseStudyHero({ project }: CaseStudyHeroProps) {
 
   return (
     <Section id="cs-hero" containerClassName="pt-4 md:pt-6 pb-12 md:pb-20" showTopLine={false} showBottomLine={true}>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        <div className="lg:col-span-7 space-y-6">
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
+        <div className="space-y-6 lg:col-span-7">
           <BackButton href="/works" label="Back to Archive" />
-          
-          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-neutral-400 dark:text-neutral-500 block">
-            {project.tag}
-          </span>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground font-sans leading-tight">
-            {project.title}
-          </h1>
-          <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans max-w-2xl">
-            {project.description}
-          </p>
+
+          <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">{project.tag}</span>
+          <h1 className="font-sans text-3xl leading-tight font-bold tracking-tight text-foreground md:text-5xl">{project.title}</h1>
+          <p className="max-w-2xl font-sans text-base leading-relaxed text-neutral-600 md:text-lg dark:text-neutral-400">{project.description}</p>
 
           {/* Quick CTAs */}
           <div className="flex flex-wrap gap-3 pt-2">
             {caseStudy.liveUrl && (
               <Link href={caseStudy.liveUrl} target="_blank" rel="noopener noreferrer">
-                <Button size="sm" className="rounded-none font-mono text-xs uppercase tracking-wider cursor-pointer">
+                <Button size="sm" className="cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase">
                   Live Demo
                   <ExternalLink className="ml-1.5 size-3.5" />
                 </Button>
@@ -42,7 +36,7 @@ export function CaseStudyHero({ project }: CaseStudyHeroProps) {
             )}
             {caseStudy.githubUrl && (
               <Link href={caseStudy.githubUrl} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="rounded-none border-dashed font-mono text-xs uppercase tracking-wider cursor-pointer">
+                <Button variant="outline" size="sm" className="cursor-pointer rounded-none border-dashed font-mono text-xs tracking-wider uppercase">
                   GitHub Code
                   <Globe className="ml-1.5 size-3.5" />
                 </Button>
@@ -52,37 +46,26 @@ export function CaseStudyHero({ project }: CaseStudyHeroProps) {
         </div>
 
         {/* Project Specs Metadata Block */}
-        <div className="lg:col-span-5 w-full border border-dashed border-neutral-300 dark:border-neutral-700 p-6 bg-neutral-50 dark:bg-neutral-900/60 space-y-4 lg:sticky lg:top-24 self-start">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-foreground border-b border-dashed border-neutral-300 dark:border-neutral-700 pb-2.5">
+        <div className="w-full space-y-4 self-start border border-dashed border-neutral-300 bg-neutral-50 p-6 lg:sticky lg:top-24 lg:col-span-5 dark:border-neutral-700 dark:bg-neutral-900/60">
+          <h3 className="border-b border-dashed border-neutral-300 pb-2.5 font-mono text-xs tracking-wider text-foreground uppercase dark:border-neutral-700">
             Project Parameters
           </h3>
-          
+
           <div className="space-y-3.5 font-mono text-xs">
-            <ParameterRow
-              icon={<User className="size-3.5" />}
-              label="Role:"
-              value={caseStudy.role}
-            />
-            <ParameterRow
-              icon={<Calendar className="size-3.5" />}
-              label="Timeline:"
-              value={caseStudy.timeline}
-            />
-            {caseStudy.client && (
-              <ParameterRow
-                icon={<Building2 className="size-3.5" />}
-                label="Client:"
-                value={caseStudy.client}
-              />
-            )}
-            <div className="pt-2 border-t border-dashed border-neutral-250 dark:border-neutral-800">
+            <ParameterRow icon={<User className="size-3.5" />} label="Role:" value={caseStudy.role} />
+            <ParameterRow icon={<Calendar className="size-3.5" />} label="Timeline:" value={caseStudy.timeline} />
+            {caseStudy.client && <ParameterRow icon={<Building2 className="size-3.5" />} label="Client:" value={caseStudy.client} />}
+            <div className="border-neutral-250 border-t border-dashed pt-2 dark:border-neutral-800">
               <ParameterRow
                 icon={<Cpu className="size-3.5" />}
                 label="Stack:"
                 value={
-                  <div className="flex flex-wrap gap-1 justify-end max-w-full">
+                  <div className="flex max-w-full flex-wrap justify-end gap-1">
                     {project.tags.map((t) => (
-                      <span key={t} className="text-[9px] px-1.5 py-0.5 rounded border border-neutral-200 dark:border-neutral-800 bg-background text-neutral-600 dark:text-neutral-400">
+                      <span
+                        key={t}
+                        className="rounded border border-neutral-200 bg-background px-1.5 py-0.5 text-[9px] text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+                      >
                         {t}
                       </span>
                     ))}

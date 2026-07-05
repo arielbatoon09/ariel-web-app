@@ -8,46 +8,44 @@ import { CtaSection } from "@/components/common/cta-section";
 
 export const metadata = {
   title: "About Me | Full-Stack Developer Cebu",
-  description: "Learn more about Ariel Batoon, a Cebu-based Software Engineer specializing in Next.js, mobile apps, database design, and premium SaaS architecture.",
+  description:
+    "Learn more about Ariel Batoon, a Cebu-based Software Engineer specializing in Next.js, mobile apps, database design, and premium SaaS architecture.",
 };
 
 export default function AboutPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    "mainEntity": {
+    mainEntity: {
       "@type": "Person",
-      "name": "Ariel Batoon",
-      "jobTitle": "Full-Stack Software Engineer",
-      "url": "https://arielbatoon.com/about",
-      "address": {
+      name: "Ariel Batoon",
+      jobTitle: "Full-Stack Software Engineer",
+      url: "https://arielbatoon.com/about",
+      address: {
         "@type": "PostalAddress",
-        "addressLocality": "Cebu City",
-        "addressRegion": "Cebu",
-        "addressCountry": "PH"
+        addressLocality: "Cebu City",
+        addressRegion: "Cebu",
+        addressCountry: "PH",
       },
-      "knowsAbout": [
+      knowsAbout: [
         "Software Engineering",
         "Full-Stack Web Development",
         "React Native Mobile App Development",
         "Next.js",
         "Node.js",
         "PostgreSQL",
-        "Database Scoping"
+        "Database Scoping",
       ],
-      "alumniOf": {
+      alumniOf: {
         "@type": "EducationalOrganization",
-        "name": "Bachelor of Science in Information Technology (Software Engineering)"
-      }
-    }
+        name: "Bachelor of Science in Information Technology (Software Engineering)",
+      },
+    },
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <AboutProfileIntroSection />
       <AboutExperienceTimelineSection />
       <AboutTechStackSection />

@@ -7,33 +7,38 @@ interface UseArchiveFilterOptions<T> {
   itemsPerPage?: number;
 }
 
-export function useArchiveFilter<T>({
-  items,
-  searchKeys,
-  itemsPerPage = 6
-}: UseArchiveFilterOptions<T>) {
+export function useArchiveFilter<T>({ items, searchKeys, itemsPerPage = 6 }: UseArchiveFilterOptions<T>) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
   // Filter & Search Logic
   const filteredItems = useMemo(() => {
-    return items.filter((item: any) => {
+    return items.filter((item: T) => {
+      const itemRecord = item as Record<string, unknown>;
       // Category Match
       const matchesCategory =
         activeCategory === "all" ||
-        (item.categories && item.categories.includes(activeCategory)) ||
-        (item.category && item.category === activeCategory);
+        (Array.isArray(itemRecord.categories) && itemRecord.categories.includes(activeCategory)) ||
+        (typeof itemRecord.category === "string" && itemRecord.category === activeCategory);
 
       // Search Query Match
       const matchesSearch =
         searchQuery === "" ||
         searchKeys.some((key) => {
-          const val = item[key];
+          const val = itemRecord[key as string];
           if (Array.isArray(val)) {
-            return val.some((tag: string) =>
-              tag.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            return val.some((tag: unknown) => typeof tag === "string" && tag.toLowerCase().includes(searchQuery.toLowerCase()));
           }
           if (typeof val === "string") {
             return val.toLowerCase().includes(searchQuery.toLowerCase());
@@ -45,11 +50,6 @@ export function useArchiveFilter<T>({
     });
   }, [items, activeCategory, searchQuery, searchKeys]);
 
-  // Reset pagination when category or search changes
-  useMemo(() => {
-    setCurrentPage(1);
-  }, [activeCategory, searchQuery]);
-
   // Pagination calculations
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -59,13 +59,13 @@ export function useArchiveFilter<T>({
 
   return {
     activeCategory,
-    setActiveCategory,
+    setActiveCategory: handleCategoryChange,
     searchQuery,
-    setSearchQuery,
+    setSearchQuery: handleSearchChange,
     currentPage,
     setCurrentPage,
     totalPages,
     filteredItems,
-    paginatedItems
+    paginatedItems,
   };
 }

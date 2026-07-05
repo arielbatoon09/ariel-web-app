@@ -13,10 +13,10 @@ export function CrispChat() {
   useEffect(() => {
     // Prevent multiple initializations
     if (window.$crisp) return;
-    
+
     window.$crisp = [];
     window.CRISP_WEBSITE_ID = "894b5955-b05e-457d-b572-d374a5a23462";
-    
+
     const d = document;
     const s = d.createElement("script");
     s.src = "https://client.crisp.chat/l.js";

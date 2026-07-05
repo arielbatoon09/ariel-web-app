@@ -10,11 +10,12 @@ export function ThemeToggle() {
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return <div className="w-[60px] h-8" />;
+    return <div className="h-8 w-[60px]" />;
   }
 
   const isDark = resolvedTheme === "dark";
@@ -22,35 +23,27 @@ export function ThemeToggle() {
   return (
     <button
       onClick={(e) => toggleTheme(e)}
-      className="relative w-[60px] h-8 rounded-none transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-500 border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-950 flex items-center"
+      className="relative flex h-8 w-[60px] items-center rounded-none border border-dashed border-neutral-300 bg-neutral-50 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:focus-visible:ring-neutral-500"
       aria-label="Toggle theme"
     >
       {/* Sliding Active Backdrop */}
       <motion.div
         layout
         transition={{ type: "spring", stiffness: 380, damping: 28 }}
-        className="absolute top-[2px] bottom-[2px] w-[26px] rounded-none bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xs"
+        className="absolute top-[2px] bottom-[2px] w-[26px] rounded-none border border-neutral-200 bg-white shadow-xs dark:border-neutral-800 dark:bg-neutral-900"
         style={{
           left: isDark ? "31px" : "3px",
         }}
       />
 
       {/* Sun Icon (Left Segment) */}
-      <div className="relative z-10 w-[26px] h-[26px] flex items-center justify-center ml-[1px]">
-        <Sun
-          className={`size-3.5 transition-colors duration-300 ${
-            !isDark ? "text-neutral-950" : "text-neutral-500 hover:text-neutral-300"
-          }`}
-        />
+      <div className="relative z-10 ml-[1px] flex h-[26px] w-[26px] items-center justify-center">
+        <Sun className={`size-3.5 transition-colors duration-300 ${!isDark ? "text-neutral-950" : "text-neutral-500 hover:text-neutral-300"}`} />
       </div>
 
       {/* Moon Icon (Right Segment) */}
-      <div className="relative z-10 w-[26px] h-[26px] flex items-center justify-center ml-[2px]">
-        <Moon
-          className={`size-3.5 transition-colors duration-300 ${
-            isDark ? "text-neutral-50" : "text-neutral-500 hover:text-neutral-700"
-          }`}
-        />
+      <div className="relative z-10 ml-[2px] flex h-[26px] w-[26px] items-center justify-center">
+        <Moon className={`size-3.5 transition-colors duration-300 ${isDark ? "text-neutral-50" : "text-neutral-500 hover:text-neutral-700"}`} />
       </div>
     </button>
   );

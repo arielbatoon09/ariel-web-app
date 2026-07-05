@@ -8,75 +8,62 @@ import { BookCallSection } from "@/components/features/home/book-call-section";
 
 export const metadata = {
   title: "Freelance Software Engineer & Web Developer in Cebu City",
-  description: "Ariel Batoon is a Full-Stack Software Engineer based in Cebu City, Philippines. Specialized in building premium SaaS, high-performance web systems, and custom React Native mobile applications.",
+  description:
+    "Ariel Batoon is a Full-Stack Software Engineer based in Cebu City, Philippines. Specialized in building premium SaaS, high-performance web systems, and custom React Native mobile applications.",
 };
 
 export default function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "name": "Ariel Batoon | Freelance Software Engineer Cebu",
-    "image": "https://arielbatoon.com/icons/ab-logo-text-dark.png",
-    "url": "https://arielbatoon.com",
-    "telephone": "+639688540898",
-    "priceRange": "$$$",
-    "address": {
+    name: "Ariel Batoon | Freelance Software Engineer Cebu",
+    image: "https://arielbatoon.com/icons/ab-logo-text-dark.png",
+    url: "https://arielbatoon.com",
+    telephone: "+639688540898",
+    priceRange: "$$$",
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": "Lahug",
-      "addressLocality": "Cebu City",
-      "addressRegion": "Cebu",
-      "postalCode": "6000",
-      "addressCountry": "PH"
+      streetAddress: "Lahug",
+      addressLocality: "Cebu City",
+      addressRegion: "Cebu",
+      postalCode: "6000",
+      addressCountry: "PH",
     },
-    "geo": {
+    geo: {
       "@type": "GeoCoordinates",
-      "latitude": 10.3312,
-      "longitude": 123.8986
+      latitude: 10.3312,
+      longitude: 123.8986,
     },
-    "openingHoursSpecification": {
+    openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-      ],
-      "opens": "00:00",
-      "closes": "23:59"
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "00:00",
+      closes: "23:59",
     },
-    "sameAs": [
-      "https://www.linkedin.com/in/arielbatoon",
-      "https://github.com/arielbatoon09"
-    ],
-    "areaServed": [
+    sameAs: ["https://www.linkedin.com/in/arielbatoon", "https://github.com/arielbatoon09"],
+    areaServed: [
       {
         "@type": "AdministrativeArea",
-        "name": "Cebu City"
+        name: "Cebu City",
       },
       {
         "@type": "Country",
-        "name": "Philippines"
+        name: "Philippines",
       },
       {
         "@type": "Country",
-        "name": "United States"
+        name: "United States",
       },
       {
         "@type": "Country",
-        "name": "Singapore"
-      }
-    ]
+        name: "Singapore",
+      },
+    ],
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <HeroSection />
       <FeaturedWorksSection />
       <ProcessSection />

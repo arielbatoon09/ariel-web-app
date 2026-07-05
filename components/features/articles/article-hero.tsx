@@ -1,8 +1,6 @@
-import { User, Calendar, Clock } from "lucide-react";
 import { Section } from "@/components/common/section";
 import { BackButton } from "@/components/common/back-button";
 import { BannerShowcase } from "@/components/common/banner-showcase";
-import { ParameterRow } from "@/components/common/parameter-row";
 import type { Article } from "@/constants/articles";
 
 interface ArticleHeroProps {
@@ -12,11 +10,11 @@ interface ArticleHeroProps {
 export function ArticleHero({ article }: ArticleHeroProps) {
   return (
     <Section id="article-hero" containerClassName="pt-6 md:pt-10 pb-12 md:pb-20" showTopLine={false} showBottomLine={true}>
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="mx-auto max-w-3xl space-y-6">
         <BackButton href="/articles" label="Back to Articles" />
-        
+
         <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-neutral-450 dark:text-neutral-500">
+          <div className="text-neutral-450 flex flex-wrap items-center gap-2 font-mono text-[10px] tracking-wider uppercase dark:text-neutral-500">
             <span>{article.tag}</span>
             <span>•</span>
             <span>{article.date}</span>
@@ -25,14 +23,10 @@ export function ArticleHero({ article }: ArticleHeroProps) {
             <span>•</span>
             <span>By {article.author}</span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground font-sans leading-tight">
-            {article.title}
-          </h1>
+          <h1 className="font-sans text-3xl leading-tight font-bold tracking-tight text-foreground md:text-5xl">{article.title}</h1>
         </div>
 
-        <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
-          {article.description}
-        </p>
+        <p className="font-sans text-base leading-relaxed text-neutral-600 md:text-lg dark:text-neutral-400">{article.description}</p>
 
         {/* Article Banner Image */}
         {article.imageSrc && (

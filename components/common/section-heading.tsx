@@ -9,59 +9,24 @@ interface SectionHeadingProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "main" | "sub"; // Defaults to "main"
 }
 
-export function SectionHeading({
-  label,
-  title,
-  description,
-  action,
-  icon,
-  variant = "main",
-  className,
-  ...props
-}: SectionHeadingProps) {
+export function SectionHeading({ label, title, description, action, icon, variant = "main", className, ...props }: SectionHeadingProps) {
   if (variant === "sub") {
     return (
       <div className={cn("flex items-center gap-3", className)} {...props}>
-        {icon && (
-          <span className="text-neutral-400 flex items-center justify-center shrink-0">
-            {icon}
-          </span>
-        )}
-        <h3 className="text-lg font-bold font-mono uppercase tracking-wider text-foreground">
-          {title}
-        </h3>
+        {icon && <span className="flex shrink-0 items-center justify-center text-neutral-400">{icon}</span>}
+        <h3 className="font-mono text-lg font-bold tracking-wider text-foreground uppercase">{title}</h3>
       </div>
     );
   }
 
   return (
-    <div
-      className={cn(
-        "flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-0",
-        className
-      )}
-      {...props}
-    >
-      <div className="space-y-2 max-w-xl">
-        {label && (
-          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-neutral-400 dark:text-neutral-500 block">
-            {label}
-          </span>
-        )}
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-foreground font-sans leading-tight">
-          {title}
-        </h2>
-        {description && (
-          <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed font-mono">
-            {description}
-          </p>
-        )}
+    <div className={cn("flex flex-col gap-6 pb-0 sm:flex-row sm:items-end sm:justify-between", className)} {...props}>
+      <div className="max-w-xl space-y-2">
+        {label && <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">{label}</span>}
+        <h2 className="font-sans text-2xl leading-tight font-bold tracking-tight text-foreground md:text-3xl lg:text-4xl">{title}</h2>
+        {description && <p className="font-mono text-xs leading-relaxed text-neutral-500 md:text-sm dark:text-neutral-400">{description}</p>}
       </div>
-      {action && (
-        <div className="flex-shrink-0 sm:mb-0.5">
-          {action}
-        </div>
-      )}
+      {action && <div className="flex-shrink-0 sm:mb-0.5">{action}</div>}
     </div>
   );
 }

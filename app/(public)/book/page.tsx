@@ -3,7 +3,8 @@ import { BookCallSection } from "@/components/features/book/book-call-section";
 
 export const metadata = {
   title: "Book a Call | Ariel Batoon",
-  description: "Select a convenient time on the calendar to discuss your project, technical requirements, or potential collaborations with Ariel Batoon.",
+  description:
+    "Select a convenient time on the calendar to discuss your project, technical requirements, or potential collaborations with Ariel Batoon.",
 };
 
 export default function BookCallPage() {
@@ -11,15 +12,14 @@ export default function BookCallPage() {
     <div className="min-h-screen bg-background">
       {/* Book Call Hero Header */}
       <Section containerClassName="pt-6 md:pt-10 pb-6 md:pb-10" showBottomLine={true} showTopLine={false}>
-        <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-top-4 duration-1000 ease-out">
-          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-neutral-450 dark:text-neutral-500 block">
-            SCHEDULING
-          </span>
-          <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold tracking-tight text-foreground font-sans leading-[1.1] max-w-3xl">
+        <div className="max-w-4xl animate-in space-y-6 duration-1000 ease-out fade-in slide-in-from-top-4">
+          <span className="text-neutral-450 block font-mono text-[10px] tracking-[0.2em] uppercase dark:text-neutral-500">SCHEDULING</span>
+          <h1 className="max-w-3xl font-sans text-4xl leading-[1.1] font-bold tracking-tight text-foreground md:text-5xl lg:text-[56px]">
             Book a Free 30-Min Discovery Call
           </h1>
-          <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-450 font-sans leading-relaxed max-w-2xl">
-            Select a convenient time on the calendar below to discuss your project, technical needs, or potential collaboration. Let's build something great together.
+          <p className="dark:text-neutral-450 max-w-2xl font-sans text-base leading-relaxed text-neutral-500 md:text-lg">
+            Select a convenient time on the calendar below to discuss your project, technical needs, or potential collaboration. Let&apos;s build
+            something great together.
           </p>
         </div>
       </Section>
