@@ -4,45 +4,9 @@ import { GridCard } from "@/components/common/grid-card";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-interface BlogPost {
-  id: string;
-  date: string;
-  readTime: string;
-  title: string;
-  description: string;
-  tags: string[];
-  link: string;
-}
+import { ALL_ARTICLES } from "@/constants/articles";
 
-const RECENT_BLOGS: BlogPost[] = [
-  {
-    id: "01",
-    date: "June 28, 2026",
-    readTime: "5 min read",
-    title: "Scaling Next.js Serverless Databases",
-    description: "An in-depth look at connection pooling strategies, cold start optimizations, and stateful caching solutions in serverless runtime environments.",
-    tags: ["Next.js", "Serverless", "SQL"],
-    link: "#",
-  },
-  {
-    id: "02",
-    date: "May 12, 2026",
-    readTime: "4 min read",
-    title: "Building Secure API Integrations",
-    description: "A developer guide to token rotation, request signing validation, and strict rate-limiting rules protecting enterprise system boundaries.",
-    tags: ["Security", "APIs", "Node.js"],
-    link: "#",
-  },
-  {
-    id: "03",
-    date: "April 05, 2026",
-    readTime: "6 min read",
-    title: "The Economics of Clean Code",
-    description: "Analyzing why investing in solid architectural design patterns and robust testing suites saves startup runways and accelerates development velocity.",
-    tags: ["Architecture", "Testing", "SaaS"],
-    link: "#",
-  },
-];
+const RECENT_BLOGS = ALL_ARTICLES.slice(0, 3);
 
 export function RecentBlogsSection() {
   return (
@@ -76,7 +40,7 @@ export function RecentBlogsSection() {
         {/* View All CTA Link at the bottom */}
         <div className="flex justify-center pt-4">
           <Link
-            href="#blog-archive"
+            href="/articles"
             className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-foreground dark:text-neutral-500 dark:hover:text-foreground transition-colors duration-200 group"
           >
             All Articles

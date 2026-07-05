@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { Quote, ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useScrollCarousel } from "@/hooks/use-scroll-carousel";
 
 interface Testimonial {
   id: string;
@@ -51,100 +52,17 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 export function TestimonialSection() {
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const [pagesCount, setPagesCount] = useState(TESTIMONIALS.length);
-  const [resetKey, setResetKey] = useState(0);
+  const { scrollRef, activeIndex, scrollToCard, handleScroll } = useScrollCarousel({
+    itemCount: TESTIMONIALS.length,
+    gap: 24,
+    cardSelector: ".testimonial-card",
+    autoPlay: !isHovered,
+    autoPlayInterval: 5000
+  });
 
-  const handleInteraction = () => {
-    setResetKey((prev) => prev + 1);
-  };
-
-  // Sync scroll state (active index, arrow disabled statuses, and total pages count)
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const container = scrollRef.current;
-    const scrollLeft = container.scrollLeft;
-    const maxScroll = container.scrollWidth - container.clientWidth;
-
-    const cardWidth = container.querySelector(".testimonial-card")?.clientWidth || 320;
-    const gap = 24; // gap-6
-    const scrollAmount = cardWidth + gap;
-    
-    // Calculate active page index
-    const index = Math.round(scrollLeft / scrollAmount);
-    setActiveIndex(index);
-
-    // Calculate dynamically how many pages are scrollable based on container dimensions
-    let totalPages = 1;
-    if (maxScroll > 0) {
-      totalPages = Math.round(maxScroll / scrollAmount) + 1;
-    }
-    setPagesCount(totalPages);
-
-    // Disable arrows based on active index relative to total pages
-    setCanScrollLeft(index > 0);
-    setCanScrollRight(index < totalPages - 1);
-  };
-
-  // Scroll to index helper
-  const scrollToCard = (index: number) => {
-    if (!scrollRef.current) return;
-    const container = scrollRef.current;
-    const cardWidth = container.querySelector(".testimonial-card")?.clientWidth || 320;
-    const gap = 24;
-    const scrollAmount = cardWidth + gap;
-    
-    container.scrollTo({
-      left: index * scrollAmount,
-      behavior: "smooth"
-    });
-  };
-
-  // Scroll function helper (with boundary locking)
-  const scroll = (direction: "left" | "right") => {
-    if (direction === "left") {
-      scrollToCard(Math.max(0, activeIndex - 1));
-    } else {
-      scrollToCard(Math.min(pagesCount - 1, activeIndex + 1));
-    }
-  };
-
-  // Auto sliding logic (stops at boundaries, pauses on hover, resets on manual interaction)
-  useEffect(() => {
-    if (isHovered) return;
-
-    const timer = setInterval(() => {
-      if (!scrollRef.current) return;
-      const container = scrollRef.current;
-      const maxScroll = container.scrollWidth - container.clientWidth;
-
-      if (container.scrollLeft >= maxScroll - 10) {
-        // Reset back to start once we hit the end
-        container.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        scroll("right");
-      }
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, [isHovered, resetKey]);
-
-  // Initial check and resize listener to handle dynamic responsive pages
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      handleScroll();
-    }, 100);
-    
-    window.addEventListener("resize", handleScroll);
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener("resize", handleScroll);
-    };
-  }, []);
+  const canScrollLeft = activeIndex > 0;
+  const canScrollRight = activeIndex < TESTIMONIALS.length - 1;
 
   return (
     <Section id="testimonials" containerClassName="py-12 md:py-16 overflow-hidden" showTopLine={false} showBottomLine={true}>
@@ -162,10 +80,7 @@ export function TestimonialSection() {
                   "rounded-none size-10 flex items-center justify-center cursor-pointer border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 transition-all duration-300 bg-background text-foreground",
                   !canScrollLeft && "opacity-30 pointer-events-none"
                 )}
-                onClick={() => {
-                  scroll("left");
-                  handleInteraction();
-                }}
+                onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
                 aria-label="Previous testimonial"
               >
                 <ArrowLeft className="size-4" />
@@ -176,10 +91,7 @@ export function TestimonialSection() {
                   "rounded-none size-10 flex items-center justify-center cursor-pointer border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 transition-all duration-300 bg-background text-foreground",
                   !canScrollRight && "opacity-30 pointer-events-none"
                 )}
-                onClick={() => {
-                  scroll("right");
-                  handleInteraction();
-                }}
+                onClick={() => scrollToCard(Math.min(TESTIMONIALS.length - 1, activeIndex + 1))}
                 aria-label="Next testimonial"
               >
                 <ArrowRight className="size-4" />
@@ -253,20 +165,17 @@ export function TestimonialSection() {
         </div>
 
         {/* Pagination Dots (Calculated based on actual scroll pages) */}
-        {pagesCount > 1 && (
+        {TESTIMONIALS.length > 1 && (
           <div className="flex justify-center items-center gap-3 pt-2">
-            {Array.from({ length: pagesCount }).map((_, index) => (
+            {TESTIMONIALS.map((_, index) => (
               <button
                 key={index}
-                onClick={() => {
-                  scrollToCard(index);
-                  handleInteraction();
-                }}
+                onClick={() => scrollToCard(index)}
                 className={cn(
                   "h-1.5 transition-all duration-300 rounded-none cursor-pointer",
                   activeIndex === index
                     ? "w-8 bg-neutral-900 dark:bg-neutral-100"
-                    : "w-2 bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-450 dark:hover:bg-neutral-500"
+                    : "w-2 bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-455 dark:hover:bg-neutral-500"
                 )}
                 aria-label={`Go to slide ${index + 1}`}
               />

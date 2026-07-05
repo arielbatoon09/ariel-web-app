@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { MotionSection } from "@/components/common/motion-section";
 
 interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
@@ -78,7 +79,9 @@ export function Section({
 
         {/* Content area padded inside the vertical lines */}
         <div className="px-4 md:px-8 pt-2 pb-6">
-          {children}
+          <MotionSection>
+            {children}
+          </MotionSection>
         </div>
       </div>
     </section>

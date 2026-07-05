@@ -2,23 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { buttonVariants, Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { ConnectDialog } from "@/components/common/connect-dialog";
+import { NAV_LINKS } from "@/constants/navigation";
 
 export function PublicHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-
-  const isWorkActive = pathname.startsWith("/works") || pathname.startsWith("/work");
-  const isArticlesActive = pathname.startsWith("/articles") || pathname.startsWith("/article");
-  const isServicesActive = pathname.startsWith("/services");
-  const isAboutActive = pathname.startsWith("/about");
-  const isContactActive = pathname === "/contact";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-dashed border-neutral-300 dark:border-neutral-700 bg-background/80 backdrop-blur-md">
@@ -35,7 +30,7 @@ export function PublicHeader() {
           +
         </div>
 
-        {/* Content Wrapper aligned with Section Content (indented inside vertical lines) */}
+        {/* Content Wrapper aligned with Section Content */}
         <div className="w-full h-full px-4 md:px-8 flex items-center justify-between">
           {/* Logo & Brand */}
           <Link href="/" className="flex items-center space-x-3">
@@ -63,66 +58,27 @@ export function PublicHeader() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/about"
-              className={cn(
-                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
-                isAboutActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              About
-              <span
-                className={cn(
-                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
-                  isAboutActive ? "scale-x-100" : "group-hover:scale-x-100"
-                )}
-              />
-            </Link>
-            <Link
-              href="/services"
-              className={cn(
-                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
-                isServicesActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              Services
-              <span
-                className={cn(
-                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
-                  isServicesActive ? "scale-x-100" : "group-hover:scale-x-100"
-                )}
-              />
-            </Link>
-            <Link
-              href="/works"
-              className={cn(
-                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
-                isWorkActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              Works
-              <span
-                className={cn(
-                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
-                  isWorkActive ? "scale-x-100" : "group-hover:scale-x-100"
-                )}
-              />
-            </Link>
-            <Link
-              href="/articles"
-              className={cn(
-                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
-                isArticlesActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              Articles
-              <span
-                className={cn(
-                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
-                  isArticlesActive ? "scale-x-100" : "group-hover:scale-x-100"
-                )}
-              />
-            </Link>
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={cn(
+                    "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
+                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {link.label}
+                  <span
+                    className={cn(
+                      "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
+                      isActive ? "scale-x-100" : "group-hover:scale-x-100"
+                    )}
+                  />
+                </Link>
+              );
+            })}
           </nav>
 
           {/* CTA Actions */}
@@ -156,34 +112,16 @@ export function PublicHeader() {
       {isOpen && (
         <div className="md:hidden border-t border-dashed border-neutral-300 dark:border-neutral-700 bg-background/95 backdrop-blur-md px-10 py-6 space-y-4 animate-in slide-in-from-top duration-200">
           <nav className="flex flex-col space-y-3 font-mono text-xs uppercase tracking-wider">
-            <Link
-              href="/about"
-              onClick={() => setIsOpen(false)}
-              className="py-2 border-b border-dashed border-neutral-200/50 dark:border-neutral-800/50 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="/services"
-              onClick={() => setIsOpen(false)}
-              className="py-2 border-b border-dashed border-neutral-200/50 dark:border-neutral-800/50 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Services
-            </Link>
-            <Link
-              href="/works"
-              onClick={() => setIsOpen(false)}
-              className="py-2 border-b border-dashed border-neutral-200/50 dark:border-neutral-800/50 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Works
-            </Link>
-            <Link
-              href="/articles"
-              onClick={() => setIsOpen(false)}
-              className="py-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Articles
-            </Link>
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="py-2 border-b border-dashed border-neutral-200/50 dark:border-neutral-800/50 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
           <div className="pt-2">
             <ConnectDialog>
@@ -198,4 +136,3 @@ export function PublicHeader() {
     </header>
   );
 }
-

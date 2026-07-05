@@ -1,13 +1,15 @@
-import Link from "next/link";
+import Link from "next/image";
+import LinkComponent from "next/link";
 import Image from "next/image";
 import { Section } from "@/components/common/section";
+import { NAV_LINKS, SOCIALS, FOOTER_SERVICES, CONTACT_INFO } from "@/constants/navigation";
 
 export function PublicFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
     <Section showTopLine={true} showBottomLine={false} containerClassName="py-0 md:py-0 relative overflow-hidden">
-      {/* Huge low-contrast background watermark text overlaying both navigation and copyright sections */}
+      {/* Huge low-contrast background watermark */}
       <div className="absolute inset-x-0 bottom-10 top-0 overflow-hidden pointer-events-none select-none z-[-1] flex items-end justify-center">
         <div className="text-[11.3vw] font-black tracking-tighter text-neutral-100/80 dark:text-neutral-800/35 uppercase leading-none select-none translate-y-[25%] md:translate-y-[20%]">
           Ariel Batoon
@@ -18,9 +20,9 @@ export function PublicFooter() {
         {/* Grid container for 5 footer columns */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12 lg:gap-8 pb-12">
           
-          {/* Column 1: Brand & Logo (Matching PublicHeader structure) */}
+          {/* Column 1: Brand & Logo */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1 space-y-4 pr-0 lg:pr-4">
-            <Link href="/" className="flex items-center space-x-3 w-fit">
+            <LinkComponent href="/" className="flex items-center space-x-3 w-fit">
               <div className="relative h-6 flex items-center">
                 <Image
                   src="/icons/ab-logo-text-dark.png"
@@ -41,7 +43,7 @@ export function PublicFooter() {
               <span className="text-[12px] font-medium tracking-[0.2em] uppercase">
                 Ariel Batoon
               </span>
-            </Link>
+            </LinkComponent>
             <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 max-w-sm pt-1">
               Engineering premium digital products and experiences for ambitious businesses that refuse to settle. Built once, built right.
             </p>
@@ -53,20 +55,19 @@ export function PublicFooter() {
               Navigation
             </span>
             <ul className="space-y-2.5">
-              {[
-                { label: "Home", href: "/" },
-                { label: "Work", href: "/works" },
-                { label: "Services", href: "/services" },
-                { label: "About", href: "/about" },
-                { label: "Contact", href: "/contact" },
-              ].map((item) => (
+              <li>
+                <LinkComponent href="/" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200">
+                  Home
+                </LinkComponent>
+              </li>
+              {NAV_LINKS.map((item) => (
                 <li key={item.label}>
-                  <Link
+                  <LinkComponent
                     href={item.href}
                     className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200"
                   >
                     {item.label}
-                  </Link>
+                  </LinkComponent>
                 </li>
               ))}
             </ul>
@@ -78,17 +79,11 @@ export function PublicFooter() {
               Services
             </span>
             <ul className="space-y-2.5">
-              {[
-                { label: "Product Design", href: "/services" },
-                { label: "Frontend Engineering", href: "/services" },
-                { label: "Full-Stack Development", href: "/services" },
-                { label: "Design Systems", href: "/services" },
-                { label: "Technical Consulting", href: "/services" },
-              ].map((item) => (
+              {FOOTER_SERVICES.map((item) => (
                 <li key={item.label} className="text-sm text-neutral-600 dark:text-neutral-400">
-                  <Link href={item.href} className="hover:text-foreground transition-colors duration-200">
+                  <LinkComponent href={item.href} className="hover:text-foreground transition-colors duration-200">
                     {item.label}
-                  </Link>
+                  </LinkComponent>
                 </li>
               ))}
             </ul>
@@ -100,13 +95,7 @@ export function PublicFooter() {
               Socials
             </span>
             <ul className="space-y-2.5">
-              {[
-                { label: "GitHub", href: "https://github.com" },
-                { label: "LinkedIn", href: "https://linkedin.com" },
-                { label: "Twitter / X", href: "https://twitter.com" },
-                { label: "Dribbble", href: "https://dribbble.com" },
-                { label: "Read.cv", href: "https://read.cv" },
-              ].map((item) => (
+              {SOCIALS.map((item) => (
                 <li key={item.label}>
                   <a
                     href={item.href}
@@ -129,24 +118,24 @@ export function PublicFooter() {
             <ul className="space-y-2.5">
               <li>
                 <a
-                  href="https://wa.me/639455684578"
+                  href={CONTACT_INFO.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200"
                 >
-                  WhatsApp &rarr; +63 945 568 4578
+                  WhatsApp &rarr; {CONTACT_INFO.whatsappLabel}
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+639455684578"
+                  href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, '')}`}
                   className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200"
                 >
-                  +63 945 568 4578
+                  {CONTACT_INFO.phone}
                 </a>
               </li>
-              <li className="text-sm text-neutral-400 dark:text-neutral-500 font-mono">
-                Zamboanga City, Philippines
+              <li className="text-sm text-neutral-400 dark:text-neutral-505 font-mono">
+                {CONTACT_INFO.location}
               </li>
             </ul>
           </div>
