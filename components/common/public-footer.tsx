@@ -56,8 +56,8 @@ export function PublicFooter() {
               {[
                 { label: "Home", href: "/" },
                 { label: "Work", href: "/works" },
-                { label: "Services", href: "/#services" },
-                { label: "About", href: "/#about" },
+                { label: "Services", href: "/services" },
+                { label: "About", href: "/about" },
                 { label: "Contact", href: "/contact" },
               ].map((item) => (
                 <li key={item.label}>
@@ -79,14 +79,16 @@ export function PublicFooter() {
             </span>
             <ul className="space-y-2.5">
               {[
-                { label: "Product Design", href: "#services" },
-                { label: "Frontend Engineering", href: "#services" },
-                { label: "Full-Stack Development", href: "#services" },
-                { label: "Design Systems", href: "#services" },
-                { label: "Technical Consulting", href: "#services" },
+                { label: "Product Design", href: "/services" },
+                { label: "Frontend Engineering", href: "/services" },
+                { label: "Full-Stack Development", href: "/services" },
+                { label: "Design Systems", href: "/services" },
+                { label: "Technical Consulting", href: "/services" },
               ].map((item) => (
                 <li key={item.label} className="text-sm text-neutral-600 dark:text-neutral-400">
-                  {item.label}
+                  <Link href={item.href} className="hover:text-foreground transition-colors duration-200">
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

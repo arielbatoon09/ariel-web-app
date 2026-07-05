@@ -5,9 +5,23 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, Mail } from "lucide-react";
+import { Calendar, Mail } from "lucide-react";
 
-export function HeroCta() {
+interface ConnectDialogProps {
+  children?: React.ReactNode;
+  triggerText?: string;
+  triggerClassName?: string;
+  triggerVariant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  triggerSize?: "default" | "sm" | "lg" | "icon";
+}
+
+export function ConnectDialog({
+  children,
+  triggerText = "Let's talk",
+  triggerClassName,
+  triggerVariant = "default",
+  triggerSize = "lg",
+}: ConnectDialogProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -25,13 +39,19 @@ export function HeroCta() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button 
-            size="lg" 
-            className="rounded-none px-6 h-11 text-sm font-medium flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
-          >
-            Let's talk
-            <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </Button>
+          React.isValidElement(children) ? (
+            children
+          ) : children ? (
+            <span>{children}</span>
+          ) : (
+            <Button
+              variant={triggerVariant}
+              size={triggerSize}
+              className={triggerClassName}
+            >
+              {triggerText}
+            </Button>
+          )
         }
       />
 

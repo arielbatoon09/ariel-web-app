@@ -16,6 +16,7 @@ import {
   Target 
 } from "lucide-react";
 import Image from "next/image";
+import { ConnectDialog } from "@/components/common/connect-dialog";
 
 interface PageProps {
   params: Promise<{
@@ -241,11 +242,11 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                   I specialize in engineering performance-optimized applications configured to solve specific operational bottlenecks.
                 </p>
                 <div className="pt-2">
-                  <Link href="/contact" className="inline-block w-full">
+                  <ConnectDialog>
                     <Button variant="ghost" size="sm" className="w-full rounded-none border border-white bg-transparent text-white hover:bg-white hover:text-black dark:border-black dark:text-black dark:hover:bg-black dark:hover:text-white font-mono text-[11px] uppercase tracking-wider cursor-pointer">
                       Let's Build It
                     </Button>
-                  </Link>
+                  </ConnectDialog>
                 </div>
               </div>
             </div>

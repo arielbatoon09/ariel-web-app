@@ -40,7 +40,7 @@ export function FeaturedWorksSection() {
 
         {/* Unified "All Projects" link at the bottom, creating a natural reading flow */}
         <div className="flex justify-center pt-4">
-          <Link href="/#archive" className="group">
+          <Link href="/works" className="group">
             <Button 
               variant="outline"
               size="lg" 

@@ -2,14 +2,23 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 import { ArrowUpRight, Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/common/theme-toggle";
+import { ConnectDialog } from "@/components/common/connect-dialog";
 
 export function PublicHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isWorkActive = pathname.startsWith("/works") || pathname.startsWith("/work");
+  const isArticlesActive = pathname.startsWith("/articles") || pathname.startsWith("/article");
+  const isServicesActive = pathname.startsWith("/services");
+  const isAboutActive = pathname.startsWith("/about");
+  const isContactActive = pathname === "/contact";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-dashed border-neutral-300 dark:border-neutral-700 bg-background/80 backdrop-blur-md">
@@ -28,26 +37,26 @@ export function PublicHeader() {
 
         {/* Content Wrapper aligned with Section Content (indented inside vertical lines) */}
         <div className="w-full h-full px-4 md:px-8 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo & Brand */}
           <Link href="/" className="flex items-center space-x-3">
-            <div className="relative h-6 flex items-center">
+            <div className="relative h-5 flex items-center">
               <Image
                 src="/icons/ab-logo-text-dark.png"
-                className="h-12 w-auto block dark:hidden object-contain"
+                className="h-10 w-auto block dark:hidden object-contain"
                 alt="ab logo"
-                width={100}
-                height={100}
+                width={80}
+                height={80}
               />
               <Image
                 src="/icons/ab-logo-text-white.png"
-                className="h-12 w-auto hidden dark:block object-contain"
+                className="h-10 w-auto hidden dark:block object-contain"
                 alt="ab logo"
-                width={100}
-                height={100}
+                width={80}
+                height={80}
               />
             </div>
-            <div className="h-3.5 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-            <span className="text-[12px] font-medium tracking-[0.2em] uppercase">
+            <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
+            <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-neutral-500 dark:text-neutral-400">
               Ariel Batoon
             </span>
           </Link>
@@ -55,41 +64,78 @@ export function PublicHeader() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
-              href="/works"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Work
-            </Link>
-            <Link
-              href="/#services"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Services
-            </Link>
-            <Link
-              href="/#about"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              href="/about"
+              className={cn(
+                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
+                isAboutActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
             >
               About
+              <span
+                className={cn(
+                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
+                  isAboutActive ? "scale-x-100" : "group-hover:scale-x-100"
+                )}
+              />
             </Link>
             <Link
-              href="/contact"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              href="/services"
+              className={cn(
+                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
+                isServicesActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
             >
-              Contact
+              Services
+              <span
+                className={cn(
+                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
+                  isServicesActive ? "scale-x-100" : "group-hover:scale-x-100"
+                )}
+              />
+            </Link>
+            <Link
+              href="/works"
+              className={cn(
+                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
+                isWorkActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Works
+              <span
+                className={cn(
+                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
+                  isWorkActive ? "scale-x-100" : "group-hover:scale-x-100"
+                )}
+              />
+            </Link>
+            <Link
+              href="/articles"
+              className={cn(
+                "relative font-mono text-[11px] uppercase tracking-wider py-1 transition-colors group cursor-pointer",
+                isArticlesActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Articles
+              <span
+                className={cn(
+                  "absolute -bottom-0.5 left-0 right-0 h-0 border-b border-dashed border-current transition-transform duration-300 origin-left scale-x-0",
+                  isArticlesActive ? "scale-x-100" : "group-hover:scale-x-100"
+                )}
+              />
             </Link>
           </nav>
 
           {/* CTA Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
             <ThemeToggle />
-            <Link
-              href="/contact"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
-            >
-              Let's Talk
-              <ArrowUpRight className="ml-1 size-4" />
-            </Link>
+            <ConnectDialog>
+              <Button
+                className="rounded-none border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 font-mono text-[10px] uppercase tracking-wider cursor-pointer h-8 px-4"
+              >
+                Let's Talk
+                <ArrowUpRight className="ml-1 size-3.5" />
+              </Button>
+            </ConnectDialog>
           </div>
 
           {/* Mobile Menu & Theme Toggle */}
@@ -97,10 +143,10 @@ export function PublicHeader() {
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="h-8 w-8 flex items-center justify-center rounded-none border border-dashed border-neutral-300 dark:border-neutral-700 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               aria-label="Toggle menu"
             >
-              <Menu className="size-5" />
+              <Menu className="size-4" />
             </button>
           </div>
         </div>
@@ -108,46 +154,44 @@ export function PublicHeader() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden border-t border-neutral-200/50 dark:border-neutral-800/50 bg-background px-6 py-4 space-y-4 animate-in slide-in-from-top duration-200">
-          <nav className="flex flex-col space-y-4">
+        <div className="md:hidden border-t border-dashed border-neutral-300 dark:border-neutral-700 bg-background/95 backdrop-blur-md px-10 py-6 space-y-4 animate-in slide-in-from-top duration-200">
+          <nav className="flex flex-col space-y-3 font-mono text-xs uppercase tracking-wider">
             <Link
-              href="/works"
+              href="/about"
               onClick={() => setIsOpen(false)}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Work
-            </Link>
-            <Link
-              href="/#services"
-              onClick={() => setIsOpen(false)}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Services
-            </Link>
-            <Link
-              href="/#about"
-              onClick={() => setIsOpen(false)}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="py-2 border-b border-dashed border-neutral-200/50 dark:border-neutral-800/50 text-muted-foreground hover:text-foreground transition-colors"
             >
               About
             </Link>
             <Link
-              href="/contact"
+              href="/services"
               onClick={() => setIsOpen(false)}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="py-2 border-b border-dashed border-neutral-200/50 dark:border-neutral-800/50 text-muted-foreground hover:text-foreground transition-colors"
             >
-              Contact
+              Services
+            </Link>
+            <Link
+              href="/works"
+              onClick={() => setIsOpen(false)}
+              className="py-2 border-b border-dashed border-neutral-200/50 dark:border-neutral-800/50 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Works
+            </Link>
+            <Link
+              href="/articles"
+              onClick={() => setIsOpen(false)}
+              className="py-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Articles
             </Link>
           </nav>
           <div className="pt-2">
-            <Link
-              href="/contact"
-              onClick={() => setIsOpen(false)}
-              className={cn(buttonVariants({ size: "sm" }), "w-full")}
-            >
-              Let's Talk
-              <ArrowUpRight className="ml-1 size-4" />
-            </Link>
+            <ConnectDialog>
+              <Button size="lg" className="w-full rounded-none font-mono text-xs uppercase tracking-wider cursor-pointer h-11">
+                Let's Talk
+                <ArrowUpRight className="ml-1 size-4" />
+              </Button>
+            </ConnectDialog>
           </div>
         </div>
       )}

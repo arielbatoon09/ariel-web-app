@@ -1,9 +1,9 @@
 import { Section } from "@/components/common/section";
 import { GridCard } from "@/components/common/grid-card";
 import { Button } from "@/components/ui/button";
-import { Globe, Cpu, Smartphone, Brain } from "lucide-react";
+import { Globe, Cpu, Smartphone, Brain, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { HeroCta } from "@/components/features/home/hero-cta";
+import { ConnectDialog } from "@/components/common/connect-dialog";
 
 export function HeroSection() {
   return (
@@ -32,7 +32,15 @@ export function HeroSection() {
 
           {/* CTAs with balanced size square buttons */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <HeroCta />
+            <ConnectDialog>
+              <Button 
+                size="lg" 
+                className="rounded-none px-6 h-11 text-sm font-medium flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+              >
+                Let's talk
+                <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </Button>
+            </ConnectDialog>
             <Link href="#work">
               <Button variant="outline" size="lg" className="rounded-none px-6 h-11 text-sm font-medium flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-50 dark:hover:bg-neutral-900">
                 View my work
