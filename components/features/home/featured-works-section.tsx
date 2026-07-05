@@ -17,7 +17,7 @@ export function FeaturedWorksSection() {
         <SectionHeading label="Featured Works" title="Software engineered for real-world application." />
 
         {/* 3-Column Architectural Project Grid using the common GridCard component */}
-        <div className="grid grid-cols-1 border-t border-l border-dashed border-neutral-300 md:grid-cols-3 dark:border-neutral-700">
+        <div className="grid grid-cols-1 border-t border-l border-dashed border-neutral-300 lg:grid-cols-3 dark:border-neutral-700">
           {FEATURED_PROJECTS.map((project) => (
             <GridCard
               key={project.id}

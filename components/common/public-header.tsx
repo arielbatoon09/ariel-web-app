@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { ConnectDialog } from "@/components/common/connect-dialog";
 import { NAV_LINKS } from "@/constants/navigation";
+import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 
 export function PublicHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,7 +58,7 @@ export function PublicHeader() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden items-center space-x-8 md:flex">
+          <nav className="hidden items-center space-x-8 lg:flex">
             {NAV_LINKS.map((link) => {
               const isActive = pathname.startsWith(link.href);
               return (
@@ -82,7 +83,7 @@ export function PublicHeader() {
           </nav>
 
           {/* CTA Actions */}
-          <div className="hidden items-center space-x-3 md:flex">
+          <div className="hidden items-center space-x-3 lg:flex">
             <ThemeToggle />
             <ConnectDialog>
               <Button className="h-8 cursor-pointer rounded-none border border-dashed border-neutral-300 px-4 font-mono text-[10px] tracking-wider uppercase hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-100">
@@ -93,44 +94,83 @@ export function PublicHeader() {
           </div>
 
           {/* Mobile Menu & Theme Toggle */}
-          <div className="flex items-center space-x-2 md:hidden">
-            <ThemeToggle />
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-none border border-dashed border-neutral-300 text-muted-foreground transition-colors hover:text-foreground dark:border-neutral-700"
-              aria-label="Toggle menu"
-            >
-              <Menu className="size-4" />
-            </button>
+          <div className="flex items-center space-x-2 lg:hidden">
+            <Drawer open={isOpen} onOpenChange={setIsOpen} swipeDirection="right">
+              <DrawerTrigger
+                render={
+                  <button
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-none border border-dashed border-neutral-300 text-muted-foreground transition-colors hover:text-foreground dark:border-neutral-700"
+                    aria-label="Toggle menu"
+                  >
+                    <Menu className="size-4" />
+                  </button>
+                }
+              />
+              <DrawerContent className="border-l border-dashed border-neutral-300 bg-background p-6 dark:border-neutral-700">
+                <DrawerTitle className="sr-only">Navigation Menu</DrawerTitle>
+                <DrawerDescription className="sr-only">Mobile navigation menu and theme switcher</DrawerDescription>
+                
+                <div className="flex h-full flex-col justify-between">
+                  <div>
+                    {/* Drawer Header Area with branding */}
+                    <div className="flex items-center justify-between border-b border-dashed border-neutral-300 pb-6 dark:border-neutral-700">
+                      <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center space-x-3">
+                        <div className="relative flex h-5 items-center">
+                          <Image
+                            src="/icons/ab-logo-text-dark.png"
+                            className="block h-8 w-auto object-contain dark:hidden"
+                            alt="ab logo"
+                            width={64}
+                            height={64}
+                          />
+                          <Image
+                            src="/icons/ab-logo-text-white.png"
+                            className="hidden h-8 w-auto object-contain dark:block"
+                            alt="ab logo"
+                            width={64}
+                            height={64}
+                          />
+                        </div>
+                        <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
+                        <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">
+                          Ariel Batoon
+                        </span>
+                      </Link>
+                    </div>
+
+                    {/* Navigation links */}
+                    <nav className="flex flex-col space-y-3 pt-6 font-mono text-xs tracking-wider uppercase">
+                      {NAV_LINKS.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          className="border-b border-dashed border-neutral-200/50 py-3 text-muted-foreground transition-colors hover:text-foreground dark:border-neutral-800/50"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </nav>
+                  </div>
+
+                  {/* Drawer Footer CTA with Theme Toggle */}
+                  <div className="flex flex-col gap-4 pt-6">
+                    <ConnectDialog>
+                      <Button size="lg" className="h-11 w-full cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase">
+                        Let&apos;s Talk
+                        <ArrowUpRight className="ml-1 size-4" />
+                      </Button>
+                    </ConnectDialog>
+                    <div className="flex justify-center border-t border-dashed border-neutral-300 pt-4 dark:border-neutral-700">
+                      <ThemeToggle />
+                    </div>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
       </div>
-
-      {/* Mobile Drawer */}
-      {isOpen && (
-        <div className="animate-in space-y-4 border-t border-dashed border-neutral-300 bg-background/95 px-10 py-6 backdrop-blur-md duration-200 slide-in-from-top md:hidden dark:border-neutral-700">
-          <nav className="flex flex-col space-y-3 font-mono text-xs tracking-wider uppercase">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="border-b border-dashed border-neutral-200/50 py-2 text-muted-foreground transition-colors hover:text-foreground dark:border-neutral-800/50"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="pt-2">
-            <ConnectDialog>
-              <Button size="lg" className="h-11 w-full cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase">
-                Let&apos;s Talk
-                <ArrowUpRight className="ml-1 size-4" />
-              </Button>
-            </ConnectDialog>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
