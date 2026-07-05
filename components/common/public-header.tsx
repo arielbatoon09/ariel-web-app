@@ -55,7 +55,7 @@ export function PublicHeader() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
-              href="/#work"
+              href="/works"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Work
@@ -111,7 +111,7 @@ export function PublicHeader() {
         <div className="md:hidden border-t border-neutral-200/50 dark:border-neutral-800/50 bg-background px-6 py-4 space-y-4 animate-in slide-in-from-top duration-200">
           <nav className="flex flex-col space-y-4">
             <Link
-              href="/#work"
+              href="/works"
               onClick={() => setIsOpen(false)}
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >

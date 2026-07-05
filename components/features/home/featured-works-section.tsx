@@ -3,46 +3,11 @@ import { SectionHeading } from "@/components/common/section-heading";
 import { GridCard } from "@/components/common/grid-card";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-interface Project {
-  id: string;
-  tag: string;
-  title: string;
-  description: string;
-  imageSrc: string;
-  tags: string[];
-  link: string;
-}
+import { ALL_PROJECTS } from "@/constants/projects";
 
-const FEATURED_PROJECTS: Project[] = [
-  {
-    id: "01",
-    tag: "Custom SaaS / Web Platform",
-    title: "Apex Logistics Platform",
-    description: "An automated administrative panel and client portal engineered to streamline cargo tracking, automated billing, and live routing pipelines.",
-    imageSrc: "/projects/project-logistics.png",
-    tags: ["Next.js", "Node.js", "PostgreSQL"],
-    link: "#",
-  },
-  {
-    id: "02",
-    tag: "Mobile E-Commerce App",
-    title: "Nova Retail Mobile App",
-    description: "An offline-first, high-conversion mobile shopping experience featuring secure checkouts, real-time push alerts, and fluid catalog browsing.",
-    imageSrc: "/projects/project-retail.png",
-    tags: ["React Native", "TypeScript", "FastAPI"],
-    link: "#",
-  },
-  {
-    id: "03",
-    tag: "AI / Enterprise Software",
-    title: "Insight Document Search",
-    description: "A semantic search engine and AI-powered document analyzer utilizing vector databases to deliver instant, contextual answers for enterprise files.",
-    imageSrc: "/projects/project-search.png",
-    tags: ["Python", "OpenAI", "Pinecone"],
-    link: "#",
-  },
-];
+const FEATURED_PROJECTS = ALL_PROJECTS.slice(0, 3);
 
 export function FeaturedWorksSection() {
   return (
@@ -75,12 +40,15 @@ export function FeaturedWorksSection() {
 
         {/* Unified "All Projects" link at the bottom, creating a natural reading flow */}
         <div className="flex justify-center pt-4">
-          <Link
-            href="#archive"
-            className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-foreground dark:text-neutral-500 dark:hover:text-foreground transition-colors duration-200 group"
-          >
-            All Projects
-            <ArrowRight className="size-3.5 group-hover:translate-x-0.5 transition-transform duration-200" />
+          <Link href="/#archive" className="group">
+            <Button 
+              variant="outline"
+              size="lg" 
+              className="rounded-none px-6 h-11 text-sm font-medium flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+            >
+              All Projects
+              <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform duration-300" />
+            </Button>
           </Link>
         </div>
       </div>

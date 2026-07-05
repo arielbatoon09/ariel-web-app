@@ -3,12 +3,14 @@ import { cn } from "@/lib/utils";
 interface SectionHeadingProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
   title: string;
+  description?: string;
   action?: React.ReactNode;
 }
 
 export function SectionHeading({
   label,
   title,
+  description,
   action,
   className,
   ...props
@@ -21,13 +23,18 @@ export function SectionHeading({
       )}
       {...props}
     >
-      <div className="space-y-2 max-w-md">
+      <div className="space-y-2 max-w-xl">
         <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-neutral-400 dark:text-neutral-500 block">
           {label}
         </span>
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-foreground font-sans leading-tight">
           {title}
         </h2>
+        {description && (
+          <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed font-mono">
+            {description}
+          </p>
+        )}
       </div>
       {action && (
         <div className="flex-shrink-0 sm:mb-0.5">

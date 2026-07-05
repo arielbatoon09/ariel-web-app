@@ -55,7 +55,7 @@ export function PublicFooter() {
             <ul className="space-y-2.5">
               {[
                 { label: "Home", href: "/" },
-                { label: "Work", href: "/#work" },
+                { label: "Work", href: "/works" },
                 { label: "Services", href: "/#services" },
                 { label: "About", href: "/#about" },
                 { label: "Contact", href: "/contact" },

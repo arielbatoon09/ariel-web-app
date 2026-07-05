@@ -1,7 +1,7 @@
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { Button } from "@/components/ui/button";
-import { FileText, Calendar, Code2, Rocket } from "lucide-react";
+import { FileText, Calendar, Code2, Rocket, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 interface Step {
@@ -102,9 +102,10 @@ export function ProcessSection() {
 
         {/* Centered Action CTA Button (Square border) */}
         <div className="flex justify-center pt-4">
-          <Link href="#contact">
-            <Button size="lg" className="rounded-none px-8 h-11 text-sm font-medium flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5">
+          <Link href="/contact" className="group">
+            <Button variant="outline" size="lg" className="rounded-none px-8 h-11 text-sm font-medium flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
               Start Your Project
+              <ArrowUpRight className="ml-2 size-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
             </Button>
           </Link>
         </div>

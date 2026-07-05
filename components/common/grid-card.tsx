@@ -50,15 +50,29 @@ export function GridCard({
       <div className="space-y-4">
         {/* Optional Visual Image Showcase */}
         {imageSrc && (
-          <div className="relative w-full aspect-[16/10] overflow-hidden rounded border border-dashed border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 mb-2">
-            <Image
-              src={imageSrc}
-              alt={title}
-              fill
-              sizes="(max-w-768px) 100vw, 33vw"
-              className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
-            />
-          </div>
+          link ? (
+            <Link href={link.href} className="block cursor-pointer">
+              <div className="relative w-full aspect-[16/10] overflow-hidden rounded border border-dashed border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 mb-2">
+                <Image
+                  src={imageSrc}
+                  alt={title}
+                  fill
+                  sizes="(max-w-768px) 100vw, 33vw"
+                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+                />
+              </div>
+            </Link>
+          ) : (
+            <div className="relative w-full aspect-[16/10] overflow-hidden rounded border border-dashed border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 mb-2">
+              <Image
+                src={imageSrc}
+                alt={title}
+                fill
+                sizes="(max-w-768px) 100vw, 33vw"
+                className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+              />
+            </div>
+          )
         )}
 
         {/* Optional Icon Block */}
