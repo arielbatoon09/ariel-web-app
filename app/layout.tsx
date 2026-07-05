@@ -15,6 +15,10 @@ const fontMono = Geist_Mono({
 
 export const metadata = {
   metadataBase: new URL("https://arielbatoon.com"),
+  robots: {
+    index: false,
+    follow: false,
+  },
   title: {
     default: "Ariel Batoon | Freelance Software Engineer & Web Developer in Cebu",
     template: "%s | Ariel Batoon - Software Engineer Cebu",
