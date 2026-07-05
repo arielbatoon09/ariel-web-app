@@ -15,7 +15,7 @@ import {
   Compass,
 } from "lucide-react";
 
-export const lucideIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+export const lucideIconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Users,
   Globe,
   Lock,
