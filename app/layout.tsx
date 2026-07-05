@@ -62,6 +62,7 @@ export const metadata = {
 };
 
 import { CrispChat } from "@/components/common/crisp-chat";
+import { CookiesBanner } from "@/components/common/cookies-banner";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             {children}
             <Toaster />
             <CrispChat />
+            <CookiesBanner />
           </TooltipProvider>
         </ThemeProvider>
       </body>

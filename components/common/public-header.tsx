@@ -109,7 +109,7 @@ export function PublicHeader() {
               <DrawerContent className="border-l border-dashed border-neutral-300 bg-background p-6 dark:border-neutral-700">
                 <DrawerTitle className="sr-only">Navigation Menu</DrawerTitle>
                 <DrawerDescription className="sr-only">Mobile navigation menu and theme switcher</DrawerDescription>
-                
+
                 <div className="flex h-full flex-col justify-between">
                   <div>
                     {/* Drawer Header Area with branding */}
@@ -132,9 +132,7 @@ export function PublicHeader() {
                           />
                         </div>
                         <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-                        <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">
-                          Ariel Batoon
-                        </span>
+                        <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">Ariel Batoon</span>
                       </Link>
                     </div>
 

@@ -133,6 +133,17 @@ export function PublicFooter() {
         {/* Bottom copyright/founder row */}
         <div className="flex flex-col items-center justify-between gap-4 font-mono text-[11px] text-neutral-400 sm:flex-row dark:text-neutral-500">
           <div>&copy; {currentYear} Ariel Batoon. All rights reserved.</div>
+          <div className="flex gap-4">
+            <Link href="/privacy" className="transition-colors hover:text-foreground">
+              Privacy
+            </Link>
+            <Link href="/cookies" className="transition-colors hover:text-foreground">
+              Cookies
+            </Link>
+            <Link href="/terms" className="transition-colors hover:text-foreground">
+              Terms
+            </Link>
+          </div>
           <div>Founded by Ariel Batoon</div>
         </div>
       </div>
