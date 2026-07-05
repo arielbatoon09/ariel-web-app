@@ -90,22 +90,6 @@ export function TestimonialSection() {
     setCanScrollRight(index < totalPages - 1);
   };
 
-  // Scroll function helper (with boundary locking)
-  const scroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return;
-    
-    const container = scrollRef.current;
-    const cardWidth = container.querySelector(".testimonial-card")?.clientWidth || 320;
-    const gap = 24; 
-    const scrollAmount = cardWidth + gap;
-
-    if (direction === "left") {
-      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    } else {
-      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
-
   // Scroll to index helper
   const scrollToCard = (index: number) => {
     if (!scrollRef.current) return;
@@ -118,6 +102,15 @@ export function TestimonialSection() {
       left: index * scrollAmount,
       behavior: "smooth"
     });
+  };
+
+  // Scroll function helper (with boundary locking)
+  const scroll = (direction: "left" | "right") => {
+    if (direction === "left") {
+      scrollToCard(Math.max(0, activeIndex - 1));
+    } else {
+      scrollToCard(Math.min(pagesCount - 1, activeIndex + 1));
+    }
   };
 
   // Auto sliding logic (stops at boundaries, pauses on hover, resets on manual interaction)
