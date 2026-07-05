@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ALL_ARTICLES } from "@/constants/articles";
 import { Section } from "@/components/common/section";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { ConnectDialog } from "@/components/common/connect-dialog";
+import { CtaSection } from "@/components/common/cta-section";
 
 interface PageProps {
   params: Promise<{
@@ -76,6 +78,22 @@ export default async function ArticleDetailPage({ params }: PageProps) {
             {article.description}
           </p>
           
+          {/* Article Banner Image */}
+          {article.imageSrc && (
+            <div className="mt-6 relative w-full aspect-[21/9] overflow-hidden border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900">
+              <Image
+                src={article.imageSrc}
+                alt={`${article.title} Banner`}
+                fill
+                className="object-cover object-center grayscale hover:grayscale-0 transition-all duration-700 ease-out"
+                sizes="100vw"
+                priority
+              />
+              <div className="absolute inset-0 bg-grid-white/[0.02] pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none" />
+            </div>
+          )}
+          
           {/* Article Content Render */}
           <div className="pt-8 border-t border-dashed border-neutral-300 dark:border-neutral-700 space-y-8">
             {article.sections.map((section, idx) => (
@@ -91,16 +109,12 @@ export default async function ArticleDetailPage({ params }: PageProps) {
           </div>
 
           {/* Connect CTA at the bottom */}
-          <div className="pt-8 border-t border-dashed border-neutral-300 dark:border-neutral-700 space-y-4">
-            <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-450 font-sans leading-normal">
-              Have questions about these concepts or need high-performance systems engineering for your project? Let's connect.
-            </p>
-            <ConnectDialog>
-              <Button className="rounded-none font-mono text-xs uppercase tracking-wider cursor-pointer h-10 px-6">
-                Let's Discuss
-                <ArrowRight className="ml-1.5 size-3.5" />
-              </Button>
-            </ConnectDialog>
+          <div className="pt-8 border-t border-dashed border-neutral-300 dark:border-neutral-700">
+            <CtaSection 
+              title="Need systems engineering or code consultation?"
+              description="Have questions about these concepts or need high-performance systems engineering for your project? Let's connect."
+              buttonText="Let's Discuss"
+            />
           </div>
         </div>
       </Section>

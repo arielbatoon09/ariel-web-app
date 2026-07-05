@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { ConnectDialog } from "@/components/common/connect-dialog";
+import { CtaSection } from "@/components/common/cta-section";
 
 interface PageProps {
   params: Promise<{
@@ -301,6 +302,15 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+      </Section>
+
+      {/* CTA Footer Section */}
+      <Section id="cs-cta" containerClassName="pb-16 pt-0" showTopLine={false} showBottomLine={false}>
+        <CtaSection 
+          title="Need a similar system built?"
+          description="I specialize in engineering performance-optimized applications configured to solve operational bottlenecks. Let's align on your project parameters."
+          buttonText="Let's Build It"
+        />
       </Section>
     </div>
   );
