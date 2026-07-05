@@ -24,7 +24,7 @@ export function ServicesList() {
           {ALL_SERVICES.map((pkg) => (
             <div 
               key={pkg.id} 
-              className="border border-dashed border-neutral-300 dark:border-neutral-700 p-8 bg-neutral-50/30 dark:bg-neutral-900/10 space-y-6 flex flex-col justify-between"
+              className="border border-dashed border-neutral-300 dark:border-neutral-700 p-8 bg-neutral-50 dark:bg-neutral-900/60 space-y-6 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 {/* Header Info */}

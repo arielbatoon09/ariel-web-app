@@ -31,7 +31,7 @@ export function ContactFormSection() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Direct Message Form Column */}
         <div className="lg:col-span-7">
-          <div className="p-6 md:p-8 border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50/30 dark:bg-neutral-900/10 relative">
+          <div className="p-6 md:p-8 border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/60 relative">
             <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700">
               +
             </div>

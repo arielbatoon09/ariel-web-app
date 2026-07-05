@@ -19,9 +19,9 @@ export function AboutExperienceTimelineSection() {
                 <span className={cn(
                   "absolute -left-10 top-1 size-4 flex items-center justify-center text-[8px] font-bold select-none transition-all duration-300 border border-dashed",
                   isPresent 
-                    ? "border-neutral-900 dark:border-neutral-100 text-neutral-50 dark:text-neutral-955 bg-neutral-900 dark:bg-neutral-100 border-solid scale-105"
+                    ? "border-neutral-900 dark:border-white text-white dark:text-black bg-neutral-900 dark:bg-white border-solid scale-105"
                     : "bg-background border-neutral-400 dark:border-neutral-600 text-neutral-400 dark:text-neutral-500",
-                  "group-hover:border-neutral-900 dark:group-hover:border-neutral-100 group-hover:text-foreground group-hover:bg-neutral-50 dark:group-hover:bg-neutral-900 group-hover:scale-110"
+                  "group-hover:border-neutral-900 dark:group-hover:border-white group-hover:text-foreground group-hover:bg-neutral-50 dark:group-hover:bg-neutral-900 group-hover:scale-110"
                 )}>
                   +
                 </span>
@@ -34,7 +34,7 @@ export function AboutExperienceTimelineSection() {
                       </h4>
                     </div>
                     {isPresent ? (
-                      <span className="text-[10px] font-mono border border-neutral-900 dark:border-neutral-100 bg-neutral-900 dark:bg-neutral-100 text-background px-2.5 py-0.5 uppercase tracking-wider font-bold select-none transition-all duration-300">
+                      <span className="text-[10px] font-mono border border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black px-2.5 py-0.5 uppercase tracking-wider font-bold select-none transition-all duration-300">
                         Present
                       </span>
                     ) : (

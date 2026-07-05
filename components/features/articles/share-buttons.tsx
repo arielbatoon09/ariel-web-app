@@ -66,7 +66,7 @@ export function ShareButtons({ title }: ShareButtonsProps) {
             alt="Facebook"
             width={14}
             height={14}
-            className="size-3.5 object-contain dark:invert"
+            className="size-3.5 object-contain"
           />
           Facebook
         </Link>
@@ -81,7 +81,7 @@ export function ShareButtons({ title }: ShareButtonsProps) {
             alt="LinkedIn"
             width={14}
             height={14}
-            className="size-3.5 object-contain dark:invert"
+            className="size-3.5 object-contain"
           />
           LinkedIn
         </Link>

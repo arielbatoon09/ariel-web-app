@@ -58,7 +58,7 @@ export function ProcessSection() {
           {PROCESS_STEPS.map((step) => (
             <div
               key={step.id}
-              className="group relative p-8 border-r border-b border-dashed border-neutral-300 dark:border-neutral-700 space-y-6 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/10 transition-colors duration-300 overflow-hidden"
+              className="group relative p-8 border-r border-b border-dashed border-neutral-300 dark:border-neutral-700 space-y-6 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-colors duration-300 overflow-hidden"
             >
               {/* Interactive Corner Plus (+) Markers */}
               <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 select-none pointer-events-none text-[10px] font-light text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-600 dark:group-hover:text-neutral-400 group-hover:scale-150 transition-all duration-300 z-20">

@@ -8,7 +8,7 @@ export function AboutEducationSection() {
       <div className="space-y-8">
         <SectionHeading icon={<GraduationCap className="size-5" />} title="Education" variant="sub" />
 
-        <div className="border border-dashed border-neutral-300 dark:border-neutral-700 p-6 max-w-3xl space-y-2">
+        <div className="border border-dashed border-neutral-300 dark:border-neutral-700 p-6 bg-neutral-50 dark:bg-neutral-900/60 w-full space-y-2">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1">
             <div>
               <h4 className="text-sm font-bold text-foreground font-sans">Bachelor of Science in Information Technology</h4>

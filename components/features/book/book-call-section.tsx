@@ -14,7 +14,7 @@ export function BookCallSection() {
 
   return (
     <Section containerClassName="py-12 md:py-16" showTopLine={false} showBottomLine={true}>
-      <div className="group relative p-4 border border-dashed border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/10 transition-colors duration-300 z-10 w-full min-h-[700px] flex flex-col bg-background">
+      <div className="group relative p-4 border border-dashed border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-colors duration-300 z-10 w-full min-h-[700px] flex flex-col bg-background">
         <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-500 dark:group-hover:text-neutral-400 transition-colors">
           +
         </div>

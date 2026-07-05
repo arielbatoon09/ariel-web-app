@@ -17,7 +17,7 @@ export function AboutCertificatesSection() {
               href={cert.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 p-6 bg-neutral-50/20 dark:bg-neutral-900/10 hover:bg-neutral-100/50 dark:hover:bg-neutral-900/30 space-y-3 relative group cursor-pointer transition-all duration-300 hover:-translate-y-1 block"
+              className="border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 p-6 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 space-y-3 relative group cursor-pointer transition-all duration-300 hover:-translate-y-1 block"
             >
               <div className="flex justify-between items-start gap-3">
                 <div className="space-y-1">

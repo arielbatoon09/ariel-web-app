@@ -52,7 +52,7 @@ export function CaseStudyHero({ project }: CaseStudyHeroProps) {
         </div>
 
         {/* Project Specs Metadata Block */}
-        <div className="lg:col-span-5 w-full border border-dashed border-neutral-300 dark:border-neutral-700 p-6 bg-neutral-50/50 dark:bg-neutral-900/10 space-y-4 lg:sticky lg:top-24 self-start">
+        <div className="lg:col-span-5 w-full border border-dashed border-neutral-300 dark:border-neutral-700 p-6 bg-neutral-50 dark:bg-neutral-900/60 space-y-4 lg:sticky lg:top-24 self-start">
           <h3 className="text-xs font-mono uppercase tracking-wider text-foreground border-b border-dashed border-neutral-300 dark:border-neutral-700 pb-2.5">
             Project Parameters
           </h3>

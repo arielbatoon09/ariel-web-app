@@ -22,7 +22,7 @@ export function AboutTechStackSection() {
           <div className="relative inline-block text-left z-30">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center justify-between gap-3 px-3 py-2 text-[10px] font-mono border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900/50 text-foreground hover:border-neutral-450 cursor-pointer min-w-[200px] uppercase tracking-wider transition-colors duration-200"
+              className="flex items-center justify-between gap-3 px-3 py-2 text-[10px] font-mono border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/60 text-foreground hover:border-neutral-450 cursor-pointer min-w-[200px] uppercase tracking-wider transition-colors duration-200"
             >
               <span>Category: {activeCategory}</span>
               <ChevronDown className={cn("size-3.5 text-neutral-450 transition-transform duration-200", isDropdownOpen && "rotate-180")} />
@@ -64,7 +64,7 @@ export function AboutTechStackSection() {
             return (
               <div
                 key={idx}
-                className="group relative flex items-center gap-2.5 p-2.5 border border-dashed border-neutral-250 dark:border-neutral-750 bg-neutral-100/30 dark:bg-neutral-800/10 hover:bg-white dark:hover:bg-neutral-900/50 transition-all duration-300 hover:-translate-y-0.5"
+                className="group relative flex items-center gap-2.5 p-2.5 border border-dashed border-neutral-250 dark:border-neutral-750 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-all duration-300 hover:-translate-y-0.5"
                 style={{
                   "--hover-border": skill.color,
                 } as React.CSSProperties}

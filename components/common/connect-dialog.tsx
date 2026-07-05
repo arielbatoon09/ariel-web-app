@@ -70,7 +70,7 @@ export function ConnectDialog({
             {/* Option A: Book a Call */}
             <button
               onClick={handleBookCall}
-              className="group/option text-left p-5 border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 bg-neutral-50/50 dark:bg-neutral-900/10 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-all duration-300 relative cursor-pointer"
+              className="group/option text-left p-5 border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-all duration-300 relative cursor-pointer"
             >
               <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700 group-hover/option:text-neutral-500 dark:group-hover/option:text-neutral-400 transition-colors">
                 +
@@ -93,7 +93,7 @@ export function ConnectDialog({
             {/* Option B: Direct Message */}
             <button
               onClick={handleSendMessage}
-              className="group/option text-left p-5 border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 bg-neutral-50/50 dark:bg-neutral-900/10 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-all duration-300 relative cursor-pointer"
+              className="group/option text-left p-5 border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-all duration-300 relative cursor-pointer"
             >
               <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700 group-hover/option:text-neutral-500 dark:group-hover/option:text-neutral-400 transition-colors">
                 +

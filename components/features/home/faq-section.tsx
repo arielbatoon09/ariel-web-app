@@ -43,24 +43,31 @@ export function FaqSection() {
           title="Frequently asked questions"
         />
 
-        {/* Clean, Dashed Separated Accordion Layout */}
-        <div className="w-full border-t border-dashed border-neutral-300 dark:border-neutral-700">
-          <Accordion className="w-full">
-            {FAQS.map((faq, index) => (
-              <AccordionItem
-                key={index}
-                value={`item-${index}`}
-                className="w-full border-b border-dashed border-neutral-300 dark:border-neutral-700"
-              >
-                <AccordionTrigger className="text-foreground hover:no-underline py-4 text-sm md:text-base font-medium flex items-center justify-between">
+        {/* Clean, Dashed Box Grid Accordion Layout */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 border-t border-l border-dashed border-neutral-300 dark:border-neutral-700">
+          {FAQS.map((faq, index) => (
+            <div
+              key={index}
+              className="group relative p-6 border-r border-b border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-colors duration-300 overflow-hidden"
+            >
+              {/* Interactive Corner Plus (+) Markers */}
+              <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 select-none pointer-events-none text-[10px] font-light text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-600 dark:group-hover:text-neutral-400 group-hover:scale-150 transition-all duration-300 z-20">
+                +
+              </div>
+              <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 select-none pointer-events-none text-[10px] font-light text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-600 dark:group-hover:text-neutral-400 group-hover:scale-150 transition-all duration-300 z-20">
+                +
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="text-sm md:text-base font-bold text-foreground font-sans tracking-tight">
                   {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 pb-4 leading-relaxed">
+                </h3>
+                <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed font-sans">
                   {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </Section>

@@ -13,8 +13,8 @@ export function AboutPhilosophySection() {
           {PHILOSOPHIES.map((phi, idx) => {
             const IconComponent = lucideIconMap[phi.iconName] || Cpu;
             return (
-              <div key={idx} className="border border-dashed border-neutral-300 dark:border-neutral-700 p-6 space-y-3 flex items-start gap-4">
-                <div className="p-2 border border-dashed border-neutral-300 dark:border-neutral-700 shrink-0">
+              <div key={idx} className="border border-dashed border-neutral-300 dark:border-neutral-700 p-6 bg-neutral-50 dark:bg-neutral-900/60 space-y-3 flex items-start gap-4">
+                <div className="p-2 border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-100/50 dark:bg-neutral-950/20 shrink-0">
                   <IconComponent className="size-5 text-neutral-500" />
                 </div>
                 <div className="space-y-1">

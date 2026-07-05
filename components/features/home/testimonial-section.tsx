@@ -121,7 +121,7 @@ export function TestimonialSection() {
             {TESTIMONIALS.map((item) => (
               <div
                 key={item.id}
-                className="testimonial-card group relative w-[280px] sm:w-[360px] md:w-[420px] shrink-0 snap-start p-6 md:p-8 border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 bg-neutral-50/20 dark:bg-neutral-900/5 hover:bg-neutral-50/80 dark:hover:bg-neutral-900/30 transition-all duration-300 select-none"
+                className="testimonial-card group relative w-[280px] sm:w-[360px] md:w-[420px] shrink-0 snap-start p-6 md:p-8 border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-900 dark:hover:border-neutral-100 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-all duration-300 select-none"
               >
                 {/* Plus (+) Corner Markers */}
                 <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700 group-hover:text-neutral-550 dark:group-hover:text-neutral-400 group-hover:scale-125 transition-all duration-300">

@@ -34,7 +34,7 @@ export function GridCard({
   return (
     <div
       className={cn(
-        "group relative p-6 border-r border-b border-dashed border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/10 transition-colors duration-300 flex flex-col justify-between",
+        "group relative p-6 border-r border-b border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-900/90 transition-colors duration-300 flex flex-col justify-between",
         className
       )}
       {...props}
@@ -52,7 +52,7 @@ export function GridCard({
         {imageSrc && (
           link ? (
             <Link href={link.href} className="block cursor-pointer">
-              <div className="relative w-full aspect-[16/10] overflow-hidden rounded border border-dashed border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 mb-2">
+              <div className="relative w-full aspect-[16/10] overflow-hidden rounded border border-dashed border-neutral-250 dark:border-neutral-850 bg-neutral-100/50 dark:bg-neutral-900/80 mb-2">
                 <Image
                   src={imageSrc}
                   alt={title}
@@ -63,7 +63,7 @@ export function GridCard({
               </div>
             </Link>
           ) : (
-            <div className="relative w-full aspect-[16/10] overflow-hidden rounded border border-dashed border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 mb-2">
+            <div className="relative w-full aspect-[16/10] overflow-hidden rounded border border-dashed border-neutral-250 dark:border-neutral-850 bg-neutral-100/50 dark:bg-neutral-900/80 mb-2">
               <Image
                 src={imageSrc}
                 alt={title}

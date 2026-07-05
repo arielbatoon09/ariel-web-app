@@ -41,6 +41,7 @@ export function PublicHeader() {
                 alt="ab logo"
                 width={80}
                 height={80}
+                priority
               />
               <Image
                 src="/icons/ab-logo-text-white.png"
@@ -48,6 +49,7 @@ export function PublicHeader() {
                 alt="ab logo"
                 width={80}
                 height={80}
+                priority
               />
             </div>
             <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
