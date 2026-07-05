@@ -10,7 +10,7 @@ import { ALL_SERVICES, type ServicePackage } from "@/constants/services";
 
 export function ServicesList() {
   return (
-    <Section id="services-list" containerClassName="pt-4 md:pt-6 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
+    <Section id="services-list" containerClassName="pt-6 md:pt-10 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-12">
         {/* Section Heading */}
         <SectionHeading

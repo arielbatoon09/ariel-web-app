@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { TECH_STACK, lucideIconMap } from "@/constants/about";
+import Image from "next/image";
 
 export function AboutTechStackSection() {
   const [activeCategory, setActiveCategory] = useState("Frontend");
@@ -76,24 +77,20 @@ export function AboutTechStackSection() {
                 {/* Tech Icon Container */}
                 <div className="size-5 shrink-0 flex items-center justify-center relative">
                   {skill.iconUrl ? (
-                    <img
+                    <Image
                       src={skill.iconUrl}
                       alt={skill.name}
+                      width={18}
+                      height={18}
                       className="size-4.5 object-contain transition-all duration-300 group-hover:scale-110"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
                     />
                   ) : skill.slug ? (
-                    <img
+                    <Image
                       src={`https://cdn.simpleicons.org/${skill.slug}`}
                       alt={skill.name}
+                      width={18}
+                      height={18}
                       className="size-4.5 object-contain filter dark:brightness-95 transition-all duration-300 group-hover:scale-110"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
                     />
                   ) : LucideIconComponent ? (
                     <LucideIconComponent 

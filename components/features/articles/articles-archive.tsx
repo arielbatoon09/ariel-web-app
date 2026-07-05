@@ -35,7 +35,7 @@ export function ArticlesArchive() {
   });
 
   return (
-    <Section id="articles-archive" containerClassName="pt-4 md:pt-6 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
+    <Section id="articles-archive" containerClassName="pt-6 md:pt-10 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-10">
         {/* Section Heading */}
         <SectionHeading

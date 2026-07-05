@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/common/section-heading";
 
 export function AboutProfileIntroSection() {
   return (
-    <Section id="about-intro" containerClassName="pt-8 md:pt-12 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
+    <Section id="about-intro" containerClassName="pt-6 md:pt-10 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-16">
         {/* Header Title */}
         <SectionHeading

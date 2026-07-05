@@ -1,5 +1,4 @@
-import Link from "next/image";
-import LinkComponent from "next/link";
+import Link from "next/link";
 import Image from "next/image";
 import { Section } from "@/components/common/section";
 import { NAV_LINKS, SOCIALS, FOOTER_SERVICES, CONTACT_INFO } from "@/constants/navigation";
@@ -22,7 +21,7 @@ export function PublicFooter() {
           
           {/* Column 1: Brand & Logo */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1 space-y-4 pr-0 lg:pr-4">
-            <LinkComponent href="/" className="flex items-center space-x-3 w-fit">
+            <Link href="/" className="flex items-center space-x-3 w-fit">
               <div className="relative h-6 flex items-center">
                 <Image
                   src="/icons/ab-logo-text-dark.png"
@@ -43,7 +42,7 @@ export function PublicFooter() {
               <span className="text-[12px] font-medium tracking-[0.2em] uppercase">
                 Ariel Batoon
               </span>
-            </LinkComponent>
+            </Link>
             <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 max-w-sm pt-1">
               Engineering premium digital products and experiences for ambitious businesses that refuse to settle. Built once, built right.
             </p>
@@ -56,18 +55,18 @@ export function PublicFooter() {
             </span>
             <ul className="space-y-2.5">
               <li>
-                <LinkComponent href="/" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200">
+                <Link href="/" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200">
                   Home
-                </LinkComponent>
+                </Link>
               </li>
               {NAV_LINKS.map((item) => (
                 <li key={item.label}>
-                  <LinkComponent
+                  <Link
                     href={item.href}
                     className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200"
                   >
                     {item.label}
-                  </LinkComponent>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -81,9 +80,9 @@ export function PublicFooter() {
             <ul className="space-y-2.5">
               {FOOTER_SERVICES.map((item) => (
                 <li key={item.label} className="text-sm text-neutral-600 dark:text-neutral-400">
-                  <LinkComponent href={item.href} className="hover:text-foreground transition-colors duration-200">
+                  <Link href={item.href} className="hover:text-foreground transition-colors duration-200">
                     {item.label}
-                  </LinkComponent>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -97,14 +96,14 @@ export function PublicFooter() {
             <ul className="space-y-2.5">
               {SOCIALS.map((item) => (
                 <li key={item.label}>
-                  <a
+                  <Link
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -117,22 +116,22 @@ export function PublicFooter() {
             </span>
             <ul className="space-y-2.5">
               <li>
-                <a
+                <Link
                   href={CONTACT_INFO.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200"
                 >
                   WhatsApp &rarr; {CONTACT_INFO.whatsappLabel}
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, '')}`}
                   className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors duration-200"
                 >
                   {CONTACT_INFO.phone}
-                </a>
+                </Link>
               </li>
               <li className="text-sm text-neutral-400 dark:text-neutral-505 font-mono">
                 {CONTACT_INFO.location}

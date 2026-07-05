@@ -37,7 +37,7 @@ export function Section({
 
       <div
         className={cn(
-          "relative px-6 md:px-8 py-12 md:py-16",
+          "relative px-6 md:px-8 pt-8 pb-12 md:pt-12 md:pb-16",
           fullWidth ? "w-full" : "max-w-7xl mx-auto",
           containerClassName
         )}
