@@ -53,11 +53,14 @@ export default function AdminOrdersPage() {
         <button
           onClick={() => handleCycleStatus(item)}
           className={cn(
-            "rounded px-2 py-0.5 font-mono text-xs uppercase tracking-wider transition-all duration-300 hover:scale-105",
-            item.status === "completed" && "bg-green-50 text-green-600 border border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-900/40",
-            item.status === "in-progress" && "bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-900/40",
-            item.status === "pending" && "bg-yellow-50 text-yellow-600 border border-yellow-200 dark:bg-yellow-950/20 dark:text-yellow-400 dark:border-yellow-900/40",
-            item.status === "cancelled" && "bg-red-50 text-red-600 border border-red-200 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/40"
+            "rounded px-2 py-0.5 font-mono text-xs tracking-wider uppercase transition-all duration-300 hover:scale-105",
+            item.status === "completed" &&
+              "border border-green-200 bg-green-50 text-green-600 dark:border-green-900/40 dark:bg-green-950/20 dark:text-green-400",
+            item.status === "in-progress" &&
+              "border border-blue-200 bg-blue-50 text-blue-600 dark:border-blue-900/40 dark:bg-blue-950/20 dark:text-blue-400",
+            item.status === "pending" &&
+              "border border-yellow-200 bg-yellow-50 text-yellow-600 dark:border-yellow-900/40 dark:bg-yellow-950/20 dark:text-yellow-400",
+            item.status === "cancelled" && "border border-red-200 bg-red-50 text-red-600 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400"
           )}
           title="Click to cycle status"
         >

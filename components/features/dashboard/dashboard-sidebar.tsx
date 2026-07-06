@@ -6,12 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { 
-  Menu, 
-  X, 
-  LogOut, 
-  User 
-} from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 
 export interface NavItem {
   label: string;
@@ -56,7 +51,7 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
             />
           </div>
           <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-          <span className="font-mono text-xs font-bold tracking-wider uppercase text-foreground">
+          <span className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">
             {role === "admin" ? "ADMIN PANEL" : "CLIENT PORTAL"}
           </span>
         </Link>
@@ -70,12 +65,7 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
       </header>
 
       {/* Sidebar overlay for mobile */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden" onClick={() => setIsOpen(false)} />}
 
       {/* Main Sidebar Wrapper */}
       <aside
@@ -117,7 +107,7 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
                   />
                 </div>
                 <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-                <span className="font-mono text-sm font-bold tracking-widest uppercase text-foreground">
+                <span className="font-mono text-sm font-bold tracking-widest text-foreground uppercase">
                   {role === "admin" ? "ADMIN PANEL" : "CLIENT PORTAL"}
                 </span>
               </div>
@@ -136,11 +126,16 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
                   className={cn(
                     "group flex items-center gap-3 border border-transparent px-3 py-2.5 font-sans text-sm font-medium transition-all duration-300",
                     isActive
-                      ? "border border-neutral-300 bg-neutral-100 text-foreground dark:border-neutral-750 dark:bg-neutral-900/60"
+                      ? "dark:border-neutral-750 border border-neutral-300 bg-neutral-100 text-foreground dark:bg-neutral-900/60"
                       : "text-neutral-500 hover:bg-neutral-100 hover:text-foreground dark:text-neutral-400 dark:hover:bg-neutral-900/40"
                   )}
                 >
-                  <span className={cn("size-4 transition-transform duration-300", isActive ? "text-foreground" : "text-neutral-400 dark:text-neutral-500")}>
+                  <span
+                    className={cn(
+                      "size-4 transition-transform duration-300",
+                      isActive ? "text-foreground" : "text-neutral-400 dark:text-neutral-500"
+                    )}
+                  >
                     {item.icon}
                   </span>
                   <span className="font-mono text-xs tracking-wide">{item.label}</span>

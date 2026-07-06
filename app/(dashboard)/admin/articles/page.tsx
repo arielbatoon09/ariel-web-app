@@ -60,7 +60,10 @@ export default function AdminArticlesPage() {
     const title = window.prompt("Enter Article Title:");
     if (!title) return;
     const desc = window.prompt("Enter Description:") || "";
-    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
 
     const newArticle: Article = {
       id: `0${articles.length + 1}`,

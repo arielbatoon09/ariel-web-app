@@ -4,19 +4,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Plus, MoreHorizontal, Eye, Edit, ShieldAlert, Trash2, ChevronLeft, ChevronRight, CornerDownRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -91,7 +80,6 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
   const totalItems = filteredData.length;
   const totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
 
-
   const safePage = currentPage > totalPages ? 1 : currentPage;
 
   const paginatedData = React.useMemo(() => {
@@ -119,7 +107,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
           )}
           {hasStatusFilter && (
             <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val as "all" | "active" | "disabled")}>
-              <SelectTrigger size="sm" className="h-9 rounded-none border-neutral-300 font-sans text-xs bg-transparent dark:bg-transparent">
+              <SelectTrigger size="sm" className="h-9 rounded-none border-neutral-300 bg-transparent font-sans text-xs dark:bg-transparent">
                 <SelectValue placeholder="Status Filter" />
               </SelectTrigger>
               <SelectContent className="rounded-none border border-neutral-300 bg-background font-sans text-xs dark:border-neutral-700">
@@ -133,11 +121,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
         </div>
 
         {onAddClick && (
-          <Button
-            onClick={onAddClick}
-            size="sm"
-            className="h-9 cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase"
-          >
+          <Button onClick={onAddClick} size="sm" className="h-9 cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase">
             <Plus className="mr-1.5 size-3.5" />
             {addButtonLabel}
           </Button>
@@ -147,8 +131,12 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
       {/* Main Table Grid Card */}
       <div className="relative border border-neutral-300 bg-neutral-50/50 dark:border-neutral-700 dark:bg-neutral-900/20">
         {/* Intersection markers */}
-        <div className="pointer-events-none absolute top-0 right-0 z-20 translate-x-1/2 -translate-y-1/2 text-xs text-neutral-300 select-none dark:text-neutral-700">+</div>
-        <div className="pointer-events-none absolute left-0 bottom-0 z-20 -translate-x-1/2 translate-y-1/2 text-xs text-neutral-300 select-none dark:text-neutral-700">+</div>
+        <div className="pointer-events-none absolute top-0 right-0 z-20 translate-x-1/2 -translate-y-1/2 text-xs text-neutral-300 select-none dark:text-neutral-700">
+          +
+        </div>
+        <div className="pointer-events-none absolute bottom-0 left-0 z-20 -translate-x-1/2 translate-y-1/2 text-xs text-neutral-300 select-none dark:text-neutral-700">
+          +
+        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left font-sans text-xs">
@@ -156,40 +144,31 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
               <tr className="border-b border-neutral-300 bg-neutral-100/50 dark:border-neutral-700 dark:bg-neutral-900/40">
                 {columns.map((col, idx) => (
                   <th
-                     key={idx}
-                     className={cn(
-                       "px-4 py-3 font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-500",
-                       col.className
-                     )}
-                   >
-                     {col.header}
-                   </th>
-                 ))}
-                 {hasActions && (
-                   <th className="px-4 py-3 text-right font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-500 w-20">
-                     Actions
-                   </th>
-                 )}
-               </tr>
-             </thead>
+                    key={idx}
+                    className={cn("px-4 py-3 font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-500", col.className)}
+                  >
+                    {col.header}
+                  </th>
+                ))}
+                {hasActions && (
+                  <th className="w-20 px-4 py-3 text-right font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                    Actions
+                  </th>
+                )}
+              </tr>
+            </thead>
             <tbody>
               {isLoading ? (
                 Array.from({ length: pageSize }).map((_, rowIdx) => (
-                  <tr
-                    key={rowIdx}
-                    className={cn(
-                      "border-b border-neutral-200 dark:border-neutral-800",
-                      rowIdx === pageSize - 1 && "border-b-0"
-                    )}
-                  >
+                  <tr key={rowIdx} className={cn("border-b border-neutral-200 dark:border-neutral-800", rowIdx === pageSize - 1 && "border-b-0")}>
                     {columns.map((_, colIdx) => (
                       <td key={colIdx} className="px-4 py-3">
                         <Skeleton className="h-4 w-full" />
                       </td>
                     ))}
                     {hasActions && (
-                      <td className="px-4 py-3 w-20">
-                        <Skeleton className="h-6 w-7 ml-auto" />
+                      <td className="w-20 px-4 py-3">
+                        <Skeleton className="ml-auto h-6 w-7" />
                       </td>
                     )}
                   </tr>
@@ -206,13 +185,11 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   >
                     {columns.map((col, colIdx) => (
                       <td key={colIdx} className={cn("px-4 py-3 text-foreground", col.className)}>
-                        {typeof col.accessorKey === "function"
-                          ? col.accessorKey(item)
-                          : (item[col.accessorKey as keyof T] as React.ReactNode)}
+                        {typeof col.accessorKey === "function" ? col.accessorKey(item) : (item[col.accessorKey as keyof T] as React.ReactNode)}
                       </td>
                     ))}
                     {hasActions && (
-                      <td className="px-4 py-3 text-right w-20">
+                      <td className="w-20 px-4 py-3 text-right">
                         <div className="flex justify-end">
                           <DropdownMenu>
                             <DropdownMenuTrigger
@@ -222,11 +199,14 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                                 </button>
                               }
                             />
-                            <DropdownMenuContent align="end" className="w-40 rounded-none border border-neutral-300 bg-background font-mono text-[10px] dark:border-neutral-700">
+                            <DropdownMenuContent
+                              align="end"
+                              className="w-40 rounded-none border border-neutral-300 bg-background font-mono text-[10px] dark:border-neutral-700"
+                            >
                               {onViewClick && (
                                 <DropdownMenuItem
                                   onClick={() => onViewClick(item)}
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 text-neutral-600 hover:text-foreground dark:text-neutral-400 whitespace-nowrap"
+                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
                                 >
                                   <Eye className="size-3.5" />
                                   <span>VIEW DETAILS</span>
@@ -235,7 +215,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                               {onEditClick && (
                                 <DropdownMenuItem
                                   onClick={() => onEditClick(item)}
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 text-neutral-600 hover:text-foreground dark:text-neutral-400 whitespace-nowrap"
+                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
                                 >
                                   <Edit className="size-3.5" />
                                   <span>EDIT ENTRY</span>
@@ -244,7 +224,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                               {onToggleStatusClick && (
                                 <DropdownMenuItem
                                   onClick={() => onToggleStatusClick(item)}
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 text-neutral-600 hover:text-foreground dark:text-neutral-400 whitespace-nowrap"
+                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
                                 >
                                   <ShieldAlert className="size-3.5" />
                                   <span>{item.disabled ? "ENABLE" : "DISABLE"}</span>
@@ -254,7 +234,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                                 <DropdownMenuItem
                                   onClick={() => onDeleteClick(item)}
                                   variant="destructive"
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 whitespace-nowrap"
+                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
                                 >
                                   <Trash2 className="size-3.5" />
                                   <span>DELETE ENTRY</span>
@@ -311,10 +291,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   variant={currentPage === pageNum ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(pageNum)}
-                  className={cn(
-                    "h-8 w-8 cursor-pointer rounded-none p-0 font-mono text-xs",
-                    currentPage !== pageNum && "border-neutral-300"
-                  )}
+                  className={cn("h-8 w-8 cursor-pointer rounded-none p-0 font-mono text-xs", currentPage !== pageNum && "border-neutral-300")}
                 >
                   {pageNum}
                 </Button>

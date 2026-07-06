@@ -37,7 +37,7 @@ export default function CustomersPage() {
         <span
           className={cn(
             "inline-flex items-center gap-1 font-mono text-xs tracking-wide uppercase",
-            item.role === "admin" ? "text-amber-500 font-bold" : "text-neutral-400 dark:text-neutral-500"
+            item.role === "admin" ? "font-bold text-amber-500" : "text-neutral-400 dark:text-neutral-500"
           )}
         >
           {item.role === "admin" ? <Shield className="size-3" /> : <User className="size-3" />}
@@ -51,7 +51,7 @@ export default function CustomersPage() {
         <span
           className={cn(
             "inline-flex items-center gap-1 font-mono text-xs tracking-wide uppercase",
-            item.disabled ? "text-red-500 font-bold" : "text-green-550"
+            item.disabled ? "font-bold text-red-500" : "text-green-550"
           )}
         >
           {item.disabled ? <ShieldAlert className="size-3" /> : <Clock className="size-3" />}
@@ -94,40 +94,31 @@ export default function CustomersPage() {
       </div>
 
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="rounded-none border border-neutral-200 bg-background/95 p-6 backdrop-blur-md sm:max-w-[500px] dark:border-neutral-800 font-mono text-xs">
+        <DialogContent className="rounded-none border border-neutral-200 bg-background/95 p-6 font-mono text-xs backdrop-blur-md sm:max-w-[500px] dark:border-neutral-800">
           {currentCustomer && (
             <div className="space-y-6">
               <DialogHeader className="space-y-1">
-                <DialogTitle className="font-sans text-base font-bold text-foreground">
-                  Customer Profile & Audits
-                </DialogTitle>
-                <DialogDescription className="text-[10px] text-neutral-400 uppercase">
-                  ID: {currentCustomer.id}
-                </DialogDescription>
+                <DialogTitle className="font-sans text-base font-bold text-foreground">Customer Profile & Audits</DialogTitle>
+                <DialogDescription className="text-[10px] text-neutral-400 uppercase">ID: {currentCustomer.id}</DialogDescription>
               </DialogHeader>
 
               {/* User Bio & Primary Settings */}
-              <div className="border border-dashed border-neutral-300 p-4 dark:border-neutral-700 space-y-4 bg-neutral-50/20 dark:bg-neutral-900/10">
+              <div className="space-y-4 border border-dashed border-neutral-300 bg-neutral-50/20 p-4 dark:border-neutral-700 dark:bg-neutral-900/10">
                 <div className="space-y-1">
                   <div className="text-[10px] text-neutral-400 uppercase">Name & Email</div>
-                  <div className="font-sans font-bold text-sm text-foreground">{currentCustomer.name}</div>
+                  <div className="font-sans text-sm font-bold text-foreground">{currentCustomer.name}</div>
                   <div className="text-neutral-505 dark:text-neutral-400">{currentCustomer.email}</div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-dashed border-neutral-200 dark:border-neutral-800">
+                <div className="grid grid-cols-2 gap-4 border-t border-dashed border-neutral-200 pt-2 dark:border-neutral-800">
                   {/* Change Role Button */}
                   <div className="space-y-1.5">
                     <div className="text-[10px] text-neutral-400 uppercase">Change Account Role</div>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() =>
-                        updateCustomerRole(
-                          currentCustomer.id,
-                          currentCustomer.role === "admin" ? "customer" : "admin"
-                        )
-                      }
-                      className="h-8 rounded-none border-dashed font-mono text-[10px] uppercase w-full justify-between"
+                      onClick={() => updateCustomerRole(currentCustomer.id, currentCustomer.role === "admin" ? "customer" : "admin")}
+                      className="h-8 w-full justify-between rounded-none border-dashed font-mono text-[10px] uppercase"
                     >
                       <span>{currentCustomer.role === "admin" ? "Demote to User" : "Promote to Admin"}</span>
                       {currentCustomer.role === "admin" ? <User className="size-3" /> : <Shield className="size-3" />}
@@ -142,8 +133,8 @@ export default function CustomersPage() {
                       size="sm"
                       onClick={() => toggleCustomerBlockStatus(currentCustomer.id)}
                       className={cn(
-                        "h-8 rounded-none border-dashed font-mono text-[10px] uppercase w-full justify-between",
-                        !currentCustomer.disabled && "text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/25"
+                        "h-8 w-full justify-between rounded-none border-dashed font-mono text-[10px] uppercase",
+                        !currentCustomer.disabled && "text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/25"
                       )}
                     >
                       <span>{currentCustomer.disabled ? "Unblock Account" : "Block Account"}</span>
@@ -155,30 +146,26 @@ export default function CustomersPage() {
 
               {/* Activity Logs */}
               <div className="space-y-2">
-                <h4 className="font-mono text-[10px] font-bold tracking-wider uppercase text-neutral-400 dark:text-neutral-500">
-                  User Audit Logs
-                </h4>
-                <div className="border border-dashed border-neutral-300 dark:border-neutral-700 max-h-48 overflow-y-auto divide-y divide-dashed divide-neutral-200 dark:divide-neutral-800">
+                <h4 className="font-mono text-[10px] font-bold tracking-wider text-neutral-400 uppercase dark:text-neutral-500">User Audit Logs</h4>
+                <div className="max-h-48 divide-y divide-dashed divide-neutral-200 overflow-y-auto border border-dashed border-neutral-300 dark:divide-neutral-800 dark:border-neutral-700">
                   {currentCustomer.activities && currentCustomer.activities.length > 0 ? (
                     currentCustomer.activities.map((act) => (
-                      <div key={act.id} className="p-3 space-y-1 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/10">
+                      <div key={act.id} className="space-y-1 p-3 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/10">
                         <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-300">
                           <span className="font-sans font-medium">{act.action}</span>
-                          <span className="text-[9px] text-neutral-450 dark:text-neutral-500 flex items-center gap-1">
+                          <span className="text-neutral-450 flex items-center gap-1 text-[9px] dark:text-neutral-500">
                             <Clock className="size-2.5" />
                             {act.timestamp}
                           </span>
                         </div>
-                        <div className="text-[9px] text-neutral-450 dark:text-neutral-500 flex items-center gap-1">
+                        <div className="text-neutral-450 flex items-center gap-1 text-[9px] dark:text-neutral-500">
                           <Globe className="size-2.5" />
                           IP Address: {act.ipAddress}
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="p-4 text-center text-neutral-400 dark:text-neutral-500">
-                      No activities logged for this user.
-                    </div>
+                    <div className="p-4 text-center text-neutral-400 dark:text-neutral-500">No activities logged for this user.</div>
                   )}
                 </div>
               </div>

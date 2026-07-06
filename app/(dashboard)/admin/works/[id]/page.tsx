@@ -22,9 +22,7 @@ export default function AdminWorkDetailPage() {
   const projectId = params.id as string;
   const project = works.find((p) => p.id === projectId);
 
-  const [activeTab, setActiveTab] = React.useState<"edit" | "preview">(
-    searchParams.get("edit") === "true" ? "edit" : "preview"
-  );
+  const [activeTab, setActiveTab] = React.useState<"edit" | "preview">(searchParams.get("edit") === "true" ? "edit" : "preview");
   const [previewMode, setPreviewMode] = React.useState<"desktop" | "tablet" | "mobile">("desktop");
 
   // Form State
@@ -40,7 +38,7 @@ export default function AdminWorkDetailPage() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData(JSON.parse(JSON.stringify(project)) as Project); // Deep clone for local edits
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project?.id]);
 
   React.useEffect(() => {
@@ -74,7 +72,7 @@ export default function AdminWorkDetailPage() {
   }
 
   const handleFieldChange = (field: keyof Project, value: Project[keyof Project]) => {
-    setFormData((prev) => prev ? { ...prev, [field]: value } : null);
+    setFormData((prev) => (prev ? { ...prev, [field]: value } : null));
   };
 
   const handleSeoFieldChange = (field: keyof SeoMeta, value: string) => {
@@ -193,7 +191,7 @@ export default function AdminWorkDetailPage() {
   return (
     <div className="space-y-6 pt-6">
       {/* Header Panel */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-dashed border-neutral-300 pb-4 dark:border-neutral-700">
+      <div className="flex flex-col gap-4 border-b border-dashed border-neutral-300 pb-4 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-700">
         <div className="flex items-center gap-3">
           <Link
             href="/admin/works"
@@ -204,7 +202,9 @@ export default function AdminWorkDetailPage() {
           </Link>
           <div>
             <h1 className="font-sans text-xl font-bold tracking-tight text-foreground">Visual Project Editor</h1>
-            <p className="font-mono text-[9px] text-neutral-400 dark:text-neutral-500">Edit inline directly on the live template or preview changes instantly.</p>
+            <p className="font-mono text-[9px] text-neutral-400 dark:text-neutral-500">
+              Edit inline directly on the live template or preview changes instantly.
+            </p>
           </div>
         </div>
 
@@ -231,7 +231,7 @@ export default function AdminWorkDetailPage() {
             size="sm"
             onClick={handleSave}
             disabled={!isDirty}
-            className="h-8 rounded-none font-mono text-[10px] uppercase bg-green-600 hover:bg-green-700 text-white dark:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-8 rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-green-700"
           >
             <Save className="mr-1.5 size-3" />
             Save changes
@@ -241,8 +241,8 @@ export default function AdminWorkDetailPage() {
 
       {activeTab === "edit" ? (
         /* Visual Inline Editor Mode (Inheriting Exact Public Layout CSS) */
-        <div className="border border-dashed border-neutral-300 dark:border-neutral-700 bg-background p-6 space-y-16">
-          <div className="pointer-events-none w-full bg-amber-500/10 border border-dashed border-amber-300 text-[10px] font-mono tracking-widest text-center py-2 uppercase text-amber-600 dark:text-amber-500 select-none">
+        <div className="space-y-16 border border-dashed border-neutral-300 bg-background p-6 dark:border-neutral-700">
+          <div className="pointer-events-none w-full border border-dashed border-amber-300 bg-amber-500/10 py-2 text-center font-mono text-[10px] tracking-widest text-amber-600 uppercase select-none dark:text-amber-500">
             Visual Editor Mode Active — Click text components to edit directly.
           </div>
 
@@ -252,37 +252,37 @@ export default function AdminWorkDetailPage() {
               <input
                 value={formData.tag}
                 onChange={(e) => handleFieldChange("tag", e.target.value)}
-                className="w-full bg-transparent border-none outline-none font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500 focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-1 rounded font-bold"
+                className="focus:ring-dashed focus:ring-neutral-450 w-full rounded border-none bg-transparent p-1 font-mono text-[10px] font-bold tracking-[0.2em] text-neutral-400 uppercase outline-none focus:ring-1 dark:text-neutral-500"
                 placeholder="TAG SUBTITLE"
               />
               <input
                 value={formData.title}
                 onChange={(e) => handleFieldChange("title", e.target.value)}
-                className="w-full bg-transparent border-none outline-none font-sans text-3xl md:text-5xl font-bold tracking-tight text-foreground focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-1 rounded"
+                className="focus:ring-dashed focus:ring-neutral-450 w-full rounded border-none bg-transparent p-1 font-sans text-3xl font-bold tracking-tight text-foreground outline-none focus:ring-1 md:text-5xl"
                 placeholder="Project Title"
               />
               <textarea
                 value={formData.description}
                 onChange={(e) => handleFieldChange("description", e.target.value)}
-                className="w-full bg-transparent border-none outline-none font-sans text-sm md:text-base leading-relaxed text-neutral-600 dark:text-neutral-400 focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-1 rounded resize-none"
+                className="focus:ring-dashed focus:ring-neutral-450 w-full resize-none rounded border-none bg-transparent p-1 font-sans text-sm leading-relaxed text-neutral-600 outline-none focus:ring-1 md:text-base dark:text-neutral-400"
                 placeholder="Project Description Summary..."
                 rows={5}
               />
               {/* Banner Image Showcase Editor */}
-              <div className="pt-2 space-y-1.5">
-                <span className="text-neutral-400 font-mono text-[9px] uppercase block">Project Banner Image:</span>
+              <div className="space-y-1.5 pt-2">
+                <span className="block font-mono text-[9px] text-neutral-400 uppercase">Project Banner Image:</span>
                 {formData.imageSrc ? (
-                  <div className="relative aspect-[16/6] w-full border border-dashed border-neutral-300 bg-neutral-100 overflow-hidden dark:border-neutral-700 dark:bg-neutral-900 group">
+                  <div className="group relative aspect-[16/6] w-full overflow-hidden border border-dashed border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
                     <Image
                       src={formData.imageSrc}
                       alt="Project Banner Preview"
                       fill
                       className="object-cover grayscale transition-all duration-705 ease-out hover:grayscale-0"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none" />
-                    
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
+
                     {/* Hover Controls */}
-                    <div className="absolute inset-0 flex items-center justify-center gap-3 bg-neutral-950/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 flex items-center justify-center gap-3 bg-neutral-950/40 opacity-0 transition-opacity group-hover:opacity-100">
                       <Button
                         size="sm"
                         onClick={() => {
@@ -291,7 +291,7 @@ export default function AdminWorkDetailPage() {
                             handleFieldChange("imageSrc", newSrc);
                           }
                         }}
-                        className="rounded-none border-dashed font-mono text-[9px] uppercase px-3 h-7 bg-background text-foreground hover:bg-neutral-100 border border-neutral-300"
+                        className="h-7 rounded-none border border-dashed border-neutral-300 bg-background px-3 font-mono text-[9px] text-foreground uppercase hover:bg-neutral-100"
                       >
                         Change Path
                       </Button>
@@ -299,7 +299,7 @@ export default function AdminWorkDetailPage() {
                         variant="destructive"
                         size="sm"
                         onClick={() => handleFieldChange("imageSrc", "")}
-                        className="rounded-none font-mono text-[9px] uppercase px-3 h-7"
+                        className="h-7 rounded-none px-3 font-mono text-[9px] uppercase"
                       >
                         Remove
                       </Button>
@@ -314,7 +314,7 @@ export default function AdminWorkDetailPage() {
                         handleFieldChange("imageSrc", path);
                       }
                     }}
-                    className="w-full aspect-[16/6] border-2 border-dashed border-neutral-300 hover:border-neutral-450 dark:border-neutral-700 dark:hover:bg-neutral-500 bg-neutral-50/50 dark:bg-neutral-900/10 flex flex-col items-center justify-center text-neutral-400 font-mono text-xs uppercase transition-colors gap-1"
+                    className="hover:border-neutral-450 flex aspect-[16/6] w-full flex-col items-center justify-center gap-1 border-2 border-dashed border-neutral-300 bg-neutral-50/50 font-mono text-xs text-neutral-400 uppercase transition-colors dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-500"
                   >
                     <Plus className="size-5" />
                     <span>Add Project Banner Image</span>
@@ -330,20 +330,20 @@ export default function AdminWorkDetailPage() {
                 Project Parameters
               </h3>
               <div className="space-y-3.5 font-mono text-xs">
-                <div className="flex items-center justify-between py-1 border-b border-dashed border-neutral-200 dark:border-neutral-800">
+                <div className="flex items-center justify-between border-b border-dashed border-neutral-200 py-1 dark:border-neutral-800">
                   <span className="text-neutral-400">Role:</span>
                   <input
                     value={formData.caseStudy.role}
                     onChange={(e) => handleCaseStudyFieldChange("role", e.target.value)}
-                    className="bg-transparent border-none outline-none text-right font-bold text-foreground focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-0.5 rounded w-48"
+                    className="focus:ring-dashed focus:ring-neutral-450 w-48 rounded border-none bg-transparent p-0.5 text-right font-bold text-foreground outline-none focus:ring-1"
                   />
                 </div>
-                <div className="flex items-center justify-between py-1 border-b border-dashed border-neutral-200 dark:border-neutral-800">
+                <div className="flex items-center justify-between border-b border-dashed border-neutral-200 py-1 dark:border-neutral-800">
                   <span className="text-neutral-400">Timeline:</span>
                   <input
                     value={formData.caseStudy.timeline}
                     onChange={(e) => handleCaseStudyFieldChange("timeline", e.target.value)}
-                    className="bg-transparent border-none outline-none text-right font-bold text-foreground focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-0.5 rounded w-48"
+                    className="focus:ring-dashed focus:ring-neutral-450 w-48 rounded border-none bg-transparent p-0.5 text-right font-bold text-foreground outline-none focus:ring-1"
                   />
                 </div>
                 <div className="flex items-center justify-between py-1">
@@ -351,7 +351,7 @@ export default function AdminWorkDetailPage() {
                   <input
                     value={formData.caseStudy.client || ""}
                     onChange={(e) => handleCaseStudyFieldChange("client", e.target.value)}
-                    className="bg-transparent border-none outline-none text-right font-bold text-foreground focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-0.5 rounded w-48"
+                    className="focus:ring-dashed focus:ring-neutral-450 w-48 rounded border-none bg-transparent p-0.5 text-right font-bold text-foreground outline-none focus:ring-1"
                     placeholder="None"
                   />
                 </div>
@@ -362,37 +362,33 @@ export default function AdminWorkDetailPage() {
           {/* Section 1.5: Project Gallery Showcase Editor */}
           <div className="space-y-4 border-t border-dashed border-neutral-200 pt-12 dark:border-neutral-800">
             <div className="flex items-center justify-between">
-              <h3 className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase">
-                Project Gallery Showcase
-              </h3>
-              <span className="text-[10px] font-mono text-neutral-400">
-                {formData.gallery?.length || 0} images
-              </span>
+              <h3 className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase">Project Gallery Showcase</h3>
+              <span className="font-mono text-[10px] text-neutral-400">{formData.gallery?.length || 0} images</span>
             </div>
 
             {/* Gallery Images Container */}
             {formData.gallery && formData.gallery.length > 0 ? (
               <div className="space-y-4">
                 {/* Large Main View of the First Image / Carousel */}
-                <div className="relative aspect-[16/6] w-full border border-dashed border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden group">
+                <div className="group relative aspect-[16/6] w-full overflow-hidden border border-dashed border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
                   <Image
                     src={formData.gallery[0]}
                     alt="Main Gallery Preview"
                     fill
                     className="object-cover grayscale transition-all duration-705 ease-out hover:grayscale-0"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none" />
-                  <div className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm px-2 py-1 text-[9px] font-mono text-foreground uppercase border border-dashed border-neutral-300 dark:border-neutral-700">
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
+                  <div className="absolute bottom-4 left-4 border border-dashed border-neutral-300 bg-background/80 px-2 py-1 font-mono text-[9px] text-foreground uppercase backdrop-blur-sm dark:border-neutral-700">
                     Primary Image
                   </div>
                 </div>
 
                 {/* Thumbnails Row with Add/Remove buttons */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6">
                   {formData.gallery.map((src, idx) => (
                     <div
                       key={idx}
-                      className="group relative aspect-[16/10] border border-neutral-300 dark:border-neutral-700 overflow-hidden bg-neutral-100 dark:bg-neutral-900"
+                      className="group relative aspect-[16/10] overflow-hidden border border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900"
                     >
                       <Image src={src} alt={`Thumb ${idx}`} fill className="object-cover" />
                       {/* Delete Overlay */}
@@ -401,7 +397,7 @@ export default function AdminWorkDetailPage() {
                           const updated = (formData.gallery || []).filter((_, i) => i !== idx);
                           handleFieldChange("gallery", updated);
                         }}
-                        className="absolute inset-0 flex items-center justify-center bg-red-650/80 text-white opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[8px] uppercase tracking-wider font-bold"
+                        className="bg-red-650/80 absolute inset-0 flex items-center justify-center font-mono text-[8px] font-bold tracking-wider text-white uppercase opacity-0 transition-opacity group-hover:opacity-100"
                       >
                         Remove
                       </button>
@@ -417,9 +413,9 @@ export default function AdminWorkDetailPage() {
                         handleFieldChange("gallery", [...currentGallery, path]);
                       }
                     }}
-                    className="aspect-[16/10] border border-dashed border-neutral-300 hover:border-neutral-450 dark:border-neutral-700 dark:hover:bg-neutral-500 bg-neutral-50/50 dark:bg-neutral-900/10 flex flex-col items-center justify-center text-neutral-400 font-mono text-[9px] uppercase transition-colors"
+                    className="hover:border-neutral-450 flex aspect-[16/10] flex-col items-center justify-center border border-dashed border-neutral-300 bg-neutral-50/50 font-mono text-[9px] text-neutral-400 uppercase transition-colors dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-500"
                   >
-                    <Plus className="size-4 mb-1" />
+                    <Plus className="mb-1 size-4" />
                     Add Image
                   </button>
                 </div>
@@ -433,7 +429,7 @@ export default function AdminWorkDetailPage() {
                     handleFieldChange("gallery", [path]);
                   }
                 }}
-                className="w-full aspect-[16/6] border-2 border-dashed border-neutral-300 hover:border-neutral-450 dark:border-neutral-700 dark:hover:bg-neutral-500 bg-neutral-50/50 dark:bg-neutral-900/10 flex flex-col items-center justify-center text-neutral-400 font-mono text-xs uppercase transition-colors gap-2"
+                className="hover:border-neutral-450 flex aspect-[16/6] w-full flex-col items-center justify-center gap-2 border-2 border-dashed border-neutral-300 bg-neutral-50/50 font-mono text-xs text-neutral-400 uppercase transition-colors dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-500"
               >
                 <Plus className="size-6" />
                 <span>Add Gallery Images</span>
@@ -443,7 +439,7 @@ export default function AdminWorkDetailPage() {
           </div>
 
           {/* Section 2: Challenge & Solution */}
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 border-t border-dashed border-neutral-200 pt-12 dark:border-neutral-800">
+          <div className="grid grid-cols-1 gap-12 border-t border-dashed border-neutral-200 pt-12 lg:grid-cols-12 dark:border-neutral-800">
             <div className="space-y-10 lg:col-span-8">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-foreground">
@@ -453,7 +449,7 @@ export default function AdminWorkDetailPage() {
                 <textarea
                   value={formData.caseStudy.challenge}
                   onChange={(e) => handleCaseStudyFieldChange("challenge", e.target.value)}
-                  className="w-full bg-transparent border-none outline-none font-sans text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-1 rounded resize-none"
+                  className="focus:ring-dashed focus:ring-neutral-450 w-full resize-none rounded border-none bg-transparent p-1 font-sans text-sm leading-relaxed text-neutral-600 outline-none focus:ring-1 dark:text-neutral-400"
                   rows={4}
                 />
               </div>
@@ -466,7 +462,7 @@ export default function AdminWorkDetailPage() {
                 <textarea
                   value={formData.caseStudy.solution}
                   onChange={(e) => handleCaseStudyFieldChange("solution", e.target.value)}
-                  className="w-full bg-transparent border-none outline-none font-sans text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-1 rounded resize-none"
+                  className="focus:ring-dashed focus:ring-neutral-450 w-full resize-none rounded border-none bg-transparent p-1 font-sans text-sm leading-relaxed text-neutral-600 outline-none focus:ring-1 dark:text-neutral-400"
                   rows={4}
                 />
               </div>
@@ -485,9 +481,9 @@ export default function AdminWorkDetailPage() {
                 variant="outline"
                 size="sm"
                 onClick={addFeature}
-                className="h-7 rounded-none border-dashed font-mono text-[9px] uppercase px-2.5"
+                className="h-7 rounded-none border-dashed px-2.5 font-mono text-[9px] uppercase"
               >
-                <Plus className="size-3 mr-1" /> Add Feature card
+                <Plus className="mr-1 size-3" /> Add Feature card
               </Button>
             </div>
 
@@ -495,11 +491,11 @@ export default function AdminWorkDetailPage() {
               {formData.caseStudy.features.map((feature, idx) => (
                 <div
                   key={idx}
-                  className="relative border border-dashed border-neutral-300 bg-neutral-50/30 p-5 dark:border-neutral-700 dark:bg-neutral-900/10 space-y-2 group"
+                  className="group relative space-y-2 border border-dashed border-neutral-300 bg-neutral-50/30 p-5 dark:border-neutral-700 dark:bg-neutral-900/10"
                 >
                   <button
                     onClick={() => removeFeature(idx)}
-                    className="absolute top-2 right-2 text-neutral-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-500"
                   >
                     <Trash2 className="size-3.5" />
                   </button>
@@ -508,13 +504,13 @@ export default function AdminWorkDetailPage() {
                     <input
                       value={feature.title}
                       onChange={(e) => handleFeatureChange(idx, "title", e.target.value)}
-                      className="bg-transparent border-none outline-none font-bold text-sm text-foreground focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-0.5 rounded w-full"
+                      className="focus:ring-dashed focus:ring-neutral-450 w-full rounded border-none bg-transparent p-0.5 text-sm font-bold text-foreground outline-none focus:ring-1"
                     />
                   </div>
                   <textarea
                     value={feature.description}
                     onChange={(e) => handleFeatureChange(idx, "description", e.target.value)}
-                    className="w-full bg-transparent border-none outline-none text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-0.5 rounded resize-none"
+                    className="focus:ring-dashed focus:ring-neutral-450 w-full resize-none rounded border-none bg-transparent p-0.5 text-xs leading-relaxed text-neutral-500 outline-none focus:ring-1 dark:text-neutral-400"
                     rows={3}
                   />
                 </div>
@@ -523,7 +519,7 @@ export default function AdminWorkDetailPage() {
           </div>
 
           {/* Section 4: Outcomes */}
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 border-t border-dashed border-neutral-200 pt-12 dark:border-neutral-800">
+          <div className="grid grid-cols-1 gap-12 border-t border-dashed border-neutral-200 pt-12 lg:grid-cols-12 dark:border-neutral-800">
             <div className="space-y-6 lg:col-span-8">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-foreground">
@@ -534,24 +530,24 @@ export default function AdminWorkDetailPage() {
                   variant="outline"
                   size="sm"
                   onClick={addResult}
-                  className="h-7 rounded-none border-dashed font-mono text-[9px] uppercase px-2.5"
+                  className="h-7 rounded-none border-dashed px-2.5 font-mono text-[9px] uppercase"
                 >
-                  <Plus className="size-3 mr-1" /> Add Outcome
+                  <Plus className="mr-1 size-3" /> Add Outcome
                 </Button>
               </div>
 
               <div className="space-y-4">
                 {formData.caseStudy.results.map((result, idx) => (
-                  <div key={idx} className="flex items-start gap-3 group relative pr-8">
+                  <div key={idx} className="group relative flex items-start gap-3 pr-8">
                     <div className="mt-2.5 size-1.5 flex-shrink-0 rounded-full bg-neutral-900 dark:bg-neutral-100" />
                     <input
                       value={result}
                       onChange={(e) => handleResultChange(idx, e.target.value)}
-                      className="w-full bg-transparent border-none outline-none text-xs md:text-sm text-neutral-600 dark:text-neutral-400 focus:ring-1 focus:ring-dashed focus:ring-neutral-450 p-0.5 rounded"
+                      className="focus:ring-dashed focus:ring-neutral-450 w-full rounded border-none bg-transparent p-0.5 text-xs text-neutral-600 outline-none focus:ring-1 md:text-sm dark:text-neutral-400"
                     />
                     <button
                       onClick={() => removeResult(idx)}
-                      className="absolute right-0 top-1 text-neutral-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-0 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-500"
                     >
                       <Trash2 className="size-3.5" />
                     </button>
@@ -563,103 +559,107 @@ export default function AdminWorkDetailPage() {
           </div>
 
           {/* Section 4: SEO Metadata Settings */}
-          <div className="border-t border-solid border-neutral-300 pt-8 dark:border-neutral-800 space-y-6">
+          <div className="space-y-6 border-t border-solid border-neutral-300 pt-8 dark:border-neutral-800">
             <div>
               <h3 className="font-sans text-lg font-bold tracking-tight text-foreground">SEO Metadata Settings</h3>
-              <p className="font-mono text-xs text-neutral-505 dark:text-neutral-400">Configure page-level titles and descriptions for search engine indexing.</p>
+              <p className="text-neutral-505 font-mono text-xs dark:text-neutral-400">
+                Configure page-level titles and descriptions for search engine indexing.
+              </p>
             </div>
-            
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <label className="block font-mono text-xs text-neutral-450 uppercase dark:text-neutral-500">Meta Title</label>
+                <label className="text-neutral-450 block font-mono text-xs uppercase dark:text-neutral-500">Meta Title</label>
                 <input
                   type="text"
                   value={formData.seo?.title || ""}
                   onChange={(e) => handleSeoFieldChange("title", e.target.value)}
                   placeholder="e.g. Project Name | Ariel Batoon Portfolio"
-                  className="w-full bg-transparent border border-neutral-300 dark:border-neutral-700 focus:ring-1 focus:ring-neutral-450 p-2.5 rounded text-xs font-sans text-foreground"
+                  className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
                 />
-                <span className="block text-[10px] text-neutral-400 font-mono">
+                <span className="block font-mono text-[10px] text-neutral-400">
                   Characters: {(formData.seo?.title || "").length} (Recommended: 50-60)
                 </span>
               </div>
 
               <div className="space-y-2">
-                <label className="block font-mono text-xs text-neutral-450 uppercase dark:text-neutral-500">Meta Keywords</label>
+                <label className="text-neutral-450 block font-mono text-xs uppercase dark:text-neutral-500">Meta Keywords</label>
                 <input
                   type="text"
                   value={formData.seo?.keywords || ""}
                   onChange={(e) => handleSeoFieldChange("keywords", e.target.value)}
                   placeholder="e.g. portfolio, react, nextjs, frontend"
-                  className="w-full bg-transparent border border-neutral-300 dark:border-neutral-700 focus:ring-1 focus:ring-neutral-450 p-2.5 rounded text-xs font-sans text-foreground"
+                  className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
                 />
-                <span className="block text-[10px] text-neutral-400 font-mono">Comma-separated tags</span>
+                <span className="block font-mono text-[10px] text-neutral-400">Comma-separated tags</span>
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <label className="block font-mono text-xs text-neutral-450 uppercase dark:text-neutral-500">Canonical URL Override</label>
+                <label className="text-neutral-450 block font-mono text-xs uppercase dark:text-neutral-500">Canonical URL Override</label>
                 <input
                   type="text"
                   value={formData.seo?.canonicalUrl || ""}
                   onChange={(e) => handleSeoFieldChange("canonicalUrl", e.target.value)}
                   placeholder="e.g. https://medium.com/@username/original-post"
-                  className="w-full bg-transparent border border-neutral-300 dark:border-neutral-700 focus:ring-1 focus:ring-neutral-450 p-2.5 rounded text-xs font-sans text-foreground"
+                  className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
                 />
-                <span className="block text-[10px] text-neutral-400 font-mono">Leave empty to automatically point to this page&apos;s URL</span>
+                <span className="block font-mono text-[10px] text-neutral-400">Leave empty to automatically point to this page&apos;s URL</span>
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <label className="block font-mono text-xs text-neutral-450 uppercase dark:text-neutral-500">Meta Description</label>
+                <label className="text-neutral-450 block font-mono text-xs uppercase dark:text-neutral-500">Meta Description</label>
                 <textarea
                   value={formData.seo?.description || ""}
                   onChange={(e) => handleSeoFieldChange("description", e.target.value)}
                   placeholder="Brief summary of the project for search engine listings..."
-                  className="w-full bg-transparent border border-neutral-300 dark:border-neutral-700 focus:ring-1 focus:ring-neutral-450 p-2.5 rounded text-xs font-sans text-foreground resize-none"
+                  className="focus:ring-neutral-450 w-full resize-none rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
                   rows={3}
                 />
-                <span className="block text-[10px] text-neutral-400 font-mono">
+                <span className="block font-mono text-[10px] text-neutral-400">
                   Characters: {(formData.seo?.description || "").length} (Recommended: 150-160)
                 </span>
               </div>
             </div>
 
             {/* Social Share Settings (Open Graph) */}
-            <div className="border-t border-solid border-neutral-300 pt-6 dark:border-neutral-800 space-y-4">
+            <div className="space-y-4 border-t border-solid border-neutral-300 pt-6 dark:border-neutral-800">
               <div>
                 <h4 className="font-sans text-sm font-bold tracking-tight text-foreground">Social Sharing (Open Graph Overrides)</h4>
-                <p className="font-mono text-[10px] text-neutral-500 dark:text-neutral-400">Override metadata titles, descriptions, and images when shared on social channels (Facebook, Twitter/X, LinkedIn).</p>
+                <p className="font-mono text-[10px] text-neutral-500 dark:text-neutral-400">
+                  Override metadata titles, descriptions, and images when shared on social channels (Facebook, Twitter/X, LinkedIn).
+                </p>
               </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="block font-mono text-xs text-neutral-450 uppercase dark:text-neutral-500">OG Title</label>
+                  <label className="text-neutral-450 block font-mono text-xs uppercase dark:text-neutral-500">OG Title</label>
                   <input
                     type="text"
                     value={formData.seo?.ogTitle || ""}
                     onChange={(e) => handleSeoFieldChange("ogTitle", e.target.value)}
                     placeholder="Custom sharing title..."
-                    className="w-full bg-transparent border border-neutral-300 dark:border-neutral-700 focus:ring-1 focus:ring-neutral-450 p-2.5 rounded text-xs font-sans text-foreground"
+                    className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block font-mono text-xs text-neutral-450 uppercase dark:text-neutral-500">OG Image URL</label>
+                  <label className="text-neutral-450 block font-mono text-xs uppercase dark:text-neutral-500">OG Image URL</label>
                   <input
                     type="text"
                     value={formData.seo?.ogImage || ""}
                     onChange={(e) => handleSeoFieldChange("ogImage", e.target.value)}
                     placeholder="e.g. /projects/banner-og.png"
-                    className="w-full bg-transparent border border-neutral-300 dark:border-neutral-700 focus:ring-1 focus:ring-neutral-450 p-2.5 rounded text-xs font-sans text-foreground"
+                    className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
                   />
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                  <label className="block font-mono text-xs text-neutral-450 uppercase dark:text-neutral-500">OG Description</label>
+                  <label className="text-neutral-450 block font-mono text-xs uppercase dark:text-neutral-500">OG Description</label>
                   <textarea
                     value={formData.seo?.ogDescription || ""}
                     onChange={(e) => handleSeoFieldChange("ogDescription", e.target.value)}
                     placeholder="Custom sharing snippet..."
-                    className="w-full bg-transparent border border-neutral-300 dark:border-neutral-700 focus:ring-1 focus:ring-neutral-450 p-2.5 rounded text-xs font-sans text-foreground resize-none"
+                    className="focus:ring-neutral-450 w-full resize-none rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
                     rows={2}
                   />
                 </div>
@@ -671,14 +671,14 @@ export default function AdminWorkDetailPage() {
         /* Real-Time Live Preview Mode (Matches Public View layout) */
         <div className="space-y-4">
           {/* Device Switcher Bar */}
-          <div className="flex items-center justify-between border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900/20 px-4 py-2">
-            <span className="font-mono text-[10px] text-neutral-455 uppercase dark:text-neutral-500">Device Viewport:</span>
+          <div className="flex items-center justify-between border border-dashed border-neutral-300 bg-neutral-50/50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900/20">
+            <span className="text-neutral-455 font-mono text-[10px] uppercase dark:text-neutral-500">Device Viewport:</span>
             <div className="flex items-center gap-1">
               <Button
                 variant={previewMode === "desktop" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setPreviewMode("desktop")}
-                className="h-7 rounded-none font-mono text-[9px] uppercase px-3"
+                className="h-7 rounded-none px-3 font-mono text-[9px] uppercase"
               >
                 <Monitor className="mr-1.5 size-3" />
                 Desktop
@@ -687,7 +687,7 @@ export default function AdminWorkDetailPage() {
                 variant={previewMode === "tablet" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setPreviewMode("tablet")}
-                className="h-7 rounded-none font-mono text-[9px] uppercase px-3"
+                className="h-7 rounded-none px-3 font-mono text-[9px] uppercase"
               >
                 <Tablet className="mr-1.5 size-3" />
                 Tablet
@@ -696,7 +696,7 @@ export default function AdminWorkDetailPage() {
                 variant={previewMode === "mobile" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setPreviewMode("mobile")}
-                className="h-7 rounded-none font-mono text-[9px] uppercase px-3"
+                className="h-7 rounded-none px-3 font-mono text-[9px] uppercase"
               >
                 <Smartphone className="mr-1.5 size-3" />
                 Mobile
@@ -710,20 +710,16 @@ export default function AdminWorkDetailPage() {
           </div>
 
           {/* Viewport Frame */}
-          <div className="flex justify-center bg-neutral-100 dark:bg-neutral-900/60 p-4 border border-dashed border-neutral-300 dark:border-neutral-700">
+          <div className="flex justify-center border border-dashed border-neutral-300 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900/60">
             <PreviewFrame
-              className={`bg-background border border-neutral-300 dark:border-neutral-800 shadow-2xl h-[70vh] max-w-full transition-all duration-300 ${
+              className={`h-[70vh] max-w-full border border-neutral-300 bg-background shadow-2xl transition-all duration-300 dark:border-neutral-800 ${
                 previewMode === "desktop" ? "w-full" : ""
-              } ${
-                previewMode === "tablet" ? "w-[768px]" : ""
-              } ${
-                previewMode === "mobile" ? "w-[375px]" : ""
-              }`}
+              } ${previewMode === "tablet" ? "w-[768px]" : ""} ${previewMode === "mobile" ? "w-[375px]" : ""}`}
             >
-              <div className="pointer-events-none sticky top-0 z-10 w-full text-[9px] font-mono tracking-widest text-center py-1 uppercase text-neutral-405 bg-neutral-900/10 border-b border-dashed border-neutral-300 dark:border-neutral-700 select-none">
+              <div className="text-neutral-405 pointer-events-none sticky top-0 z-10 w-full border-b border-dashed border-neutral-300 bg-neutral-900/10 py-1 text-center font-mono text-[9px] tracking-widest uppercase select-none dark:border-neutral-700">
                 Live Preview Mode Active
               </div>
-              <div className="p-4 space-y-16">
+              <div className="space-y-16 p-4">
                 <CaseStudyHero project={formData} />
                 <CaseStudyDetails caseStudy={formData.caseStudy} />
                 <CaseStudyOutcomes caseStudy={formData.caseStudy} />

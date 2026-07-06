@@ -1,15 +1,6 @@
 import { DashboardSidebar, type NavItem } from "@/components/features/dashboard/dashboard-sidebar";
 import { AdminHeader } from "@/components/features/dashboard/admin-header";
-import { 
-  LayoutDashboard, 
-  Briefcase, 
-  FileText, 
-  Layers, 
-  ShoppingBag, 
-  CreditCard,
-  User,
-  Package
-} from "lucide-react";
+import { LayoutDashboard, Briefcase, FileText, Layers, ShoppingBag, CreditCard, User, Package } from "lucide-react";
 
 export const metadata = {
   title: "Admin Dashboard | Ariel Batoon",
@@ -29,9 +20,9 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen w-screen flex-col lg:flex-row overflow-hidden bg-background">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-background lg:flex-row">
       <DashboardSidebar role="admin" navItems={ADMIN_NAV_ITEMS} />
-      <main className="flex-1 overflow-x-hidden overflow-y-auto px-4 pt-0 pb-6 md:px-8 md:pt-0 md:pb-8 h-full">
+      <main className="h-full flex-1 overflow-x-hidden overflow-y-auto px-4 pt-0 pb-6 md:px-8 md:pt-0 md:pb-8">
         <div className="mx-auto max-w-6xl space-y-6">
           <AdminHeader />
           {children}

@@ -87,13 +87,8 @@ export function PreviewFrame({ children, className, ...props }: PreviewFrameProp
   }, []);
 
   return (
-    <iframe
-      {...props}
-      ref={setIframeRef}
-      className={className}
-      style={{ border: "none", ...props.style }}
-    >
-      {mountNode && createPortal(<div className="bg-background text-foreground min-h-screen">{children}</div>, mountNode)}
+    <iframe {...props} ref={setIframeRef} className={className} style={{ border: "none", ...props.style }}>
+      {mountNode && createPortal(<div className="min-h-screen bg-background text-foreground">{children}</div>, mountNode)}
     </iframe>
   );
 }

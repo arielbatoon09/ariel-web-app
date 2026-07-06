@@ -58,9 +58,7 @@ export default function AdminWorksPage() {
               {t}
             </span>
           ))}
-          {item.tags.length > 3 && (
-            <span className="font-mono text-xs text-neutral-400">+{item.tags.length - 3}</span>
-          )}
+          {item.tags.length > 3 && <span className="font-mono text-xs text-neutral-400">+{item.tags.length - 3}</span>}
         </div>
       ),
     },
@@ -70,7 +68,10 @@ export default function AdminWorksPage() {
     const title = window.prompt("Enter Project Title:");
     if (!title) return;
     const desc = window.prompt("Enter Description:") || "";
-    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
 
     const newProject: Project = {
       id: `0${works.length + 1}`,

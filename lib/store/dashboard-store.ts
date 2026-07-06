@@ -65,7 +65,8 @@ const INITIAL_SERVICES: Service[] = [
   {
     id: "srv-1",
     name: "Startup MVP Launch",
-    description: "Validate your ideas with a fast-to-market, feature-complete Minimal Viable Product (MVP) designed to impress users and pitch to investors.",
+    description:
+      "Validate your ideas with a fast-to-market, feature-complete Minimal Viable Product (MVP) designed to impress users and pitch to investors.",
     price: 150000,
     deliveryTime: "3 - 4 Weeks",
     features: [
@@ -83,7 +84,8 @@ const INITIAL_SERVICES: Service[] = [
   {
     id: "srv-2",
     name: "Production Web App & SaaS",
-    description: "A full-scale, secure, and highly optimized Software-as-a-Service (SaaS) web application ready for production, high user traffic, and operational scale.",
+    description:
+      "A full-scale, secure, and highly optimized Software-as-a-Service (SaaS) web application ready for production, high user traffic, and operational scale.",
     price: 350000,
     deliveryTime: "6 - 8 Weeks",
     features: [
@@ -101,7 +103,8 @@ const INITIAL_SERVICES: Service[] = [
   {
     id: "srv-3",
     name: "AI Integration & Agents",
-    description: "Inject intelligent capabilities into your workflow, including vector search engines, retrieval-augmented generation (RAG), and autonomous agents.",
+    description:
+      "Inject intelligent capabilities into your workflow, including vector search engines, retrieval-augmented generation (RAG), and autonomous agents.",
     price: 200000,
     deliveryTime: "4 - 6 Weeks",
     features: [
@@ -110,9 +113,7 @@ const INITIAL_SERVICES: Service[] = [
       "Vector database setup & semantic indexing (Pinecone, pgvector)",
       "Deterministic fallback logic for structured JSON responses",
     ],
-    addOns: [
-      { id: "addon-5", name: "Private Model Hosting", price: 60000, description: "Deploy local llama models securely on dedicated VPS." },
-    ],
+    addOns: [{ id: "addon-5", name: "Private Model Hosting", price: 60000, description: "Deploy local llama models securely on dedicated VPS." }],
   },
 ];
 

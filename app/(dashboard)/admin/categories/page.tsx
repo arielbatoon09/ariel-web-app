@@ -28,20 +28,19 @@ export default function AdminCategoriesPage() {
     },
     {
       header: "Linked Scope",
-      accessorKey: (item: Category) => (
-        <span className="font-mono text-xs uppercase tracking-wider text-neutral-400">
-          {item.target}
-        </span>
-      ),
+      accessorKey: (item: Category) => <span className="font-mono text-xs tracking-wider text-neutral-400 uppercase">{item.target}</span>,
     },
   ];
 
   const handleAdd = () => {
     const name = window.prompt("Enter Category Name:");
     if (!name) return;
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
     const targetInput = window.prompt("Enter Target Scope ('works', 'articles', or 'both'):", "both");
-    const target = (targetInput === "works" || targetInput === "articles" || targetInput === "both") ? targetInput : "both";
+    const target = targetInput === "works" || targetInput === "articles" || targetInput === "both" ? targetInput : "both";
 
     const newCategory: Category = {
       id: `cat-${Date.now()}`,

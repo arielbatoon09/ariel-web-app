@@ -3,7 +3,10 @@ import { z } from "zod";
 export const CategorySchema = z.object({
   id: z.string().min(1, "ID is required"),
   name: z.string().min(1, "Name is required"),
-  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Invalid slug format"),
+  slug: z
+    .string()
+    .min(1, "Slug is required")
+    .regex(/^[a-z0-9-]+$/, "Invalid slug format"),
   target: z.enum(["works", "articles", "both"]),
   disabled: z.boolean().optional(),
 });
@@ -37,7 +40,10 @@ export const SeoMetaSchema = z.object({
 
 export const ProjectSchema = z.object({
   id: z.string().min(1, "ID is required"),
-  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Invalid slug format"),
+  slug: z
+    .string()
+    .min(1, "Slug is required")
+    .regex(/^[a-z0-9-]+$/, "Invalid slug format"),
   tag: z.string().min(1, "Tag subtitle is required"),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
@@ -58,7 +64,10 @@ export const ArticleSectionSchema = z.object({
 
 export const ArticleSchema = z.object({
   id: z.string().min(1, "ID is required"),
-  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Invalid slug format"),
+  slug: z
+    .string()
+    .min(1, "Slug is required")
+    .regex(/^[a-z0-9-]+$/, "Invalid slug format"),
   tag: z.string().min(1, "Tag subtitle is required"),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
