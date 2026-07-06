@@ -84,6 +84,13 @@ export function PublicHeader() {
 
           {/* CTA Actions */}
           <div className="hidden items-center space-x-3 lg:flex">
+            <Link
+              href="/login"
+              className="font-mono text-[10px] tracking-wider uppercase text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Login
+            </Link>
+            <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
             <ThemeToggle />
             <ConnectDialog>
               <Button className="h-8 cursor-pointer rounded-none border border-dashed border-neutral-300 px-4 font-mono text-[10px] tracking-wider uppercase hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-100">
@@ -152,13 +159,20 @@ export function PublicHeader() {
                   </div>
 
                   {/* Drawer Footer CTA with Theme Toggle */}
-                  <div className="flex flex-col gap-4 pt-6">
+                  <div className="flex flex-col gap-3 pt-6">
                     <ConnectDialog>
                       <Button size="lg" className="h-11 w-full cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase">
                         Let&apos;s Talk
                         <ArrowUpRight className="ml-1 size-4" />
                       </Button>
                     </ConnectDialog>
+
+                    <Link href="/login" onClick={() => setIsOpen(false)} className="w-full">
+                      <Button variant="outline" size="lg" className="h-11 w-full cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase border border-dashed border-neutral-300 dark:border-neutral-700">
+                        Portal Login
+                      </Button>
+                    </Link>
+
                     <div className="flex justify-center border-t border-dashed border-neutral-300 pt-4 dark:border-neutral-700">
                       <ThemeToggle />
                     </div>
