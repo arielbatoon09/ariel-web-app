@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { useDashboardStore } from "@/lib/store/dashboard-store";
+import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/features/dashboard/data-table";
 import type { Article } from "@/lib/schemas/dashboard";
 

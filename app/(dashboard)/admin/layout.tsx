@@ -2,6 +2,13 @@ import { DashboardSidebar, type NavItem } from "@/components/features/dashboard/
 import { AdminHeader } from "@/components/features/dashboard/admin-header";
 import { LayoutDashboard, Briefcase, FileText, Layers, ShoppingBag, CreditCard, User, Package } from "lucide-react";
 
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { db } from "@/drizzle";
+import { users, userRoles } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
+
 export const metadata = {
   title: "Admin Dashboard | Ariel Batoon",
   description: "Administrative control portal for managing projects, blog articles, services, and transactions.",
@@ -18,7 +25,37 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
   { label: "Transactions", href: "/admin/transactions", icon: <CreditCard className="size-4" /> },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  // Fetch role from DB
+  const dbUser = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.authId, user.id))
+    .limit(1);
+
+  if (dbUser.length === 0) {
+    redirect("/login");
+  }
+
+  const roleRecord = await db
+    .select({ role: userRoles.role })
+    .from(userRoles)
+    .where(eq(userRoles.userId, dbUser[0].id))
+    .limit(1);
+
+  const isAdmin = roleRecord.length > 0 && roleRecord[0].role === "admin";
+
+  if (!isAdmin) {
+    redirect("/customer");
+  }
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-background lg:flex-row">
       <DashboardSidebar role="admin" navItems={ADMIN_NAV_ITEMS} />

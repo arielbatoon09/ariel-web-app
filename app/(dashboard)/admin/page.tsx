@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import * as React from "react";
-import { useDashboardStore } from "@/lib/store/dashboard-store";
+import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DollarSign, ShoppingBag, Briefcase, FileText, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 

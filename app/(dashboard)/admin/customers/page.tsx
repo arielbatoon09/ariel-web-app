@@ -1,18 +1,46 @@
 "use client";
 
 import * as React from "react";
-import { useDashboardStore } from "@/lib/store/dashboard-store";
+import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/features/dashboard/data-table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Shield, ShieldAlert, User, Clock, Globe } from "lucide-react";
+import { Shield, ShieldAlert, User, Clock, Globe, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Customer } from "@/lib/schemas/dashboard";
+import { AddCustomerDialog } from "@/components/features/dashboard/customers/add-customer-dialog";
+import { toast } from "sonner";
+import {
+  getCustomersAction,
+  updateCustomerRoleAction,
+  toggleCustomerBlockStatusAction,
+} from "@/components/features/dashboard/customers/customers-action";
 
 export default function CustomersPage() {
-  const { customers, updateCustomerRole, toggleCustomerBlockStatus } = useDashboardStore();
+  const { customers, updateCustomerRole, toggleCustomerBlockStatus, addCustomer, setCustomers } = useDashboardStore();
   const [selectedCustomer, setSelectedCustomer] = React.useState<Customer | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
+  const [isAddOpen, setIsAddOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    async function loadCustomers() {
+      try {
+        setIsLoading(true);
+        const res = await getCustomersAction();
+        if (res.success && res.customers) {
+          setCustomers(res.customers);
+        } else {
+          toast.error(res.error || "Failed to load customers.");
+        }
+      } catch (err: any) {
+        toast.error(err?.message || "Failed to load customers.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadCustomers();
+  }, [setCustomers]);
 
   // Sync selectedCustomer state with store changes when they happen
   const currentCustomer = React.useMemo(() => {
@@ -71,26 +99,67 @@ export default function CustomersPage() {
     setIsDetailsOpen(true);
   };
 
-  const handleToggleBlock = (customer: Customer) => {
-    toggleCustomerBlockStatus(customer.id);
+  const handleToggleBlock = async (customer: Customer) => {
+    const targetStatus = !customer.disabled;
+    try {
+      const res = await toggleCustomerBlockStatusAction(customer.id, targetStatus);
+      if (res.success) {
+        toggleCustomerBlockStatus(customer.id);
+        toast.success(targetStatus ? "Customer blocked successfully." : "Customer unblocked successfully.");
+      } else {
+        toast.error(res.error || "Failed to update block status.");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "An unexpected error occurred.");
+    }
+  };
+
+  const handleUpdateRole = async (customer: Customer) => {
+    const targetRole = customer.role === "admin" ? "client" : "admin";
+    try {
+      const res = await updateCustomerRoleAction(customer.id, targetRole);
+      if (res.success) {
+        updateCustomerRole(customer.id, customer.role === "admin" ? "customer" : "admin");
+        toast.success("Customer role updated successfully.");
+      } else {
+        toast.error(res.error || "Failed to update role.");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "An unexpected error occurred.");
+    }
   };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-sans text-xl font-bold tracking-tight text-foreground md:text-2xl">Customer Management</h1>
-        <p className="font-mono text-xs text-neutral-400 dark:text-neutral-500">Manage user roles, block access, and audit log activities.</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="font-sans text-xl font-bold tracking-tight text-foreground md:text-2xl">Customer Management</h1>
+          <p className="font-mono text-xs text-neutral-400 dark:text-neutral-500">Manage user roles, block access, and audit log activities.</p>
+        </div>
+        <Button
+          onClick={() => setIsAddOpen(true)}
+          className="rounded-none border border-neutral-900 font-mono text-xs tracking-widest uppercase py-2.5 dark:border-neutral-100 sm:w-auto w-full"
+        >
+          <Plus className="mr-1 size-3.5" />
+          Add Customer
+        </Button>
       </div>
 
       <div className="relative">
-        <DataTable
-          data={customers}
-          columns={columns}
-          searchKey="name"
-          searchPlaceholder="Search customer by name..."
-          onViewClick={handleViewDetails}
-          onToggleStatusClick={handleToggleBlock}
-        />
+        {isLoading ? (
+          <div className="flex h-32 items-center justify-center font-mono text-xs text-neutral-500">
+            Retrieving customer database records...
+          </div>
+        ) : (
+          <DataTable
+            data={customers}
+            columns={columns}
+            searchKey="name"
+            searchPlaceholder="Search customer by name..."
+            onViewClick={handleViewDetails}
+            onToggleStatusClick={handleToggleBlock}
+          />
+        )}
       </div>
 
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
@@ -107,7 +176,7 @@ export default function CustomersPage() {
                 <div className="space-y-1">
                   <div className="text-[10px] text-neutral-400 uppercase">Name & Email</div>
                   <div className="font-sans text-sm font-bold text-foreground">{currentCustomer.name}</div>
-                  <div className="text-neutral-505 dark:text-neutral-400">{currentCustomer.email}</div>
+                  <div className="text-neutral-550 dark:text-neutral-400">{currentCustomer.email}</div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 border-t border-dashed border-neutral-200 pt-2 dark:border-neutral-800">
@@ -117,7 +186,7 @@ export default function CustomersPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => updateCustomerRole(currentCustomer.id, currentCustomer.role === "admin" ? "customer" : "admin")}
+                      onClick={() => handleUpdateRole(currentCustomer)}
                       className="h-8 w-full justify-between rounded-none border-dashed font-mono text-[10px] uppercase"
                     >
                       <span>{currentCustomer.role === "admin" ? "Demote to User" : "Promote to Admin"}</span>
@@ -131,7 +200,7 @@ export default function CustomersPage() {
                     <Button
                       variant={currentCustomer.disabled ? "default" : "outline"}
                       size="sm"
-                      onClick={() => toggleCustomerBlockStatus(currentCustomer.id)}
+                      onClick={() => handleToggleBlock(currentCustomer)}
                       className={cn(
                         "h-8 w-full justify-between rounded-none border-dashed font-mono text-[10px] uppercase",
                         !currentCustomer.disabled && "text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/25"
@@ -184,6 +253,14 @@ export default function CustomersPage() {
           )}
         </DialogContent>
       </Dialog>
+
+      <AddCustomerDialog
+        open={isAddOpen}
+        onOpenChange={setIsAddOpen}
+        onSuccess={(newCustomer) => {
+          addCustomer(newCustomer);
+        }}
+      />
     </div>
   );
 }

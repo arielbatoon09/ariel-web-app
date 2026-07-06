@@ -13,6 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 
+import { useAuthStore } from "@/hooks/use-auth-store";
+import { getUserRoleAction } from "@/components/features/auth/auth-action";
+
 const loginSchema = z.object({
   email: z.string().min(1, "Email address is required.").email("Please enter a valid email address."),
   password: z.string().min(1, "Password is required."),
@@ -21,7 +24,7 @@ const loginSchema = z.object({
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, isLoading } = useAuthStore();
 
   const form = useForm({
     defaultValues: {
@@ -32,14 +35,23 @@ export function LoginForm() {
       onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
-      setIsLoading(true);
-
-      // Simulate login
-      setTimeout(() => {
-        setIsLoading(false);
+      const res = await signIn(value.email, value.password);
+      if (res.success) {
         toast.success("Successfully logged in!");
-        router.push("/admin");
-      }, 1200);
+        try {
+          const roleRes = await getUserRoleAction();
+          if (roleRes.success && roleRes.role === "admin") {
+            router.push("/admin");
+          } else {
+            router.push("/customer");
+          }
+        } catch {
+          // Default fallback
+          router.push("/customer");
+        }
+      } else {
+        toast.error(res.error || "Failed to log in.");
+      }
     },
   });
 

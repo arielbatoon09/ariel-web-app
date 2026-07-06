@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useDashboardStore } from "@/lib/store/dashboard-store";
+import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { Button } from "@/components/ui/button";
 import { ArticleHero } from "@/components/features/articles/article-hero";
 import { ArticleContent } from "@/components/features/articles/article-content";

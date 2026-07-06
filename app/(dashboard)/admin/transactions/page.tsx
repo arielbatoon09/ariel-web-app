@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useDashboardStore } from "@/lib/store/dashboard-store";
+import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/features/dashboard/data-table";
 import type { Transaction } from "@/lib/schemas/dashboard";
 import { cn } from "@/lib/utils";

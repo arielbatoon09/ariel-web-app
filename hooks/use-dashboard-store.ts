@@ -46,6 +46,8 @@ interface DashboardState {
   updateTransactionStatus: (id: string, status: Transaction["status"]) => void;
 
   // Customers Actions
+  addCustomer: (customer: Customer) => void;
+  setCustomers: (customers: Customer[]) => void;
   updateCustomerRole: (id: string, role: Customer["role"]) => void;
   toggleCustomerBlockStatus: (id: string) => void;
 }
@@ -266,69 +268,17 @@ export const useDashboardStore = create<DashboardState>((set) => ({
     })),
 
   // Customers State & Actions
-  customers: [
-    {
-      id: "usr-1",
-      name: "Juan Dela Cruz",
-      email: "juan@example.com",
-      role: "customer",
-      disabled: false,
-      joinedAt: "2026-06-28",
-      activities: [
-        { id: "act-1", action: "Signed In", ipAddress: "112.204.45.12", timestamp: "2026-07-06 02:15 PM" },
-        { id: "act-2", action: "Placed Order #ord-1", ipAddress: "112.204.45.12", timestamp: "2026-06-28 10:15 AM" },
-        { id: "act-3", action: "Created Account", ipAddress: "112.204.45.12", timestamp: "2026-06-28 10:00 AM" },
-      ],
-    },
-    {
-      id: "usr-2",
-      name: "Samantha Miller",
-      email: "samantha@startup.io",
-      role: "customer",
-      disabled: false,
-      joinedAt: "2026-07-04",
-      activities: [
-        { id: "act-4", action: "Initiated Checkout", ipAddress: "74.125.19.102", timestamp: "2026-07-04 02:28 PM" },
-        { id: "act-5", action: "Signed In", ipAddress: "74.125.19.102", timestamp: "2026-07-04 02:25 PM" },
-      ],
-    },
-    {
-      id: "usr-3",
-      name: "Robert Chen",
-      email: "robert@insight.corp",
-      role: "customer",
-      disabled: true,
-      joinedAt: "2026-05-15",
-      activities: [
-        { id: "act-6", action: "Failed Sign In Attempt", ipAddress: "203.111.4.56", timestamp: "2026-07-05 09:12 AM" },
-        { id: "act-7", action: "Signed In", ipAddress: "203.111.4.56", timestamp: "2026-05-15 11:00 AM" },
-      ],
-    },
-    {
-      id: "usr-4",
-      name: "Ariel Batoon",
-      email: "ariel@batoon.com",
-      role: "admin",
-      disabled: false,
-      joinedAt: "2026-01-01",
-      activities: [
-        { id: "act-8", action: "Accessed System Console", ipAddress: "122.54.167.3", timestamp: "2026-07-06 03:20 PM" },
-        { id: "act-9", action: "Configured API Keys", ipAddress: "122.54.167.3", timestamp: "2026-07-06 01:10 PM" },
-      ],
-    },
-    {
-      id: "usr-5",
-      name: "Patricia Santos",
-      email: "patricia.s@gmail.com",
-      role: "customer",
-      disabled: false,
-      joinedAt: "2026-07-06",
-      activities: [
-        { id: "act-10", action: "Signed In", ipAddress: "110.54.128.45", timestamp: "2026-07-06 02:30 PM" },
-        { id: "act-11", action: "Created Account", ipAddress: "110.54.128.45", timestamp: "2026-07-06 02:20 PM" },
-      ],
-    },
-  ],
+  customers: [],
+
+  addCustomer: (customer) =>
+    set((state) => ({
+      customers: [customer, ...state.customers],
+    })),
+
+  setCustomers: (customers) =>
+    set(() => ({
+      customers,
+    })),
 
   updateCustomerRole: (id, role) =>
     set((state) => ({

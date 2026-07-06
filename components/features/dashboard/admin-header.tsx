@@ -34,6 +34,7 @@ export function AdminHeader() {
   const breadcrumbs = pathParts
     .map((part) => {
       if (part === "admin") return "CONTROL PANEL";
+      if (part === "customer") return "CLIENT PORTAL";
       return part.replace(/-/g, " ");
     })
     .join(" / ")
