@@ -7,7 +7,7 @@ import { Shield, ShieldAlert, User, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Customer } from "@/lib/schemas/dashboard";
 import { toast } from "sonner";
-import { getCustomersAction, toggleCustomerBlockStatusAction, deleteCustomersAction, createCustomerAction } from "@/components/features/dashboard/customers/customers-action";
+import { getCustomersAction, toggleCustomerBlockStatusAction, deleteCustomersAction } from "@/components/features/dashboard/customers/customers-action";
 
 export function CustomerTable() {
   const {
@@ -125,49 +125,6 @@ export function CustomerTable() {
     }
   };
 
-  const handleImportCSV = async (items: any[]) => {
-    toast.info(`Importing ${items.length} records...`);
-    let successCount = 0;
-    let failCount = 0;
-
-    for (const item of items) {
-      if (!item.email || !(item.name || item.fullname)) {
-        failCount++;
-        continue;
-      }
-
-      try {
-        const res = await createCustomerAction({
-          email: item.email,
-          fullName: item.name || item.fullname || "Imported User",
-          phone: item.phone || undefined,
-          role: item.role === "admin" ? "admin" : "client",
-          password: Math.random().toString(36).slice(-12),
-        });
-
-        if (res.success && res.user) {
-          const newCust = {
-            id: res.user.id.toString(),
-            name: res.user.fullName || "Unknown",
-            email: item.email,
-            role: item.role === "admin" ? ("admin" as const) : ("customer" as const),
-            disabled: false,
-            joinedAt: new Date().toISOString().split("T")[0],
-            activities: [],
-          };
-          addCustomer(newCust);
-          successCount++;
-        } else {
-          failCount++;
-        }
-      } catch {
-        failCount++;
-      }
-    }
-
-    toast.success(`Import complete. Success: ${successCount}, Failed: ${failCount}`);
-  };
-
   return (
     <div className="relative">
       <DataTable
@@ -179,7 +136,6 @@ export function CustomerTable() {
         onToggleStatusClick={handleToggleBlock}
         isLoading={isLoadingCustomers}
         onDeleteBulk={handleDeleteBulk}
-        onImportCSV={handleImportCSV}
       />
     </div>
   );
