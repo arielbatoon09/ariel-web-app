@@ -48,7 +48,10 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
     }
 
     // Shuffle characters
-    pwd = pwd.split("").sort(() => 0.5 - Math.random()).join("");
+    pwd = pwd
+      .split("")
+      .sort(() => 0.5 - Math.random())
+      .join("");
     setVal(pwd);
     toast.success("Generated a strong password!");
   };
@@ -72,7 +75,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
       if (res.success) {
         toast.success("Customer account successfully created!");
         const newCustomerId = res.user?.id ? res.user.id.toString() : Math.random().toString();
-        
+
         onSuccess?.({
           id: newCustomerId,
           name: value.fullName,
@@ -86,10 +89,10 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
               action: "Created Account",
               ipAddress: "127.0.0.1",
               timestamp: new Date().toLocaleString(),
-            }
-          ]
+            },
+          ],
         });
-        
+
         form.reset();
         onOpenChange(false);
       } else {

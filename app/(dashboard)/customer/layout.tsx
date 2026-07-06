@@ -23,28 +23,22 @@ const CUSTOMER_NAV_ITEMS: NavItem[] = [
 export default async function CustomerLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     redirect("/login");
   }
 
   // Fetch role from DB
-  const dbUser = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.authId, user.id))
-    .limit(1);
+  const dbUser = await db.select({ id: users.id }).from(users).where(eq(users.authId, user.id)).limit(1);
 
   if (dbUser.length === 0) {
     redirect("/login");
   }
 
-  const roleRecord = await db
-    .select({ role: userRoles.role })
-    .from(userRoles)
-    .where(eq(userRoles.userId, dbUser[0].id))
-    .limit(1);
+  const roleRecord = await db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, dbUser[0].id)).limit(1);
 
   const isAdmin = roleRecord.length > 0 && roleRecord[0].role === "admin";
 

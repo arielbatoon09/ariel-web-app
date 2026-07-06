@@ -45,11 +45,20 @@ interface DashboardState {
   addTransaction: (transaction: Transaction) => void;
   updateTransactionStatus: (id: string, status: Transaction["status"]) => void;
 
-  // Customers Actions
+  // Customers State & Actions
+  selectedCustomerId: string | null;
+  isDetailsOpen: boolean;
+  isAddOpen: boolean;
+  isLoadingCustomers: boolean;
   addCustomer: (customer: Customer) => void;
   setCustomers: (customers: Customer[]) => void;
   updateCustomerRole: (id: string, role: Customer["role"]) => void;
   toggleCustomerBlockStatus: (id: string) => void;
+  deleteCustomer: (id: string) => void;
+  setSelectedCustomerId: (id: string | null) => void;
+  setIsDetailsOpen: (open: boolean) => void;
+  setIsAddOpen: (open: boolean) => void;
+  setIsLoadingCustomers: (loading: boolean) => void;
 }
 
 // Prepopulated Categories
@@ -269,6 +278,10 @@ export const useDashboardStore = create<DashboardState>((set) => ({
 
   // Customers State & Actions
   customers: [],
+  selectedCustomerId: null,
+  isDetailsOpen: false,
+  isAddOpen: false,
+  isLoadingCustomers: true,
 
   addCustomer: (customer) =>
     set((state) => ({
@@ -289,4 +302,14 @@ export const useDashboardStore = create<DashboardState>((set) => ({
     set((state) => ({
       customers: state.customers.map((c) => (c.id === id ? { ...c, disabled: !c.disabled } : c)),
     })),
+
+  deleteCustomer: (id) =>
+    set((state) => ({
+      customers: state.customers.filter((c) => c.id !== id),
+    })),
+
+  setSelectedCustomerId: (id) => set(() => ({ selectedCustomerId: id })),
+  setIsDetailsOpen: (open) => set(() => ({ isDetailsOpen: open })),
+  setIsAddOpen: (open) => set(() => ({ isAddOpen: open })),
+  setIsLoadingCustomers: (loading) => set(() => ({ isLoadingCustomers: loading })),
 }));

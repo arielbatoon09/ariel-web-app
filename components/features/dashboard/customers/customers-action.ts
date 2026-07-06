@@ -48,11 +48,7 @@ export async function createCustomerAction(input: CreateCustomerInput) {
     }
 
     // 2. Verify that the current user is an Admin
-    const dbUser = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.authId, currentUser.id))
-      .limit(1);
+    const dbUser = await db.select({ id: users.id }).from(users).where(eq(users.authId, currentUser.id)).limit(1);
 
     if (dbUser.length === 0) {
       return { success: false, error: "Unauthorized: User account not found in database." };
@@ -108,7 +104,10 @@ export async function createCustomerAction(input: CreateCustomerInput) {
 export async function getCustomersAction() {
   try {
     const adminClient = getSupabaseAdmin();
-    const { data: { users: authUsers }, error: authError } = await adminClient.auth.admin.listUsers();
+    const {
+      data: { users: authUsers },
+      error: authError,
+    } = await adminClient.auth.admin.listUsers();
     if (authError) {
       return { success: false, error: authError.message };
     }
@@ -149,21 +148,12 @@ export async function getCustomersAction() {
 export async function updateCustomerRoleAction(customerId: string, role: "admin" | "client") {
   try {
     const numericId = parseInt(customerId, 10);
-    const existing = await db
-      .select()
-      .from(userRoles)
-      .where(eq(userRoles.userId, numericId))
-      .limit(1);
+    const existing = await db.select().from(userRoles).where(eq(userRoles.userId, numericId)).limit(1);
 
     if (existing.length > 0) {
-      await db
-        .update(userRoles)
-        .set({ role })
-        .where(eq(userRoles.userId, numericId));
+      await db.update(userRoles).set({ role }).where(eq(userRoles.userId, numericId));
     } else {
-      await db
-        .insert(userRoles)
-        .values({ userId: numericId, role });
+      await db.insert(userRoles).values({ userId: numericId, role });
     }
     return { success: true };
   } catch (err: any) {
@@ -174,11 +164,7 @@ export async function updateCustomerRoleAction(customerId: string, role: "admin"
 export async function toggleCustomerBlockStatusAction(customerId: string, isBlocked: boolean) {
   try {
     const numericId = parseInt(customerId, 10);
-    const [dbUser] = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, numericId))
-      .limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.id, numericId)).limit(1);
 
     if (!dbUser || !dbUser.authId) {
       return { success: false, error: "User not found." };
@@ -200,5 +186,33 @@ export async function toggleCustomerBlockStatusAction(customerId: string, isBloc
     return { success: true };
   } catch (err: any) {
     return { success: false, error: err?.message || "Failed to update block status." };
+  }
+}
+
+export async function deleteCustomersAction(customerIds: string[]) {
+  try {
+    const adminClient = getSupabaseAdmin();
+
+    for (const customerId of customerIds) {
+      const numericId = parseInt(customerId, 10);
+
+      // Get auth ID to delete from Supabase Auth
+      const [dbUser] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, numericId))
+        .limit(1);
+
+      if (dbUser && dbUser.authId) {
+        // Delete from Supabase Auth
+        await adminClient.auth.admin.deleteUser(dbUser.authId);
+      }
+
+      // Delete from local DB (userRoles will cascade delete)
+      await db.delete(users).where(eq(users.id, numericId));
+    }
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to delete customers." };
   }
 }

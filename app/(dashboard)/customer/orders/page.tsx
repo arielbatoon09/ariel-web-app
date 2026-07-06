@@ -9,7 +9,7 @@ export default function CustomerOrdersPage() {
           Viewing development milestones, source repositories, and finalized deliverables for active agreements.
         </p>
       </div>
-      <div className="border border-neutral-300 border-dashed p-12 text-center dark:border-neutral-800">
+      <div className="border border-dashed border-neutral-300 p-12 text-center dark:border-neutral-800">
         <span className="font-mono text-xs text-neutral-400">No active invoices or orders under construction.</span>
       </div>
     </div>

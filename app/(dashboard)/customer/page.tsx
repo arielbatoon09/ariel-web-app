@@ -17,14 +17,10 @@ export default function CustomerDashboardPage() {
     <div className="space-y-8 py-4">
       {/* Welcome Panel */}
       <div className="relative overflow-hidden border border-neutral-300 bg-neutral-50/50 p-6 backdrop-blur-md dark:border-neutral-700 dark:bg-neutral-900/40">
-        <div className="pointer-events-none absolute top-0 right-0 p-2 font-mono text-[9px] text-neutral-300 dark:text-neutral-700">
-          SYS_SEC_OK
-        </div>
+        <div className="pointer-events-none absolute top-0 right-0 p-2 font-mono text-[9px] text-neutral-300 dark:text-neutral-700">SYS_SEC_OK</div>
         <div className="max-w-2xl space-y-2">
           <span className="font-mono text-[10px] tracking-widest text-neutral-400 uppercase">Active Session</span>
-          <h1 className="font-sans text-xl font-bold tracking-tight text-foreground md:text-2xl">
-            Welcome, {user?.email || "Valued Client"}
-          </h1>
+          <h1 className="font-sans text-xl font-bold tracking-tight text-foreground md:text-2xl">Welcome, {user?.email || "Valued Client"}</h1>
           <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
             Authorized client dashboard. Monitor development streams, view active order statuses, and access your delivery files.
           </p>
@@ -79,30 +75,28 @@ export default function CustomerDashboardPage() {
                   <th className="p-4 font-normal text-neutral-500">Service Title</th>
                   <th className="p-4 font-normal text-neutral-500">Date Ordered</th>
                   <th className="p-4 font-normal text-neutral-500">Status</th>
-                  <th className="p-4 font-normal text-neutral-500 text-right">Amount</th>
+                  <th className="p-4 text-right font-normal text-neutral-500">Amount</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {mockOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-neutral-100/50 dark:hover:bg-neutral-900/20">
-                    <td className="p-4 font-mono font-bold text-neutral-900 dark:text-neutral-150">{order.id}</td>
+                    <td className="dark:text-neutral-150 p-4 font-mono font-bold text-neutral-900">{order.id}</td>
                     <td className="p-4 font-medium text-neutral-800 dark:text-neutral-200">{order.name}</td>
                     <td className="p-4 text-neutral-500">{order.date}</td>
                     <td className="p-4">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[9px] uppercase border ${
+                        className={`inline-flex items-center gap-1 border px-2 py-0.5 font-mono text-[9px] uppercase ${
                           order.status === "completed"
-                            ? "bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400"
-                            : "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400"
+                            ? "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400"
+                            : "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400"
                         }`}
                       >
                         <span className={`size-1 rounded-full ${order.status === "completed" ? "bg-green-500" : "bg-blue-500"}`} />
                         {order.status}
                       </span>
                     </td>
-                    <td className="p-4 text-right font-mono font-medium text-neutral-900 dark:text-neutral-150">
-                      {order.price}
-                    </td>
+                    <td className="dark:text-neutral-150 p-4 text-right font-mono font-medium text-neutral-900">{order.price}</td>
                   </tr>
                 ))}
               </tbody>

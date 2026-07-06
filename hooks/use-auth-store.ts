@@ -20,7 +20,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   initialize: async () => {
     set({ isLoading: true });
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       set({ user, isLoading: false });
     } catch {
       set({ user: null, isLoading: false });

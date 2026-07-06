@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Plus, MoreHorizontal, Eye, Edit, ShieldAlert, Trash2, ChevronLeft, ChevronRight, CornerDownRight } from "lucide-react";
+import { Search, Plus, MoreHorizontal, Eye, Edit, ShieldAlert, Trash2, ChevronLeft, ChevronRight, CornerDownRight, ListFilter } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Column<T> {
@@ -44,7 +44,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
     onDeleteClick,
     addButtonLabel = "Add New",
     filterComponent,
-    pageSize = 5,
+    pageSize = 10,
     isLoading = false,
   } = props;
 
@@ -107,13 +107,18 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
           )}
           {hasStatusFilter && (
             <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val as "all" | "active" | "disabled")}>
-              <SelectTrigger size="sm" className="h-9 rounded-none border-neutral-300 bg-transparent font-sans text-xs dark:bg-transparent">
-                <SelectValue placeholder="Status Filter" />
+              <SelectTrigger className="!h-8 w-44 !rounded-none border-neutral-300 bg-transparent font-sans text-xs dark:bg-transparent">
+                <span className="flex items-center gap-1.5">
+                  <ListFilter className="size-3 text-neutral-400" />
+                  <SelectValue placeholder="All Status">
+                    {statusFilter === "all" ? "All Status" : statusFilter === "active" ? "Active" : "Disabled"}
+                  </SelectValue>
+                </span>
               </SelectTrigger>
-              <SelectContent className="rounded-none border border-neutral-300 bg-background font-sans text-xs dark:border-neutral-700">
-                <SelectItem value="all">ALL STATUS</SelectItem>
-                <SelectItem value="active">ACTIVE / ENABLED</SelectItem>
-                <SelectItem value="disabled">DISABLED / INACTIVE</SelectItem>
+              <SelectContent alignItemWithTrigger={false} className="w-44 !rounded-none border border-neutral-300 bg-background font-sans text-xs dark:border-neutral-700">
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="disabled">Disabled</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -121,8 +126,8 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
         </div>
 
         {onAddClick && (
-          <Button onClick={onAddClick} size="sm" className="h-9 cursor-pointer rounded-none font-mono text-xs tracking-wider uppercase">
-            <Plus className="mr-1.5 size-3.5" />
+          <Button onClick={onAddClick} size="sm" className="h-8 cursor-pointer rounded-none font-mono text-[10px] tracking-wider uppercase">
+            <Plus className="mr-1.5 size-3" />
             {addButtonLabel}
           </Button>
         )}
@@ -145,13 +150,13 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                 {columns.map((col, idx) => (
                   <th
                     key={idx}
-                    className={cn("px-4 py-3 font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-500", col.className)}
+                    className={cn("px-4 py-3 font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500", col.className)}
                   >
                     {col.header}
                   </th>
                 ))}
                 {hasActions && (
-                  <th className="w-20 px-4 py-3 text-right font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                  <th className="w-20 px-4 py-3 text-right font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
                     Actions
                   </th>
                 )}
@@ -174,79 +179,98 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   </tr>
                 ))
               ) : paginatedData.length > 0 ? (
-                paginatedData.map((item, rowIdx) => (
-                  <tr
-                    key={item.id}
-                    className={cn(
-                      "border-b border-neutral-200 transition-colors hover:bg-neutral-100/40 dark:border-neutral-800 dark:hover:bg-neutral-900/10",
-                      rowIdx === paginatedData.length - 1 && "border-b-0",
-                      item.disabled && "opacity-60 saturate-50"
-                    )}
-                  >
-                    {columns.map((col, colIdx) => (
-                      <td key={colIdx} className={cn("px-4 py-3 text-foreground", col.className)}>
-                        {typeof col.accessorKey === "function" ? col.accessorKey(item) : (item[col.accessorKey as keyof T] as React.ReactNode)}
-                      </td>
-                    ))}
-                    {hasActions && (
-                      <td className="w-20 px-4 py-3 text-right">
-                        <div className="flex justify-end">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger
-                              render={
-                                <button className="flex size-7 items-center justify-center border border-neutral-300 hover:bg-neutral-100 focus:outline-none dark:border-neutral-700 dark:hover:bg-neutral-900/60">
-                                  <MoreHorizontal className="size-4 text-neutral-500" />
-                                </button>
-                              }
-                            />
-                            <DropdownMenuContent
-                              align="end"
-                              className="w-40 rounded-none border border-neutral-300 bg-background font-mono text-[10px] dark:border-neutral-700"
-                            >
-                              {onViewClick && (
-                                <DropdownMenuItem
-                                  onClick={() => onViewClick(item)}
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
-                                >
-                                  <Eye className="size-3.5" />
-                                  <span>VIEW DETAILS</span>
-                                </DropdownMenuItem>
-                              )}
-                              {onEditClick && (
-                                <DropdownMenuItem
-                                  onClick={() => onEditClick(item)}
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
-                                >
-                                  <Edit className="size-3.5" />
-                                  <span>EDIT ENTRY</span>
-                                </DropdownMenuItem>
-                              )}
-                              {onToggleStatusClick && (
-                                <DropdownMenuItem
-                                  onClick={() => onToggleStatusClick(item)}
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
-                                >
-                                  <ShieldAlert className="size-3.5" />
-                                  <span>{item.disabled ? "ENABLE" : "DISABLE"}</span>
-                                </DropdownMenuItem>
-                              )}
-                              {onDeleteClick && (
-                                <DropdownMenuItem
-                                  onClick={() => onDeleteClick(item)}
-                                  variant="destructive"
-                                  className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
-                                >
-                                  <Trash2 className="size-3.5" />
-                                  <span>DELETE ENTRY</span>
-                                </DropdownMenuItem>
-                              )}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </td>
-                    )}
-                  </tr>
-                ))
+                <>
+                  {paginatedData.map((item, rowIdx) => (
+                    <tr
+                      key={item.id}
+                      className={cn(
+                        "border-b border-neutral-200 transition-colors hover:bg-neutral-100/40 dark:border-neutral-800 dark:hover:bg-neutral-900/10",
+                        rowIdx === paginatedData.length - 1 && pageSize - paginatedData.length === 0 && "border-b-0",
+                        item.disabled && "opacity-60 saturate-50"
+                      )}
+                    >
+                      {columns.map((col, colIdx) => (
+                        <td key={colIdx} className={cn("px-4 py-3 text-foreground", col.className)}>
+                          {typeof col.accessorKey === "function" ? col.accessorKey(item) : (item[col.accessorKey as keyof T] as React.ReactNode)}
+                        </td>
+                      ))}
+                      {hasActions && (
+                        <td className="w-20 px-4 py-3 text-right">
+                          <div className="flex justify-end">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger
+                                render={
+                                  <button className="flex size-7 items-center justify-center border border-neutral-300 hover:bg-neutral-100 focus:outline-none dark:border-neutral-700 dark:hover:bg-neutral-900/60">
+                                    <MoreHorizontal className="size-4 text-neutral-500" />
+                                  </button>
+                                }
+                              />
+                              <DropdownMenuContent
+                                align="end"
+                                className="w-40 rounded-none border border-neutral-300 bg-background font-mono text-[10px] dark:border-neutral-700"
+                              >
+                                {onViewClick && (
+                                  <DropdownMenuItem
+                                    onClick={() => onViewClick(item)}
+                                    className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
+                                  >
+                                    <Eye className="size-3.5" />
+                                    <span>VIEW DETAILS</span>
+                                  </DropdownMenuItem>
+                                )}
+                                {onEditClick && (
+                                  <DropdownMenuItem
+                                    onClick={() => onEditClick(item)}
+                                    className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
+                                  >
+                                    <Edit className="size-3.5" />
+                                    <span>EDIT ENTRY</span>
+                                  </DropdownMenuItem>
+                                )}
+                                {onToggleStatusClick && (
+                                  <DropdownMenuItem
+                                    onClick={() => onToggleStatusClick(item)}
+                                    className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
+                                  >
+                                    <ShieldAlert className="size-3.5" />
+                                    <span>{item.disabled ? "ENABLE" : "DISABLE"}</span>
+                                  </DropdownMenuItem>
+                                )}
+                                {onDeleteClick && (
+                                  <DropdownMenuItem
+                                    onClick={() => onDeleteClick(item)}
+                                    variant="destructive"
+                                    className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
+                                  >
+                                    <Trash2 className="size-3.5" />
+                                    <span>DELETE ENTRY</span>
+                                  </DropdownMenuItem>
+                                )}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                  {/* Preoccupied/empty space rows */}
+                  {Array.from({ length: pageSize - paginatedData.length }).map((_, emptyIdx) => (
+                    <tr
+                      key={`empty-${emptyIdx}`}
+                      className={cn(
+                        "border-b border-neutral-200/30 dark:border-neutral-800/30",
+                        emptyIdx === pageSize - paginatedData.length - 1 && "border-b-0"
+                      )}
+                    >
+                      {columns.map((col, colIdx) => (
+                        <td key={colIdx} className="px-4 py-3 text-transparent select-none">
+                          &nbsp;
+                        </td>
+                      ))}
+                      {hasActions && <td className="w-20 px-4 py-3 text-transparent select-none">&nbsp;</td>}
+                    </tr>
+                  ))}
+                </>
               ) : (
                 <tr>
                   <td

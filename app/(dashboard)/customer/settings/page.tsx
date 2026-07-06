@@ -9,7 +9,7 @@ export default function CustomerSettingsPage() {
           Manage your account notifications, contact details, and secure credentials.
         </p>
       </div>
-      <div className="border border-neutral-300 border-dashed p-12 text-center dark:border-neutral-800">
+      <div className="border border-dashed border-neutral-300 p-12 text-center dark:border-neutral-800">
         <span className="font-mono text-xs text-neutral-400">Settings panel configuration is offline.</span>
       </div>
     </div>

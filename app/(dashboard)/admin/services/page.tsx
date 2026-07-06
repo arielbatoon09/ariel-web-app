@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
-import { DataTable } from "@/components/features/dashboard/data-table";
+import { DataTable } from "@/components/common/data-table";
+import { ManagementHeader } from "@/components/common/management-header";
 import type { Service } from "@/lib/schemas/dashboard";
 
 export default function AdminServicesPage() {
@@ -80,10 +81,7 @@ export default function AdminServicesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-sans text-2xl font-bold tracking-tight text-foreground md:text-3xl">Services</h1>
-        <p className="font-mono text-xs text-neutral-400 dark:text-neutral-500">MANAGE SERVICES, TIMELINES, FEATURES, AND DYNAMIC ADD-ONS</p>
-      </div>
+      <ManagementHeader title="Services" description="Manage services, timelines, features, and dynamic add-ons" />
 
       <DataTable<Service>
         data={services}

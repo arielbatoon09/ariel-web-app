@@ -10,27 +10,22 @@ export async function getUserRoleAction() {
   try {
     const cookieStore = await cookies();
     const supabase = createClient(cookieStore);
-    const { data: { user }, error } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
     if (error || !user) {
       return { success: false, error: "Not logged in" };
     }
 
-    const dbUser = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.authId, user.id))
-      .limit(1);
+    const dbUser = await db.select({ id: users.id }).from(users).where(eq(users.authId, user.id)).limit(1);
 
     if (dbUser.length === 0) {
       return { success: false, error: "User profile not found in database" };
     }
 
-    const roleRecord = await db
-      .select({ role: userRoles.role })
-      .from(userRoles)
-      .where(eq(userRoles.userId, dbUser[0].id))
-      .limit(1);
+    const roleRecord = await db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, dbUser[0].id)).limit(1);
 
     if (roleRecord.length === 0) {
       return { success: true, role: "client" as const };
