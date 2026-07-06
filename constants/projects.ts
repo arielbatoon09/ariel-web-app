@@ -15,10 +15,12 @@ export interface CaseStudy {
 
 export interface Project {
   id: string;
+  slug: string;
   tag: string;
   title: string;
   description: string;
   imageSrc: string;
+  gallery?: string[];
   tags: string[];
   link: string;
   categories: ("web" | "mobile" | "ai-data" | "open-source")[];
@@ -28,14 +30,16 @@ export interface Project {
 export const ALL_PROJECTS: Project[] = [
   {
     id: "01",
+    slug: "apex-logistics-platform",
     categories: ["web"],
     tag: "Custom SaaS / Web Platform",
     title: "Apex Logistics Platform",
     description:
       "An automated administrative panel and client portal engineered to streamline cargo tracking, automated billing, and live routing pipelines.",
     imageSrc: "/projects/project-logistics.png",
+    gallery: ["/projects/project-logistics.png", "/projects/project-retail.png", "/projects/project-search.png"],
     tags: ["Next.js", "Node.js", "PostgreSQL"],
-    link: "/work/01",
+    link: "/work/apex-logistics-platform",
     caseStudy: {
       role: "Lead Systems Architect & Full-Stack Developer",
       timeline: "4 Months (Q1 2026)",
@@ -69,14 +73,16 @@ export const ALL_PROJECTS: Project[] = [
   },
   {
     id: "02",
+    slug: "nova-retail-mobile-app",
     categories: ["mobile"],
     tag: "Mobile E-Commerce App",
     title: "Nova Retail Mobile App",
     description:
       "An offline-first, high-conversion mobile shopping experience featuring secure checkouts, real-time push alerts, and fluid catalog browsing.",
     imageSrc: "/projects/project-retail.png",
+    gallery: ["/projects/project-retail.png", "/projects/project-search.png", "/projects/project-logistics.png"],
     tags: ["React Native", "TypeScript", "FastAPI"],
-    link: "/work/02",
+    link: "/work/nova-retail-mobile-app",
     caseStudy: {
       role: "Mobile Software Engineer",
       timeline: "3 Months (Q4 2025)",
@@ -109,14 +115,16 @@ export const ALL_PROJECTS: Project[] = [
   },
   {
     id: "03",
+    slug: "insight-document-search",
     categories: ["ai-data", "web"],
     tag: "AI / Enterprise Software",
     title: "Insight Document Search",
     description:
       "A semantic search engine and AI-powered document analyzer utilizing vector databases to deliver instant, contextual answers for enterprise files.",
     imageSrc: "/projects/project-search.png",
+    gallery: ["/projects/project-search.png", "/projects/project-logistics.png", "/projects/project-retail.png"],
     tags: ["Python", "OpenAI", "Pinecone"],
-    link: "/work/03",
+    link: "/work/insight-document-search",
     caseStudy: {
       role: "AI Integration Engineer",
       timeline: "5 Months (Q2 2026)",
@@ -149,14 +157,16 @@ export const ALL_PROJECTS: Project[] = [
   },
   {
     id: "04",
+    slug: "solaria-energy-monitor",
     categories: ["web"],
     tag: "IoT / Web Application",
     title: "Solaria Energy Monitor",
     description:
       "An interactive telemetry platform analyzing industrial solar panel arrays, tracking power output grid efficiency, and battery depletion metrics.",
     imageSrc: "/projects/project-logistics.png",
+    gallery: ["/projects/project-logistics.png", "/projects/project-retail.png", "/projects/project-search.png"],
     tags: ["Next.js", "GraphQL", "TimescaleDB"],
-    link: "/work/04",
+    link: "/work/solaria-energy-monitor",
     caseStudy: {
       role: "Full-Stack Engineer",
       timeline: "3 Months (Q3 2025)",
@@ -189,14 +199,16 @@ export const ALL_PROJECTS: Project[] = [
   },
   {
     id: "05",
+    slug: "aegis-cyber-dashboard",
     categories: ["ai-data", "web"],
     tag: "Enterprise / Security",
     title: "Aegis Cyber Dashboard",
     description:
       "A real-time threat monitoring and log analysis cockpit built for network security operations, offering instant incident alert routing.",
     imageSrc: "/projects/project-search.png",
+    gallery: ["/projects/project-search.png", "/projects/project-logistics.png", "/projects/project-retail.png"],
     tags: ["React", "Go", "Elasticsearch"],
-    link: "/work/05",
+    link: "/work/aegis-cyber-dashboard",
     caseStudy: {
       role: "Security Infrastructure Engineer",
       timeline: "4 Months (Q4 2025)",
@@ -228,14 +240,16 @@ export const ALL_PROJECTS: Project[] = [
   },
   {
     id: "06",
+    slug: "quantum-ledger-engine",
     categories: ["web"],
     tag: "Fintech API System",
     title: "Quantum Ledger Engine",
     description:
       "A high-frequency ledger processing engine with double-entry cryptographic audits and sub-millisecond transaction execution pipelines.",
     imageSrc: "/projects/project-retail.png",
+    gallery: ["/projects/project-retail.png", "/projects/project-search.png", "/projects/project-logistics.png"],
     tags: ["Rust", "gRPC", "Redis"],
-    link: "/work/06",
+    link: "/work/quantum-ledger-engine",
     caseStudy: {
       role: "Backend Core Architect",
       timeline: "6 Months (Q1-Q2 2025)",
@@ -267,14 +281,16 @@ export const ALL_PROJECTS: Project[] = [
   },
   {
     id: "07",
+    slug: "hyperquery-sql-parser",
     categories: ["open-source", "web"],
     tag: "Open Source Library",
     title: "HyperQuery SQL Parser",
     description:
       "A lightweight, zero-dependency SQL parsing library optimized for sub-millisecond Abstract Syntax Tree (AST) generation and type-safe query inspection.",
     imageSrc: "/projects/project-logistics.png",
+    gallery: ["/projects/project-logistics.png", "/projects/project-retail.png", "/projects/project-search.png"],
     tags: ["TypeScript", "Parser", "SQL", "Open Source"],
-    link: "/work/07",
+    link: "/work/hyperquery-sql-parser",
     caseStudy: {
       role: "Author / Core Maintainer",
       timeline: "Active Open Source",
@@ -306,13 +322,15 @@ export const ALL_PROJECTS: Project[] = [
   },
   {
     id: "08",
+    slug: "baseui-tailwind-integration",
     categories: ["open-source", "web"],
     tag: "BaseUI Tailwind Integration",
     title: "BaseUI Tailwind Integration",
     description: "A plug-and-play preset to unify Headless MUI Base UI component states with Tailwind CSS utility classes and layout variables.",
     imageSrc: "/projects/project-retail.png",
+    gallery: ["/projects/project-retail.png", "/projects/project-search.png", "/projects/project-logistics.png"],
     tags: ["TailwindCSS", "CSS", "BaseUI", "Open Source"],
-    link: "/work/08",
+    link: "/work/baseui-tailwind-integration",
     caseStudy: {
       role: "Author / Core Maintainer",
       timeline: "Active Open Source",

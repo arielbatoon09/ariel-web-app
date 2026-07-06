@@ -5,13 +5,13 @@ import { ArticleContent } from "@/components/features/articles/article-content";
 
 interface PageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
 export async function generateStaticParams() {
   return ALL_ARTICLES.map((article) => ({
-    id: article.id,
+    slug: article.slug,
   }));
 }
 
@@ -19,7 +19,7 @@ export const dynamicParams = false;
 
 export async function generateMetadata({ params }: PageProps) {
   const resolvedParams = await params;
-  const article = ALL_ARTICLES.find((a) => a.id === resolvedParams.id);
+  const article = ALL_ARTICLES.find((a) => a.slug === resolvedParams.slug);
   if (!article) return {};
 
   return {
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ArticleDetailPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const article = ALL_ARTICLES.find((a) => a.id === resolvedParams.id);
+  const article = ALL_ARTICLES.find((a) => a.slug === resolvedParams.slug);
 
   if (!article) {
     notFound();

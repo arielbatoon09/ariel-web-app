@@ -122,7 +122,8 @@ export function HeroSection() {
                 Building Quality Software.
               </h1>
               <p className="max-w-2xl font-sans text-base leading-relaxed text-neutral-500 md:text-lg dark:text-neutral-400">
-                Full-Stack Engineer partnering with ambitious startups to design, build, and scale custom web applications, mobile apps, and AI integrations.
+                Full-Stack Engineer partnering with ambitious startups to design, build, and scale custom web applications, mobile apps, and AI
+                integrations.
               </p>
             </div>
 
@@ -150,11 +151,11 @@ export function HeroSection() {
           </div>
 
           {/* Right Column (Interactive 3D Stack Cards) */}
-          <div className="relative flex h-[380px] w-full items-center justify-center overflow-hidden lg:overflow-visible lg:col-span-5 lg:pr-12">
-            <motion.div 
+          <div className="relative flex h-[380px] w-full items-center justify-center overflow-hidden lg:col-span-5 lg:overflow-visible lg:pr-12">
+            <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="relative flex h-full w-full max-w-[250px] items-center justify-center xs:max-w-[290px] sm:max-w-[330px] lg:max-w-[340px]"
+              className="xs:max-w-[290px] relative flex h-full w-full max-w-[250px] items-center justify-center sm:max-w-[330px] lg:max-w-[340px]"
               style={{ perspective: 1200, transformStyle: "preserve-3d" }}
             >
               {HERO_CARDS.map((card, idx) => {
@@ -245,15 +246,11 @@ export function HeroSection() {
                         <div className="flex size-11 shrink-0 items-center justify-center border border-dashed border-neutral-300 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900">
                           <card.Icon className="size-5 text-neutral-800 dark:text-neutral-200" />
                         </div>
-                        <h3 className="font-sans text-base font-extrabold text-foreground tracking-tight">
-                          {card.title}
-                        </h3>
+                        <h3 className="font-sans text-base font-extrabold tracking-tight text-foreground">{card.title}</h3>
                       </div>
 
                       {/* Description */}
-                      <p className="font-sans text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
-                        {card.description}
-                      </p>
+                      <p className="font-sans text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{card.description}</p>
                     </div>
 
                     {/* Bottom Action Badges */}
@@ -261,60 +258,60 @@ export function HeroSection() {
                       {card.id === "mobile" ? (
                         <>
                           {/* App Store button */}
-                          <div className="flex h-8 select-none items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white dark:bg-neutral-800">
+                          <div className="flex h-8 items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white select-none dark:bg-neutral-800">
                             <AppleLogo />
                             <div className="flex flex-col text-left font-sans">
-                              <span className="text-[6px] leading-none uppercase text-neutral-400">Download on the</span>
-                              <span className="text-[10px] font-bold leading-tight">App Store</span>
+                              <span className="text-[6px] leading-none text-neutral-400 uppercase">Download on the</span>
+                              <span className="text-[10px] leading-tight font-bold">App Store</span>
                             </div>
                           </div>
 
                           {/* Google Play button */}
-                          <div className="flex h-8 select-none items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white dark:bg-neutral-800">
+                          <div className="flex h-8 items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white select-none dark:bg-neutral-800">
                             <PlayStoreLogo />
                             <div className="flex flex-col text-left font-sans">
-                              <span className="text-[6px] leading-none uppercase text-neutral-400">GET IT ON</span>
-                              <span className="text-[10px] font-bold leading-tight">Google Play</span>
+                              <span className="text-[6px] leading-none text-neutral-400 uppercase">GET IT ON</span>
+                              <span className="text-[10px] leading-tight font-bold">Google Play</span>
                             </div>
                           </div>
                         </>
                       ) : card.id === "dashboard" ? (
                         <>
                           {/* Web App Launch Button */}
-                          <div className="flex h-8 select-none items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white dark:bg-neutral-800">
+                          <div className="flex h-8 items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white select-none dark:bg-neutral-800">
                             <GlobeIcon />
                             <div className="flex flex-col text-left font-sans">
-                              <span className="text-[6px] leading-none uppercase text-neutral-400">LAUNCH</span>
-                              <span className="text-[10px] font-bold leading-tight">Web App</span>
+                              <span className="text-[6px] leading-none text-neutral-400 uppercase">LAUNCH</span>
+                              <span className="text-[10px] leading-tight font-bold">Web App</span>
                             </div>
                           </div>
 
                           {/* Explore Dashboard Button */}
-                          <div className="flex h-8 select-none items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white dark:bg-neutral-800">
+                          <div className="flex h-8 items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white select-none dark:bg-neutral-800">
                             <MonitorIcon />
                             <div className="flex flex-col text-left font-sans">
-                              <span className="text-[6px] leading-none uppercase text-neutral-400">EXPLORE</span>
-                              <span className="text-[10px] font-bold leading-tight">SaaS Portal</span>
+                              <span className="text-[6px] leading-none text-neutral-400 uppercase">EXPLORE</span>
+                              <span className="text-[10px] leading-tight font-bold">SaaS Portal</span>
                             </div>
                           </div>
                         </>
                       ) : (
                         <>
                           {/* Live Preview Button */}
-                          <div className="flex h-8 select-none items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white dark:bg-neutral-800">
+                          <div className="flex h-8 items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white select-none dark:bg-neutral-800">
                             <EyeIcon />
                             <div className="flex flex-col text-left font-sans">
-                              <span className="text-[6px] leading-none uppercase text-neutral-400">PREVIEW</span>
-                              <span className="text-[10px] font-bold leading-tight">Live Sites</span>
+                              <span className="text-[6px] leading-none text-neutral-400 uppercase">PREVIEW</span>
+                              <span className="text-[10px] leading-tight font-bold">Live Sites</span>
                             </div>
                           </div>
 
                           {/* View Case Studies Button */}
-                          <div className="flex h-8 select-none items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white dark:bg-neutral-800">
+                          <div className="flex h-8 items-center gap-1.5 rounded-md bg-neutral-900 px-3 text-white select-none dark:bg-neutral-800">
                             <FolderIcon />
                             <div className="flex flex-col text-left font-sans">
-                              <span className="text-[6px] leading-none uppercase text-neutral-400">VIEW</span>
-                              <span className="text-[10px] font-bold leading-tight">Case Studies</span>
+                              <span className="text-[6px] leading-none text-neutral-400 uppercase">VIEW</span>
+                              <span className="text-[10px] leading-tight font-bold">Case Studies</span>
                             </div>
                           </div>
                         </>
@@ -332,7 +329,7 @@ export function HeroSection() {
                 opacity: [0.35, 0.18, 0.35],
               }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute bottom-2 left-1/2 h-4 w-[60%] -translate-x-1/2 rounded-[100%] bg-neutral-900/10 blur-xl dark:bg-black/55 pointer-events-none"
+              className="pointer-events-none absolute bottom-2 left-1/2 h-4 w-[60%] -translate-x-1/2 rounded-[100%] bg-neutral-900/10 blur-xl dark:bg-black/55"
             />
           </div>
         </div>

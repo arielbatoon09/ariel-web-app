@@ -40,9 +40,7 @@ export function PublicFooter() {
                 />
               </div>
               <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-              <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">
-                Ariel Batoon
-              </span>
+              <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">Ariel Batoon</span>
             </Link>
             <p className="max-w-sm pt-1 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
               Engineering premium digital products and experiences for ambitious businesses that refuse to settle. Built once, built right.
@@ -114,7 +112,7 @@ export function PublicFooter() {
               <li>
                 <Link
                   href={`mailto:${CONTACT_INFO.email}`}
-                  className="block break-all text-sm text-neutral-600 transition-colors duration-200 hover:text-foreground dark:text-neutral-400 sm:break-normal"
+                  className="block text-sm break-all text-neutral-600 transition-colors duration-200 hover:text-foreground sm:break-normal dark:text-neutral-400"
                 >
                   {CONTACT_INFO.email}
                 </Link>

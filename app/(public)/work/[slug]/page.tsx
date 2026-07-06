@@ -7,13 +7,13 @@ import { CtaSection } from "@/components/common/cta-section";
 
 interface PageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
 export async function generateStaticParams() {
   return ALL_PROJECTS.map((project) => ({
-    id: project.id,
+    slug: project.slug,
   }));
 }
 
@@ -21,7 +21,7 @@ export const dynamicParams = false;
 
 export async function generateMetadata({ params }: PageProps) {
   const resolvedParams = await params;
-  const project = ALL_PROJECTS.find((p) => p.id === resolvedParams.id);
+  const project = ALL_PROJECTS.find((p) => p.slug === resolvedParams.slug);
   if (!project) return {};
 
   return {
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ProjectCaseStudyPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const project = ALL_PROJECTS.find((p) => p.id === resolvedParams.id);
+  const project = ALL_PROJECTS.find((p) => p.slug === resolvedParams.slug);
 
   if (!project) {
     notFound();

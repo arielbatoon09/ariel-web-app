@@ -5,6 +5,7 @@ export interface ArticleSection {
 
 export interface Article {
   id: string;
+  slug: string;
   tag: string;
   title: string;
   description: string;
@@ -21,14 +22,15 @@ export interface Article {
 export const ALL_ARTICLES: Article[] = [
   {
     id: "01",
+    slug: "optimizing-nextjs-server-components-for-extreme-scale",
     categories: ["engineering"],
     tag: "Software Engineering & Architecture",
     title: "Optimizing Next.js Server Components for Extreme Scale",
     description:
       "A deep dive into minimizing hydration mismatch, leveraging partial pre-rendering, and tuning caching behaviors for production workloads.",
-    imageSrc: "/projects/project-logistics.png", // Reusing existing project image placeholder
+    imageSrc: "/projects/project-logistics.png",
     tags: ["Next.js", "React 19", "Web Performance"],
-    link: "/article/01",
+    link: "/article/optimizing-nextjs-server-components-for-extreme-scale",
     date: "July 2, 2026",
     readTime: "6 min read",
     author: "Ariel Batoon",
@@ -49,6 +51,7 @@ export const ALL_ARTICLES: Article[] = [
   },
   {
     id: "02",
+    slug: "designing-clean-offline-first-architectures-in-react-native",
     categories: ["engineering", "design"],
     tag: "Mobile Development",
     title: "Designing Clean Offline-First Architectures in React Native",
@@ -56,7 +59,7 @@ export const ALL_ARTICLES: Article[] = [
       "How to engineer cross-platform mobile apps with local database syncing, robust queue management, and resilient UI state indicators.",
     imageSrc: "/projects/project-retail.png",
     tags: ["React Native", "SQLite", "Architecture"],
-    link: "/article/02",
+    link: "/article/designing-clean-offline-first-architectures-in-react-native",
     date: "June 24, 2026",
     readTime: "8 min read",
     author: "Ariel Batoon",
@@ -77,6 +80,7 @@ export const ALL_ARTICLES: Article[] = [
   },
   {
     id: "03",
+    slug: "integrating-intelligent-ai-agents-into-production-saas-workflows",
     categories: ["ai"],
     tag: "Artificial Intelligence Integration",
     title: "Integrating Intelligent AI Agents into Production SaaS Workflows",
@@ -84,7 +88,7 @@ export const ALL_ARTICLES: Article[] = [
       "An architectural guide to deploying autonomous LLM agents with deterministic logic guards, semantic vector search, and structured JSON outputs.",
     imageSrc: "/projects/project-fitness.png",
     tags: ["AI Agents", "LLM", "Vector Databases"],
-    link: "/article/03",
+    link: "/article/integrating-intelligent-ai-agents-into-production-saas-workflows",
     date: "June 15, 2026",
     readTime: "7 min read",
     author: "Ariel Batoon",
@@ -105,13 +109,14 @@ export const ALL_ARTICLES: Article[] = [
   },
   {
     id: "04",
+    slug: "building-consistent-token-systems-for-dark-and-light-themes",
     categories: ["design"],
     tag: "Design Systems & UI",
     title: "Building Consistent Token Systems for Dark & Light Themes",
     description: "Best practices for architecting CSS variables, semantic keys, and layout tokens that feel natural in both day and night modes.",
     imageSrc: "/projects/project-logistics.png",
     tags: ["CSS", "Design Systems", "Themes"],
-    link: "/article/04",
+    link: "/article/building-consistent-token-systems-for-dark-and-light-themes",
     date: "June 08, 2026",
     readTime: "5 min read",
     author: "Ariel Batoon",
@@ -124,6 +129,7 @@ export const ALL_ARTICLES: Article[] = [
   },
   {
     id: "05",
+    slug: "scaling-startup-mvps-without-architectural-regret",
     categories: ["business"],
     tag: "Product Strategy",
     title: "Scaling Startup MVPs without Architectural Regret",
@@ -131,7 +137,7 @@ export const ALL_ARTICLES: Article[] = [
       "How to balance rapid feature validation with technical structure, choosing the right databases, infrastructure, and API boundaries.",
     imageSrc: "/projects/project-retail.png",
     tags: ["MVPs", "Startups", "Scale"],
-    link: "/article/05",
+    link: "/article/scaling-startup-mvps-without-architectural-regret",
     date: "May 29, 2026",
     readTime: "7 min read",
     author: "Ariel Batoon",
@@ -144,13 +150,14 @@ export const ALL_ARTICLES: Article[] = [
   },
   {
     id: "06",
+    slug: "designing-sql-database-schemas-for-complex-workflows",
     categories: ["engineering"],
     tag: "Database Design",
     title: "Designing SQL Database Schemas for Complex Workflows",
     description: "A guide to relational schema creation, normalization levels, indices optimization, and PostgreSQL replication configuration.",
     imageSrc: "/projects/project-fitness.png",
     tags: ["SQL", "Database", "PostgreSQL"],
-    link: "/article/06",
+    link: "/article/designing-sql-database-schemas-for-complex-workflows",
     date: "May 15, 2026",
     readTime: "9 min read",
     author: "Ariel Batoon",
@@ -163,13 +170,14 @@ export const ALL_ARTICLES: Article[] = [
   },
   {
     id: "07",
+    slug: "fine-tuning-models-vs-rag-choosing-the-right-approach",
     categories: ["ai"],
     tag: "Machine Learning Integration",
     title: "Fine-Tuning Models vs. RAG: Choosing the Right Approach",
     description: "A comparative evaluation of custom model fine-tuning and context-based document injection for production environments.",
     imageSrc: "/projects/project-logistics.png",
     tags: ["RAG", "Fine-Tuning", "LLMs"],
-    link: "/article/07",
+    link: "/article/fine-tuning-models-vs-rag-choosing-the-right-approach",
     date: "May 03, 2026",
     readTime: "6 min read",
     author: "Ariel Batoon",
@@ -182,13 +190,14 @@ export const ALL_ARTICLES: Article[] = [
   },
   {
     id: "08",
+    slug: "rest-vs-graphql-in-high-load-enterprise-systems",
     categories: ["engineering"],
     tag: "Web APIs & Integration",
     title: "REST vs. GraphQL in High-Load Enterprise Systems",
     description: "Evaluating payload sizes, request structures, security, caching, and rate limiting rules for modern web applications.",
     imageSrc: "/projects/project-retail.png",
     tags: ["APIs", "REST", "GraphQL"],
-    link: "/article/08",
+    link: "/article/rest-vs-graphql-in-high-load-enterprise-systems",
     date: "April 20, 2026",
     readTime: "8 min read",
     author: "Ariel Batoon",

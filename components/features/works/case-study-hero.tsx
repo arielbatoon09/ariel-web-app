@@ -4,7 +4,7 @@ import { Section } from "@/components/common/section";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/common/back-button";
 import { ParameterRow } from "@/components/common/parameter-row";
-import { BannerShowcase } from "@/components/common/banner-showcase";
+import { CaseStudyGallery } from "@/components/features/works/case-study-gallery";
 import type { Project } from "@/constants/projects";
 
 interface CaseStudyHeroProps {
@@ -77,9 +77,9 @@ export function CaseStudyHero({ project }: CaseStudyHeroProps) {
         </div>
       </div>
 
-      {/* Project Banner Showcase */}
+      {/* Project Gallery Showcase */}
       <div className="mt-12">
-        <BannerShowcase src={project.imageSrc} alt={`${project.title} Banner`} />
+        <CaseStudyGallery images={project.gallery || [project.imageSrc]} title={project.title} />
       </div>
     </Section>
   );
