@@ -20,12 +20,15 @@ function MediaCard({
   isSelected,
   onToggleSelect,
   onSelectAsset,
+  index,
 }: {
   asset: MediaAsset;
   isSelected: boolean;
   onToggleSelect: () => void;
   onSelectAsset: () => void;
+  index: number;
 }) {
+  const isAboveFold = index < 6;
   const [copied, setCopied] = React.useState(false);
   const isImage = asset.mimeType.startsWith("image/");
   const isSvg = asset.mimeType === "image/svg+xml";
@@ -71,6 +74,8 @@ function MediaCard({
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            loading={isAboveFold ? "eager" : "lazy"}
+            priority={isAboveFold}
           />
         ) : isSvg ? (
           <div className="flex h-full items-center justify-center p-4">
@@ -141,13 +146,14 @@ export function MediaGrid({ assets, selectedIds, onToggleSelect, onSelectAsset, 
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-      {assets.map((asset) => (
+      {assets.map((asset, index) => (
         <MediaCard
           key={asset.id}
           asset={asset}
           isSelected={selectedIds.has(asset.id)}
           onToggleSelect={() => onToggleSelect(asset.id)}
           onSelectAsset={() => onSelectAsset(asset)}
+          index={index}
         />
       ))}
     </div>
