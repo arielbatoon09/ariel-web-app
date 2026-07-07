@@ -445,10 +445,15 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                       type="checkbox"
                       checked={isAllSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="peer sr-only"
+                      className="sr-only"
                     />
-                    <span className="size-3.5 border border-neutral-350 bg-neutral-100/50 flex items-center justify-center transition-all duration-300 peer-checked:border-foreground dark:border-neutral-600 dark:bg-neutral-900/50 dark:peer-checked:border-white">
-                      <span className="size-1.5 bg-neutral-800 dark:bg-white scale-0 transition-transform duration-300 peer-checked:scale-100" />
+                    <span className={cn(
+                      "size-3.5 border flex items-center justify-center transition-all duration-300",
+                      isAllSelected
+                        ? "border-foreground bg-neutral-200 dark:border-white dark:bg-neutral-800"
+                        : "border-neutral-300 bg-neutral-100/30 dark:border-neutral-700 dark:bg-neutral-950/30"
+                    )}>
+                      {isAllSelected && <span className="size-1.5 bg-neutral-800 dark:bg-white" />}
                     </span>
                   </label>
                 </th>
@@ -537,10 +542,15 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                               type="checkbox"
                               checked={isSelected}
                               onChange={(e) => handleSelectRow(item.id, e.target.checked)}
-                              className="peer sr-only"
+                              className="sr-only"
                             />
-                            <span className="size-3.5 border border-neutral-300 bg-neutral-100/30 flex items-center justify-center transition-all duration-300 peer-checked:border-foreground dark:border-neutral-700 dark:bg-neutral-950/30 dark:peer-checked:border-white">
-                              <span className="size-1.5 bg-neutral-800 dark:bg-white scale-0 transition-transform duration-300 peer-checked:scale-100" />
+                            <span className={cn(
+                              "size-3.5 border flex items-center justify-center transition-all duration-300",
+                              isSelected
+                                ? "border-foreground bg-neutral-200 dark:border-white dark:bg-neutral-800"
+                                : "border-neutral-300 bg-neutral-100/30 dark:border-neutral-700 dark:bg-neutral-950/30"
+                            )}>
+                              {isSelected && <span className="size-1.5 bg-neutral-800 dark:bg-white" />}
                             </span>
                           </label>
                         </td>
