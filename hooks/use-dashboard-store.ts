@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { ALL_PROJECTS } from "@/constants/projects";
 import { ALL_ARTICLES } from "@/constants/articles";
 import type { Category, Project, Article, Service, Order, Transaction, Customer } from "@/lib/schemas/dashboard";
+import type { MediaAsset } from "@/data/media";
 
 interface DashboardState {
   works: Project[];
@@ -75,6 +76,20 @@ interface DashboardState {
   setSelectedWorkId: (id: string | null) => void;
   setIsWorkDetailsOpen: (open: boolean) => void;
   setIsWorkAddOpen: (open: boolean) => void;
+
+  // Media UI State & Actions
+  mediaSelectedIds: Set<number>;
+  mediaActiveAsset: MediaAsset | null;
+  mediaShowUpload: boolean;
+  mediaSearch: string;
+  mediaActiveYear: string | null;
+  setMediaSelectedIds: (ids: Set<number>) => void;
+  setMediaActiveAsset: (asset: MediaAsset | null) => void;
+  setMediaShowUpload: (open: boolean) => void;
+  setMediaSearch: (q: string) => void;
+  setMediaActiveYear: (year: string | null) => void;
+  toggleMediaSelect: (id: number) => void;
+  clearMediaSelection: () => void;
 }
 
 // Prepopulated Categories
@@ -344,4 +359,23 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   setSelectedWorkId: (id) => set(() => ({ selectedWorkId: id })),
   setIsWorkDetailsOpen: (open) => set(() => ({ isWorkDetailsOpen: open })),
   setIsWorkAddOpen: (open) => set(() => ({ isWorkAddOpen: open })),
+
+  // Media UI State & Actions
+  mediaSelectedIds: new Set<number>(),
+  mediaActiveAsset: null,
+  mediaShowUpload: false,
+  mediaSearch: "",
+  mediaActiveYear: null,
+  setMediaSelectedIds: (ids) => set(() => ({ mediaSelectedIds: ids })),
+  setMediaActiveAsset: (asset) => set(() => ({ mediaActiveAsset: asset })),
+  setMediaShowUpload: (open) => set(() => ({ mediaShowUpload: open })),
+  setMediaSearch: (q) => set(() => ({ mediaSearch: q })),
+  setMediaActiveYear: (year) => set(() => ({ mediaActiveYear: year })),
+  toggleMediaSelect: (id) =>
+    set((state) => {
+      const next = new Set(state.mediaSelectedIds);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return { mediaSelectedIds: next };
+    }),
+  clearMediaSelection: () => set(() => ({ mediaSelectedIds: new Set<number>() })),
 }));

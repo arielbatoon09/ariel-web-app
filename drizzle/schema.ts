@@ -95,3 +95,23 @@ export const works = pgTable(
     index("works_title_idx").on(table.title),
   ]
 );
+
+export const mediaAssets = pgTable(
+  "media_assets",
+  {
+    id: serial("id").primaryKey(),
+    filename: text("filename").notNull(),
+    url: text("url").notNull(),
+    mimeType: text("mime_type").notNull(),
+    size: integer("size").notNull(), // in bytes
+    folder: text("folder").notNull(), // e.g. "media/2026"
+    altText: text("alt_text"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("media_assets_folder_idx").on(table.folder),
+    index("media_assets_mime_type_idx").on(table.mimeType),
+    index("media_assets_created_at_idx").on(table.createdAt),
+  ]
+);

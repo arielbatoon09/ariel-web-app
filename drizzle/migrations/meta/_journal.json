@@ -22,6 +22,13 @@
       "when": 1783407124421,
       "tag": "0002_early_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783409310987,
+      "tag": "0003_bitter_big_bertha",
+      "breakpoints": true
     }
   ]
 }

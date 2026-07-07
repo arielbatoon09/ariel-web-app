@@ -1,6 +1,6 @@
 import { DashboardSidebar, type NavItem } from "@/components/features/dashboard/dashboard-sidebar";
 import { AdminHeader } from "@/components/features/dashboard/admin-header";
-import { LayoutDashboard, Briefcase, FileText, Layers, ShoppingBag, CreditCard, User, Package } from "lucide-react";
+import { LayoutDashboard, Briefcase, FileText, Layers, ShoppingBag, CreditCard, User, Package, ImageIcon } from "lucide-react";
 
 import { redirect } from "next/navigation";
 import { getCurrentSessionUser } from "@/data/auth";
@@ -17,6 +17,7 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
   { label: "Customers", href: "/admin/customers", icon: <User className="size-4" /> },
   { label: "Works", href: "/admin/works", icon: <Briefcase className="size-4" /> },
   { label: "Articles", href: "/admin/articles", icon: <FileText className="size-4" /> },
+  { label: "Media", href: "/admin/media", icon: <ImageIcon className="size-4" /> },
   { label: "Categories", href: "/admin/categories", icon: <Layers className="size-4" /> },
   { label: "Services", href: "/admin/services", icon: <Package className="size-4" /> },
   { label: "Orders", href: "/admin/orders", icon: <ShoppingBag className="size-4" /> },
