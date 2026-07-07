@@ -67,6 +67,14 @@ interface DashboardState {
   setSelectedCategoryId: (id: string | null) => void;
   setIsCategoryDetailsOpen: (open: boolean) => void;
   setIsCategoryAddOpen: (open: boolean) => void;
+
+  // Works UI State & Actions
+  selectedWorkId: string | null;
+  isWorkDetailsOpen: boolean;
+  isWorkAddOpen: boolean;
+  setSelectedWorkId: (id: string | null) => void;
+  setIsWorkDetailsOpen: (open: boolean) => void;
+  setIsWorkAddOpen: (open: boolean) => void;
 }
 
 // Prepopulated Categories
@@ -328,4 +336,12 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   setSelectedCategoryId: (id) => set(() => ({ selectedCategoryId: id })),
   setIsCategoryDetailsOpen: (open) => set(() => ({ isCategoryDetailsOpen: open })),
   setIsCategoryAddOpen: (open) => set(() => ({ isCategoryAddOpen: open })),
+
+  // Works UI State & Actions
+  selectedWorkId: null,
+  isWorkDetailsOpen: false,
+  isWorkAddOpen: false,
+  setSelectedWorkId: (id) => set(() => ({ selectedWorkId: id })),
+  setIsWorkDetailsOpen: (open) => set(() => ({ isWorkDetailsOpen: open })),
+  setIsWorkAddOpen: (open) => set(() => ({ isWorkAddOpen: open })),
 }));

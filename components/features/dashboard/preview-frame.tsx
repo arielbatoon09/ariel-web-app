@@ -16,14 +16,10 @@ export function PreviewFrame({ children, className, ...props }: PreviewFrameProp
     if (!node || !node.contentWindow) return;
     const doc = node.contentWindow.document;
 
-    // Apply dark mode class to iframe html element matching the parent HTML
+    // Copy all classes and CSS variables from parent document elements to iframe elements
     const updateTheme = () => {
-      const isDark = document.documentElement.classList.contains("dark");
-      if (isDark) {
-        doc.documentElement.classList.add("dark");
-      } else {
-        doc.documentElement.classList.remove("dark");
-      }
+      doc.documentElement.className = document.documentElement.className;
+      doc.body.className = document.body.className + " !bg-transparent";
     };
 
     // Initial theme set

@@ -8,6 +8,20 @@
       "when": 1783402586156,
       "tag": "0000_greedy_redwing",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783406135470,
+      "tag": "0001_unusual_calypso",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783407124421,
+      "tag": "0002_early_crystal",
+      "breakpoints": true
     }
   ]
 }

@@ -1,6 +1,7 @@
-import { pgEnum, pgTable, serial, text, varchar, timestamp, integer, boolean, index } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, serial, text, varchar, timestamp, integer, boolean, index, jsonb } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["admin", "client"]);
+export const workStatusEnum = pgEnum("work_status", ["draft", "published", "unpublished"]);
 
 export const users = pgTable(
   "users",
@@ -49,5 +50,48 @@ export const categories = pgTable(
     index("categories_name_idx").on(table.name),
     index("categories_slug_idx").on(table.slug),
     index("categories_target_idx").on(table.target),
+  ]
+);
+
+export const works = pgTable(
+  "works",
+  {
+    id: serial("id").primaryKey(),
+    slug: text("slug").unique().notNull(),
+    tag: text("tag").notNull(),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    imageSrc: text("image_src").notNull(),
+    gallery: jsonb("gallery").$type<string[]>().default([]).notNull(),
+    tags: jsonb("tags").$type<string[]>().default([]).notNull(),
+    link: text("link").notNull(),
+    categories: jsonb("categories").$type<string[]>().default([]).notNull(),
+    caseStudy: jsonb("case_study").$type<{
+      role: string;
+      timeline: string;
+      challenge: string;
+      solution: string;
+      features: Array<{ title: string; description: string }>;
+      results: string[];
+      client?: string;
+      liveUrl?: string;
+      githubUrl?: string;
+    }>().notNull(),
+    seo: jsonb("seo").$type<{
+      title?: string;
+      description?: string;
+      keywords?: string;
+      ogTitle?: string;
+      ogDescription?: string;
+      ogImage?: string;
+      canonicalUrl?: string;
+    }>(),
+    status: workStatusEnum("status").default("draft").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("works_slug_idx").on(table.slug),
+    index("works_title_idx").on(table.title),
   ]
 );

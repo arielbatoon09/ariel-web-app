@@ -51,6 +51,7 @@ interface DataTableProps<T> {
   // Advanced Operations
   onDeleteBulk?: (items: T[]) => void;
   onImportCSV?: (items: any[]) => void;
+  hideExport?: boolean;
 }
 
 export function DataTable<T extends { id: string; name?: string; title?: string; disabled?: boolean }>(props: DataTableProps<T>) {
@@ -70,6 +71,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
     isLoading = false,
     onDeleteBulk,
     onImportCSV,
+    hideExport = false,
   } = props;
 
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -367,16 +369,18 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
               Import
             </Button>
           )}
-          <Button
-            onClick={handleExportCSV}
-            variant="outline"
-            size="sm"
-            className="h-8 rounded-none border border-neutral-300 font-mono text-[10px] tracking-wider uppercase transition-colors duration-300 hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-600"
-            title={selectedIds.size > 0 ? "Export Selected to CSV" : "Export All to CSV"}
-          >
-            <Download className="mr-1.5 size-3" />
-            Export {selectedIds.size > 0 && `(${selectedIds.size})`}
-          </Button>
+          {!hideExport && (
+            <Button
+              onClick={handleExportCSV}
+              variant="outline"
+              size="sm"
+              className="h-8 rounded-none border border-neutral-300 font-mono text-[10px] tracking-wider uppercase transition-colors duration-300 hover:border-neutral-400 dark:border-neutral-700 dark:hover:bg-neutral-600"
+              title={selectedIds.size > 0 ? "Export Selected to CSV" : "Export All to CSV"}
+            >
+              <Download className="mr-1.5 size-3" />
+              Export {selectedIds.size > 0 && `(${selectedIds.size})`}
+            </Button>
+          )}
 
           {onAddClick && (
             <Button onClick={onAddClick} size="sm" className="h-8 cursor-pointer rounded-none font-mono text-[10px] tracking-wider uppercase">
