@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
-import { createCustomerAction } from "./customers-action";
+import { createCustomerAction } from "@/services/customers";
 import type { Customer } from "@/lib/schemas/dashboard";
 
 const customerSchema = z.object({

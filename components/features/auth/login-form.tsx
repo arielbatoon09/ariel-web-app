@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 
 import { useAuthStore } from "@/hooks/use-auth-store";
-import { getUserRoleAction } from "@/components/features/auth/auth-action";
+import { getUserRoleAction } from "@/services/auth";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email address is required.").email("Please enter a valid email address."),

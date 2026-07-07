@@ -4,11 +4,14 @@ import * as React from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { ManagementDetailDialog } from "@/components/common/management-detail-dialog";
 import { CustomerProfileView } from "@/components/features/dashboard/customers/customer-profile-view";
-import { toast } from "sonner";
-import { updateCustomerRoleAction, toggleCustomerBlockStatusAction } from "@/components/features/dashboard/customers/customers-action";
+import { useCustomersQuery, useUpdateCustomerRoleMutation, useToggleCustomerBlockMutation } from "@/hooks/use-customers";
 
 export function CustomerDetailDialog() {
-  const { customers, selectedCustomerId, isDetailsOpen, setIsDetailsOpen, updateCustomerRole, toggleCustomerBlockStatus } = useDashboardStore();
+  const { selectedCustomerId, isDetailsOpen, setIsDetailsOpen } = useDashboardStore();
+
+  const { data: customers = [] } = useCustomersQuery();
+  const updateRoleMutation = useUpdateCustomerRoleMutation();
+  const toggleBlockMutation = useToggleCustomerBlockMutation();
 
   const currentCustomer = React.useMemo(() => {
     if (!selectedCustomerId) return null;
@@ -18,33 +21,13 @@ export function CustomerDetailDialog() {
   const handleToggleBlock = async () => {
     if (!currentCustomer) return;
     const targetStatus = !currentCustomer.disabled;
-    try {
-      const res = await toggleCustomerBlockStatusAction(currentCustomer.id, targetStatus);
-      if (res.success) {
-        toggleCustomerBlockStatus(currentCustomer.id);
-        toast.success(targetStatus ? "Customer blocked successfully." : "Customer unblocked successfully.");
-      } else {
-        toast.error(res.error || "Failed to update block status.");
-      }
-    } catch (err: any) {
-      toast.error(err?.message || "An unexpected error occurred.");
-    }
+    toggleBlockMutation.mutate({ customerId: currentCustomer.id, isBlocked: targetStatus });
   };
 
   const handleUpdateRole = async () => {
     if (!currentCustomer) return;
     const targetRole = currentCustomer.role === "admin" ? "client" : "admin";
-    try {
-      const res = await updateCustomerRoleAction(currentCustomer.id, targetRole);
-      if (res.success) {
-        updateCustomerRole(currentCustomer.id, currentCustomer.role === "admin" ? "customer" : "admin");
-        toast.success("Customer role updated successfully.");
-      } else {
-        toast.error(res.error || "Failed to update role.");
-      }
-    } catch (err: any) {
-      toast.error(err?.message || "An unexpected error occurred.");
-    }
+    updateRoleMutation.mutate({ customerId: currentCustomer.id, role: targetRole });
   };
 
   return (

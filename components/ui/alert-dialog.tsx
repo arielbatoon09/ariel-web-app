@@ -117,16 +117,14 @@ function AlertDialogDescription({ className, ...props }: React.ComponentProps<ty
       {...props}
     />
   );
-}
-
-function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof Button>) {
-  return <Button data-slot="alert-dialog-action" className={cn(className)} {...props} />;
+}function AlertDialogAction({ className, size = "sm", ...props }: React.ComponentProps<typeof Button>) {
+  return <Button data-slot="alert-dialog-action" size={size} className={cn(className)} {...props} />;
 }
 
 function AlertDialogCancel({
   className,
   variant = "outline",
-  size = "default",
+  size = "sm",
   ...props
 }: AlertDialogPrimitive.Close.Props & Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
   return (

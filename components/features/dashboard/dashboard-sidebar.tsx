@@ -3,10 +3,11 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { Menu, X, LogOut, User } from "lucide-react";
+import { Menu, X, LogOut, User, Globe } from "lucide-react";
+import { useAuthStore } from "@/hooks/use-auth-store";
 
 export interface NavItem {
   label: string;
@@ -25,7 +26,14 @@ interface DashboardSidebarProps {
 
 export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel Batoon", email: "ariel@batoon.com" } }: DashboardSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { signOut } = useAuthStore();
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/login");
+  };
 
   return (
     <>
@@ -160,13 +168,22 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
             <ThemeToggle />
           </div>
 
-          <Link
-            href="/"
-            className="flex w-full items-center justify-center gap-2 border border-neutral-300 py-2.5 font-mono text-xs tracking-wider text-neutral-500 uppercase transition-all duration-300 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:hover:bg-neutral-900/60"
-          >
-            <LogOut className="size-3.5" />
-            Exit Portal
-          </Link>
+          <div className="space-y-2">
+            <Link
+              href="/"
+              className="flex w-full items-center justify-center gap-2 border border-neutral-300 py-2.5 font-mono text-xs tracking-wider text-neutral-500 uppercase transition-all duration-300 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:hover:bg-neutral-900/60"
+            >
+              <Globe className="size-3.5" />
+              View Website
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center justify-center gap-2 border border-neutral-300 py-2.5 font-mono text-xs tracking-wider text-red-500 uppercase transition-all duration-300 hover:bg-red-50/50 hover:text-red-650 dark:border-neutral-700 dark:hover:bg-red-950/20 dark:hover:text-red-400"
+            >
+              <LogOut className="size-3.5" />
+              Logout
+            </button>
+          </div>
         </div>
       </aside>
     </>

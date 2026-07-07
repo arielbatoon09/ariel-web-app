@@ -1,45 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import * as React from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/common/data-table";
-import { Shield, ShieldAlert, User, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Customer } from "@/lib/schemas/dashboard";
-import { toast } from "sonner";
-import { getCustomersAction, toggleCustomerBlockStatusAction, deleteCustomersAction } from "@/components/features/dashboard/customers/customers-action";
+import { useCustomersQuery, useToggleCustomerBlockMutation, useDeleteCustomersMutation } from "@/hooks/use-customers";
+import { ConfirmDialog } from "@/components/common/confirm-dialog";
 
 export function CustomerTable() {
   const {
-    customers,
-    setCustomers,
     setSelectedCustomerId,
     setIsDetailsOpen,
-    toggleCustomerBlockStatus,
-    isLoadingCustomers,
-    setIsLoadingCustomers,
-    addCustomer,
-    deleteCustomer,
   } = useDashboardStore();
 
-  useEffect(() => {
-    async function loadCustomers() {
-      try {
-        setIsLoadingCustomers(true);
-        const res = await getCustomersAction();
-        if (res.success && res.customers) {
-          setCustomers(res.customers);
-        } else {
-          toast.error(res.error || "Failed to load customers.");
-        }
-      } catch (err: any) {
-        toast.error(err?.message || "Failed to load customers.");
-      } finally {
-        setIsLoadingCustomers(false);
-      }
-    }
-    loadCustomers();
-  }, [setCustomers, setIsLoadingCustomers]);
+  const { data: customers = [], isLoading: isLoadingCustomers } = useCustomersQuery();
+  const toggleBlockMutation = useToggleCustomerBlockMutation();
+  const deleteCustomersMutation = useDeleteCustomersMutation();
+
+  const [itemsToDelete, setItemsToDelete] = React.useState<Customer[]>([]);
+  const [customerToBlock, setCustomerToBlock] = React.useState<Customer | null>(null);
+  const [confirmType, setConfirmType] = React.useState<"delete" | "block" | null>(null);
 
   const columns = [
     {
@@ -55,28 +36,17 @@ export function CustomerTable() {
     {
       header: "Role",
       accessorKey: ((item: Customer) => (
-        <span
-          className={cn(
-            "inline-flex items-center gap-1 font-mono text-xs tracking-wide uppercase",
-            item.role === "admin" ? "font-bold text-amber-500" : "text-neutral-400 dark:text-neutral-500"
-          )}
-        >
-          {item.role === "admin" ? <Shield className="size-3" /> : <User className="size-3" />}
-          {item.role}
+        <span className="font-sans text-xs">
+          {item.role === "admin" ? "Admin" : "Customer"}
         </span>
       )) as (item: Customer) => React.ReactNode,
     },
     {
       header: "Status",
       accessorKey: ((item: Customer) => (
-        <span
-          className={cn(
-            "inline-flex items-center gap-1 font-mono text-xs tracking-wide uppercase",
-            item.disabled ? "font-bold text-red-500" : "text-green-550"
-          )}
-        >
-          {item.disabled ? <ShieldAlert className="size-3" /> : <Clock className="size-3" />}
-          {item.disabled ? "BLOCKED" : "ACTIVE"}
+        <span className="inline-flex items-center gap-1.5 font-sans text-xs">
+          <span className={cn("size-1.5 rounded-full", item.disabled ? "bg-red-500" : "bg-green-500")} />
+          {item.disabled ? "Blocked" : "Active"}
         </span>
       )) as (item: Customer) => React.ReactNode,
     },
@@ -92,38 +62,38 @@ export function CustomerTable() {
     setIsDetailsOpen(true);
   };
 
-  const handleToggleBlock = async (customer: Customer) => {
-    const targetStatus = !customer.disabled;
-    try {
-      const res = await toggleCustomerBlockStatusAction(customer.id, targetStatus);
-      if (res.success) {
-        toggleCustomerBlockStatus(customer.id);
-        toast.success(targetStatus ? "Customer blocked successfully." : "Customer unblocked successfully.");
-      } else {
-        toast.error(res.error || "Failed to update block status.");
-      }
-    } catch (err: any) {
-      toast.error(err?.message || "An unexpected error occurred.");
-    }
+  const handleToggleBlock = (customer: Customer) => {
+    setCustomerToBlock(customer);
+    setConfirmType("block");
   };
 
-  const handleDeleteBulk = async (items: Customer[]) => {
-    if (!window.confirm(`Are you sure you want to delete ${items.length} selected customer(s)?`)) {
-      return;
-    }
-    const ids = items.map((item) => item.id);
-    try {
-      const res = await deleteCustomersAction(ids);
-      if (res.success) {
-        ids.forEach((id) => deleteCustomer(id));
-        toast.success("Selected customer(s) deleted successfully.");
-      } else {
-        toast.error(res.error || "Failed to delete selected customer(s).");
-      }
-    } catch (err: any) {
-      toast.error(err?.message || "An unexpected error occurred.");
-    }
+  const handleDeleteBulk = (items: Customer[]) => {
+    setItemsToDelete(items);
+    setConfirmType("delete");
   };
+
+  const handleConfirm = () => {
+    if (confirmType === "delete") {
+      const ids = itemsToDelete.map((item) => item.id);
+      deleteCustomersMutation.mutate(ids);
+    } else if (confirmType === "block" && customerToBlock) {
+      const targetStatus = !customerToBlock.disabled;
+      toggleBlockMutation.mutate({ customerId: customerToBlock.id, isBlocked: targetStatus });
+    }
+    setConfirmType(null);
+  };
+
+  const confirmTitle = confirmType === "delete" ? "Delete Customer(s)" : "Update Login Status";
+  
+  const confirmDescription = confirmType === "delete"
+    ? "This action cannot be undone. This will permanently delete the selected customer(s) from the database and auth records."
+    : customerToBlock?.disabled
+    ? `This will unblock ${customerToBlock.name || "the customer"} and restore their login access.`
+    : `This will block ${customerToBlock?.name || "the customer"} and immediately suspend their login access.`;
+
+  const confirmVariant = confirmType === "delete" || (confirmType === "block" && !customerToBlock?.disabled)
+    ? "destructive"
+    : "default";
 
   return (
     <div className="relative">
@@ -136,6 +106,16 @@ export function CustomerTable() {
         onToggleStatusClick={handleToggleBlock}
         isLoading={isLoadingCustomers}
         onDeleteBulk={handleDeleteBulk}
+      />
+
+      <ConfirmDialog
+        open={confirmType !== null}
+        onOpenChange={(open) => !open && setConfirmType(null)}
+        title={confirmTitle}
+        description={confirmDescription}
+        onConfirm={handleConfirm}
+        variant={confirmVariant}
+        isLoading={deleteCustomersMutation.isPending || toggleBlockMutation.isPending}
       />
     </div>
   );

@@ -1,10 +1,8 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { db } from "@/drizzle";
-import { users, userRoles } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
 import { LoginForm } from "@/components/features/auth/login-form";
+import { getCurrentSessionUser } from "@/data/auth";
+import { getUserByAuthId } from "@/data/users";
+import { getUserRoleByUserId } from "@/data/roles";
 
 export const metadata = {
   title: "Sign In | Ariel Batoon",
@@ -12,19 +10,14 @@ export const metadata = {
 };
 
 export default async function LoginPage() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentSessionUser();
 
   if (user) {
-    const dbUser = await db.select({ id: users.id }).from(users).where(eq(users.authId, user.id)).limit(1);
+    const dbUser = await getUserByAuthId(user.id);
 
-    if (dbUser.length > 0) {
-      const roleRecord = await db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, dbUser[0].id)).limit(1);
-
-      const isAdmin = roleRecord.length > 0 && roleRecord[0].role === "admin";
+    if (dbUser) {
+      const role = await getUserRoleByUserId(dbUser.id);
+      const isAdmin = role === "admin";
       if (isAdmin) {
         redirect("/admin");
       } else {

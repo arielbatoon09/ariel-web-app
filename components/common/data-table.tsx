@@ -325,21 +325,21 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 flex-wrap items-center gap-3">
           {searchKey && (
-            <div className="relative w-full max-w-xs">
-              <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-neutral-400 dark:text-neutral-500" />
+            <div className="relative w-full max-w-xs group/search">
+              <Search className="absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-neutral-400 group-focus-within/search:text-foreground transition-colors duration-200 dark:text-neutral-500" />
               <Input
                 placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="rounded-none border-neutral-300 pl-9 font-sans text-xs focus-visible:ring-1 focus-visible:ring-neutral-400"
+                className="rounded-none border-neutral-300 pl-9 font-sans text-xs hover:border-neutral-400 focus-visible:ring-0 focus-visible:border-neutral-600 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus-visible:border-neutral-500 transition-all duration-300"
               />
             </div>
           )}
           {hasStatusFilter && (
             <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val as "all" | "active" | "disabled")}>
-              <SelectTrigger className="!h-8 w-44 !rounded-none border-neutral-300 bg-transparent font-sans text-xs dark:bg-transparent">
+              <SelectTrigger className="!h-8 w-44 !rounded-none border border-neutral-300 bg-transparent font-sans text-xs hover:border-neutral-400 dark:border-neutral-700 dark:bg-transparent dark:hover:border-neutral-600 transition-colors duration-300">
                 <span className="flex items-center gap-1.5">
-                  <ListFilter className="size-3 text-neutral-400" />
+                  <ListFilter className="size-3 text-neutral-400 dark:text-neutral-500" />
                   <SelectValue placeholder="All Status">
                     {statusFilter === "all" ? "All Status" : statusFilter === "active" ? "Active" : "Disabled"}
                   </SelectValue>
@@ -369,7 +369,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
               onClick={() => fileInputRef.current?.click()}
               variant="outline"
               size="sm"
-              className="h-8 rounded-none border-neutral-300 font-mono text-[10px] tracking-wider uppercase"
+              className="h-8 rounded-none border border-neutral-300 font-mono text-[10px] tracking-wider uppercase transition-colors duration-300 hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-600"
               title="Import CSV Data"
             >
               <Upload className="mr-1.5 size-3" />
@@ -380,7 +380,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
             onClick={handleExportCSV}
             variant="outline"
             size="sm"
-            className="h-8 rounded-none border-neutral-300 font-mono text-[10px] tracking-wider uppercase"
+            className="h-8 rounded-none border border-neutral-300 font-mono text-[10px] tracking-wider uppercase transition-colors duration-300 hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-600"
             title={selectedIds.size > 0 ? "Export Selected to CSV" : "Export All to CSV"}
           >
             <Download className="mr-1.5 size-3" />
@@ -418,7 +418,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
               onClick={() => setSelectedIds(new Set())}
               variant="outline"
               size="sm"
-              className="h-6 rounded-none px-2 border-neutral-300 font-mono text-[9px] uppercase"
+              className="h-6 rounded-none px-2 border border-neutral-300 font-mono text-[9px] uppercase hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-600"
             >
               Clear
             </Button>
@@ -427,27 +427,30 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
       )}
 
       {/* Main Table Grid Card */}
-      <div className="relative border border-neutral-300 bg-neutral-50/50 dark:border-neutral-700 dark:bg-neutral-900/20">
-        {/* Intersection markers */}
-        <div className="pointer-events-none absolute top-0 right-0 z-20 translate-x-1/2 -translate-y-1/2 text-xs text-neutral-300 select-none dark:text-neutral-700">
-          +
-        </div>
-        <div className="pointer-events-none absolute bottom-0 left-0 z-20 -translate-x-1/2 translate-y-1/2 text-xs text-neutral-300 select-none dark:text-neutral-700">
-          +
-        </div>
+      <div className="relative border border-neutral-300 bg-neutral-50/20 backdrop-blur-[2px] dark:border-neutral-700 dark:bg-neutral-950/10">
+        {/* Corner markers */}
+        <div className="pointer-events-none absolute -top-px -left-px size-2.5 border-t-2 border-l-2 border-neutral-400 dark:border-neutral-500 z-10" />
+        <div className="pointer-events-none absolute -top-px -right-px size-2.5 border-t-2 border-r-2 border-neutral-400 dark:border-neutral-500 z-10" />
+        <div className="pointer-events-none absolute -bottom-px -left-px size-2.5 border-b-2 border-l-2 border-neutral-400 dark:border-neutral-500 z-10" />
+        <div className="pointer-events-none absolute -bottom-px -right-px size-2.5 border-b-2 border-r-2 border-neutral-400 dark:border-neutral-500 z-10" />
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left font-sans text-xs">
             <thead>
-              <tr className="border-b border-neutral-300 bg-neutral-100/50 dark:border-neutral-700 dark:bg-neutral-900/40">
+              <tr className="border-b border-neutral-300 dark:border-neutral-700 bg-neutral-100/50 dark:bg-neutral-900/40">
                 {/* Select All Checkbox Column */}
-                <th className="w-10 px-4 py-3 text-center">
-                  <input
-                    type="checkbox"
-                    checked={isAllSelected}
-                    onChange={(e) => handleSelectAll(e.target.checked)}
-                    className="accent-neutral-900 dark:accent-neutral-100"
-                  />
+                <th className="w-10 px-4 py-3.5 text-center border-b border-neutral-300 dark:border-neutral-700">
+                  <label className="relative flex items-center justify-center cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={isAllSelected}
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      className="peer sr-only"
+                    />
+                    <span className="size-3.5 border border-neutral-350 bg-neutral-100/50 flex items-center justify-center transition-all duration-300 peer-checked:border-foreground dark:border-neutral-600 dark:bg-neutral-900/50 dark:peer-checked:border-white">
+                      <span className="size-1.5 bg-neutral-800 dark:bg-white scale-0 transition-transform duration-300 peer-checked:scale-100" />
+                    </span>
+                  </label>
                 </th>
                 {columns.map((col, idx) => {
                   const sortKey = col.sortKey || (typeof col.accessorKey === "string" ? col.accessorKey : undefined);
@@ -459,23 +462,26 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                       key={idx}
                       onClick={() => isSortable && handleSort(sortKey)}
                       className={cn(
-                        "px-4 py-3 font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500",
-                        isSortable && "cursor-pointer hover:text-foreground select-none",
+                        "px-4 py-3.5 font-mono text-[10px] tracking-wider text-neutral-450 uppercase dark:text-neutral-400 border-b border-neutral-300 dark:border-neutral-700",
+                        isSortable && "cursor-pointer hover:text-foreground dark:hover:text-white select-none transition-colors duration-250",
                         col.className
                       )}
                     >
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <span>{col.header}</span>
                         {isSortable && (
-                          <span className="text-neutral-400">
+                          <span className={cn(
+                            "transition-colors duration-250",
+                            isSorted ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-400/50 dark:text-neutral-500/50"
+                          )}>
                             {isSorted ? (
                               sortDirection === "asc" ? (
-                                <ArrowUp className="size-3" />
+                                <ArrowUp className="size-3 stroke-[2.5]" />
                               ) : (
-                                <ArrowDown className="size-3" />
+                                <ArrowDown className="size-3 stroke-[2.5]" />
                               )
                             ) : (
-                              <ArrowUpDown className="size-3 opacity-30" />
+                              <ArrowUpDown className="size-3 stroke-[1.5]" />
                             )}
                           </span>
                         )}
@@ -484,7 +490,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   );
                 })}
                 {hasActions && (
-                  <th className="w-20 px-4 py-3 text-right font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                  <th className="w-20 px-4 py-3.5 text-right font-mono text-[10px] tracking-wider text-neutral-450 uppercase dark:text-neutral-400 border-b border-neutral-300 dark:border-neutral-700">
                     Actions
                   </th>
                 )}
@@ -516,81 +522,72 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                     return (
                       <tr
                         key={item.id}
+                        data-state={isSelected ? "selected" : undefined}
                         className={cn(
-                          "border-b border-neutral-200 transition-colors hover:bg-neutral-100/40 dark:border-neutral-800 dark:hover:bg-neutral-900/10",
+                          "group/row border-b border-neutral-200 transition-all duration-300 hover:bg-neutral-100/30 dark:border-neutral-800/80 dark:hover:bg-neutral-900/10",
                           rowIdx === paginatedData.length - 1 && pageSize - paginatedData.length === 0 && "border-b-0",
                           item.disabled && "opacity-60 saturate-50",
-                          isSelected && "bg-neutral-100/50 dark:bg-neutral-900/30"
+                          isSelected && "bg-neutral-100/60 dark:bg-neutral-900/20"
                         )}
                       >
                         {/* Checkbox Column */}
-                        <td className="w-10 px-4 py-3 text-center">
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={(e) => handleSelectRow(item.id, e.target.checked)}
-                            className="accent-neutral-900 dark:accent-neutral-100"
-                          />
+                        <td className="w-10 px-4 py-3 text-center border-l-2 border-l-transparent transition-all duration-300 group-hover/row:border-l-neutral-450 dark:group-hover/row:border-l-neutral-600 group-data-[state=selected]/row:border-l-foreground dark:group-data-[state=selected]/row:border-l-foreground">
+                          <label className="relative flex items-center justify-center cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={(e) => handleSelectRow(item.id, e.target.checked)}
+                              className="peer sr-only"
+                            />
+                            <span className="size-3.5 border border-neutral-300 bg-neutral-100/30 flex items-center justify-center transition-all duration-300 peer-checked:border-foreground dark:border-neutral-700 dark:bg-neutral-950/30 dark:peer-checked:border-white">
+                              <span className="size-1.5 bg-neutral-800 dark:bg-white scale-0 transition-transform duration-300 peer-checked:scale-100" />
+                            </span>
+                          </label>
                         </td>
                         {columns.map((col, colIdx) => (
-                          <td key={colIdx} className={cn("px-4 py-3 text-foreground", col.className)}>
+                          <td key={colIdx} className={cn("px-4 py-3 text-foreground transition-colors duration-300 group-hover/row:text-neutral-900 dark:group-hover/row:text-white", col.className)}>
                             {typeof col.accessorKey === "function" ? col.accessorKey(item) : (item[col.accessorKey as keyof T] as React.ReactNode)}
                           </td>
                         ))}
                         {hasActions && (
-                          <td className="w-20 px-4 py-3 text-right">
-                            <div className="flex justify-end">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger
-                                  render={
-                                    <button className="flex size-7 items-center justify-center border border-neutral-300 hover:bg-neutral-100 focus:outline-none dark:border-neutral-700 dark:hover:bg-neutral-900/60">
-                                      <MoreHorizontal className="size-4 text-neutral-500" />
-                                    </button>
-                                  }
-                                />
-                                <DropdownMenuContent
-                                  align="end"
-                                  className="w-40 rounded-none border border-neutral-300 bg-background text-[11px] dark:border-neutral-700"
+                          <td className="w-36 px-4 py-2.5 text-right">
+                            <div className="flex justify-end gap-1.5 opacity-60 group-hover/row:opacity-100 transition-all duration-300">
+                              {onViewClick && (
+                                <button
+                                  onClick={() => onViewClick(item)}
+                                  className="flex size-7 items-center justify-center border border-neutral-300 bg-neutral-100/10 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-800 dark:hover:text-white text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  title="View Details"
                                 >
-                                  {onViewClick && (
-                                    <DropdownMenuItem
-                                      onClick={() => onViewClick(item)}
-                                      className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
-                                    >
-                                      <Eye className="size-3.5" />
-                                      <span>View Details</span>
-                                    </DropdownMenuItem>
-                                  )}
-                                  {onEditClick && (
-                                    <DropdownMenuItem
-                                      onClick={() => onEditClick(item)}
-                                      className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
-                                    >
-                                      <Edit className="size-3.5" />
-                                      <span>Edit Details</span>
-                                    </DropdownMenuItem>
-                                  )}
-                                  {onToggleStatusClick && (
-                                    <DropdownMenuItem
-                                      onClick={() => onToggleStatusClick(item)}
-                                      className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-neutral-600 hover:text-foreground dark:text-neutral-400"
-                                    >
-                                      <ShieldAlert className="size-3.5" />
-                                      <span>{item.disabled ? "Enable" : "Disable"}</span>
-                                    </DropdownMenuItem>
-                                  )}
-                                  {onDeleteClick && (
-                                    <DropdownMenuItem
-                                      onClick={() => onDeleteClick(item)}
-                                      variant="destructive"
-                                      className="cursor-pointer gap-2 rounded-none px-3 py-2 whitespace-nowrap text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
-                                    >
-                                      <Trash2 className="size-3.5" />
-                                      <span>Delete</span>
-                                    </DropdownMenuItem>
-                                  )}
-                                </DropdownMenuContent>
-                              </DropdownMenu>
+                                  <Eye className="size-3.5" />
+                                </button>
+                              )}
+                              {onEditClick && (
+                                <button
+                                  onClick={() => onEditClick(item)}
+                                  className="flex size-7 items-center justify-center border border-neutral-300 bg-neutral-100/10 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-800 dark:hover:text-white text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  title="Edit Details"
+                                >
+                                  <Edit className="size-3.5" />
+                                </button>
+                              )}
+                              {onToggleStatusClick && (
+                                <button
+                                  onClick={() => onToggleStatusClick(item)}
+                                  className="flex size-7 items-center justify-center border border-neutral-300 bg-neutral-100/10 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-800 dark:hover:text-white text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  title={item.disabled ? "Enable" : "Disable"}
+                                >
+                                  <ShieldAlert className="size-3.5" />
+                                </button>
+                              )}
+                              {onDeleteClick && (
+                                <button
+                                  onClick={() => onDeleteClick(item)}
+                                  className="flex size-7 items-center justify-center border border-neutral-350 bg-neutral-100/10 hover:bg-red-50 hover:text-red-500 dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-red-950/20 dark:hover:text-red-400 text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  title="Delete"
+                                >
+                                  <Trash2 className="size-3.5" />
+                                </button>
+                              )}
                             </div>
                           </td>
                         )}
@@ -606,7 +603,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                         emptyIdx === pageSize - paginatedData.length - 1 && "border-b-0"
                       )}
                     >
-                      <td className="w-10 px-4 py-3">&nbsp;</td>
+                      <td className="w-10 px-4 py-3 border-l-2 border-l-transparent">&nbsp;</td>
                       {columns.map((col, colIdx) => (
                         <td key={colIdx} className="px-4 py-3 text-transparent select-none">
                           &nbsp;
@@ -619,7 +616,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
               ) : (
                 <tr>
                   <td
-                    colSpan={columns.length + (hasActions ? 1 : 0) + 1}
+                    colSpan={columns.length + (hasActions ? 1 : 0) + 2}
                     className="px-4 py-10 text-center font-mono text-xs text-neutral-400 dark:text-neutral-500"
                   >
                     No entries found
@@ -633,8 +630,8 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
       {/* Pagination Bar */}
       <div className="flex items-center justify-between border-t border-neutral-300 pt-4 dark:border-neutral-700">
-        <span className="flex items-center gap-1.5 font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
-          <CornerDownRight className="size-3" />
+        <span className="flex items-center gap-1.5 font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-555">
+          <CornerDownRight className="size-3 text-neutral-400" />
           Page {currentPage} of {totalPages} ({totalItems} total)
         </span>
 
@@ -644,7 +641,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
             size="sm"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-            className="h-8 cursor-pointer rounded-none border-neutral-300 font-mono text-xs tracking-wider uppercase disabled:pointer-events-none disabled:opacity-30"
+            className="h-8 cursor-pointer rounded-none border border-neutral-300 font-mono text-xs tracking-wider uppercase disabled:pointer-events-none disabled:opacity-30 transition-colors duration-350 hover:border-neutral-450 dark:border-neutral-700 dark:hover:border-neutral-600"
           >
             <ChevronLeft className="mr-1 size-3" />
             Prev
@@ -660,7 +657,10 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   variant={currentPage === pageNum ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(pageNum)}
-                  className={cn("h-8 w-8 cursor-pointer rounded-none p-0 font-mono text-xs", currentPage !== pageNum && "border-neutral-300")}
+                  className={cn(
+                    "h-8 w-8 cursor-pointer rounded-none p-0 font-mono text-xs transition-all duration-350",
+                    currentPage !== pageNum && "border border-neutral-300 hover:border-neutral-450 dark:border-neutral-700 dark:hover:border-neutral-600"
+                  )}
                 >
                   {pageNum}
                 </Button>
@@ -673,7 +673,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
             size="sm"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
-            className="h-8 cursor-pointer rounded-none border-neutral-300 font-mono text-xs tracking-wider uppercase disabled:pointer-events-none disabled:opacity-30"
+            className="h-8 cursor-pointer rounded-none border border-neutral-300 font-mono text-xs tracking-wider uppercase disabled:pointer-events-none disabled:opacity-30 transition-colors duration-350 hover:border-neutral-450 dark:border-neutral-700 dark:hover:border-neutral-600"
           >
             Next
             <ChevronRight className="ml-1 size-3" />

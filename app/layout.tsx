@@ -67,18 +67,21 @@ export const metadata = {
 
 import { CrispChat } from "@/components/common/crisp-chat";
 import { CookiesBanner } from "@/components/common/cookies-banner";
+import { QueryProvider } from "@/components/context/query-provider";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning className={cn("antialiased", fontMono.variable, "font-sans", geistSans.variable)}>
       <body className="flex min-h-screen flex-col">
         <ThemeProvider>
-          <TooltipProvider>
-            {children}
-            <Toaster />
-            <CrispChat />
-            <CookiesBanner />
-          </TooltipProvider>
+          <QueryProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster />
+              <CrispChat />
+              <CookiesBanner />
+            </TooltipProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
