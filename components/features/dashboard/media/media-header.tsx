@@ -7,6 +7,7 @@ import { Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { MediaUploadZone } from "@/components/features/dashboard/media/media-upload-zone";
+import { ConfirmDialog } from "@/components/common/confirm-dialog";
 
 export function MediaHeader() {
   const { data: assets = [] } = useMediaQuery();
@@ -19,16 +20,23 @@ export function MediaHeader() {
   const clearMediaSelection = useDashboardStore((s) => s.clearMediaSelection);
   const setMediaActiveAsset = useDashboardStore((s) => s.setMediaActiveAsset);
 
+  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = React.useState(false);
+
   const selectedCount = mediaSelectedIds.size;
 
   const handleBulkDelete = () => {
     if (selectedCount === 0) return;
+    setShowBulkDeleteConfirm(true);
+  };
+
+  const handleBulkDeleteConfirm = () => {
     deleteMutation.mutate(Array.from(mediaSelectedIds), {
       onSuccess: () => {
         clearMediaSelection();
         if (mediaActiveAsset && mediaSelectedIds.has(mediaActiveAsset.id)) {
           setMediaActiveAsset(null);
         }
+        setShowBulkDeleteConfirm(false);
       },
     });
   };
@@ -115,6 +123,18 @@ export function MediaHeader() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Bulk Delete Confirm Dialog */}
+      <ConfirmDialog
+        open={showBulkDeleteConfirm}
+        onOpenChange={(open) => !open && setShowBulkDeleteConfirm(false)}
+        title="Delete Selected Assets"
+        description={`Are you sure you want to permanently delete ${selectedCount} asset${selectedCount !== 1 ? "s" : ""}? This action cannot be undone.`}
+        confirmText={`Delete ${selectedCount} Asset${selectedCount !== 1 ? "s" : ""}`}
+        onConfirm={handleBulkDeleteConfirm}
+        variant="destructive"
+        isLoading={deleteMutation.isPending}
+      />
     </>
   );
 }

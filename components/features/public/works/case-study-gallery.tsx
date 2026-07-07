@@ -13,6 +13,7 @@ interface CaseStudyGalleryProps {
 export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
+  const thumbnailRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
 
   React.useEffect(() => {
     if (!api) return;
@@ -24,6 +25,17 @@ export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
       setCurrent(api.selectedScrollSnap());
     });
   }, [api]);
+
+  React.useEffect(() => {
+    const activeThumbnail = thumbnailRefs.current[current];
+    if (activeThumbnail) {
+      activeThumbnail.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [current]);
 
   const handleThumbnailClick = (index: number) => {
     api?.scrollTo(index);
@@ -44,8 +56,8 @@ export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
                     src={src}
                     alt={`${title} Gallery Image ${index + 1}`}
                     fill
-                    className="object-cover object-center grayscale transition-all duration-700 ease-out hover:grayscale-0"
-                    sizes="100vw"
+                    className="object-cover object-center"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                     priority={index === 0}
                   />
                   {/* Premium overlays */}
@@ -64,13 +76,16 @@ export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
 
       {/* Thumbnails Control Strip */}
       {images.length > 1 && (
-        <div className="flex flex-wrap gap-3">
+        <div className="flex gap-3 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {images.map((src, index) => (
             <button
               key={index}
+              ref={(el) => {
+                thumbnailRefs.current[index] = el;
+              }}
               onClick={() => handleThumbnailClick(index)}
               className={cn(
-                "relative aspect-[16/6] w-24 overflow-hidden border transition-all duration-300 ease-out focus:outline-none md:w-32",
+                "relative aspect-[16/6] w-24 flex-shrink-0 overflow-hidden border transition-all duration-300 ease-out focus:outline-none md:w-32",
                 current === index
                   ? "ring-neutral-850 border-neutral-800 ring-1 dark:border-neutral-200 dark:ring-neutral-300"
                   : "hover:border-neutral-450 border-dashed border-neutral-300 dark:border-neutral-700 dark:hover:border-neutral-500"
@@ -83,7 +98,7 @@ export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
                 fill
                 className={cn(
                   "object-cover object-center transition-all duration-500",
-                  current === index ? "scale-105 grayscale-0" : "grayscale hover:grayscale-0"
+                  current === index ? "scale-105 opacity-100" : "opacity-60 hover:opacity-100"
                 )}
                 sizes="(max-width: 768px) 96px, 128px"
               />

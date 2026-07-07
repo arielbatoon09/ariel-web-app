@@ -93,6 +93,7 @@ export function CategoriesTable() {
         onToggleStatusClick={handleToggleStatus}
         isLoading={isLoadingCategories}
         onDeleteBulk={handleDeleteBulk}
+        onRowClick={handleViewDetails}
       />
 
       <ConfirmDialog

@@ -29,6 +29,13 @@
       "when": 1783409310987,
       "tag": "0003_bitter_big_bertha",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783435991058,
+      "tag": "0004_loving_betty_brant",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,7 @@
 import { WorksArchive } from "@/components/features/public/works/works-archive";
+import { getWorksQuery } from "@/data/works";
+import { getCategoriesQuery } from "@/data/categories";
+import type { Project } from "@/constants/projects";
 
 export const metadata = {
   title: "Portfolio | Creative Works & Projects Cebu",
@@ -6,7 +9,25 @@ export const metadata = {
     "Browse software projects engineered by Ariel Batoon in Cebu. Custom SaaS dashboards, performance-driven web apps, and native mobile apps.",
 };
 
-export default function WorksPage() {
+export default async function WorksPage() {
+  const projects = await getWorksQuery();
+  const publishedProjects: Project[] = projects
+    .filter((p) => p.status === "published")
+    .map((p) => ({
+      ...p,
+      id: p.id.toString(),
+      categories: p.categories as ("web" | "mobile" | "ai-data" | "open-source")[],
+    }));
+
+  const categoriesData = await getCategoriesQuery();
+  const activeWorksCategories = categoriesData
+    .filter((c) => (c.target === "works" || c.target === "both") && !c.disabled)
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
+    }));
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -28,7 +49,7 @@ export default function WorksPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="min-h-screen bg-background">
-        <WorksArchive />
+        <WorksArchive initialProjects={publishedProjects} categories={activeWorksCategories} />
       </div>
     </>
   );

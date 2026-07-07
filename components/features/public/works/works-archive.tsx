@@ -7,23 +7,34 @@ import { ArchiveFilterBar } from "@/components/common/archive-filter-bar";
 import { ArchivePagination } from "@/components/common/archive-pagination";
 import { useArchiveFilter } from "@/hooks/use-archive-filter";
 
-import { ALL_PROJECTS, type Project } from "@/constants/projects";
+import * as React from "react";
+import type { Project } from "@/constants/projects";
 
-const CATEGORIES = [
-  { id: "all", label: "All Works" },
-  { id: "web", label: "Web / SaaS" },
-  { id: "mobile", label: "Mobile Apps" },
-  { id: "ai-data", label: "AI & Systems" },
-  { id: "open-source", label: "Open Source" },
-] as const;
+interface WorksCategory {
+  id: string;
+  name: string;
+  slug: string;
+}
 
-export function WorksArchive() {
+interface WorksArchiveProps {
+  initialProjects: Project[];
+  categories: WorksCategory[];
+}
+
+export function WorksArchive({ initialProjects, categories }: WorksArchiveProps) {
   const { activeCategory, setActiveCategory, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, filteredItems, paginatedItems } =
     useArchiveFilter({
-      items: ALL_PROJECTS,
+      items: initialProjects,
       searchKeys: ["title", "description", "tags", "tag"],
       itemsPerPage: 6,
     });
+
+  const dynamicCategories = React.useMemo(() => {
+    return [
+      { id: "all", label: "All Works" },
+      ...categories.map((c) => ({ id: c.slug, label: c.name })),
+    ];
+  }, [categories]);
 
   return (
     <Section id="archive" containerClassName="pt-6 md:pt-10 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
@@ -37,7 +48,7 @@ export function WorksArchive() {
 
         {/* Filter Control Center */}
         <ArchiveFilterBar
-          categories={CATEGORIES}
+          categories={dynamicCategories}
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
           searchQuery={searchQuery}

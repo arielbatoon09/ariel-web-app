@@ -34,6 +34,7 @@ export function WorkEditorClient({ projectId, initialData }: WorkEditorClientPro
     addResult,
     removeResult,
     handleSave,
+    handlePublish,
   } = useWorkEditor(projectId, initialData);
 
   const [activeTab, setActiveTab] = React.useState<"edit" | "preview">(
@@ -60,8 +61,11 @@ export function WorkEditorClient({ projectId, initialData }: WorkEditorClientPro
         isSaving={isSaving}
         handleBackClick={handleBackClick}
         handleSave={handleSave}
+        handlePublish={handlePublish}
         status={formData.status}
         onStatusChange={(val) => handleFieldChange("status", val)}
+        slug={formData.slug}
+        hasDraft={!!formData.draft}
       />
 
       {activeTab === "edit" ? (

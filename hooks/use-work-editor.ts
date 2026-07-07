@@ -10,21 +10,37 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
   const { data: project, isLoading: isFetching } = useWorkDetailQuery(projectId);
   const updateWorkMutation = useUpdateWorkMutation(projectId);
 
+  // Merge staged draft changes on top of original data
+  const mergedActiveProject = React.useMemo(() => {
+    const activeProject = project || initialData;
+    if (!activeProject) return null;
+    if (activeProject.draft) {
+      return {
+        ...activeProject,
+        ...(activeProject.draft || {}),
+        categories: (activeProject.draft.categories || activeProject.categories),
+        seo: activeProject.draft.seo || activeProject.seo || undefined,
+        caseStudy: activeProject.draft.caseStudy || activeProject.caseStudy,
+      } as Project;
+    }
+    return activeProject;
+  }, [project, initialData]);
+
   // Form State
-  const [formData, setFormData] = React.useState<Project | null>(initialData || null);
+  const [formData, setFormData] = React.useState<Project | null>(mergedActiveProject || null);
 
   const isDirty = React.useMemo(() => {
-    const activeProject = project || initialData;
-    if (!activeProject || !formData) return false;
-    return JSON.stringify(activeProject) !== JSON.stringify(formData);
-  }, [project, initialData, formData]);
+    if (!mergedActiveProject || !formData) return false;
+    const cleanActive = { ...mergedActiveProject, draft: undefined, isDraftSave: undefined };
+    const cleanForm = { ...formData, draft: undefined, isDraftSave: undefined };
+    return JSON.stringify(cleanActive) !== JSON.stringify(cleanForm);
+  }, [mergedActiveProject, formData]);
 
   React.useEffect(() => {
-    const activeProject = project || initialData;
-    if (activeProject) {
-      setFormData(JSON.parse(JSON.stringify(activeProject)) as Project); // Deep clone for local edits
+    if (mergedActiveProject) {
+      setFormData(JSON.parse(JSON.stringify(mergedActiveProject)) as Project); // Deep clone for local edits
     }
-  }, [project, initialData]);
+  }, [mergedActiveProject]);
 
   // Dirty check navigation alert
   React.useEffect(() => {
@@ -175,6 +191,37 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
           caseStudy: formData.caseStudy,
           seo: formData.seo,
           status: formData.status,
+          isDraftSave: true,
+        },
+      },
+      {
+        onSuccess: () => {
+          router.push("/admin/works");
+        },
+      }
+    );
+  };
+
+  const handlePublish = (targetStatus: "published" | "draft" | "unpublished") => {
+    if (!formData) return;
+    setFormData((prev) => (prev ? { ...prev, status: targetStatus } : null));
+
+    updateWorkMutation.mutate(
+      {
+        id: projectId,
+        data: {
+          title: formData.title,
+          tag: formData.tag,
+          description: formData.description,
+          imageSrc: formData.imageSrc,
+          gallery: formData.gallery,
+          tags: formData.tags,
+          link: formData.link,
+          categories: formData.categories,
+          caseStudy: formData.caseStudy,
+          seo: formData.seo,
+          status: targetStatus,
+          isDraftSave: false,
         },
       },
       {
@@ -202,6 +249,7 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
     addResult,
     removeResult,
     handleSave,
+    handlePublish,
     setFormData,
   };
 }

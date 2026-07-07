@@ -55,6 +55,8 @@ export const ProjectSchema = z.object({
   caseStudy: CaseStudySchema,
   disabled: z.boolean().optional(),
   seo: SeoMetaSchema.optional(),
+  draft: z.any().nullable().optional(),
+  isDraftSave: z.boolean().optional(),
   status: z.enum(["draft", "published", "unpublished"]).default("draft"),
 });
 

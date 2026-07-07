@@ -6,6 +6,7 @@ import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { useWorksQuery, useToggleWorkStatusMutation, useDeleteWorksMutation } from "@/hooks/use-works";
 import { DataTable } from "@/components/common/data-table";
 import type { Project } from "@/schemas/dashboard";
+import { ConfirmDialog } from "@/components/common/confirm-dialog";
 
 export function WorkTable() {
   const router = useRouter();
@@ -14,6 +15,9 @@ export function WorkTable() {
   const { data: works = [], isLoading } = useWorksQuery();
   const toggleStatusMutation = useToggleWorkStatusMutation();
   const deleteWorksMutation = useDeleteWorksMutation();
+
+  const [itemsToDelete, setItemsToDelete] = React.useState<Project[]>([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
   const columns = [
     {
@@ -35,6 +39,11 @@ export function WorkTable() {
             {item.status === "published" && (
               <span className="rounded border border-green-200 bg-green-50/20 px-1.5 py-0.5 font-mono text-[8px] text-green-500 uppercase dark:border-green-900/30">
                 Published
+              </span>
+            )}
+            {item.draft && (
+              <span className="rounded border border-purple-200 bg-purple-50/20 px-1.5 py-0.5 font-mono text-[8px] text-purple-500 uppercase dark:border-purple-900/30 animate-pulse">
+                Staged Changes
               </span>
             )}
           </div>
@@ -84,15 +93,25 @@ export function WorkTable() {
   };
 
   const handleDelete = (item: Project) => {
-    if (window.confirm(`Are you sure you want to delete project "${item.title}"?`)) {
-      deleteWorksMutation.mutate([item.id]);
-    }
+    setItemsToDelete([item]);
+    setShowDeleteConfirm(true);
   };
 
   const handleDeleteBulk = (items: Project[]) => {
-    if (window.confirm(`Are you sure you want to delete ${items.length} selected projects?`)) {
-      deleteWorksMutation.mutate(items.map((item) => item.id));
-    }
+    setItemsToDelete(items);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirm = () => {
+    deleteWorksMutation.mutate(
+      itemsToDelete.map((item) => item.id),
+      {
+        onSuccess: () => {
+          setShowDeleteConfirm(false);
+          setItemsToDelete([]);
+        },
+      }
+    );
   };
 
   const handleView = (item: Project) => {
@@ -100,18 +119,39 @@ export function WorkTable() {
     setIsWorkDetailsOpen(true);
   };
 
+  const isBulkDelete = itemsToDelete.length > 1;
+  const confirmTitle = isBulkDelete ? "Delete Selected Projects" : "Delete Project";
+  const confirmDescription = isBulkDelete
+    ? `Are you sure you want to permanently delete the ${itemsToDelete.length} selected projects? This action cannot be undone.`
+    : `Are you sure you want to permanently delete project "${itemsToDelete[0]?.title}"? This action cannot be undone.`;
+  const confirmText = isBulkDelete ? `Delete ${itemsToDelete.length} Projects` : "Delete Project";
+
   return (
-    <DataTable<Project>
-      data={works}
-      columns={columns}
-      searchKey="title"
-      searchPlaceholder="Search projects..."
-      onViewClick={handleView}
-      onEditClick={(item) => router.push(`/admin/works/${item.id}?edit=true`)}
-      onDeleteClick={handleDelete}
-      onDeleteBulk={handleDeleteBulk}
-      hideExport={true}
-      isLoading={isLoading}
-    />
+    <>
+      <DataTable<Project>
+        data={works}
+        columns={columns}
+        searchKey="title"
+        searchPlaceholder="Search projects..."
+        onViewClick={handleView}
+        onEditClick={(item) => router.push(`/admin/works/${item.id}?edit=true`)}
+        onDeleteClick={handleDelete}
+        onDeleteBulk={handleDeleteBulk}
+        onRowClick={handleView}
+        hideExport={true}
+        isLoading={isLoading}
+      />
+
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        onOpenChange={(open) => !open && setShowDeleteConfirm(false)}
+        title={confirmTitle}
+        description={confirmDescription}
+        confirmText={confirmText}
+        onConfirm={handleConfirm}
+        variant="destructive"
+        isLoading={deleteWorksMutation.isPending}
+      />
+    </>
   );
 }

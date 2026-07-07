@@ -1,1 +1,5 @@
-export { default } from "../not-found";
+import { NotFoundContent } from "../not-found";
+
+export default function PublicNotFound() {
+  return <NotFoundContent />;
+}

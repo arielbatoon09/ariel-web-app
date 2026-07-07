@@ -86,6 +86,37 @@ export const works = pgTable(
       ogImage?: string;
       canonicalUrl?: string;
     }>(),
+    draft: jsonb("draft").$type<{
+      slug: string;
+      tag: string;
+      title: string;
+      description: string;
+      imageSrc: string;
+      gallery: string[];
+      tags: string[];
+      link: string;
+      categories: string[];
+      caseStudy: {
+        role: string;
+        timeline: string;
+        challenge: string;
+        solution: string;
+        features: Array<{ title: string; description: string }>;
+        results: string[];
+        client?: string;
+        liveUrl?: string;
+        githubUrl?: string;
+      };
+      seo?: {
+        title?: string;
+        description?: string;
+        keywords?: string;
+        ogTitle?: string;
+        ogDescription?: string;
+        ogImage?: string;
+        canonicalUrl?: string;
+      };
+    }>(),
     status: workStatusEnum("status").default("draft").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),

@@ -52,6 +52,7 @@ interface DataTableProps<T> {
   onDeleteBulk?: (items: T[]) => void;
   onImportCSV?: (items: any[]) => void;
   hideExport?: boolean;
+  onRowClick?: (item: T) => void;
 }
 
 export function DataTable<T extends { id: string; name?: string; title?: string; disabled?: boolean }>(props: DataTableProps<T>) {
@@ -72,6 +73,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
     onDeleteBulk,
     onImportCSV,
     hideExport = false,
+    onRowClick,
   } = props;
 
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -517,11 +519,26 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                       <tr
                         key={item.id}
                         data-state={isSelected ? "selected" : undefined}
+                        onClick={(e) => {
+                          if (!onRowClick) return;
+                          const target = e.target as HTMLElement;
+                          if (
+                            target.closest("button") ||
+                            target.closest("a") ||
+                            target.closest("input") ||
+                            target.closest("label") ||
+                            target.closest("[role='menuitem']")
+                          ) {
+                            return;
+                          }
+                          onRowClick(item);
+                        }}
                         className={cn(
                           "group/row border-b border-neutral-200 transition-all duration-300 hover:bg-neutral-100/30 dark:border-neutral-800/80 dark:hover:bg-neutral-900/10",
                           rowIdx === paginatedData.length - 1 && pageSize - paginatedData.length === 0 && "border-b-0",
                           item.disabled && "opacity-60 saturate-50",
-                          isSelected && "bg-neutral-100/60 dark:bg-neutral-900/20"
+                          isSelected && "bg-neutral-100/60 dark:bg-neutral-900/20",
+                          onRowClick && "cursor-pointer"
                         )}
                       >
                         {/* Checkbox Column */}

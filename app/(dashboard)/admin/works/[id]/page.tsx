@@ -38,9 +38,12 @@ export default async function AdminWorkDetailPage({ params }: PageProps) {
 
   const project: Project = {
     ...rawProject,
+    ...(rawProject.draft || {}),
     id: rawProject.id.toString(),
-    categories: rawProject.categories as ("web" | "mobile" | "ai-data" | "open-source")[],
-    seo: rawProject.seo || undefined,
+    categories: (rawProject.draft?.categories || rawProject.categories) as ("web" | "mobile" | "ai-data" | "open-source")[],
+    seo: rawProject.draft?.seo || rawProject.seo || undefined,
+    caseStudy: rawProject.draft?.caseStudy || rawProject.caseStudy,
+    draft: rawProject.draft,
   };
 
   return <WorkEditorClient projectId={id} initialData={project} />;

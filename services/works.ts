@@ -144,6 +144,7 @@ export async function updateWorkAction(
     caseStudy: any;
     seo: any;
     status: "draft" | "published" | "unpublished";
+    isDraftSave?: boolean;
   }>
 ) {
   try {
@@ -151,7 +152,34 @@ export async function updateWorkAction(
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericId = parseInt(id, 10);
-    const updated = await updateWorkQuery(numericId, data);
+    const { isDraftSave, ...fields } = data;
+
+    let updatePayload: any = {};
+
+    if (isDraftSave) {
+      updatePayload = {
+        draft: {
+          slug: fields.slug,
+          tag: fields.tag,
+          title: fields.title,
+          description: fields.description,
+          imageSrc: fields.imageSrc,
+          gallery: fields.gallery,
+          tags: fields.tags,
+          link: fields.link,
+          categories: fields.categories,
+          caseStudy: fields.caseStudy,
+          seo: fields.seo,
+        },
+      };
+    } else {
+      updatePayload = {
+        ...fields,
+        draft: null,
+      };
+    }
+
+    const updated = await updateWorkQuery(numericId, updatePayload);
     if (!updated) return { success: false, error: "Work not found." };
 
     return { success: true, work: { ...updated, id: updated.id.toString() } };

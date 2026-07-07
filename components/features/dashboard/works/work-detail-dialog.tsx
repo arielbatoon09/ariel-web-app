@@ -82,7 +82,7 @@ export function WorkDetailDialog() {
                   src={currentWork.imageSrc}
                   alt={currentWork.title}
                   fill
-                  className="object-cover grayscale"
+                  className="object-cover"
                 />
               </div>
             )}

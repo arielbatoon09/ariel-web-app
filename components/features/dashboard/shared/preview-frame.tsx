@@ -3,6 +3,8 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 
+import { PortalContainerContext } from "@/components/context/portal-context";
+
 interface PreviewFrameProps extends React.IframeHTMLAttributes<HTMLIFrameElement> {
   children: React.ReactNode;
 }
@@ -10,10 +12,15 @@ interface PreviewFrameProps extends React.IframeHTMLAttributes<HTMLIFrameElement
 export function PreviewFrame({ children, className, ...props }: PreviewFrameProps) {
   const iframeRef = React.useRef<HTMLIFrameElement | null>(null);
   const [mountNode, setMountNode] = React.useState<HTMLElement | null>(null);
+  const [isReady, setIsReady] = React.useState(false);
 
   const setIframeRef = React.useCallback((node: HTMLIFrameElement | null) => {
     iframeRef.current = node;
-    if (!node || !node.contentWindow) return;
+    if (!node || !node.contentWindow) {
+      setIsReady(false);
+      setMountNode(null);
+      return;
+    }
     const doc = node.contentWindow.document;
 
     // Copy all classes and CSS variables from parent document elements to iframe elements
@@ -30,8 +37,20 @@ export function PreviewFrame({ children, className, ...props }: PreviewFrameProp
     while (headEl.firstChild) headEl.removeChild(headEl.firstChild);
 
     // Copy stylesheets
-    document.querySelectorAll("style, link[rel='stylesheet']").forEach((el) => {
-      headEl.appendChild(el.cloneNode(true));
+    const links = document.querySelectorAll("style, link[rel='stylesheet']");
+    const promises: Promise<void>[] = [];
+
+    links.forEach((el) => {
+      const cloned = el.cloneNode(true) as HTMLElement;
+      if (cloned.tagName === "LINK") {
+        promises.push(
+          new Promise((resolve) => {
+            cloned.onload = () => resolve();
+            cloned.onerror = () => resolve();
+          })
+        );
+      }
+      headEl.appendChild(cloned);
     });
 
     // Add a base style to make sure overflow works inside the frame body
@@ -74,17 +93,47 @@ export function PreviewFrame({ children, className, ...props }: PreviewFrameProp
     const observer = new MutationObserver(updateTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
+    // Listen to style/link injections in parent head (for Next.js dynamic styles in dev mode)
+    const headObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeName === "STYLE" || (node.nodeName === "LINK" && (node as HTMLLinkElement).rel === "stylesheet")) {
+            doc.head.appendChild(node.cloneNode(true));
+          }
+        });
+      });
+    });
+    headObserver.observe(document.head, { childList: true });
+
     setMountNode(doc.body);
+
+    // Wait for all stylesheets to load and a layout tick before showing the iframe
+    Promise.all(promises).then(() => {
+      setTimeout(() => {
+        setIsReady(true);
+      }, 80);
+    });
 
     return () => {
       doc.removeEventListener("click", handleLinkClick, true);
       observer.disconnect();
+      headObserver.disconnect();
     };
   }, []);
 
   return (
-    <iframe {...props} ref={setIframeRef} className={className} style={{ border: "none", ...props.style }}>
-      {mountNode && createPortal(<div className="min-h-screen bg-background text-foreground">{children}</div>, mountNode)}
+    <iframe
+      {...props}
+      ref={setIframeRef}
+      className={`${className || ""} transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0"}`}
+      style={{ border: "none", ...props.style }}
+    >
+      {mountNode && createPortal(
+        <PortalContainerContext.Provider value={mountNode}>
+          <div className="min-h-screen bg-background text-foreground">{children}</div>
+        </PortalContainerContext.Provider>,
+        mountNode
+      )}
     </iframe>
   );
 }

@@ -100,6 +100,7 @@ export function CustomerTable() {
         onToggleStatusClick={handleToggleBlock}
         isLoading={isLoadingCustomers}
         onDeleteBulk={handleDeleteBulk}
+        onRowClick={handleViewDetails}
       />
 
       <ConfirmDialog
