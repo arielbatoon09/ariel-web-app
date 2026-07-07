@@ -3,7 +3,7 @@
 import { db } from "@/drizzle";
 import { users, userRoles } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
-import type { Customer } from "@/lib/schemas/dashboard";
+import type { Customer } from "@/schemas/dashboard";
 import { getCurrentSessionUser, getSupabaseAdminClient } from "@/data/auth";
 import { getUserByAuthId, getUserById, insertUser, deleteUserById } from "@/data/users";
 import { getUserRoleByUserId, upsertUserRole } from "@/data/roles";

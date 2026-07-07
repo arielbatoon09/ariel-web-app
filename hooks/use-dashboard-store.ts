@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { ALL_PROJECTS } from "@/constants/projects";
 import { ALL_ARTICLES } from "@/constants/articles";
-import type { Category, Project, Article, Service, Order, Transaction, Customer } from "@/lib/schemas/dashboard";
+import type { Category, Project, Article, Service, Order, Transaction, Customer } from "@/schemas/dashboard";
 import type { MediaAsset } from "@/data/media";
 
 interface DashboardState {

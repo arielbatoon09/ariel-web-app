@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { Category } from "@/lib/schemas/dashboard";
+import type { Category } from "@/schemas/dashboard";
 
 const categoryFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),

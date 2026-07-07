@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/features/dashboard/data-table";
-import type { Article } from "@/lib/schemas/dashboard";
+import type { Article } from "@/schemas/dashboard";
 
 export default function AdminArticlesPage() {
   const router = useRouter();

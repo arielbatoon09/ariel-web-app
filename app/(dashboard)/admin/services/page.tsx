@@ -4,7 +4,7 @@ import * as React from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/common/data-table";
 import { ManagementHeader } from "@/components/common/management-header";
-import type { Service } from "@/lib/schemas/dashboard";
+import type { Service } from "@/schemas/dashboard";
 
 export default function AdminServicesPage() {
   const { services, addService, deleteService, toggleServiceStatus } = useDashboardStore();

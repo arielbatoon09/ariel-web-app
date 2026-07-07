@@ -1,9 +1,9 @@
-import { AboutProfileIntroSection } from "@/components/features/about/about-profile-intro-section";
-import { AboutExperienceTimelineSection } from "@/components/features/about/about-experience-timeline-section";
-import { AboutTechStackSection } from "@/components/features/about/about-tech-stack-section";
-import { AboutPhilosophySection } from "@/components/features/about/about-philosophy-section";
-import { AboutCertificatesSection } from "@/components/features/about/about-certificates-section";
-import { AboutEducationSection } from "@/components/features/about/about-education-section";
+import { AboutProfileIntroSection } from "@/components/features/public/about/about-profile-intro-section";
+import { AboutExperienceTimelineSection } from "@/components/features/public/about/about-experience-timeline-section";
+import { AboutTechStackSection } from "@/components/features/public/about/about-tech-stack-section";
+import { AboutPhilosophySection } from "@/components/features/public/about/about-philosophy-section";
+import { AboutCertificatesSection } from "@/components/features/public/about/about-certificates-section";
+import { AboutEducationSection } from "@/components/features/public/about/about-education-section";
 import { CtaSection } from "@/components/common/cta-section";
 
 export const metadata = {

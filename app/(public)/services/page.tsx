@@ -1,4 +1,4 @@
-import { ServicesList } from "@/components/features/services/services-list";
+import { ServicesList } from "@/components/features/public/services/services-list";
 
 export const metadata = {
   title: "Services & Pricing | Web Design & Software Dev Cebu",

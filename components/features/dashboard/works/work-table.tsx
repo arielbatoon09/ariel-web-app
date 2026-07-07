@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { useWorksQuery, useToggleWorkStatusMutation, useDeleteWorksMutation } from "@/hooks/use-works";
 import { DataTable } from "@/components/common/data-table";
-import type { Project } from "@/lib/schemas/dashboard";
+import type { Project } from "@/schemas/dashboard";
 
 export function WorkTable() {
   const router = useRouter();

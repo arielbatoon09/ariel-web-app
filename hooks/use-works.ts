@@ -10,7 +10,7 @@ import {
   toggleWorkStatusAction,
   deleteWorksAction,
 } from "@/services/works";
-import type { Project } from "@/lib/schemas/dashboard";
+import type { Project } from "@/schemas/dashboard";
 
 export const WORKS_QUERY_KEY = ["works"];
 

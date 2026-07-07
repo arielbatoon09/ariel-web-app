@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getWorkByIdQuery } from "@/data/works";
 import { WorkEditorClient } from "@/components/features/dashboard/works/work-editor-client";
-import type { Project } from "@/lib/schemas/dashboard";
+import type { Project } from "@/schemas/dashboard";
 
 interface PageProps {
   params: Promise<{ id: string }>;

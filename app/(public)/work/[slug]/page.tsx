@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { ALL_PROJECTS } from "@/constants/projects";
-import { CaseStudyHero } from "@/components/features/works/case-study-hero";
-import { CaseStudyDetails } from "@/components/features/works/case-study-details";
-import { CaseStudyOutcomes } from "@/components/features/works/case-study-outcomes";
+import { CaseStudyHero } from "@/components/features/public/works/case-study-hero";
+import { CaseStudyDetails } from "@/components/features/public/works/case-study-details";
+import { CaseStudyOutcomes } from "@/components/features/public/works/case-study-outcomes";
 import { CtaSection } from "@/components/common/cta-section";
 
 interface PageProps {

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useWorkDetailQuery, useUpdateWorkMutation } from "@/hooks/use-works";
-import type { Project, SeoMeta } from "@/lib/schemas/dashboard";
+import type { Project, SeoMeta } from "@/schemas/dashboard";
 
 export function useWorkEditor(projectId: string, initialData?: Project) {
   const router = useRouter();

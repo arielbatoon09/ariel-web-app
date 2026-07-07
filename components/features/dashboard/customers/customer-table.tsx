@@ -4,7 +4,7 @@ import * as React from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/common/data-table";
 import { cn } from "@/lib/utils";
-import type { Customer } from "@/lib/schemas/dashboard";
+import type { Customer } from "@/schemas/dashboard";
 import { useCustomersQuery, useToggleCustomerBlockMutation, useDeleteCustomersMutation } from "@/hooks/use-customers";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 

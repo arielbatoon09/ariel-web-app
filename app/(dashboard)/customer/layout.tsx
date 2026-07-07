@@ -1,5 +1,5 @@
-import { DashboardSidebar, type NavItem } from "@/components/features/dashboard/dashboard-sidebar";
-import { AdminHeader } from "@/components/features/dashboard/admin-header";
+import { DashboardSidebar, type NavItem } from "@/components/features/dashboard/shared/dashboard-sidebar";
+import { AdminHeader } from "@/components/features/dashboard/shared/admin-header";
 import { LayoutDashboard, ShoppingBag, Settings, User } from "lucide-react";
 
 import { redirect } from "next/navigation";

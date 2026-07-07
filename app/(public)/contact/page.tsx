@@ -1,5 +1,5 @@
 import { Section } from "@/components/common/section";
-import { ContactFormSection } from "@/components/features/contact/contact-form-section";
+import { ContactFormSection } from "@/components/features/public/contact/contact-form-section";
 
 export const metadata = {
   title: "Contact | Hire Web Developer Cebu City",

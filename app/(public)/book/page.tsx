@@ -1,5 +1,5 @@
 import { Section } from "@/components/common/section";
-import { BookCallSection } from "@/components/features/book/book-call-section";
+import { BookCallSection } from "@/components/features/public/book/book-call-section";
 
 export const metadata = {
   title: "Book a Call | Ariel Batoon",

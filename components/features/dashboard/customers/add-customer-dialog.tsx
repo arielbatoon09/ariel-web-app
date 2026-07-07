@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createCustomerAction } from "@/services/customers";
-import type { Customer } from "@/lib/schemas/dashboard";
+import type { Customer } from "@/schemas/dashboard";
 import { cn } from "@/lib/utils";
 
 const customerSchema = z.object({

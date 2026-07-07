@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, Target, CheckCircle2, Cpu, FileText, Loader2, Upload } from "lucide-react";
-import type { Project, SeoMeta } from "@/lib/schemas/dashboard";
+import type { Project, SeoMeta } from "@/schemas/dashboard";
 import { uploadToR2 } from "@/lib/r2/upload";
 import { toast } from "sonner";
 

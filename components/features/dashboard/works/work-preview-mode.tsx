@@ -3,14 +3,14 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Monitor, Tablet, Smartphone } from "lucide-react";
-import { PreviewFrame } from "@/components/features/dashboard/preview-frame";
-import { CaseStudyHero } from "@/components/features/works/case-study-hero";
-import { CaseStudyDetails } from "@/components/features/works/case-study-details";
-import { CaseStudyOutcomes } from "@/components/features/works/case-study-outcomes";
+import { PreviewFrame } from "@/components/features/dashboard/shared/preview-frame";
+import { CaseStudyHero } from "@/components/features/public/works/case-study-hero";
+import { CaseStudyDetails } from "@/components/features/public/works/case-study-details";
+import { CaseStudyOutcomes } from "@/components/features/public/works/case-study-outcomes";
 import { CtaSection } from "@/components/common/cta-section";
 import { PublicHeader } from "@/components/common/public-header";
 import { PublicFooter } from "@/components/common/public-footer";
-import type { Project } from "@/lib/schemas/dashboard";
+import type { Project } from "@/schemas/dashboard";
 
 interface WorkPreviewModeProps {
   formData: Project;

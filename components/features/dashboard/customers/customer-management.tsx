@@ -7,7 +7,7 @@ import { ManagementHeader } from "@/components/common/management-header";
 import { ManagementDetailDialog } from "@/components/common/management-detail-dialog";
 import { Shield, ShieldAlert, User, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Customer } from "@/lib/schemas/dashboard";
+import type { Customer } from "@/schemas/dashboard";
 import { AddCustomerDialog } from "@/components/features/dashboard/customers/add-customer-dialog";
 import { CustomerProfileView } from "@/components/features/dashboard/customers/customer-profile-view";
 import { toast } from "sonner";

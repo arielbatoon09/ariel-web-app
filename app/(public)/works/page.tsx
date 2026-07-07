@@ -1,4 +1,4 @@
-import { WorksArchive } from "@/components/features/works/works-archive";
+import { WorksArchive } from "@/components/features/public/works/works-archive";
 
 export const metadata = {
   title: "Portfolio | Creative Works & Projects Cebu",

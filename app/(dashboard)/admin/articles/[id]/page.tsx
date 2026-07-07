@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { ArticleHero } from "@/components/features/articles/article-hero";
 import { ArticleContent } from "@/components/features/articles/article-content";
 import { ArrowLeft, Save, Eye, Edit2, Plus, Trash2, Clock, Calendar, User, Monitor, Tablet, Smartphone } from "lucide-react";
-import type { Article, SeoMeta } from "@/lib/schemas/dashboard";
-import { PreviewFrame } from "@/components/features/dashboard/preview-frame";
+import type { Article, SeoMeta } from "@/schemas/dashboard";
+import { PreviewFrame } from "@/components/features/dashboard/shared/preview-frame";
 
 export default function AdminArticleDetailPage() {
   const params = useParams();

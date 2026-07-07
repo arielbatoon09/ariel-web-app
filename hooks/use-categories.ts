@@ -9,7 +9,7 @@ import {
   toggleCategoryStatusAction,
   deleteCategoriesAction,
 } from "@/services/categories";
-import type { Category } from "@/lib/schemas/dashboard";
+import type { Category } from "@/schemas/dashboard";
 
 export const CATEGORIES_QUERY_KEY = ["categories"];
 

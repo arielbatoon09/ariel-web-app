@@ -4,7 +4,7 @@ import { Section } from "@/components/common/section";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/common/back-button";
 import { ParameterRow } from "@/components/common/parameter-row";
-import { CaseStudyGallery } from "@/components/features/works/case-study-gallery";
+import { CaseStudyGallery } from "@/components/features/public/works/case-study-gallery";
 import type { Project } from "@/constants/projects";
 
 interface CaseStudyHeroProps {

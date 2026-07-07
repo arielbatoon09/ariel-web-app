@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/features/dashboard/data-table";
-import type { Order } from "@/lib/schemas/dashboard";
+import type { Order } from "@/schemas/dashboard";
 import { cn } from "@/lib/utils";
 
 export default function AdminOrdersPage() {

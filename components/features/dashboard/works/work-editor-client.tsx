@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import type { Project } from "@/lib/schemas/dashboard";
+import type { Project } from "@/schemas/dashboard";
 
 import { useWorkEditor } from "@/hooks/use-work-editor";
 import { WorkEditorHeader } from "./work-editor-header";
