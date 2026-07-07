@@ -89,7 +89,7 @@ export function LoginForm() {
                     disabled={isLoading}
                     aria-invalid={isInvalid}
                     placeholder="name@example.com"
-                    className="rounded-none border-dashed border-neutral-300 bg-background/50 focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
+                    className="h-9 rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
                 </Field>
@@ -129,7 +129,7 @@ export function LoginForm() {
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={isLoading}
                       aria-invalid={isInvalid}
-                      className="rounded-none border-dashed border-neutral-300 bg-background/50 pr-10 focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
+                      className="h-9 rounded-none border-dashed border-neutral-300 bg-background/50 pr-10 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                     <button
                       type="button"
@@ -154,7 +154,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 disabled={activeLoading}
-                className="w-full justify-center rounded-none border border-neutral-900 py-3 font-mono text-xs tracking-widest uppercase dark:border-neutral-100"
+                className="h-9 w-full justify-center rounded-none border border-neutral-900 font-mono text-[10px] tracking-widest uppercase dark:border-neutral-100"
               >
                 {activeLoading ? (
                   <>

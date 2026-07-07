@@ -107,14 +107,16 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="rounded-none border border-neutral-300 bg-background/95 p-6 font-mono text-xs backdrop-blur-md sm:max-w-[480px] dark:border-neutral-700">
         {/* Decorative corner brackets */}
-        <div className="pointer-events-none absolute -top-px -left-px size-2.5 border-t-2 border-l-2 border-neutral-400 dark:border-neutral-500 z-50" />
-        <div className="pointer-events-none absolute -top-px -right-px size-2.5 border-t-2 border-r-2 border-neutral-400 dark:border-neutral-500 z-50" />
-        <div className="pointer-events-none absolute -bottom-px -left-px size-2.5 border-b-2 border-l-2 border-neutral-400 dark:border-neutral-500 z-50" />
-        <div className="pointer-events-none absolute -bottom-px -right-px size-2.5 border-b-2 border-r-2 border-neutral-400 dark:border-neutral-500 z-50" />
+        <div className="pointer-events-none absolute -top-px -left-px z-50 size-2.5 border-t-2 border-l-2 border-neutral-400 dark:border-neutral-500" />
+        <div className="pointer-events-none absolute -top-px -right-px z-50 size-2.5 border-t-2 border-r-2 border-neutral-400 dark:border-neutral-500" />
+        <div className="pointer-events-none absolute -bottom-px -left-px z-50 size-2.5 border-b-2 border-l-2 border-neutral-400 dark:border-neutral-500" />
+        <div className="pointer-events-none absolute -right-px -bottom-px z-50 size-2.5 border-r-2 border-b-2 border-neutral-400 dark:border-neutral-500" />
 
         <DialogHeader className="space-y-1">
           <DialogTitle className="font-sans text-base font-bold text-foreground">Create Customer Account</DialogTitle>
-          <DialogDescription className="text-[10px] text-neutral-450 uppercase dark:text-neutral-500">Register new authentication user securely</DialogDescription>
+          <DialogDescription className="text-neutral-450 text-[10px] uppercase dark:text-neutral-500">
+            Register new authentication user securely
+          </DialogDescription>
         </DialogHeader>
 
         <form
@@ -143,7 +145,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={isPending}
                       placeholder="Jane Doe"
-                      className="rounded-none border-dashed border-neutral-300 bg-background/50 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100 transition-all duration-200"
+                      className="rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
                   </Field>
@@ -170,7 +172,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={isPending}
                       placeholder="jane.doe@example.com"
-                      className="rounded-none border-dashed border-neutral-300 bg-background/50 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100 transition-all duration-200"
+                      className="rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
                   </Field>
@@ -193,7 +195,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                         type="button"
                         onClick={() => generateStrongPassword(field.handleChange)}
                         disabled={isPending}
-                        className="flex items-center gap-1 border border-dashed border-neutral-300 px-1.5 py-0.5 font-mono text-[9px] text-neutral-500 hover:border-neutral-800 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-300 dark:hover:text-white transition-colors duration-200 uppercase cursor-pointer"
+                        className="flex cursor-pointer items-center gap-1 border border-dashed border-neutral-300 px-1.5 py-0.5 font-mono text-[9px] text-neutral-500 uppercase transition-colors duration-200 hover:border-neutral-800 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-300 dark:hover:text-white"
                       >
                         <Key className="size-2.5" />
                         Generate
@@ -207,7 +209,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={isPending}
                       placeholder="••••••••••••"
-                      className="rounded-none border-dashed border-neutral-300 bg-background/50 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100 transition-all duration-200"
+                      className="rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
                   </Field>
@@ -233,7 +235,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={isPending}
                       placeholder="+63 900 000 0000"
-                      className="rounded-none border-dashed border-neutral-300 bg-background/50 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100 transition-all duration-200"
+                      className="rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
                   </Field>
@@ -251,17 +253,16 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                     <FieldLabel htmlFor={field.name} className="text-[10px] tracking-widest text-neutral-400 uppercase">
                       Role
                     </FieldLabel>
-                    <Select
-                      value={field.state.value}
-                      onValueChange={(val) => field.handleChange(val as "admin" | "client")}
-                      disabled={isPending}
-                    >
-                      <SelectTrigger className="!w-full !h-9 !rounded-none border border-neutral-300 bg-background/50 font-mono text-xs hover:border-neutral-400 dark:border-neutral-700 dark:hover:bg-neutral-900/10">
+                    <Select value={field.state.value} onValueChange={(val) => field.handleChange(val as "admin" | "client")} disabled={isPending}>
+                      <SelectTrigger className="!h-9 !w-full !rounded-none border border-neutral-300 bg-background/50 font-mono text-xs hover:border-neutral-400 dark:border-neutral-700 dark:hover:bg-neutral-900/10">
                         <SelectValue placeholder="Select Role">
                           {field.state.value === "admin" ? "Admin" : field.state.value === "client" ? "Client" : "Select Role"}
                         </SelectValue>
                       </SelectTrigger>
-                      <SelectContent alignItemWithTrigger={false} className="!rounded-none border border-neutral-300 bg-background font-mono text-xs dark:border-neutral-700">
+                      <SelectContent
+                        alignItemWithTrigger={false}
+                        className="!rounded-none border border-neutral-300 bg-background font-mono text-xs dark:border-neutral-700"
+                      >
                         <SelectItem value="client">Client</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
                       </SelectContent>
@@ -280,7 +281,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
               size="sm"
               onClick={() => onOpenChange(false)}
               disabled={isPending}
-              className="rounded-none border-dashed font-mono text-[10px] uppercase h-8"
+              className="h-8 rounded-none border-dashed font-mono text-[10px] uppercase"
             >
               Cancel
             </Button>
@@ -288,7 +289,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
               type="submit"
               size="sm"
               disabled={isPending}
-              className="rounded-none border border-neutral-900 font-mono text-[10px] uppercase h-8 dark:border-neutral-100"
+              className="h-8 rounded-none border border-neutral-900 font-mono text-[10px] uppercase dark:border-neutral-100"
             >
               {isPending ? (
                 <>

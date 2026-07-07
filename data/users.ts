@@ -3,20 +3,12 @@ import { users } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export async function getUserByAuthId(authId: string) {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.authId, authId))
-    .limit(1);
+  const [user] = await db.select().from(users).where(eq(users.authId, authId)).limit(1);
   return user || null;
 }
 
 export async function getUserById(id: number) {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, id))
-    .limit(1);
+  const [user] = await db.select().from(users).where(eq(users.id, id)).limit(1);
   return user || null;
 }
 

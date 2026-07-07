@@ -44,12 +44,13 @@ export function CustomerDetailDialog() {
   };
 
   const confirmTitle = confirmType === "role" ? "Change User Role" : "Update Login Access";
-  
-  const confirmDescription = confirmType === "role"
-    ? `Are you sure you want to change the role of ${currentCustomer?.name} to ${currentCustomer?.role === "admin" ? "Customer" : "Admin"}?`
-    : currentCustomer?.disabled
-    ? `Are you sure you want to unblock ${currentCustomer?.name} and restore their login access?`
-    : `Are you sure you want to block ${currentCustomer?.name} and suspend their login access?`;
+
+  const confirmDescription =
+    confirmType === "role"
+      ? `Are you sure you want to change the role of ${currentCustomer?.name} to ${currentCustomer?.role === "admin" ? "Customer" : "Admin"}?`
+      : currentCustomer?.disabled
+        ? `Are you sure you want to unblock ${currentCustomer?.name} and restore their login access?`
+        : `Are you sure you want to block ${currentCustomer?.name} and suspend their login access?`;
 
   const confirmVariant = confirmType === "block" && !currentCustomer?.disabled ? "destructive" : "default";
 

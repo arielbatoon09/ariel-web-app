@@ -9,10 +9,7 @@ import { useCustomersQuery, useToggleCustomerBlockMutation, useDeleteCustomersMu
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 
 export function CustomerTable() {
-  const {
-    setSelectedCustomerId,
-    setIsDetailsOpen,
-  } = useDashboardStore();
+  const { setSelectedCustomerId, setIsDetailsOpen } = useDashboardStore();
 
   const { data: customers = [], isLoading: isLoadingCustomers } = useCustomersQuery();
   const toggleBlockMutation = useToggleCustomerBlockMutation();
@@ -35,11 +32,9 @@ export function CustomerTable() {
     },
     {
       header: "Role",
-      accessorKey: ((item: Customer) => (
-        <span className="font-sans text-xs">
-          {item.role === "admin" ? "Admin" : "Customer"}
-        </span>
-      )) as (item: Customer) => React.ReactNode,
+      accessorKey: ((item: Customer) => <span className="font-sans text-xs">{item.role === "admin" ? "Admin" : "Customer"}</span>) as (
+        item: Customer
+      ) => React.ReactNode,
     },
     {
       header: "Status",
@@ -84,16 +79,15 @@ export function CustomerTable() {
   };
 
   const confirmTitle = confirmType === "delete" ? "Delete Customer(s)" : "Update Login Status";
-  
-  const confirmDescription = confirmType === "delete"
-    ? "This action cannot be undone. This will permanently delete the selected customer(s) from the database and auth records."
-    : customerToBlock?.disabled
-    ? `This will unblock ${customerToBlock.name || "the customer"} and restore their login access.`
-    : `This will block ${customerToBlock?.name || "the customer"} and immediately suspend their login access.`;
 
-  const confirmVariant = confirmType === "delete" || (confirmType === "block" && !customerToBlock?.disabled)
-    ? "destructive"
-    : "default";
+  const confirmDescription =
+    confirmType === "delete"
+      ? "This action cannot be undone. This will permanently delete the selected customer(s) from the database and auth records."
+      : customerToBlock?.disabled
+        ? `This will unblock ${customerToBlock.name || "the customer"} and restore their login access.`
+        : `This will block ${customerToBlock?.name || "the customer"} and immediately suspend their login access.`;
+
+  const confirmVariant = confirmType === "delete" || (confirmType === "block" && !customerToBlock?.disabled) ? "destructive" : "default";
 
   return (
     <div className="relative">

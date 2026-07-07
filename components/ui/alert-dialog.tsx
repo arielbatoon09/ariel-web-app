@@ -117,7 +117,8 @@ function AlertDialogDescription({ className, ...props }: React.ComponentProps<ty
       {...props}
     />
   );
-}function AlertDialogAction({ className, size = "sm", ...props }: React.ComponentProps<typeof Button>) {
+}
+function AlertDialogAction({ className, size = "sm", ...props }: React.ComponentProps<typeof Button>) {
   return <Button data-slot="alert-dialog-action" size={size} className={cn(className)} {...props} />;
 }
 

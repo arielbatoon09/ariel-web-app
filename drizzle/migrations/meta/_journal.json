@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1783353517932,
-      "tag": "0000_harsh_logan",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1783354394339,
-      "tag": "0001_cheerful_professor_monster",
+      "when": 1783402586156,
+      "tag": "0000_greedy_redwing",
       "breakpoints": true
     }
   ]

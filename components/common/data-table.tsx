@@ -122,9 +122,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
         if (valB === undefined || valB === null) return -1;
 
         if (typeof valA === "string" && typeof valB === "string") {
-          return sortDirection === "asc"
-            ? valA.localeCompare(valB)
-            : valB.localeCompare(valA);
+          return sortDirection === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
         }
 
         if (typeof valA === "number" && typeof valB === "number") {
@@ -132,9 +130,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
         }
 
         if (typeof valA === "boolean" && typeof valB === "boolean") {
-          return sortDirection === "asc"
-            ? (valA ? 1 : 0) - (valB ? 1 : 0)
-            : (valB ? 1 : 0) - (valA ? 1 : 0);
+          return sortDirection === "asc" ? (valA ? 1 : 0) - (valB ? 1 : 0) : (valB ? 1 : 0) - (valA ? 1 : 0);
         }
 
         return 0;
@@ -211,9 +207,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
   // CSV Export handler
   const handleExportCSV = () => {
-    const itemsToExport = selectedIds.size > 0
-      ? data.filter((item) => selectedIds.has(item.id))
-      : filteredData;
+    const itemsToExport = selectedIds.size > 0 ? data.filter((item) => selectedIds.has(item.id)) : filteredData;
 
     if (itemsToExport.length === 0) {
       alert("No data available to export.");
@@ -284,7 +278,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
             // Find key in columns
             const col = columns.find((c) => c.header.toLowerCase() === header.toLowerCase());
             const key = (col?.sortKey || col?.accessorKey || header.toLowerCase().replace(/\s+/g, "")) as string;
-            
+
             // Map values
             if (key === "role") {
               obj.role = rawVal.toLowerCase() === "admin" ? "admin" : "client";
@@ -325,19 +319,19 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 flex-wrap items-center gap-3">
           {searchKey && (
-            <div className="relative w-full max-w-xs group/search">
-              <Search className="absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-neutral-400 group-focus-within/search:text-foreground transition-colors duration-200 dark:text-neutral-500" />
+            <div className="group/search relative w-full max-w-xs">
+              <Search className="absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-neutral-400 transition-colors duration-200 group-focus-within/search:text-foreground dark:text-neutral-500" />
               <Input
                 placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="rounded-none border-neutral-300 pl-9 font-sans text-xs hover:border-neutral-400 focus-visible:ring-0 focus-visible:border-neutral-600 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus-visible:border-neutral-500 transition-all duration-300"
+                className="rounded-none border-neutral-300 pl-9 font-sans text-xs transition-all duration-300 hover:border-neutral-400 focus-visible:border-neutral-600 focus-visible:ring-0 dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus-visible:border-neutral-500"
               />
             </div>
           )}
           {hasStatusFilter && (
             <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val as "all" | "active" | "disabled")}>
-              <SelectTrigger className="!h-8 w-44 !rounded-none border border-neutral-300 bg-transparent font-sans text-xs hover:border-neutral-400 dark:border-neutral-700 dark:bg-transparent dark:hover:border-neutral-600 transition-colors duration-300">
+              <SelectTrigger className="!h-8 w-44 !rounded-none border border-neutral-300 bg-transparent font-sans text-xs transition-colors duration-300 hover:border-neutral-400 dark:border-neutral-700 dark:bg-transparent dark:hover:border-neutral-600">
                 <span className="flex items-center gap-1.5">
                   <ListFilter className="size-3 text-neutral-400 dark:text-neutral-500" />
                   <SelectValue placeholder="All Status">
@@ -345,7 +339,10 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   </SelectValue>
                 </span>
               </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false} className="w-44 !rounded-none border border-neutral-300 bg-background font-sans text-xs dark:border-neutral-700">
+              <SelectContent
+                alignItemWithTrigger={false}
+                className="w-44 !rounded-none border border-neutral-300 bg-background font-sans text-xs dark:border-neutral-700"
+              >
                 <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="disabled">Disabled</SelectItem>
@@ -357,13 +354,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
         <div className="flex items-center gap-2">
           {/* CSV Import/Export Buttons */}
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImportCSV}
-            accept=".csv"
-            className="hidden"
-          />
+          <input type="file" ref={fileInputRef} onChange={handleImportCSV} accept=".csv" className="hidden" />
           {onImportCSV && (
             <Button
               onClick={() => fileInputRef.current?.click()}
@@ -404,12 +395,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
           </span>
           <div className="flex gap-2">
             {onDeleteBulk && (
-              <Button
-                onClick={handleBulkDelete}
-                variant="destructive"
-                size="sm"
-                className="h-6 rounded-none px-2 font-mono text-[9px] uppercase"
-              >
+              <Button onClick={handleBulkDelete} variant="destructive" size="sm" className="h-6 rounded-none px-2 font-mono text-[9px] uppercase">
                 <Trash2 className="mr-1 size-3" />
                 Delete Selected
               </Button>
@@ -418,7 +404,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
               onClick={() => setSelectedIds(new Set())}
               variant="outline"
               size="sm"
-              className="h-6 rounded-none px-2 border border-neutral-300 font-mono text-[9px] uppercase hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-600"
+              className="h-6 rounded-none border border-neutral-300 px-2 font-mono text-[9px] uppercase hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-600"
             >
               Clear
             </Button>
@@ -429,30 +415,27 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
       {/* Main Table Grid Card */}
       <div className="relative border border-neutral-300 bg-neutral-50/20 backdrop-blur-[2px] dark:border-neutral-700 dark:bg-neutral-950/10">
         {/* Corner markers */}
-        <div className="pointer-events-none absolute -top-px -left-px size-2.5 border-t-2 border-l-2 border-neutral-400 dark:border-neutral-500 z-10" />
-        <div className="pointer-events-none absolute -top-px -right-px size-2.5 border-t-2 border-r-2 border-neutral-400 dark:border-neutral-500 z-10" />
-        <div className="pointer-events-none absolute -bottom-px -left-px size-2.5 border-b-2 border-l-2 border-neutral-400 dark:border-neutral-500 z-10" />
-        <div className="pointer-events-none absolute -bottom-px -right-px size-2.5 border-b-2 border-r-2 border-neutral-400 dark:border-neutral-500 z-10" />
+        <div className="pointer-events-none absolute -top-px -left-px z-10 size-2.5 border-t-2 border-l-2 border-neutral-400 dark:border-neutral-500" />
+        <div className="pointer-events-none absolute -top-px -right-px z-10 size-2.5 border-t-2 border-r-2 border-neutral-400 dark:border-neutral-500" />
+        <div className="pointer-events-none absolute -bottom-px -left-px z-10 size-2.5 border-b-2 border-l-2 border-neutral-400 dark:border-neutral-500" />
+        <div className="pointer-events-none absolute -right-px -bottom-px z-10 size-2.5 border-r-2 border-b-2 border-neutral-400 dark:border-neutral-500" />
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left font-sans text-xs">
             <thead>
-              <tr className="border-b border-neutral-300 dark:border-neutral-700 bg-neutral-100/50 dark:bg-neutral-900/40">
+              <tr className="border-b border-neutral-300 bg-neutral-100/50 dark:border-neutral-700 dark:bg-neutral-900/40">
                 {/* Select All Checkbox Column */}
-                <th className="w-10 px-4 py-3.5 text-center border-b border-neutral-300 dark:border-neutral-700">
-                  <label className="relative flex items-center justify-center cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={isAllSelected}
-                      onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="sr-only"
-                    />
-                    <span className={cn(
-                      "size-3.5 border flex items-center justify-center transition-all duration-300",
-                      isAllSelected
-                        ? "border-foreground bg-neutral-200 dark:border-white dark:bg-neutral-800"
-                        : "border-neutral-300 bg-neutral-100/30 dark:border-neutral-700 dark:bg-neutral-950/30"
-                    )}>
+                <th className="w-10 border-b border-neutral-300 px-4 py-3.5 text-center dark:border-neutral-700">
+                  <label className="relative flex cursor-pointer items-center justify-center select-none">
+                    <input type="checkbox" checked={isAllSelected} onChange={(e) => handleSelectAll(e.target.checked)} className="sr-only" />
+                    <span
+                      className={cn(
+                        "flex size-3.5 items-center justify-center border transition-all duration-300",
+                        isAllSelected
+                          ? "border-foreground bg-neutral-200 dark:border-white dark:bg-neutral-800"
+                          : "border-neutral-300 bg-neutral-100/30 dark:border-neutral-700 dark:bg-neutral-950/30"
+                      )}
+                    >
                       {isAllSelected && <span className="size-1.5 bg-neutral-800 dark:bg-white" />}
                     </span>
                   </label>
@@ -467,18 +450,20 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                       key={idx}
                       onClick={() => isSortable && handleSort(sortKey)}
                       className={cn(
-                        "px-4 py-3.5 font-mono text-[10px] tracking-wider text-neutral-450 uppercase dark:text-neutral-400 border-b border-neutral-300 dark:border-neutral-700",
-                        isSortable && "cursor-pointer hover:text-foreground dark:hover:text-white select-none transition-colors duration-250",
+                        "text-neutral-450 border-b border-neutral-300 px-4 py-3.5 font-mono text-[10px] tracking-wider uppercase dark:border-neutral-700 dark:text-neutral-400",
+                        isSortable && "cursor-pointer transition-colors duration-250 select-none hover:text-foreground dark:hover:text-white",
                         col.className
                       )}
                     >
                       <div className="flex items-center gap-1.5">
                         <span>{col.header}</span>
                         {isSortable && (
-                          <span className={cn(
-                            "transition-colors duration-250",
-                            isSorted ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-400/50 dark:text-neutral-500/50"
-                          )}>
+                          <span
+                            className={cn(
+                              "transition-colors duration-250",
+                              isSorted ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-400/50 dark:text-neutral-500/50"
+                            )}
+                          >
                             {isSorted ? (
                               sortDirection === "asc" ? (
                                 <ArrowUp className="size-3 stroke-[2.5]" />
@@ -495,7 +480,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   );
                 })}
                 {hasActions && (
-                  <th className="w-20 px-4 py-3.5 text-right font-mono text-[10px] tracking-wider text-neutral-450 uppercase dark:text-neutral-400 border-b border-neutral-300 dark:border-neutral-700">
+                  <th className="text-neutral-450 w-20 border-b border-neutral-300 px-4 py-3.5 text-right font-mono text-[10px] tracking-wider uppercase dark:border-neutral-700 dark:text-neutral-400">
                     Actions
                   </th>
                 )}
@@ -536,36 +521,44 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                         )}
                       >
                         {/* Checkbox Column */}
-                        <td className="w-10 px-4 py-3 text-center border-l-2 border-l-transparent transition-all duration-300 group-hover/row:border-l-neutral-450 dark:group-hover/row:border-l-neutral-600 group-data-[state=selected]/row:border-l-foreground dark:group-data-[state=selected]/row:border-l-foreground">
-                          <label className="relative flex items-center justify-center cursor-pointer select-none">
+                        <td className="group-hover/row:border-l-neutral-450 w-10 border-l-2 border-l-transparent px-4 py-3 text-center transition-all duration-300 group-data-[state=selected]/row:border-l-foreground dark:group-hover/row:border-l-neutral-600 dark:group-data-[state=selected]/row:border-l-foreground">
+                          <label className="relative flex cursor-pointer items-center justify-center select-none">
                             <input
                               type="checkbox"
                               checked={isSelected}
                               onChange={(e) => handleSelectRow(item.id, e.target.checked)}
                               className="sr-only"
                             />
-                            <span className={cn(
-                              "size-3.5 border flex items-center justify-center transition-all duration-300",
-                              isSelected
-                                ? "border-foreground bg-neutral-200 dark:border-white dark:bg-neutral-800"
-                                : "border-neutral-300 bg-neutral-100/30 dark:border-neutral-700 dark:bg-neutral-950/30"
-                            )}>
+                            <span
+                              className={cn(
+                                "flex size-3.5 items-center justify-center border transition-all duration-300",
+                                isSelected
+                                  ? "border-foreground bg-neutral-200 dark:border-white dark:bg-neutral-800"
+                                  : "border-neutral-300 bg-neutral-100/30 dark:border-neutral-700 dark:bg-neutral-950/30"
+                              )}
+                            >
                               {isSelected && <span className="size-1.5 bg-neutral-800 dark:bg-white" />}
                             </span>
                           </label>
                         </td>
                         {columns.map((col, colIdx) => (
-                          <td key={colIdx} className={cn("px-4 py-3 text-foreground transition-colors duration-300 group-hover/row:text-neutral-900 dark:group-hover/row:text-white", col.className)}>
+                          <td
+                            key={colIdx}
+                            className={cn(
+                              "px-4 py-3 text-foreground transition-colors duration-300 group-hover/row:text-neutral-900 dark:group-hover/row:text-white",
+                              col.className
+                            )}
+                          >
                             {typeof col.accessorKey === "function" ? col.accessorKey(item) : (item[col.accessorKey as keyof T] as React.ReactNode)}
                           </td>
                         ))}
                         {hasActions && (
                           <td className="w-36 px-4 py-2.5 text-right">
-                            <div className="flex justify-end gap-1.5 opacity-60 group-hover/row:opacity-100 transition-all duration-300">
+                            <div className="flex justify-end gap-1.5 opacity-60 transition-all duration-300 group-hover/row:opacity-100">
                               {onViewClick && (
                                 <button
                                   onClick={() => onViewClick(item)}
-                                  className="flex size-7 items-center justify-center border border-neutral-300 bg-neutral-100/10 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-800 dark:hover:text-white text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  className="flex size-7 cursor-pointer items-center justify-center border border-neutral-300 bg-neutral-100/10 text-neutral-400 transition-all duration-200 hover:bg-neutral-100 hover:text-foreground focus:outline-none dark:border-neutral-700 dark:bg-neutral-900/10 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
                                   title="View Details"
                                 >
                                   <Eye className="size-3.5" />
@@ -574,7 +567,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                               {onEditClick && (
                                 <button
                                   onClick={() => onEditClick(item)}
-                                  className="flex size-7 items-center justify-center border border-neutral-300 bg-neutral-100/10 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-800 dark:hover:text-white text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  className="flex size-7 cursor-pointer items-center justify-center border border-neutral-300 bg-neutral-100/10 text-neutral-400 transition-all duration-200 hover:bg-neutral-100 hover:text-foreground focus:outline-none dark:border-neutral-700 dark:bg-neutral-900/10 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
                                   title="Edit Details"
                                 >
                                   <Edit className="size-3.5" />
@@ -583,7 +576,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                               {onToggleStatusClick && (
                                 <button
                                   onClick={() => onToggleStatusClick(item)}
-                                  className="flex size-7 items-center justify-center border border-neutral-300 bg-neutral-100/10 hover:bg-neutral-100 hover:text-foreground dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-800 dark:hover:text-white text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  className="flex size-7 cursor-pointer items-center justify-center border border-neutral-300 bg-neutral-100/10 text-neutral-400 transition-all duration-200 hover:bg-neutral-100 hover:text-foreground focus:outline-none dark:border-neutral-700 dark:bg-neutral-900/10 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
                                   title={item.disabled ? "Enable" : "Disable"}
                                 >
                                   <ShieldAlert className="size-3.5" />
@@ -592,7 +585,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                               {onDeleteClick && (
                                 <button
                                   onClick={() => onDeleteClick(item)}
-                                  className="flex size-7 items-center justify-center border border-neutral-350 bg-neutral-100/10 hover:bg-red-50 hover:text-red-500 dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-red-950/20 dark:hover:text-red-400 text-neutral-400 dark:text-neutral-500 focus:outline-none transition-all duration-200 cursor-pointer"
+                                  className="border-neutral-350 flex size-7 cursor-pointer items-center justify-center border bg-neutral-100/10 text-neutral-400 transition-all duration-200 hover:bg-red-50 hover:text-red-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900/10 dark:text-neutral-500 dark:hover:bg-red-950/20 dark:hover:text-red-400"
                                   title="Delete"
                                 >
                                   <Trash2 className="size-3.5" />
@@ -613,7 +606,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                         emptyIdx === pageSize - paginatedData.length - 1 && "border-b-0"
                       )}
                     >
-                      <td className="w-10 px-4 py-3 border-l-2 border-l-transparent">&nbsp;</td>
+                      <td className="w-10 border-l-2 border-l-transparent px-4 py-3">&nbsp;</td>
                       {columns.map((col, colIdx) => (
                         <td key={colIdx} className="px-4 py-3 text-transparent select-none">
                           &nbsp;
@@ -640,7 +633,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
       {/* Pagination Bar */}
       <div className="flex items-center justify-between border-t border-neutral-300 pt-4 dark:border-neutral-700">
-        <span className="flex items-center gap-1.5 font-mono text-xs tracking-wider text-neutral-400 uppercase dark:text-neutral-555">
+        <span className="dark:text-neutral-555 flex items-center gap-1.5 font-mono text-xs tracking-wider text-neutral-400 uppercase">
           <CornerDownRight className="size-3 text-neutral-400" />
           Page {currentPage} of {totalPages} ({totalItems} total)
         </span>
@@ -651,7 +644,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
             size="sm"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-            className="h-8 cursor-pointer rounded-none border border-neutral-300 font-mono text-xs tracking-wider uppercase disabled:pointer-events-none disabled:opacity-30 transition-colors duration-350 hover:border-neutral-450 dark:border-neutral-700 dark:hover:border-neutral-600"
+            className="hover:border-neutral-450 h-8 cursor-pointer rounded-none border border-neutral-300 font-mono text-xs tracking-wider uppercase transition-colors duration-350 disabled:pointer-events-none disabled:opacity-30 dark:border-neutral-700 dark:hover:border-neutral-600"
           >
             <ChevronLeft className="mr-1 size-3" />
             Prev
@@ -669,7 +662,8 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   onClick={() => setCurrentPage(pageNum)}
                   className={cn(
                     "h-8 w-8 cursor-pointer rounded-none p-0 font-mono text-xs transition-all duration-350",
-                    currentPage !== pageNum && "border border-neutral-300 hover:border-neutral-450 dark:border-neutral-700 dark:hover:border-neutral-600"
+                    currentPage !== pageNum &&
+                      "hover:border-neutral-450 border border-neutral-300 dark:border-neutral-700 dark:hover:border-neutral-600"
                   )}
                 >
                   {pageNum}
@@ -683,7 +677,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
             size="sm"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
-            className="h-8 cursor-pointer rounded-none border border-neutral-300 font-mono text-xs tracking-wider uppercase disabled:pointer-events-none disabled:opacity-30 transition-colors duration-350 hover:border-neutral-450 dark:border-neutral-700 dark:hover:border-neutral-600"
+            className="hover:border-neutral-450 h-8 cursor-pointer rounded-none border border-neutral-300 font-mono text-xs tracking-wider uppercase transition-colors duration-350 disabled:pointer-events-none disabled:opacity-30 dark:border-neutral-700 dark:hover:border-neutral-600"
           >
             Next
             <ChevronRight className="ml-1 size-3" />

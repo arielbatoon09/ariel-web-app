@@ -178,7 +178,7 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
             </Link>
             <button
               onClick={handleLogout}
-              className="flex w-full items-center justify-center gap-2 border border-neutral-300 py-2.5 font-mono text-xs tracking-wider text-red-500 uppercase transition-all duration-300 hover:bg-red-50/50 hover:text-red-650 dark:border-neutral-700 dark:hover:bg-red-950/20 dark:hover:text-red-400"
+              className="hover:text-red-650 flex w-full items-center justify-center gap-2 border border-neutral-300 py-2.5 font-mono text-xs tracking-wider text-red-500 uppercase transition-all duration-300 hover:bg-red-50/50 dark:border-neutral-700 dark:hover:bg-red-950/20 dark:hover:text-red-400"
             >
               <LogOut className="size-3.5" />
               Logout

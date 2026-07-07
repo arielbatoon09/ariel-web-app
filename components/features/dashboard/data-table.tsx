@@ -115,7 +115,10 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
                   </SelectValue>
                 </span>
               </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false} className="w-44 !rounded-none border border-neutral-300 bg-background font-sans text-xs dark:border-neutral-700">
+              <SelectContent
+                alignItemWithTrigger={false}
+                className="w-44 !rounded-none border border-neutral-300 bg-background font-sans text-xs dark:border-neutral-700"
+              >
                 <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="disabled">Disabled</SelectItem>
