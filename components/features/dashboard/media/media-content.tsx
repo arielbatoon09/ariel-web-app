@@ -38,6 +38,7 @@ export function MediaContent() {
   const [altText, setAltText] = React.useState("");
   const [copied, setCopied] = React.useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = React.useState(false);
 
   React.useEffect(() => {
     if (mediaActiveAsset) {
@@ -56,7 +57,7 @@ export function MediaContent() {
     return result;
   }, [assets, mediaActiveYear, mediaSearch]);
 
-  const handleBulkDelete = () => {
+  const handleBulkDeleteConfirm = () => {
     if (mediaSelectedIds.size === 0) return;
     deleteMutation.mutate(Array.from(mediaSelectedIds), {
       onSuccess: () => {
@@ -64,6 +65,7 @@ export function MediaContent() {
         if (mediaActiveAsset && mediaSelectedIds.has(mediaActiveAsset.id)) {
           setMediaActiveAsset(null);
         }
+        setShowBulkDeleteConfirm(false);
       },
     });
   };
@@ -110,7 +112,7 @@ export function MediaContent() {
               Clear
             </button>
             <button
-              onClick={handleBulkDelete}
+              onClick={() => setShowBulkDeleteConfirm(true)}
               disabled={deleteMutation.isPending}
               className="font-mono text-[9px] uppercase text-red-600 hover:text-red-700 dark:text-red-400 disabled:opacity-50"
             >
@@ -240,6 +242,18 @@ export function MediaContent() {
         description={`Are you sure you want to permanently delete "${mediaActiveAsset?.filename}"? This action cannot be undone.`}
         confirmText="Delete Asset"
         onConfirm={handleDeleteConfirm}
+        variant="destructive"
+        isLoading={deleteMutation.isPending}
+      />
+
+      {/* Bulk Delete Confirm */}
+      <ConfirmDialog
+        open={showBulkDeleteConfirm}
+        onOpenChange={(open) => !open && setShowBulkDeleteConfirm(false)}
+        title="Delete Selected Assets"
+        description={`Are you sure you want to permanently delete ${mediaSelectedIds.size} asset${mediaSelectedIds.size !== 1 ? "s" : ""}? This action cannot be undone.`}
+        confirmText={`Delete ${mediaSelectedIds.size} Asset${mediaSelectedIds.size !== 1 ? "s" : ""}`}
+        onConfirm={handleBulkDeleteConfirm}
         variant="destructive"
         isLoading={deleteMutation.isPending}
       />

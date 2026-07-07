@@ -49,6 +49,7 @@ export function MediaClient() {
   const [altText, setAltText] = React.useState("");
   const [copied, setCopied] = React.useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = React.useState(false);
 
   React.useEffect(() => {
     if (activeAsset) {
@@ -65,12 +66,13 @@ export function MediaClient() {
     });
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDeleteConfirm = () => {
     if (selectedIds.size === 0) return;
     deleteMutation.mutate(Array.from(selectedIds), {
       onSuccess: () => {
         setSelectedIds(new Set());
         if (activeAsset && selectedIds.has(activeAsset.id)) setActiveAsset(null);
+        setShowBulkDeleteConfirm(false);
       },
     });
   };
@@ -123,7 +125,7 @@ export function MediaClient() {
               Clear
             </button>
             <button
-              onClick={handleBulkDelete}
+              onClick={() => setShowBulkDeleteConfirm(true)}
               disabled={deleteMutation.isPending}
               className="font-mono text-[9px] uppercase text-red-600 hover:text-red-700 dark:text-red-400 disabled:opacity-50"
             >
@@ -267,6 +269,18 @@ export function MediaClient() {
         description={`Are you sure you want to permanently delete "${activeAsset?.filename}"? This action cannot be undone.`}
         confirmText="Delete Asset"
         onConfirm={handleDeleteConfirm}
+        variant="destructive"
+        isLoading={deleteMutation.isPending}
+      />
+
+      {/* Bulk Delete Confirm Dialog */}
+      <ConfirmDialog
+        open={showBulkDeleteConfirm}
+        onOpenChange={(open) => !open && setShowBulkDeleteConfirm(false)}
+        title="Delete Selected Assets"
+        description={`Are you sure you want to permanently delete ${selectedIds.size} asset${selectedIds.size !== 1 ? "s" : ""}? This action cannot be undone.`}
+        confirmText={`Delete ${selectedIds.size} Asset${selectedIds.size !== 1 ? "s" : ""}`}
+        onConfirm={handleBulkDeleteConfirm}
         variant="destructive"
         isLoading={deleteMutation.isPending}
       />
