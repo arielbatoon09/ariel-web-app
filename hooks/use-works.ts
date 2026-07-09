@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import { getWorksAction, getWorkByIdAction, createWorkAction, updateWorkAction, toggleWorkStatusAction, deleteWorksAction } from "@/services/works";
 import type { Project } from "@/schemas/dashboard";
 
@@ -49,8 +50,8 @@ export function useCreateWorkMutation() {
       toast.success("Project created successfully.");
       queryClient.invalidateQueries({ queryKey: WORKS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to create project.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to create project."));
     },
   });
 }
@@ -74,8 +75,8 @@ export function useUpdateWorkMutation(id?: string) {
       }
       queryClient.invalidateQueries({ queryKey: [...WORKS_QUERY_KEY, updatedWork.id] });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update project.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update project."));
     },
   });
 }
@@ -96,8 +97,8 @@ export function useToggleWorkStatusMutation() {
       queryClient.invalidateQueries({ queryKey: WORKS_QUERY_KEY });
       queryClient.invalidateQueries({ queryKey: [...WORKS_QUERY_KEY, data.id] });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update status.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update status."));
     },
   });
 }
@@ -117,8 +118,8 @@ export function useDeleteWorksMutation() {
       toast.success("Selected project(s) deleted successfully.");
       queryClient.invalidateQueries({ queryKey: WORKS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to delete projects.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to delete projects."));
     },
   });
 }

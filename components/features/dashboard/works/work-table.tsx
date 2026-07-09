@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
-import { useWorksQuery, useToggleWorkStatusMutation, useDeleteWorksMutation } from "@/hooks/use-works";
+import { useWorksQuery, useDeleteWorksMutation } from "@/hooks/use-works";
 import { DataTable } from "@/components/common/data-table";
 import type { Project } from "@/schemas/dashboard";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
@@ -13,7 +13,6 @@ export function WorkTable() {
   const { setSelectedWorkId, setIsWorkDetailsOpen } = useDashboardStore();
 
   const { data: works = [], isLoading } = useWorksQuery();
-  const toggleStatusMutation = useToggleWorkStatusMutation();
   const deleteWorksMutation = useDeleteWorksMutation();
 
   const [itemsToDelete, setItemsToDelete] = useState<Project[]>([]);

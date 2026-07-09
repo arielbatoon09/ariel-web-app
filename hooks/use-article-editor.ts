@@ -15,19 +15,22 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
   const mergedActiveArticle = useMemo(() => {
     const activeArticle = article || initialData;
     if (!activeArticle) return null;
-    if (activeArticle.draft) {
+
+    // Safely check for draft properties using type casting to Partial<Article>
+    const draftContent = activeArticle.draft as Partial<Article> | undefined;
+    if (draftContent) {
       return {
         ...activeArticle,
-        ...(activeArticle.draft || {}),
-        categories: (activeArticle.draft as any).categories || activeArticle.categories,
-        seo: (activeArticle.draft as any).seo || activeArticle.seo || undefined,
+        ...draftContent,
+        categories: draftContent.categories || activeArticle.categories,
+        seo: draftContent.seo || activeArticle.seo || undefined,
       } as Article;
     }
     return activeArticle;
   }, [article, initialData]);
 
   // Form state
-  const [formData, setFormData] = useState<Article | null>(mergedActiveArticle || null);
+  const [formData, setFormData] = useState<Article | null>(() => mergedActiveArticle || null);
 
   const isDirty = useMemo(() => {
     if (!mergedActiveArticle || !formData) return false;
@@ -40,6 +43,7 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
 
   useEffect(() => {
     if (mergedActiveArticle) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData(JSON.parse(JSON.stringify(mergedActiveArticle)) as Article);
     }
   }, [mergedActiveArticle]);
@@ -127,16 +131,25 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
     });
   };
 
+  // Get the exact type payload structure expected by your update mutation
+  type UpdateMutationPayload = Parameters<typeof updateArticleMutation.mutateAsync>[0];
+
   const handleSave = async () => {
     if (!formData) return;
+
+    const payload: UpdateMutationPayload = {
+      id: articleId,
+      data: { ...formData, isDraftSave: true },
+    };
+
     await updateArticleMutation.mutateAsync(
-      {
-        id: articleId,
-        data: { ...formData, isDraftSave: true } as any,
-      },
+      payload,
       {
         onSuccess: () => toast.success("Draft saved. Changes are staged and not yet live."),
-        onError: (err: any) => toast.error(err?.message || "Failed to save draft."),
+        onError: (err: unknown) => {
+          const message = err instanceof Error ? err.message : "Failed to save draft.";
+          toast.error(message);
+        },
       }
     );
   };
@@ -144,7 +157,6 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
   const handlePublish = async (status: "published" | "draft" | "unpublished") => {
     if (!formData) return;
 
-    // Automatic date update on publish
     const today = new Date();
     const formattedDate = today.toLocaleDateString("en-US", {
       month: "long",
@@ -152,25 +164,28 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
       year: "numeric",
     });
 
-    const updatedData = {
-      ...formData,
-      status,
-      date: status === "published" ? formattedDate : formData.date,
-      isDraftSave: false,
+    const payload: UpdateMutationPayload = {
+      id: articleId,
+      data: {
+        ...formData,
+        status,
+        date: status === "published" ? formattedDate : formData.date,
+        isDraftSave: false,
+      },
     };
 
     await updateArticleMutation.mutateAsync(
-      {
-        id: articleId,
-        data: updatedData as any,
-      },
+      payload,
       {
         onSuccess: () => {
           if (status === "published") toast.success("Article published successfully.");
           else if (status === "unpublished") toast.success("Article unpublished.");
           else toast.success("Article reverted to draft.");
         },
-        onError: (err: any) => toast.error(err?.message || "Failed to publish article."),
+        onError: (err: unknown) => {
+          const message = err instanceof Error ? err.message : "Failed to publish article.";
+          toast.error(message);
+        },
       }
     );
   };

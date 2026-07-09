@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import {
   getArticlesAction,
   getArticleByIdAction,
@@ -46,7 +47,10 @@ export function useCreateArticleMutation() {
 
   return useMutation({
     mutationFn: async (article: Omit<Article, "id">) => {
-      const res = await createArticleAction(article as any);
+      // Look up what type the action explicitly expects for its first argument
+      type CreateParam = Parameters<typeof createArticleAction>[0];
+
+      const res = await createArticleAction(article as CreateParam);
       if (!res.success || !res.article) {
         throw new Error(res.error || "Failed to create article.");
       }
@@ -56,8 +60,8 @@ export function useCreateArticleMutation() {
       toast.success("Article created successfully.");
       queryClient.invalidateQueries({ queryKey: ARTICLES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to create article.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to create article."));
     },
   });
 }
@@ -67,7 +71,10 @@ export function useUpdateArticleMutation(id?: string) {
 
   return useMutation({
     mutationFn: async (payload: { id: string; data: Partial<Article> & { isDraftSave?: boolean } }) => {
-      const res = await updateArticleAction(payload.id, payload.data as any);
+      // Look up what type the action explicitly expects for its second argument
+      type UpdateParam = Parameters<typeof updateArticleAction>[1];
+
+      const res = await updateArticleAction(payload.id, payload.data as UpdateParam);
       if (!res.success || !res.article) {
         throw new Error(res.error || "Failed to update article.");
       }
@@ -80,8 +87,8 @@ export function useUpdateArticleMutation(id?: string) {
       }
       queryClient.invalidateQueries({ queryKey: [...ARTICLES_QUERY_KEY, updatedArticle.id] });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update article.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update article."));
     },
   });
 }
@@ -102,8 +109,8 @@ export function useToggleArticleStatusMutation() {
       queryClient.invalidateQueries({ queryKey: ARTICLES_QUERY_KEY });
       queryClient.invalidateQueries({ queryKey: [...ARTICLES_QUERY_KEY, data.id] });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update status.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update status."));
     },
   });
 }
@@ -123,8 +130,8 @@ export function useDeleteArticlesMutation() {
       toast.success("Selected article(s) deleted successfully.");
       queryClient.invalidateQueries({ queryKey: ARTICLES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to delete articles.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to delete articles."));
     },
   });
 }

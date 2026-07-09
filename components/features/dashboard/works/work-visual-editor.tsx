@@ -42,6 +42,7 @@ export function WorkVisualEditor({
 
   useEffect(() => {
     if (formData.tags && document.activeElement?.id !== "tags-input") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTagsInput((formData.tags || []).join(", "));
     }
   }, [formData.tags]);

@@ -7,6 +7,7 @@ import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
 import { getWorksQuery, getWorkByIdQuery, insertWorkQuery, updateWorkQuery, deleteWorksQuery } from "@/data/works";
+import { getErrorMessage } from "@/lib/error-utils";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -39,8 +40,8 @@ export async function getWorksAction() {
         id: w.id.toString(),
       })),
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch works." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to load works.")};
   }
 }
 
@@ -59,10 +60,56 @@ export async function getWorkByIdAction(id: string) {
         id: work.id.toString(),
       },
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch work details." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to load work details.")};
   }
 }
+
+type CaseStudy = {
+  role: string;
+  timeline: string;
+ challenge: string;
+  solution: string;
+  features: {
+    title: string;
+    description: string;
+  }[];
+  results: string[];
+  client?: string;
+  liveUrl?: string;
+  githubUrl?: string;
+};
+
+type Seo = {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+};
+
+type UpdateWorkInput = Partial<{
+  slug: string;
+  tag: string;
+  title: string;
+  description: string;
+  imageSrc: string;
+  gallery: string[];
+  tags: string[];
+  link: string;
+  categories: string[];
+  caseStudy: CaseStudy;
+  seo: Seo;
+  status: "draft" | "published" | "unpublished";
+  isDraftSave: boolean;
+
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  draft: unknown;
+}>;
 
 // 2. Create work (Admin)
 export async function createWorkAction(data: {
@@ -75,26 +122,8 @@ export async function createWorkAction(data: {
   tags: string[];
   link: string;
   categories: string[];
-  caseStudy: {
-    role: string;
-    timeline: string;
-    challenge: string;
-    solution: string;
-    features: Array<{ title: string; description: string }>;
-    results: string[];
-    client?: string;
-    liveUrl?: string;
-    githubUrl?: string;
-  };
-  seo?: {
-    title?: string;
-    description?: string;
-    keywords?: string;
-    ogTitle?: string;
-    ogDescription?: string;
-    ogImage?: string;
-    canonicalUrl?: string;
-  };
+  caseStudy: CaseStudy;
+  seo?: Seo;
   status?: "draft" | "published" | "unpublished";
 }) {
   try {
@@ -117,8 +146,8 @@ export async function createWorkAction(data: {
     });
 
     return { success: true, work: { ...inserted, id: inserted.id.toString() } };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to create work." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to create work.")};
   }
 }
 
@@ -135,8 +164,8 @@ export async function updateWorkAction(
     tags: string[];
     link: string;
     categories: string[];
-    caseStudy: any;
-    seo: any;
+    caseStudy: Partial<CaseStudy>;
+    seo: Partial<Seo>;
     status: "draft" | "published" | "unpublished";
     isDraftSave?: boolean;
   }>
@@ -146,9 +175,16 @@ export async function updateWorkAction(
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericId = parseInt(id, 10);
-    const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as any;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as UpdateWorkInput;
 
-    let updatePayload: any = {};
+    // Extract the exact payload type expected by the DB query
+    type UpdateQueryPayload = Parameters<typeof updateWorkQuery>[1];
+    
+    // Extract the exact type expected by the 'draft' property specifically
+    type DraftPayload = NonNullable<UpdateQueryPayload['draft']>;
+
+    let updatePayload: UpdateQueryPayload;
 
     if (isDraftSave) {
       updatePayload = {
@@ -164,7 +200,7 @@ export async function updateWorkAction(
           categories: fields.categories,
           caseStudy: fields.caseStudy,
           seo: fields.seo,
-        },
+        } as DraftPayload,
       };
     } else {
       updatePayload = {
@@ -177,8 +213,8 @@ export async function updateWorkAction(
     if (!updated) return { success: false, error: "Work not found." };
 
     return { success: true, work: { ...updated, id: updated.id.toString() } };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update work." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update work.")};
   }
 }
 
@@ -196,8 +232,8 @@ export async function toggleWorkStatusAction(id: string) {
     const updated = await updateWorkQuery(numericId, { status: newStatus });
 
     return { success: true, status: updated?.status };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to toggle status." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to toggle status.")};
   }
 }
 
@@ -211,8 +247,8 @@ export async function deleteWorksAction(ids: string[]) {
     await deleteWorksQuery(numericIds);
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to delete works." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to delete works.")};
   }
 }
 
@@ -243,7 +279,8 @@ export async function getPresignedUploadUrlAction(filename: string, contentType:
     const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/${key}`;
 
     return { success: true, presignedUrl, key, url: cdnUrl };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to generate upload URL." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to generate upload URL.")};
+
   }
 }

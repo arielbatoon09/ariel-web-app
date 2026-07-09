@@ -14,6 +14,8 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/common/section";
 import { BackButton } from "@/components/common/back-button";
+import { getErrorMessage } from "@/lib/error-utils";
+import { Order } from "@/schemas/dashboard";
 
 interface CheckoutViewProps {
   service: Service;
@@ -44,7 +46,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
   // States for flow
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [createdOrder, setCreatedOrder] = useState<any | null>(null);
+  const [createdOrder, setCreatedOrder] = useState<Order | null>(null);
 
   // Recalculate total amount
   const totalAmount = useMemo(() => {
@@ -151,8 +153,8 @@ export function CheckoutView({ service }: CheckoutViewProps) {
 
       setCreatedOrder(orderRes);
       setIsSuccess(true);
-    } catch (err: any) {
-      toast.error(err?.message || "Something went wrong during checkout.");
+    } catch (err: unknown) {
+      toast.error(getErrorMessage(err, "Something went wrong during checkout."));
     } finally {
       setIsSubmitting(false);
     }

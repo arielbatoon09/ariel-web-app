@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/error-utils";
 import { db } from "@/drizzle";
 import { users, userRoles } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -63,8 +64,8 @@ export async function createCustomerAction(input: CreateCustomerInput) {
     await upsertUserRole(insertedUser.id, input.role);
 
     return { success: true, user: insertedUser };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "An unexpected server error occurred." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "An unexpected server error occurred.") };
   }
 }
 
@@ -107,8 +108,8 @@ export async function getCustomersAction() {
     });
 
     return { success: true, customers };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "An unexpected server error occurred." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "An unexpected server error occurred.") };
   }
 }
 
@@ -117,8 +118,8 @@ export async function updateCustomerRoleAction(customerId: string, role: "admin"
     const numericId = parseInt(customerId, 10);
     await upsertUserRole(numericId, role);
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update role." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update role.") };
   }
 }
 
@@ -145,8 +146,8 @@ export async function toggleCustomerBlockStatusAction(customerId: string, isBloc
     }
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update block status." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update block status.") };
   }
 }
 
@@ -169,7 +170,7 @@ export async function deleteCustomersAction(customerIds: string[]) {
       await deleteUserById(numericId);
     }
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to delete customers." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to delete customers.") };
   }
 }

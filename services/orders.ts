@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/error-utils";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
@@ -39,8 +40,8 @@ export async function getOrdersAction() {
       success: true,
       orders: ordersList,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch orders." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch orders.")};
   }
 }
 
@@ -73,8 +74,8 @@ export async function getOrderByIdAction(id: string) {
       success: true,
       order,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch order details." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch order details.")};
   }
 }
 
@@ -144,8 +145,8 @@ export async function createOrderAction(data: {
       success: true,
       order: newOrder,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to create order." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to create order.")};
   }
 }
 
@@ -165,8 +166,8 @@ export async function updateOrderStatusAction(id: string, status: "pending" | "i
       success: true,
       order: updated,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update order status." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update order status.")};
   }
 }
 
@@ -183,7 +184,7 @@ export async function deleteOrdersAction(ids: string[]) {
       success: true,
       orders: deleted,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to delete orders." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to delete orders." )};
   }
 }

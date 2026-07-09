@@ -11,6 +11,7 @@ import {
   updateArticleQuery,
   deleteArticlesQuery,
 } from "@/data/articles";
+import { getErrorMessage } from "@/lib/error-utils";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -43,8 +44,8 @@ export async function getArticlesAction() {
         id: a.id.toString(),
       })),
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch articles." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch articles.")};
   }
 }
 
@@ -60,8 +61,8 @@ export async function getArticleByIdAction(id: string) {
       success: true,
       article: { ...article, id: article.id.toString() },
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch article details." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch article details.")};
   }
 }
 
@@ -76,8 +77,8 @@ export async function getArticleBySlugAction(slug: string) {
       success: true,
       article: { ...article, id: article.id.toString() },
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch article by slug." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch article by slug.")};
   }
 }
 
@@ -128,8 +129,8 @@ export async function createArticleAction(data: {
     });
 
     return { success: true, article: { ...inserted, id: inserted.id.toString() } };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to create article." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to create article.")};
   }
 }
 
@@ -149,7 +150,7 @@ export async function updateArticleAction(
     readTime: string;
     author: string;
     sections: Array<{ title: string; body: string }>;
-    seo: any;
+    seo: NonNullable<Parameters<typeof insertArticleQuery>[0]['seo']>;
     status: "draft" | "published" | "unpublished";
     isDraftSave?: boolean;
   }>
@@ -159,9 +160,15 @@ export async function updateArticleAction(
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericId = parseInt(id, 10);
-    const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as any;
+    
+    // Cleaned up: Removed unused parameters completely from destructuring to stop the warnings
+    const { isDraftSave, ...fields } = data;
 
-    let updatePayload: any = {};
+    // Look up exactly what the query function expects as a payload
+    type UpdateQueryPayload = Parameters<typeof updateArticleQuery>[1];
+    type DraftPayload = NonNullable<UpdateQueryPayload['draft']>;
+
+    let updatePayload: UpdateQueryPayload;
 
     if (isDraftSave) {
       // Stage changes to draft column only — public page remains unchanged
@@ -180,10 +187,9 @@ export async function updateArticleAction(
           author: fields.author,
           sections: fields.sections,
           seo: fields.seo,
-        },
+        } as DraftPayload,
       };
     } else {
-      // Promote to main fields (publish) — clears draft column
       updatePayload = {
         ...fields,
         draft: null,
@@ -194,8 +200,8 @@ export async function updateArticleAction(
     if (!updated) return { success: false, error: "Article not found." };
 
     return { success: true, article: { ...updated, id: updated.id.toString() } };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update article." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update article.")};
   }
 }
 
@@ -213,8 +219,8 @@ export async function toggleArticleStatusAction(id: string) {
     const updated = await updateArticleQuery(numericId, { status: newStatus });
 
     return { success: true, status: updated?.status };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to toggle status." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to toggle status.")};
   }
 }
 
@@ -228,7 +234,7 @@ export async function deleteArticlesAction(ids: string[]) {
     await deleteArticlesQuery(numericIds);
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to delete articles." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to delete articles.")};
   }
 }

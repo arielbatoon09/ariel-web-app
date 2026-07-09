@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/error-utils";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
@@ -40,8 +41,8 @@ export async function getServicesAction() {
       success: true,
       services: servicesList,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch services." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch services.")};
   }
 }
 
@@ -56,8 +57,8 @@ export async function getServiceByIdAction(id: string) {
       success: true,
       service,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch service details." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch service details.")};
   }
 }
 
@@ -72,8 +73,8 @@ export async function getServiceBySlugAction(slug: string) {
       success: true,
       service,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch service details." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch service details.")};
   }
 }
 
@@ -90,8 +91,8 @@ export async function createServiceAction(data: Omit<Service, "id">) {
       success: true,
       service: newService,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to create service." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to create service.")};
   }
 }
 
@@ -111,8 +112,8 @@ export async function updateServiceAction(id: string, data: Partial<Service>) {
       success: true,
       service: updated,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update service." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update service.")};
   }
 }
 
@@ -134,8 +135,8 @@ export async function toggleServiceStatusAction(id: string) {
       success: true,
       disabled: updated?.disabled,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to toggle service status." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to toggle service status.")};
   }
 }
 
@@ -152,7 +153,7 @@ export async function deleteServicesAction(ids: string[]) {
       success: true,
       services: deleted,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to delete services." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to delete services.")};
   }
 }

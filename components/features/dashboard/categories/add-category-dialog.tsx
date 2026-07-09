@@ -21,6 +21,10 @@ const categoryFormSchema = z.object({
   target: z.enum(["works", "articles", "both"]),
 });
 
+function generateCategoryId() {
+  return `cat-${Date.now()}`;
+}
+
 interface AddCategoryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,7 +49,7 @@ export function AddCategoryDialog({ open, onOpenChange, onSuccess }: AddCategory
       await new Promise((resolve) => setTimeout(resolve, 300));
       setIsPending(false);
 
-      const generatedId = `cat-${Date.now()}`;
+      const generatedId = generateCategoryId();
       onSuccess?.({
         id: generatedId,
         name: value.name,
@@ -84,9 +88,8 @@ export function AddCategoryDialog({ open, onOpenChange, onSuccess }: AddCategory
         >
           <FieldGroup>
             {/* Category Name */}
-            <form.Field
-              name="name"
-              children={(field) => {
+            <form.Field name="name">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -115,12 +118,11 @@ export function AddCategoryDialog({ open, onOpenChange, onSuccess }: AddCategory
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Slug */}
-            <form.Field
-              name="slug"
-              children={(field) => {
+            <form.Field name="slug">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -141,12 +143,11 @@ export function AddCategoryDialog({ open, onOpenChange, onSuccess }: AddCategory
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Target Scope */}
-            <form.Field
-              name="target"
-              children={(field) => {
+            <form.Field name="target">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -180,7 +181,7 @@ export function AddCategoryDialog({ open, onOpenChange, onSuccess }: AddCategory
                   </Field>
                 );
               }}
-            />
+            </form.Field>
           </FieldGroup>
 
           <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">

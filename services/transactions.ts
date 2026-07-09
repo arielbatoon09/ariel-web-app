@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/error-utils";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
@@ -37,8 +38,8 @@ export async function getTransactionsAction() {
       success: true,
       transactions: transactionsList,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to fetch transactions." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to fetch transactions.")};
   }
 }
 
@@ -64,8 +65,8 @@ export async function createTransactionAction(data: {
       success: true,
       transaction: newTx,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to submit transaction receipt." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to submit transaction receipt.")};
   }
 }
 
@@ -85,7 +86,7 @@ export async function updateTransactionStatusAction(id: string, status: "success
       success: true,
       transaction: updated,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update transaction status." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update transaction status.")};
   }
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/error-utils";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
@@ -25,7 +26,7 @@ export async function getUserRoleAction() {
     }
 
     return { success: true, role };
-  } catch (err: any) {
-    return { success: false, error: err.message || "Failed to get user role" };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to get user role") };
   }
 }

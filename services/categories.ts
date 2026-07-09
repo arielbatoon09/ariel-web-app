@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/error-utils";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
@@ -24,8 +25,8 @@ export async function getCategoriesAction() {
   try {
     const categories = await getCategoriesQuery();
     return { success: true, categories };
-  } catch (error: any) {
-    return { success: false, error: error?.message || "Failed to load categories." };
+  } catch (error: unknown) {
+    return { success: false, error: getErrorMessage(error, "Failed to load categories.") };
   }
 }
 
@@ -34,8 +35,8 @@ export async function createCategoryAction(input: { name: string; slug: string; 
     await verifyAdminAccess();
     const newCategory = await insertCategoryQuery(input);
     return { success: true, category: newCategory };
-  } catch (error: any) {
-    return { success: false, error: error?.message || "Failed to create category." };
+  } catch (error: unknown) {
+    return { success: false, error: getErrorMessage(error, "Failed to create category.") };
   }
 }
 
@@ -50,8 +51,8 @@ export async function updateCategoryAction(
       return { success: false, error: "Category not found." };
     }
     return { success: true, category: updated };
-  } catch (error: any) {
-    return { success: false, error: error?.message || "Failed to update category." };
+  } catch (error: unknown) {
+    return { success: false, error: getErrorMessage(error, "Failed to update category.") };
   }
 }
 
@@ -65,8 +66,8 @@ export async function toggleCategoryStatusAction(id: string) {
     }
     const updated = await updateCategoryQuery(id, { disabled: !category.disabled });
     return { success: true, category: updated };
-  } catch (error: any) {
-    return { success: false, error: error?.message || "Failed to toggle category status." };
+  } catch (error: unknown) {
+    return { success: false, error: getErrorMessage(error, "Failed to toggle category status.") };
   }
 }
 
@@ -75,7 +76,7 @@ export async function deleteCategoriesAction(ids: string[]) {
     await verifyAdminAccess();
     const deleted = await deleteCategoriesQuery(ids);
     return { success: true, deleted };
-  } catch (error: any) {
-    return { success: false, error: error?.message || "Failed to delete categories." };
+  } catch (error: unknown) {
+    return { success: false, error: getErrorMessage(error, "Failed to delete categories.") };
   }
 }

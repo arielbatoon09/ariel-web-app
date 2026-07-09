@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import { getMediaAction, insertMediaRecordAction, deleteMediaAction, updateMediaAltAction, getMediaPresignedUrlAction } from "@/services/media";
 import { validateMediaFile } from "@/lib/media-config";
 import type { MediaAsset } from "@/data/media";
@@ -131,8 +132,9 @@ export function useUploadMedia() {
             });
 
             setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "done", progress: 100, url: asset.url } : u)));
-          } catch (err: any) {
-            setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "error", error: err.message } : u)));
+          } catch (err: unknown) {
+            setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "error", error: getErrorMessage(err, "Failed to upload media.") } : u)));
+            console.error(getErrorMessage(err, "Failed to upload media."));
           }
         })
       );
@@ -162,8 +164,8 @@ export function useDeleteMediaMutation() {
       toast.success("Media deleted successfully.");
       queryClient.invalidateQueries({ queryKey: MEDIA_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to delete media.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to delete media."));
     },
   });
 }
@@ -181,8 +183,8 @@ export function useUpdateMediaAltMutation() {
       toast.success("Alt text updated.");
       queryClient.invalidateQueries({ queryKey: MEDIA_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update alt text.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update alt text."));
     },
   });
 }

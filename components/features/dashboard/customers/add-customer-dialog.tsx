@@ -22,6 +22,40 @@ const customerSchema = z.object({
   role: z.enum(["admin", "client"]),
 });
 
+function generateStrongPassword(setVal: (val: string) => void) {
+  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lowercase = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*()_+-=[]{}|;:,./<>";
+  const all = uppercase + lowercase + numbers + symbols;
+
+  let pwd = "";
+  pwd += uppercase[Math.floor(Math.random() * uppercase.length)];
+  pwd += lowercase[Math.floor(Math.random() * lowercase.length)];
+  pwd += numbers[Math.floor(Math.random() * numbers.length)];
+  pwd += symbols[Math.floor(Math.random() * symbols.length)];
+
+  for (let i = 4; i < 16; i++) {
+    pwd += all[Math.floor(Math.random() * all.length)];
+  }
+
+  // Shuffle characters
+  pwd = pwd
+    .split("")
+    .sort(() => 0.5 - Math.random())
+    .join("");
+  setVal(pwd);
+  toast.success("Generated a strong password!");
+}
+
+function generateCustomerId() {
+  return Math.random().toString();
+}
+
+function generateActivityId() {
+  return `act-${Math.random().toString(36).slice(-8)}`;
+}
+
 interface AddCustomerDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -30,32 +64,6 @@ interface AddCustomerDialogProps {
 
 export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomerDialogProps) {
   const [isPending, setIsPending] = useState(false);
-
-  const generateStrongPassword = (setVal: (val: string) => void) => {
-    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const lowercase = "abcdefghijklmnopqrstuvwxyz";
-    const numbers = "0123456789";
-    const symbols = "!@#$%^&*()_+-=[]{}|;:,./<>";
-    const all = uppercase + lowercase + numbers + symbols;
-
-    let pwd = "";
-    pwd += uppercase[Math.floor(Math.random() * uppercase.length)];
-    pwd += lowercase[Math.floor(Math.random() * lowercase.length)];
-    pwd += numbers[Math.floor(Math.random() * numbers.length)];
-    pwd += symbols[Math.floor(Math.random() * symbols.length)];
-
-    for (let i = 4; i < 16; i++) {
-      pwd += all[Math.floor(Math.random() * all.length)];
-    }
-
-    // Shuffle characters
-    pwd = pwd
-      .split("")
-      .sort(() => 0.5 - Math.random())
-      .join("");
-    setVal(pwd);
-    toast.success("Generated a strong password!");
-  };
 
   const form = useForm({
     defaultValues: {
@@ -75,7 +83,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
 
       if (res.success) {
         toast.success("Customer account successfully created!");
-        const newCustomerId = res.user?.id ? res.user.id.toString() : Math.random().toString();
+        const newCustomerId = res.user?.id ? res.user.id.toString() : generateCustomerId();
 
         onSuccess?.({
           id: newCustomerId,
@@ -86,7 +94,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
           joinedAt: new Date().toISOString().split("T")[0],
           activities: [
             {
-              id: `act-${Math.random().toString(36).slice(-8)}`,
+              id: generateActivityId(),
               action: "Created Account",
               ipAddress: "127.0.0.1",
               timestamp: new Date().toLocaleString(),

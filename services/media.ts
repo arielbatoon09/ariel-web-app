@@ -1,5 +1,6 @@
 "use server";
 
+import { getErrorMessage } from "@/lib/error-utils";
 import { r2Client } from "@/lib/r2/client";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
@@ -34,8 +35,8 @@ export async function getMediaAction(folder?: string) {
 
     const assets = await getAllMediaQuery(folder);
     return { success: true, assets };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to load media." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to load media.")};
   }
 }
 
@@ -74,8 +75,8 @@ export async function getMediaPresignedUrlAction(filename: string, contentType: 
     const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-placeholder.r2.dev/${key}`;
 
     return { success: true, presignedUrl, key, url: cdnUrl, folder };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to generate upload URL." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to generate upload URL.")};
   }
 }
 
@@ -111,8 +112,8 @@ export async function getReceiptPresignedUrlAction(filename: string, contentType
       url: cdnUrl,
       key,
     };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to generate receipt upload link." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to generate receipt upload link." )};
   }
 }
 
@@ -136,8 +137,8 @@ export async function insertMediaRecordAction(data: {
 
     const asset = await insertMediaQuery(data);
     return { success: true, asset };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to save media record." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to save media record.")};
   }
 }
 
@@ -167,8 +168,8 @@ export async function deleteMediaAction(ids: number[]) {
 
     await deleteMediaByIdsQuery(ids);
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to delete media." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to delete media." )};
   }
 }
 
@@ -182,7 +183,7 @@ export async function updateMediaAltAction(id: number, altText: string) {
     if (!updated) return { success: false, error: "Media asset not found." };
 
     return { success: true, asset: updated };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update alt text." };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update alt text." )};
   }
 }

@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import {
   getServicesAction,
   getServiceByIdAction,
@@ -72,8 +73,8 @@ export function useCreateServiceMutation() {
       toast.success("Service package created successfully.");
       queryClient.invalidateQueries({ queryKey: SERVICES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to create service.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to create service."));
     },
   });
 }
@@ -97,8 +98,8 @@ export function useUpdateServiceMutation(id?: string) {
       }
       queryClient.invalidateQueries({ queryKey: [...SERVICES_QUERY_KEY, updatedService.id] });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update service.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update service."));
     },
   });
 }
@@ -119,8 +120,8 @@ export function useToggleServiceStatusMutation() {
       queryClient.invalidateQueries({ queryKey: SERVICES_QUERY_KEY });
       queryClient.invalidateQueries({ queryKey: [...SERVICES_QUERY_KEY, data.id] });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to toggle service status.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to toggle service status."));
     },
   });
 }
@@ -140,8 +141,8 @@ export function useDeleteServicesMutation() {
       toast.success("Selected services deleted successfully.");
       queryClient.invalidateQueries({ queryKey: SERVICES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to delete services.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to delete services."));
     },
   });
 }

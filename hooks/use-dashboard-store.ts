@@ -427,7 +427,11 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   toggleMediaSelect: (id) =>
     set((state) => {
       const next = new Set(state.mediaSelectedIds);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return { mediaSelectedIds: next };
     }),
   clearMediaSelection: () => set(() => ({ mediaSelectedIds: new Set<number>() })),

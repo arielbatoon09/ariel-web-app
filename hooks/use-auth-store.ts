@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
+import { getErrorMessage } from "@/lib/error-utils";
 import type { User } from "@supabase/supabase-js";
 
 const supabase = createClient();
@@ -41,8 +42,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
       set({ user: data.user, isLoading: false });
       return { success: true };
-    } catch (err: any) {
-      const errMsg = err?.message || "An unexpected error occurred.";
+    } catch (err: unknown) {
+      const errMsg = getErrorMessage(err, "An unexpected error occurred.");
       set({ error: errMsg, isLoading: false });
       return { success: false, error: errMsg };
     }

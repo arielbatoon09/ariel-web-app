@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useWorkDetailQuery, useUpdateWorkMutation } from "@/hooks/use-works";
 import type { Project, SeoMeta } from "@/schemas/dashboard";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 
 export function useWorkEditor(projectId: string, initialData?: Project) {
   const { data: project, isLoading: isFetching } = useWorkDetailQuery(projectId);
@@ -25,8 +26,8 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
     return activeProject;
   }, [project, initialData]);
 
-  // Form State
-  const [formData, setFormData] = useState<Project | null>(mergedActiveProject || null);
+  // Form State initialized via an initializer function to prevent sync state mismatch on mount
+  const [formData, setFormData] = useState<Project | null>(() => mergedActiveProject || null);
 
   const isDirty = useMemo(() => {
     if (!mergedActiveProject || !formData) return false;
@@ -35,9 +36,11 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
     return JSON.stringify(cleanActive) !== JSON.stringify(cleanForm);
   }, [mergedActiveProject, formData]);
 
+  // Reset local state cleanly only if the underlying fetched data ID or key contents change
   useEffect(() => {
     if (mergedActiveProject) {
-      setFormData(JSON.parse(JSON.stringify(mergedActiveProject)) as Project); // Deep clone for local edits
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFormData(JSON.parse(JSON.stringify(mergedActiveProject)) as Project);
     }
   }, [mergedActiveProject]);
 
@@ -197,8 +200,8 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
         onSuccess: () => {
           toast.success("Draft saved. Changes are staged and not yet live.");
         },
-        onError: (err: any) => {
-          toast.error(err?.message || "Failed to save draft.");
+        onError: (err: unknown) => {
+          toast.error(getErrorMessage(err, "Failed to save draft."));
         },
       }
     );
@@ -236,8 +239,8 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
             toast.success("Project reverted to draft.");
           }
         },
-        onError: (err: any) => {
-          toast.error(err?.message || "Failed to publish project.");
+        onError: (err: unknown) => {
+          toast.error(getErrorMessage(err, "Failed to publish project."));
         },
       }
     );

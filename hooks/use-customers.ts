@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import {
   getCustomersAction,
   createCustomerAction,
@@ -36,8 +37,8 @@ export function useCreateCustomerMutation() {
         toast.error(res.error || "Failed to create customer.");
       }
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "An error occurred while creating customer.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "An error occurred while creating customer."));
     },
   });
 }
@@ -57,8 +58,8 @@ export function useUpdateCustomerRoleMutation() {
       toast.success("Customer role updated successfully.");
       queryClient.invalidateQueries({ queryKey: CUSTOMERS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "An error occurred while updating role.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "An error occurred while updating role."));
     },
   });
 }
@@ -78,8 +79,8 @@ export function useToggleCustomerBlockMutation() {
       toast.success(variables.isBlocked ? "Customer blocked." : "Customer unblocked.");
       queryClient.invalidateQueries({ queryKey: CUSTOMERS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "An error occurred while updating block status.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "An error occurred while updating block status."));
     },
   });
 }
@@ -99,8 +100,8 @@ export function useDeleteCustomersMutation() {
       toast.success("Selected customer(s) deleted successfully.");
       queryClient.invalidateQueries({ queryKey: CUSTOMERS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "An error occurred while deleting customers.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "An error occurred while deleting customers."));
     },
   });
 }

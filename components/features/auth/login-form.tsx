@@ -69,9 +69,8 @@ export function LoginForm() {
         className="space-y-4"
       >
         <FieldGroup>
-          <form.Field
-            name="email"
-            children={(field) => {
+          <form.Field name="email">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -94,11 +93,10 @@ export function LoginForm() {
                 </Field>
               );
             }}
-          />
+          </form.Field>
 
-          <form.Field
-            name="password"
-            children={(field) => {
+          <form.Field name="password">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -142,12 +140,11 @@ export function LoginForm() {
                 </Field>
               );
             }}
-          />
+          </form.Field>
         </FieldGroup>
 
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([isSubmitting]) => {
+        <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+          {([isSubmitting]) => {
             const activeLoading = isLoading || isSubmitting;
             return (
               <Button
@@ -169,7 +166,7 @@ export function LoginForm() {
               </Button>
             );
           }}
-        />
+        </form.Subscribe>
       </form>
 
       <p className="px-4 text-center font-mono text-[9px] leading-relaxed tracking-wider text-muted-foreground uppercase">

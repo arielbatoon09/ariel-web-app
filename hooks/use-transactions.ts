@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import { getTransactionsAction, createTransactionAction, updateTransactionStatusAction } from "@/services/transactions";
 import type { Transaction } from "@/schemas/dashboard";
 
@@ -35,8 +36,8 @@ export function useCreateTransactionMutation() {
       toast.success("Transaction proof submitted successfully!");
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to submit transaction proof.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to submit transaction proof."));
     },
   });
 }
@@ -56,8 +57,8 @@ export function useUpdateTransactionStatusMutation() {
       toast.success(`Transaction status updated to ${updatedTx.status}.`);
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update transaction status.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update transaction status."));
     },
   });
 }

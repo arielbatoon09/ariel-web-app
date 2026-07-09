@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import {
   getCategoriesAction,
   createCategoryAction,
@@ -41,8 +42,8 @@ export function useCreateCategoryMutation() {
       toast.success("Category created successfully.");
       queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to create category.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to create category."));
     },
   });
 }
@@ -67,8 +68,8 @@ export function useUpdateCategoryMutation() {
       toast.success("Category updated successfully.");
       queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update category.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update category."));
     },
   });
 }
@@ -88,8 +89,8 @@ export function useToggleCategoryStatusMutation() {
       toast.success("Category status updated successfully.");
       queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to toggle status.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to toggle status."));
     },
   });
 }
@@ -109,8 +110,8 @@ export function useDeleteCategoriesMutation() {
       toast.success("Selected category/categories deleted successfully.");
       queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to delete categories.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to delete categories."));
     },
   });
 }

@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-utils";
 import { getOrdersAction, getOrderByIdAction, createOrderAction, updateOrderStatusAction, deleteOrdersAction } from "@/services/orders";
 import type { Order } from "@/schemas/dashboard";
 
@@ -61,8 +62,8 @@ export function useCreateOrderMutation() {
       toast.success("Order placed successfully!");
       queryClient.invalidateQueries({ queryKey: ORDERS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to place order.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to place order."));
     },
   });
 }
@@ -86,8 +87,8 @@ export function useUpdateOrderStatusMutation(id?: string) {
       }
       queryClient.invalidateQueries({ queryKey: [...ORDERS_QUERY_KEY, updatedOrder.id] });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to update order status.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update order status."));
     },
   });
 }
@@ -107,8 +108,8 @@ export function useDeleteOrdersMutation() {
       toast.success("Selected orders deleted successfully.");
       queryClient.invalidateQueries({ queryKey: ORDERS_QUERY_KEY });
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "Failed to delete orders.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to delete orders."));
     },
   });
 }
