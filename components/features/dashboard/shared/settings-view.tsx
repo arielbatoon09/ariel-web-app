@@ -34,7 +34,6 @@ export function SettingsView() {
   // Profile fields (original values for change tracking)
   const [initialFullName, setInitialFullName] = useState("");
   const [initialPhone, setInitialPhone] = useState("");
-  const [initialAvatarUrl, setInitialAvatarUrl] = useState<string | null>(null);
 
   // staged avatar file
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -56,7 +55,6 @@ export function SettingsView() {
           setInitialPhone(res.user.phone || "");
           setEmail(res.user.email || "");
           setAvatarUrl(res.user.avatarUrl || null);
-          setInitialAvatarUrl(res.user.avatarUrl || null);
         } else {
           toast.error(res.error || "Failed to load user profile details.");
         }
@@ -105,8 +103,6 @@ export function SettingsView() {
 
     setIsSavingProfile(true);
     try {
-      let finalAvatarUrl = avatarUrl;
-
       // 1. Upload new avatar to R2 only when "Save Profile" is clicked
       if (avatarFile) {
         setIsUploadingAvatar(true);
@@ -132,9 +128,7 @@ export function SettingsView() {
           throw new Error(updateRes.error || "Failed to update profile avatar metadata.");
         }
 
-        finalAvatarUrl = res.url;
         setAvatarUrl(res.url);
-        setInitialAvatarUrl(res.url);
         setAvatarFile(null);
         if (avatarPreviewUrl) {
           URL.revokeObjectURL(avatarPreviewUrl);
