@@ -41,8 +41,8 @@ export default async function AdminArticleDetailPage({ params }: PageProps) {
     ...rawArticle,
     ...(rawArticle.draft || {}),
     id: rawArticle.id.toString(),
-    categories: ((rawArticle.draft as any)?.categories || rawArticle.categories) as string[],
-    seo: (rawArticle.draft as any)?.seo || rawArticle.seo || undefined,
+    categories: ((rawArticle.draft as Partial<Article> | null)?.categories || rawArticle.categories) as string[],
+    seo: (rawArticle.draft as Partial<Article> | null)?.seo || rawArticle.seo || undefined,
     draft: rawArticle.draft,
     status: rawArticle.status,
   };

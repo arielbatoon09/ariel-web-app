@@ -172,7 +172,7 @@ export function ArticleVisualEditor({
 
               {formData.sections.length === 0 && (
                 <div className="flex flex-col items-center justify-center gap-2 border border-dashed border-neutral-300 py-12 text-center dark:border-neutral-700">
-                  <p className="font-mono text-xs text-neutral-400">No sections yet. Click "Add Section" to start writing.</p>
+                  <p className="font-mono text-xs text-neutral-400">No sections yet. Click &quot;Add Section&quot; to start writing.</p>
                 </div>
               )}
             </div>
@@ -198,7 +198,7 @@ export function ArticleVisualEditor({
                     value={formData.seo?.title || ""}
                     onChange={(e) => handleSeoFieldChange("title", e.target.value)}
                     placeholder="e.g. Article Title | Ariel Batoon"
-                    className="w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 focus:ring-neutral-400 dark:border-neutral-700"
+                    className="w-full rounded border border-neutral-350 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 focus:ring-neutral-400 dark:border-neutral-700"
                   />
                   <span className="font-mono text-[9px] text-neutral-400">{(formData.seo?.title || "").length} chars (rec: 50-60)</span>
                 </div>
@@ -218,7 +218,7 @@ export function ArticleVisualEditor({
 
                 {/* Canonical URL */}
                 <div className="space-y-1.5 md:col-span-2">
-                  <label className="block font-mono text-[10px] tracking-widest text-neutral-400 uppercase">Canonical URL Override</label>
+                  <label className="block font-mono text-[10px] tracking-widest text-neutral-400 uppercase">Meta Canonical URL</label>
                   <input
                     type="text"
                     value={formData.seo?.canonicalUrl || ""}
@@ -226,7 +226,7 @@ export function ArticleVisualEditor({
                     placeholder="e.g. https://medium.com/@username/original-post"
                     className="w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 focus:ring-neutral-400 dark:border-neutral-700"
                   />
-                  <span className="font-mono text-[9px] text-neutral-400">Leave empty to default to this page's URL</span>
+                  <span className="font-mono text-[9px] text-neutral-400">Leave empty to default to this page&apos;s URL</span>
                 </div>
 
                 {/* Meta Description */}

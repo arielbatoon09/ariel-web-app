@@ -115,9 +115,8 @@ export function WorkAddDialog() {
         >
           <FieldGroup>
             {/* Title */}
-            <form.Field
-              name="title"
-              children={(field) => {
+            <form.Field name="title">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -146,12 +145,11 @@ export function WorkAddDialog() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Slug */}
-            <form.Field
-              name="slug"
-              children={(field) => {
+            <form.Field name="slug">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -172,12 +170,11 @@ export function WorkAddDialog() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Categories Selection */}
-            <form.Field
-              name="categoriesRaw"
-              children={(field) => {
+            <form.Field name="categoriesRaw">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 const selectedCategories = field.state.value
                   ? field.state.value
@@ -224,7 +221,7 @@ export function WorkAddDialog() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
           </FieldGroup>
 
           <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">

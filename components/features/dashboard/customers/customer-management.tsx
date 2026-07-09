@@ -30,8 +30,9 @@ export function CustomerManagement() {
         } else {
           toast.error(res.error || "Failed to load customers.");
         }
-      } catch (err: any) {
-        toast.error(err?.message || "Failed to load customers.");
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        toast.error(message || "Failed to load customers.");
       } finally {
         setIsLoading(false);
       }
@@ -106,8 +107,9 @@ export function CustomerManagement() {
       } else {
         toast.error(res.error || "Failed to update block status.");
       }
-    } catch (err: any) {
-      toast.error(err?.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toast.error(message || "An unexpected error occurred.");
     }
   };
 
@@ -121,8 +123,9 @@ export function CustomerManagement() {
       } else {
         toast.error(res.error || "Failed to update role.");
       }
-    } catch (err: any) {
-      toast.error(err?.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toast.error(message || "An unexpected error occurred.");
     }
   };
 

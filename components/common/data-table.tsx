@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ interface DataTableProps<T> {
 
   // Advanced Operations
   onDeleteBulk?: (items: T[]) => void;
-  onImportCSV?: (items: any[]) => void;
+  onImportCSV?: (items: Record<string, unknown>[]) => void;
   hideExport?: boolean;
   onRowClick?: (item: T) => void;
 }
@@ -154,19 +154,19 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
   const hasActions = onViewClick || onEditClick || onToggleStatusClick || onDeleteClick;
 
-  // Reset page-specific selection if paginated data changes
-  useEffect(() => {
-    setSelectedIds((prev) => {
-      const next = new Set<string>();
-      const currentIds = new Set(paginatedData.map((item) => item.id));
-      prev.forEach((id) => {
-        if (currentIds.has(id)) {
-          next.add(id);
-        }
-      });
-      return next;
+  // Reset page-specific selection if paginated data changes during render
+  const [prevPaginatedData, setPrevPaginatedData] = useState(paginatedData);
+  if (paginatedData !== prevPaginatedData) {
+    setPrevPaginatedData(paginatedData);
+    const next = new Set<string>();
+    const currentIds = new Set(paginatedData.map((item) => item.id));
+    selectedIds.forEach((id) => {
+      if (currentIds.has(id)) {
+        next.add(id);
+      }
     });
-  }, [paginatedData]);
+    setSelectedIds(next);
+  }
 
   // Selection handlers
   const handleSelectAll = (checked: boolean) => {
@@ -274,7 +274,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
           }
           values.push(current.trim());
 
-          const obj: any = { id: `imported-${Date.now()}-${idx}` };
+          const obj: Record<string, unknown> = { id: `imported-${Date.now()}-${idx}` };
           headers.forEach((header, index) => {
             const rawVal = values[index]?.replace(/^"|"$/g, "") || "";
             // Find key in columns
@@ -283,9 +283,9 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
             // Map values
             if (key === "role") {
-              obj.role = rawVal.toLowerCase() === "admin" ? "admin" : "client";
+              obj["role"] = rawVal.toLowerCase() === "admin" ? "admin" : "client";
             } else if (key === "disabled" || key === "status") {
-              obj.disabled = rawVal.toLowerCase() === "true" || rawVal.toLowerCase() === "blocked";
+              obj["disabled"] = rawVal.toLowerCase() === "true" || rawVal.toLowerCase() === "blocked";
             } else {
               obj[key] = rawVal;
             }
@@ -296,8 +296,9 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
         if (onImportCSV) {
           onImportCSV(parsedItems);
         }
-      } catch (err: any) {
-        alert("Failed to parse CSV: " + err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        alert("Failed to parse CSV: " + message);
       } finally {
         if (fileInputRef.current) {
           fileInputRef.current.value = "";

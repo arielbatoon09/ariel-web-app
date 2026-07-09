@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
+import type { Article } from "@/schemas/dashboard";
 
 const articleFormSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters."),
@@ -80,7 +81,7 @@ export function ArticleAddDialog() {
           author: value.author,
           sections: [{ title: "Introduction", body: "Start writing your article content here." }],
           status: "draft",
-        } as any,
+        } as Omit<Article, "id">,
         {
           onSuccess: (newArticle) => {
             form.reset();
@@ -119,9 +120,8 @@ export function ArticleAddDialog() {
         >
           <FieldGroup>
             {/* Title */}
-            <form.Field
-              name="title"
-              children={(field) => {
+            <form.Field name="title">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -150,12 +150,11 @@ export function ArticleAddDialog() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Slug */}
-            <form.Field
-              name="slug"
-              children={(field) => {
+            <form.Field name="slug">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -176,12 +175,11 @@ export function ArticleAddDialog() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Author */}
-            <form.Field
-              name="author"
-              children={(field) => {
+            <form.Field name="author">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -202,12 +200,11 @@ export function ArticleAddDialog() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Categories Selection */}
-            <form.Field
-              name="categoriesRaw"
-              children={(field) => {
+            <form.Field name="categoriesRaw">
+              {(field) => {
                 const selectedCategories = field.state.value
                   ? field.state.value
                       .split(",")
@@ -254,7 +251,7 @@ export function ArticleAddDialog() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
           </FieldGroup>
 
           <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">

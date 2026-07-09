@@ -71,8 +71,8 @@ export function ArticlePreviewMode({ formData }: ArticlePreviewModeProps) {
           <div className="flex min-h-screen flex-col bg-background">
             <PublicHeader />
             <main className="flex-1">
-              <ArticleHero article={formData as any} />
-              <ArticleContent article={formData as any} />
+              <ArticleHero article={formData as Article} />
+              <ArticleContent article={formData as Article} />
             </main>
             <PublicFooter />
           </div>

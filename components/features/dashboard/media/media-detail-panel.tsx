@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Copy, Check, Trash2, Save, FileImage } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,12 +33,15 @@ export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
   const updateAltMutation = useUpdateMediaAltMutation();
   const deleteMutation = useDeleteMediaMutation();
 
-  useEffect(() => {
+  // Reset local state cleanly when asset changes during render
+  const [prevAsset, setPrevAsset] = useState(asset);
+  if (asset !== prevAsset) {
+    setPrevAsset(asset);
     if (asset) {
       setAltText(asset.altText || "");
       setConfirmDelete(false);
     }
-  }, [asset]);
+  }
 
   if (!asset) return null;
 

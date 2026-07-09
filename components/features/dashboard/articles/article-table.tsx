@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useArticlesQuery, useToggleArticleStatusMutation, useDeleteArticlesMutation } from "@/hooks/use-articles";
+import { useArticlesQuery, useDeleteArticlesMutation } from "@/hooks/use-articles";
 import { DataTable } from "@/components/common/data-table";
 import type { Article } from "@/schemas/dashboard";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
@@ -13,7 +13,6 @@ export function ArticleTable() {
   const { setSelectedArticleId, setIsArticleDetailsOpen } = useDashboardStore();
 
   const { data: articles = [], isLoading } = useArticlesQuery();
-  const toggleStatusMutation = useToggleArticleStatusMutation();
   const deleteArticlesMutation = useDeleteArticlesMutation();
 
   const [itemsToDelete, setItemsToDelete] = useState<Article[]>([]);

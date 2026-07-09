@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { Upload, X, CheckCircle2, AlertCircle, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ function UploadFileCard({ item, onRemove }: { item: UploadProgressItem; onRemove
   useEffect(() => {
     if (item.file.type.startsWith("image/")) {
       const url = URL.createObjectURL(item.file);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPreview(url);
       return () => URL.revokeObjectURL(url);
     }
@@ -23,7 +25,7 @@ function UploadFileCard({ item, onRemove }: { item: UploadProgressItem; onRemove
       {/* Thumbnail */}
       <div className="relative size-12 shrink-0 overflow-hidden border border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800">
         {preview ? (
-          <img src={preview} alt={item.file.name} className="h-full w-full object-cover" />
+          <Image src={preview} alt={item.file.name} className="object-cover" fill unoptimized />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <ImageIcon className="size-4 text-neutral-400" />

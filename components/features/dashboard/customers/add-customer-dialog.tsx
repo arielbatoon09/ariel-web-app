@@ -135,9 +135,8 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
         >
           <FieldGroup>
             {/* Full Name */}
-            <form.Field
-              name="fullName"
-              children={(field) => {
+            <form.Field name="fullName">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -158,12 +157,11 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Email Address */}
-            <form.Field
-              name="email"
-              children={(field) => {
+            <form.Field name="email">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -185,12 +183,11 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Password with Generator */}
-            <form.Field
-              name="password"
-              children={(field) => {
+            <form.Field name="password">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -222,12 +219,11 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Phone Number (Optional) */}
-            <form.Field
-              name="phone"
-              children={(field) => {
+            <form.Field name="phone">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -248,12 +244,11 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Role Selection */}
-            <form.Field
-              name="role"
-              children={(field) => {
+            <form.Field name="role">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -278,7 +273,7 @@ export function AddCustomerDialog({ open, onOpenChange, onSuccess }: AddCustomer
                   </Field>
                 );
               }}
-            />
+            </form.Field>
           </FieldGroup>
 
           <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">

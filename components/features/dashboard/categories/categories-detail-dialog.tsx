@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { ManagementDetailDialog } from "@/components/common/management-detail-dialog";
 import { useCategoriesQuery, useUpdateCategoryMutation, useToggleCategoryStatusMutation } from "@/hooks/use-categories";
@@ -28,18 +28,24 @@ export function CategoriesDetailDialog() {
     return categories.find((c) => c.id === selectedCategoryId) || null;
   }, [categories, selectedCategoryId]);
 
-  useEffect(() => {
+  // Reset local state cleanly when currentCategory changes during render
+  const [prevCategory, setPrevCategory] = useState(currentCategory);
+  if (currentCategory !== prevCategory) {
+    setPrevCategory(currentCategory);
     if (currentCategory) {
       setName(currentCategory.name);
       setSlug(currentCategory.slug);
     }
-  }, [currentCategory]);
+  }
 
-  useEffect(() => {
+  // Reset editing mode when details dialog closes during render
+  const [prevIsOpen, setPrevIsOpen] = useState(isCategoryDetailsOpen);
+  if (isCategoryDetailsOpen !== prevIsOpen) {
+    setPrevIsOpen(isCategoryDetailsOpen);
     if (!isCategoryDetailsOpen) {
       setIsEditing(false);
     }
-  }, [isCategoryDetailsOpen]);
+  }
 
   const handleToggleStatus = () => {
     if (!currentCategory) return;

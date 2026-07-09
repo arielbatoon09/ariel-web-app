@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getWorkBySlugQuery, getWorksQuery } from "@/data/works";
 import { getCategoriesQuery } from "@/data/categories";
 import { CaseStudyHero } from "@/components/features/public/works/case-study-hero";
@@ -24,12 +25,12 @@ export async function generateStaticParams() {
 
 export const dynamicParams = true;
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const project = await getWorkBySlugQuery(resolvedParams.slug);
   if (!project || project.status !== "published") return {};
 
-  const metadata: any = {
+  const metadata: Metadata = {
     title: project.seo?.title || `${project.title} | Case Study`,
     description: project.seo?.description || project.description,
   };
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   if (project.seo?.canonicalUrl) {
-    metadata.alternatives = {
+    metadata.alternates = {
       canonical: project.seo.canonicalUrl,
     };
   }

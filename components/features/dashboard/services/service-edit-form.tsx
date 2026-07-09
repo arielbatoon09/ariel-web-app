@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import { useServiceDetailQuery, useUpdateServiceMutation } from "@/hooks/use-services";
@@ -43,13 +44,15 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
   const [addonPrice, setAddonPrice] = useState<number>(15000);
   const [addonDesc, setAddonDesc] = useState("");
 
-  // Sync state when details load
-  useEffect(() => {
+  // Reset features and addOns cleanly when service loads or changes during render
+  const [prevService, setPrevService] = useState(service);
+  if (service !== prevService) {
+    setPrevService(service);
     if (service) {
       setFeatures(service.features || []);
       setAddOns(service.addOns || []);
     }
-  }, [service]);
+  }
 
   const handleAddFeature = () => {
     if (newFeatureText.trim()) {
@@ -176,9 +179,8 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
             className="space-y-4 font-mono text-xs"
           >
             {/* Name */}
-            <form.Field
-              name="name"
-              children={(field) => {
+            <form.Field name="name">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -209,12 +211,11 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Slug */}
-            <form.Field
-              name="slug"
-              children={(field) => {
+            <form.Field name="slug">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -235,12 +236,11 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Description */}
-            <form.Field
-              name="description"
-              children={(field) => {
+            <form.Field name="description">
+              {(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
@@ -262,18 +262,17 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Image Banner */}
-            <form.Field
-              name="imageSrc"
-              children={(field) => (
+            <form.Field name="imageSrc">
+              {(field) => (
                 <div className="space-y-2">
                   <span className="block text-[10px] tracking-widest text-neutral-400 uppercase">Banner Image</span>
                   {field.state.value ? (
                     <div className="relative border border-dashed border-neutral-300 bg-background/50 p-2 dark:border-neutral-700">
                       <div className="relative aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
-                        <img src={field.state.value} alt="Banner Preview" className="h-full w-full object-cover" />
+                        <Image src={field.state.value} alt="Banner Preview" className="object-cover" fill unoptimized />
                       </div>
                       <div className="mt-2 flex items-center gap-1.5 font-mono text-[10px] text-neutral-400">
                         <Button
@@ -316,13 +315,12 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
                   />
                 </div>
               )}
-            />
+            </form.Field>
 
             <div className="grid grid-cols-2 gap-4">
               {/* Price */}
-              <form.Field
-                name="price"
-                children={(field) => {
+              <form.Field name="price">
+                {(field) => {
                   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid}>
@@ -343,12 +341,11 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
                     </Field>
                   );
                 }}
-              />
+              </form.Field>
 
               {/* Delivery Time */}
-              <form.Field
-                name="deliveryTime"
-                children={(field) => {
+              <form.Field name="deliveryTime">
+                {(field) => {
                   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid}>
@@ -369,7 +366,7 @@ export function ServiceEditForm({ id }: ServiceEditFormProps) {
                     </Field>
                   );
                 }}
-              />
+              </form.Field>
             </div>
 
             {/* Features list */}

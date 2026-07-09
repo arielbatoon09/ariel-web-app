@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useMediaQuery, useDeleteMediaMutation } from "@/hooks/use-media";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { MediaGrid } from "@/components/features/dashboard/media/media-grid";
@@ -42,12 +42,15 @@ export function MediaContent() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
 
-  useEffect(() => {
+  // Reset local state cleanly when mediaActiveAsset changes during render
+  const [prevMediaActiveAsset, setPrevMediaActiveAsset] = useState(mediaActiveAsset);
+  if (mediaActiveAsset !== prevMediaActiveAsset) {
+    setPrevMediaActiveAsset(mediaActiveAsset);
     if (mediaActiveAsset) {
       setAltText(mediaActiveAsset.altText || "");
       setCopied(false);
     }
-  }, [mediaActiveAsset]);
+  }
 
   const filteredAssets = useMemo(() => {
     let result = assets;

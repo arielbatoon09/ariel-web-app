@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getArticleBySlugQuery, getArticlesQuery } from "@/data/articles";
 import { getCategoriesQuery } from "@/data/categories";
 import { ArticleHero } from "@/components/features/public/articles/article-hero";
@@ -22,12 +23,12 @@ export async function generateStaticParams() {
 
 export const dynamicParams = true;
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const article = await getArticleBySlugQuery(resolvedParams.slug);
   if (!article || article.status !== "published") return {};
 
-  const metadata: any = {
+  const metadata: Metadata = {
     title: article.seo?.title || `${article.title} | Ariel Batoon`,
     description: article.seo?.description || article.description,
   };
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   if (article.seo?.canonicalUrl) {
-    metadata.alternatives = { canonical: article.seo.canonicalUrl };
+    metadata.alternates = { canonical: article.seo.canonicalUrl };
   }
 
   const ogTitle = article.seo?.ogTitle || article.seo?.title || `${article.title} | Ariel Batoon`;

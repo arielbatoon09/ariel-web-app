@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useMediaQuery, useDeleteMediaMutation, useUpdateMediaAltMutation } from "@/hooks/use-media";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { MediaHeader } from "@/components/features/dashboard/media/media-header";
@@ -53,17 +53,24 @@ export function MediaClient() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
 
-  useEffect(() => {
+  // Reset details panel state cleanly when activeAsset changes during render
+  const [prevActiveAsset, setPrevActiveAsset] = useState(activeAsset);
+  if (activeAsset !== prevActiveAsset) {
+    setPrevActiveAsset(activeAsset);
     if (activeAsset) {
       setAltText(activeAsset.altText || "");
       setCopied(false);
     }
-  }, [activeAsset]);
+  }
 
   const toggleSelect = (id: number) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   };

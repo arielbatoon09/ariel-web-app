@@ -11,7 +11,7 @@ import { useCategoriesQuery } from "@/hooks/use-categories";
 
 interface WorkVisualEditorProps {
   formData: Project;
-  handleFieldChange: (field: keyof Project, value: any) => void;
+  handleFieldChange: (field: keyof Project, value: Project[keyof Project]) => void;
   handleSeoFieldChange: (field: keyof SeoMeta, value: string) => void;
   handleCaseStudyFieldChange: (field: string, value: string | string[]) => void;
   handleFeatureChange: (index: number, key: "title" | "description", value: string) => void;
