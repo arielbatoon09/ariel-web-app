@@ -29,7 +29,10 @@ export function useOrderDetailQuery(id: string) {
       if (!res.success || !res.order) {
         throw new Error(res.error || "Failed to load order details.");
       }
-      return res.order as Order;
+      return {
+        order: res.order as Order,
+        transaction: res.transaction || null,
+      };
     },
     enabled: !!id,
   });
@@ -72,7 +75,7 @@ export function useUpdateOrderStatusMutation(id?: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: { id: string; status: "pending" | "in-progress" | "completed" | "cancelled" }) => {
+    mutationFn: async (payload: { id: string; status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested" }) => {
       const res = await updateOrderStatusAction(payload.id, payload.status);
       if (!res.success || !res.order) {
         throw new Error(res.error || "Failed to update order status.");

@@ -122,8 +122,7 @@ export function HeroSection() {
                 Building Quality Software.
               </h1>
               <p className="max-w-2xl font-sans text-base leading-relaxed text-neutral-500 md:text-lg dark:text-neutral-400">
-                Full-Stack Engineer partnering with ambitious startups to design, build, and scale custom web applications, mobile apps, and AI
-                integrations.
+                Full-Stack Software Engineer designing and building scalable MVPs, web applications, mobile apps, and AI-powered solutions for ambitious startups, businesses, and global clients.
               </p>
             </div>
 
@@ -138,7 +137,7 @@ export function HeroSection() {
                   <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
               </ConnectDialog>
-              <Link href="#work">
+              <Link href="/works">
                 <Button
                   variant="outline"
                   size="lg"
@@ -367,9 +366,9 @@ export function HeroSection() {
               {/* AI Applications */}
               <GridCard
                 icon={<Brain className="size-4 group-hover:animate-pulse" />}
-                title="AI Applications"
+                title="Generative AI"
                 titleClassName="text-xs font-mono font-bold uppercase tracking-wider"
-                description="Integrating intelligent machine learning capabilities, semantic search systems, and automated agents into your product workflows."
+                description="Build AI-powered MVPs with intelligent chat, content generation, workflow automation, and seamless LLM integrations."
               />
             </div>
           </div>

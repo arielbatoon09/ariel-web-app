@@ -56,6 +56,8 @@ export function useUpdateTransactionStatusMutation() {
     onSuccess: (updatedTx) => {
       toast.success(`Transaction status updated to ${updatedTx.status}.`);
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["orders", updatedTx.orderId] });
     },
     onError: (err: unknown) => {
       toast.error(getErrorMessage(err, "Failed to update transaction status."));

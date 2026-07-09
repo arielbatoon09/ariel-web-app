@@ -19,49 +19,98 @@ export const metadata = {
     index: false,
     follow: false,
   },
-  title: {
-    default: "Ariel Batoon | Freelance Software Engineer & Web Developer in Cebu",
-    template: "%s | Ariel Batoon - Software Engineer Cebu",
+  alternates: {
+    canonical: "https://arielbatoon.com",
   },
+  title: {
+    default: "Ariel Batoon — Software Engineer",
+    template: "Ariel Batoon — %s",
+  },
+
   description:
-    "Ariel Batoon is a premium freelance Software Engineer and Full-Stack Web Developer based in Cebu City, Philippines. Building high-performance SaaS, MVPs, and custom mobile apps for local and global clients.",
+    "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+
   keywords: [
-    "Web Development Cebu",
-    "AI Developer Cebu",
-    "Mobile App Developer Cebu",
-    "SaaS Developer Cebu",
-    "Software Engineer Cebu",
-    "Web Developer Cebu",
-    "Freelance Developer Philippines",
-    "React Developer Cebu",
-    "Next.js Developer Cebu",
     "Ariel Batoon",
-    "Cebu Web Design",
-    "Startup MVP Developer",
+    "Software Engineer",
+    "Full Stack Developer",
+    "React Developer",
+    "Next.js Developer",
+    "TypeScript Developer",
+    "Node.js Developer",
+    "React Native Developer",
+    "Frontend Developer",
+    "Backend Developer",
+    "Freelance Developer",
+    "SaaS Developer",
+    "Web Developer Philippines",
+    "Software Engineer Cebu",
+    "Cebu Developer",
+    "Philippines Developer",
   ],
-  authors: [{ name: "Ariel Batoon", url: "https://arielbatoon.com" }],
+
+  authors: [
+    {
+      name: "Ariel Batoon",
+      url: "https://arielbatoon.com",
+    },
+  ],
+
   creator: "Ariel Batoon",
+
   openGraph: {
     type: "website",
     locale: "en_PH",
     url: "https://arielbatoon.com",
-    title: "Ariel Batoon | Premium Software Engineer & Web Developer in Cebu",
-    description: "Premium software engineering, custom SaaS platforms, and mobile apps built in Cebu City for global brands.",
-    siteName: "Ariel Batoon Portfolio",
+    siteName: "Ariel Batoon",
+    title: "Ariel Batoon | Full-Stack Software Engineer & Indie Builder",
+    description:
+      "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+    images: [
+      {
+        url: "https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Ariel Batoon - Full-Stack Software Engineer",
+      },
+    ],
   },
-  other: {
-    "geo.region": "PH-7",
-    "geo.placename": "Cebu City",
-    "geo.position": "10.3157;123.8854",
-    ICBM: "10.3157, 123.8854",
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Ariel Batoon | Full-Stack Software Engineer & Indie Builder",
+    description:
+      "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+    creator: "@arielbatoon",
+    images: [
+      "https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png",
+    ],
   },
+
   icons: {
     icon: [
-      { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon/favicon.ico", sizes: "any" },
+      {
+        url: "/favicon/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+      {
+        url: "/favicon/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/favicon/favicon.ico",
+        sizes: "any",
+      },
     ],
-    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [
+      {
+        url: "/favicon/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
   },
 };
 

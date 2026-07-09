@@ -27,9 +27,12 @@ export function AdminHeader() {
   // Format page path to breadcrumbs
   const pathParts = pathname.split("/").filter(Boolean);
 
-  const isEditorPage = (pathParts[1] === "works" && pathParts.length > 2) || (pathParts[1] === "articles" && pathParts.length > 2);
+  const isEditorOrOrdersPage =
+    (pathParts[1] === "works" && pathParts.length > 2) ||
+    (pathParts[1] === "articles" && pathParts.length > 2) ||
+    pathParts[1] === "order";
 
-  if (isEditorPage) return null;
+  if (isEditorOrOrdersPage) return null;
 
   const breadcrumbs = pathParts
     .map((part) => {

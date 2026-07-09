@@ -7,19 +7,19 @@ import { FaqSection } from "@/components/features/public/home/faq-section";
 import { BookCallSection } from "@/components/features/public/home/book-call-section";
 
 export const metadata = {
-  title: "Freelance Software Engineer & Web Developer in Cebu City",
+  title: "Software Engineer & Indie Builder in Cebu City",
   description:
-    "Ariel Batoon is a Full-Stack Software Engineer based in Cebu City, Philippines. Specialized in building premium SaaS, high-performance web systems, and custom React Native mobile applications.",
+    "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
 };
 
 export default function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "Ariel Batoon | Freelance Software Engineer Cebu",
+    name: "Ariel Batoon — Software Engineer",
     image: "https://arielbatoon.com/icons/ab-logo-text-dark.png",
     url: "https://arielbatoon.com",
-    telephone: "+639688540898",
+    telephone: "+639674214639",
     priceRange: "$$$",
     address: {
       "@type": "PostalAddress",
@@ -36,7 +36,7 @@ export default function HomePage() {
     },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
       opens: "00:00",
       closes: "23:59",
     },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCreateOrderMutation } from "@/hooks/use-orders";
 import { useCreateTransactionMutation } from "@/hooks/use-transactions";
@@ -16,6 +16,8 @@ import { Section } from "@/components/common/section";
 import { BackButton } from "@/components/common/back-button";
 import { getErrorMessage } from "@/lib/error-utils";
 import { Order } from "@/schemas/dashboard";
+import { useAuthStore } from "@/hooks/use-auth-store";
+import { getCurrentUserProfileAction } from "@/services/auth";
 
 interface CheckoutViewProps {
   service: Service;
@@ -26,6 +28,46 @@ export function CheckoutView({ service }: CheckoutViewProps) {
   const searchParams = useSearchParams();
   const createOrder = useCreateOrderMutation();
   const createTransaction = useCreateTransactionMutation();
+
+  const { user, initialize } = useAuthStore();
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
+  // Prepopulate form states when user info is loaded
+  useEffect(() => {
+    async function loadUserProfile() {
+      if (user) {
+        if (user.email) {
+          setCustomerEmail(user.email);
+        }
+
+        try {
+          const profileRes = await getCurrentUserProfileAction();
+          if (profileRes.success && profileRes.user?.fullName) {
+            setCustomerName(profileRes.user.fullName);
+            if (profileRes.user.phone) {
+              setCustomerPhone(profileRes.user.phone);
+            }
+          } else {
+            const fullName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split("@")[0] || "";
+            if (fullName) {
+              setCustomerName(fullName);
+            }
+          }
+        } catch (e) {
+          console.error("Failed to load user profile:", e);
+          const fullName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split("@")[0] || "";
+          if (fullName) {
+            setCustomerName(fullName);
+          }
+        }
+      }
+    }
+
+    loadUserProfile();
+  }, [user]);
 
   // Load preselected addons from query params
   const initialAddons = useMemo(() => {
@@ -307,7 +349,8 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="e.g. John Doe"
                     required
-                    className="h-10 rounded-none border-dashed border-neutral-300 focus-visible:border-solid dark:border-neutral-700"
+                    disabled={!!user}
+                    className="h-9 rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                   />
                 </Field>
 
@@ -319,7 +362,8 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                     onChange={(e) => setCustomerEmail(e.target.value)}
                     placeholder="e.g. john@company.com"
                     required
-                    className="h-10 rounded-none border-dashed border-neutral-300 focus-visible:border-solid dark:border-neutral-700"
+                    disabled={!!user}
+                    className="h-9 rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                   />
                 </Field>
 
@@ -330,7 +374,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="e.g. +63 917 123 4567"
-                      className="h-10 rounded-none border-dashed border-neutral-300 focus-visible:border-solid dark:border-neutral-700"
+                      className="h-9 rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                   </Field>
                 </div>
@@ -350,7 +394,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                   placeholder="Please write down your project description, main pain points, feature requirements, or any other details you want us to handle..."
                   rows={8}
                   required
-                  className="dark:focus:border-neutral-150 min-h-[160px] w-full resize-y rounded-none border border-dashed border-neutral-300 bg-background/50 p-3 font-sans text-xs outline-none focus:border-solid focus:border-neutral-900 dark:border-neutral-700"
+                  className="min-h-[160px] w-full resize-y rounded-none border border-dashed border-neutral-300 bg-background/50 p-3 font-sans text-xs outline-none transition-all duration-200 focus:border-solid focus:border-neutral-900 focus:ring-0 dark:border-neutral-700 dark:focus:border-neutral-100"
                 />
               </Field>
             </div>
@@ -505,7 +549,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                       onChange={(e) => setReferenceNumber(e.target.value)}
                       placeholder="e.g. 5013 8927 1224"
                       required
-                      className="h-10 rounded-none border-dashed border-neutral-300 focus-visible:border-solid dark:border-neutral-700"
+                      className="h-9 rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                   </Field>
 

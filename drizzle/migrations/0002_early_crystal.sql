@@ -1,1 +1,0 @@
-ALTER TYPE "public"."work_status" ADD VALUE 'unpublished';

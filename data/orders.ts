@@ -9,21 +9,20 @@ export async function getOrdersQuery() {
     id: o.id.toString(),
     userId: o.userId?.toString() || null,
     serviceId: o.serviceId.toString(),
-    status: o.status as "pending" | "in-progress" | "completed" | "cancelled",
+    status: o.status as "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested",
     createdAt: o.createdAt.toISOString(),
   }));
 }
 
 export async function getOrderByIdQuery(id: string) {
-  const numericId = parseInt(id, 10);
-  const [result] = await db.select().from(orders).where(eq(orders.id, numericId)).limit(1);
+  const [result] = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
   return result
     ? {
         ...result,
         id: result.id.toString(),
         userId: result.userId?.toString() || null,
         serviceId: result.serviceId.toString(),
-        status: result.status as "pending" | "in-progress" | "completed" | "cancelled",
+        status: result.status as "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested",
         createdAt: result.createdAt.toISOString(),
       }
     : null;
@@ -34,7 +33,7 @@ export async function insertOrderQuery(data: {
   serviceId: string;
   customerName: string;
   customerEmail: string;
-  status: "pending" | "in-progress" | "completed" | "cancelled";
+  status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested";
   addOnsSelected: string[];
   totalAmount: number;
   referenceNumber?: string;
@@ -62,20 +61,19 @@ export async function insertOrderQuery(data: {
     id: inserted.id.toString(),
     userId: inserted.userId?.toString() || null,
     serviceId: inserted.serviceId.toString(),
-    status: inserted.status as "pending" | "in-progress" | "completed" | "cancelled",
+    status: inserted.status as "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested",
     createdAt: inserted.createdAt.toISOString(),
   };
 }
 
-export async function updateOrderStatusQuery(id: string, status: "pending" | "in-progress" | "completed" | "cancelled") {
-  const numericId = parseInt(id, 10);
+export async function updateOrderStatusQuery(id: string, status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested") {
   const [updated] = await db
     .update(orders)
     .set({
       status,
       updatedAt: new Date(),
     })
-    .where(eq(orders.id, numericId))
+    .where(eq(orders.id, id))
     .returning();
 
   return updated
@@ -84,21 +82,20 @@ export async function updateOrderStatusQuery(id: string, status: "pending" | "in
         id: updated.id.toString(),
         userId: updated.userId?.toString() || null,
         serviceId: updated.serviceId.toString(),
-        status: updated.status as "pending" | "in-progress" | "completed" | "cancelled",
+        status: updated.status as "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested",
         createdAt: updated.createdAt.toISOString(),
       }
     : null;
 }
 
 export async function deleteOrdersQuery(ids: string[]) {
-  const numericIds = ids.map((id) => parseInt(id, 10));
-  const deleted = await db.delete(orders).where(inArray(orders.id, numericIds)).returning();
+  const deleted = await db.delete(orders).where(inArray(orders.id, ids)).returning();
   return deleted.map((o) => ({
     ...o,
     id: o.id.toString(),
     userId: o.userId?.toString() || null,
     serviceId: o.serviceId.toString(),
-    status: o.status as "pending" | "in-progress" | "completed" | "cancelled",
+    status: o.status as "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested",
     createdAt: o.createdAt.toISOString(),
   }));
 }

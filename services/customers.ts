@@ -53,19 +53,45 @@ export async function createCustomerAction(input: CreateCustomerInput) {
 
     const newAuthId = authData.user.id;
 
-    // 4. Insert into the database users table using helper
-    const insertedUser = await insertUser({
-      authId: newAuthId,
-      fullName: input.fullName,
-      phone: input.phone || null,
-    });
+    // 4. Retrieve or insert into the database users table
+    let insertedUser = await getUserByAuthId(newAuthId);
+
+    if (!insertedUser) {
+      // No trigger automatically created the public user record, so insert manually
+      insertedUser = await insertUser({
+        authId: newAuthId,
+        fullName: input.fullName,
+        phone: input.phone || null,
+      });
+    } else {
+      // A trigger automatically created the public user record. Update the metadata.
+      await db
+        .update(users)
+        .set({
+          fullName: input.fullName,
+          phone: input.phone || null,
+        })
+        .where(eq(users.id, insertedUser.id));
+      
+      // Fetch the updated record
+      const updatedUser = await getUserById(insertedUser.id);
+      if (updatedUser) {
+        insertedUser = updatedUser;
+      }
+    }
+
+    if (!insertedUser) {
+      return { success: false, error: "Failed to create or retrieve user record from database." };
+    }
 
     // 5. Insert into the userRoles table using helper
     await upsertUserRole(insertedUser.id, input.role);
 
     return { success: true, user: insertedUser };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "An unexpected server error occurred.") };
+    console.error("CREATE CUSTOMER ACTION ERROR:", err);
+    const errorDetails = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    return { success: false, error: `Server Error: ${errorDetails}` };
   }
 }
 

@@ -114,7 +114,7 @@ export const OrderSchema = z.object({
   serviceId: z.string().min(1, "Service ID is required"),
   customerName: z.string().min(1, "Customer Name is required"),
   customerEmail: z.string().email("Must be a valid email address"),
-  status: z.enum(["pending", "in-progress", "completed", "cancelled"]),
+  status: z.enum(["pending", "in-progress", "completed", "cancelled", "delivered", "revision_requested"]),
   addOnsSelected: z.array(z.string()).default([]),
   totalAmount: z.number().min(0, "Total amount must be positive"),
   createdAt: z.string().min(1, "Creation date is required"),

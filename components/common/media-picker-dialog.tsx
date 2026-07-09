@@ -36,6 +36,7 @@ function MediaPickerGrid({ assets, selectedUrl, onSelect }: { assets: MediaAsset
 
         return (
           <button
+            type="button"
             key={asset.id}
             onClick={() => onSelect(asset.url)}
             className={cn(
@@ -105,6 +106,7 @@ export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }:
             <h2 className="font-mono text-sm font-bold tracking-wider text-foreground uppercase">Media Library</h2>
             <div className="flex gap-1">
               <button
+                type="button"
                 onClick={() => setTab("browse")}
                 className={cn(
                   "border px-2.5 py-1 font-mono text-[9px] uppercase transition-colors",
@@ -116,6 +118,7 @@ export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }:
                 Browse
               </button>
               <button
+                type="button"
                 onClick={() => setTab("upload")}
                 className={cn(
                   "border px-2.5 py-1 font-mono text-[9px] uppercase transition-colors",
@@ -129,7 +132,7 @@ export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }:
               </button>
             </div>
           </div>
-          <button onClick={() => onOpenChange(false)} className="text-neutral-400 hover:text-foreground">
+          <button type="button" onClick={() => onOpenChange(false)} className="text-neutral-400 hover:text-foreground">
             <X className="size-4" />
           </button>
         </div>
@@ -170,6 +173,7 @@ export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }:
             {assets.length} file{assets.length !== 1 ? "s" : ""} in library
           </span>
           <Button
+            type="button"
             variant="outline"
             size="sm"
             onClick={() => onOpenChange(false)}

@@ -18,6 +18,7 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
   titleClassName?: string;
   price?: string;
   deliveryTime?: string;
+  truncate?: boolean;
 }
 
 export function GridCard({
@@ -33,6 +34,7 @@ export function GridCard({
   titleClassName,
   price,
   deliveryTime,
+  truncate,
   ...props
 }: GridCardProps) {
   return (
@@ -111,9 +113,7 @@ export function GridCard({
             </div>
           )}
 
-          <p className="line-clamp-2 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400" title={description}>
-            {description}
-          </p>
+          <p className={cn("text-xs leading-relaxed text-neutral-500 dark:text-neutral-400", truncate && "line-clamp-4")}>{description}</p>
         </div>
       </div>
 

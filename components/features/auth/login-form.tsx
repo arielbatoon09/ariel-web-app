@@ -104,7 +104,7 @@ export function LoginForm() {
                     <FieldLabel htmlFor={field.name} className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
                       Password
                     </FieldLabel>
-                    <Link
+                    {/* <Link
                       href="#"
                       className="font-mono text-[10px] text-muted-foreground hover:text-foreground hover:underline"
                       onClick={(e) => {
@@ -113,7 +113,7 @@ export function LoginForm() {
                       }}
                     >
                       Forgot?
-                    </Link>
+                    </Link> */}
                   </div>
                   <div className="relative">
                     <Input
@@ -143,8 +143,8 @@ export function LoginForm() {
           </form.Field>
         </FieldGroup>
 
-        <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-          {([isSubmitting]) => {
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => {
             const activeLoading = isLoading || isSubmitting;
             return (
               <Button

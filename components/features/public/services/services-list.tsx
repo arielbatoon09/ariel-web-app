@@ -43,6 +43,7 @@ export function ServicesList({ initialServices }: ServicesListProps) {
                 imageSrc={pkg.imageSrc ?? undefined}
                 price={`₱${pkg.price.toLocaleString()}`}
                 deliveryTime={pkg.deliveryTime}
+                truncate
                 link={{
                   href: `/service/${pkg.slug}`,
                   label: "View Scope & Pricing",

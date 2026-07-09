@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { useOrderDetailQuery, useUpdateOrderStatusMutation } from "@/hooks/use-orders";
@@ -24,7 +25,8 @@ export function OrderDetailDialog() {
 }
 
 function OrderDetailDialogContent({ id, open, onOpenChange }: { id: string; open: boolean; onOpenChange: (open: boolean) => void }) {
-  const { data: order, isLoading } = useOrderDetailQuery(id);
+  const { data, isLoading } = useOrderDetailQuery(id);
+  const order = data?.order;
   const { data: services = [] } = useServicesQuery();
   const { data: transactions = [] } = useTransactionsQuery();
   const updateStatusMutation = useUpdateOrderStatusMutation(id);
@@ -242,12 +244,19 @@ function OrderDetailDialogContent({ id, open, onOpenChange }: { id: string; open
             </div>
           </div>
 
-          {/* Close button */}
-          <div className="flex justify-end border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">
+          {/* Action buttons */}
+          <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">
+            <Link
+              href={`/admin/order/${order.id}`}
+              onClick={() => onOpenChange(false)}
+              className="inline-flex h-9 items-center justify-center rounded-none bg-purple-650 px-4 font-mono text-[10px] text-white uppercase tracking-wider hover:bg-purple-700"
+            >
+              Project Board & Chat
+            </Link>
             <Button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="h-9 rounded-none bg-foreground font-mono text-[10px] text-background uppercase hover:bg-foreground/90"
+              className="h-9 rounded-none bg-neutral-900 font-mono text-[10px] text-white uppercase hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
             >
               Close Record
             </Button>

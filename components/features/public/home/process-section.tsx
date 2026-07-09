@@ -15,34 +15,34 @@ interface Step {
 const PROCESS_STEPS: Step[] = [
   {
     id: "01",
-    tag: "Intake",
-    title: "Scope Definition",
+    tag: "Get Started",
+    title: "Choose Your Path",
     description:
-      "Submit your project details, budget parameters, and objectives. I will review them within 24 hours to return with clear, technical questions rather than generic assumptions.",
+      "Book a free consultation for custom projects, send an inquiry through the contact form, or purchase a fixed-scope service directly. Choose the option that best fits your needs.",
     icon: <FileText className="size-4.5" />,
   },
   {
     id: "02",
-    tag: "Alignment",
-    title: "Technical Alignment",
+    tag: "Discovery",
+    title: "Plan & Align",
     description:
-      "Book a slot directly on my calendar. We'll hold a single, focused alignment call to lock down the system requirements, project milestones, and success criteria with zero back-and-forth.",
+      "For custom projects, we'll discuss your goals, requirements, timeline, and budget during a focused consultation. For fixed-scope services, I'll confirm the project details and next steps before development begins.",
     icon: <Calendar className="size-4.5" />,
   },
   {
     id: "03",
     tag: "Engineering",
-    title: "Collaborative Build",
+    title: "Build & Collaborate",
     description:
-      "Access weekly progress updates and incremental live builds. Stay fully connected to the development cycles with transparent communication and zero information gaps.",
+      "Track your project through a dedicated Customer Panel where you can monitor milestones, review progress, exchange files, and chat with me directly throughout the entire development process.",
     icon: <Code2 className="size-4.5" />,
   },
   {
     id: "04",
-    tag: "Deployment",
+    tag: "Delivery",
     title: "Launch & Support",
     description:
-      "Deploy your product with confidence and track post-launch KPIs. Includes 15 days of complimentary post-deployment support covering tweaks, fixes, or minor feature refinements.",
+      "Receive a production-ready solution with deployment assistance and 15 days of complimentary post-launch support covering bug fixes, minor refinements, and a smooth handoff.",
     icon: <Rocket className="size-4.5" />,
   },
 ];

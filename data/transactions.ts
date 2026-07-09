@@ -24,7 +24,7 @@ export async function insertTransactionQuery(data: {
   const [inserted] = await db
     .insert(transactions)
     .values({
-      orderId: parseInt(data.orderId, 10),
+      orderId: data.orderId,
       amount: data.amount,
       status: data.status,
       paymentMethod: data.paymentMethod,

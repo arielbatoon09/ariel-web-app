@@ -187,3 +187,41 @@ export async function updateMediaAltAction(id: number, altText: string) {
     return { success: false, error: getErrorMessage(err, "Failed to update alt text.") };
   }
 }
+
+/** Generate a presigned PUT URL for uploading attachments to R2 from the chat (authenticated users) */
+export async function getChatAttachmentPresignedUrlAction(filename: string, contentType: string, orderId: string) {
+  try {
+    const currentUser = await getCurrentSessionUser();
+    if (!currentUser) {
+      return { success: false, error: "Unauthorized: Please log in." };
+    }
+
+    const bucketName = process.env.R2_BUCKET_NAME;
+    if (!bucketName) {
+      return { success: false, error: "Cloudflare R2 Bucket Name is not configured." };
+    }
+
+    const cleanFilename = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+    const key = `chats/${orderId}/${cleanFilename}`;
+
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+      ContentType: contentType,
+    });
+
+    const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 600 });
+
+    const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+    const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-placeholder.r2.dev/${key}`;
+
+    return {
+      success: true,
+      presignedUrl,
+      url: cdnUrl,
+      key,
+    };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to generate chat upload link.") };
+  }
+}

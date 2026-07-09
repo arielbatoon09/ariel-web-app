@@ -7,6 +7,9 @@ import { getUserRoleByUserId } from "@/data/roles";
 import { getOrdersQuery, getOrderByIdQuery, insertOrderQuery, updateOrderStatusQuery, deleteOrdersQuery } from "@/data/orders";
 import { resend } from "@/lib/email";
 import { orderConfirmationHtml, orderConfirmationText } from "@/lib/emails/order-confirmation";
+import { db } from "@/drizzle";
+import { transactions, orders } from "@/drizzle/schema";
+import { eq, desc, or } from "drizzle-orm";
 
 async function checkAdminAccess() {
   const currentUser = await getCurrentSessionUser();
@@ -64,15 +67,32 @@ export async function getOrderByIdAction(id: string) {
     }
     const role = await getUserRoleByUserId(dbUser.id);
     const isAdmin = role === "admin";
-    const isOwner = order.userId === dbUser.id.toString();
+    const emailMatches = order.customerEmail.toLowerCase() === currentUser.email?.toLowerCase();
+    
+    // Auto-link order if email matches but userId is null in database
+    if (!order.userId && emailMatches) {
+      await db.update(orders).set({ userId: dbUser.id, updatedAt: new Date() }).where(eq(orders.id, id));
+      order.userId = dbUser.id.toString();
+    }
+
+    const isOwner = order.userId === dbUser.id.toString() || emailMatches;
 
     if (!isAdmin && !isOwner) {
       return { success: false, error: "Unauthorized: Access denied." };
     }
 
+    const [transaction] = await db.select().from(transactions).where(eq(transactions.orderId, id)).limit(1);
+
     return {
       success: true,
       order,
+      transaction: transaction ? {
+        ...transaction,
+        id: transaction.id.toString(),
+        orderId: transaction.orderId.toString(),
+        status: transaction.status as "successful" | "failed" | "pending",
+        createdAt: transaction.createdAt.toISOString(),
+      } : null,
     };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to fetch order details.") };
@@ -151,7 +171,7 @@ export async function createOrderAction(data: {
 }
 
 // 4. Update order status (Admin only)
-export async function updateOrderStatusAction(id: string, status: "pending" | "in-progress" | "completed" | "cancelled") {
+export async function updateOrderStatusAction(id: string, status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested") {
   const auth = await checkAdminAccess();
   if (!auth.authorized) {
     return { success: false, error: auth.error };
@@ -186,5 +206,49 @@ export async function deleteOrdersAction(ids: string[]) {
     };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to delete orders.") };
+  }
+}
+
+// 6. Get all orders for the logged-in customer (matched by user id or customerEmail)
+export async function getCustomerOrdersAction() {
+  try {
+    const currentUser = await getCurrentSessionUser();
+    if (!currentUser) {
+      return { success: false, error: "Unauthorized: Please log in." };
+    }
+
+    const dbUser = await getUserByAuthId(currentUser.id);
+    if (!dbUser) {
+      return { success: false, error: "Unauthorized: Account not found." };
+    }
+
+    const customerEmail = currentUser.email || "";
+    const dbUserId = dbUser.id;
+
+    // Fetch matching orders
+    const matchedOrders = await db
+      .select()
+      .from(orders)
+      .where(
+        or(
+          eq(orders.userId, dbUserId),
+          eq(orders.customerEmail, customerEmail)
+        )
+      )
+      .orderBy(desc(orders.createdAt));
+
+    // Map to frontend expectation
+    const formattedOrders = matchedOrders.map((o) => ({
+      ...o,
+      id: o.id.toString(),
+      userId: o.userId?.toString() || null,
+      serviceId: o.serviceId.toString(),
+      status: o.status as "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested",
+      createdAt: o.createdAt.toISOString(),
+    }));
+
+    return { success: true, orders: formattedOrders };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to load customer orders.") };
   }
 }

@@ -1,4 +1,4 @@
-import { pgEnum, pgTable, serial, text, varchar, timestamp, integer, boolean, index, jsonb } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, serial, text, varchar, timestamp, integer, boolean, index, jsonb, uuid } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["admin", "client"]);
 export const workStatusEnum = pgEnum("work_status", ["draft", "published", "unpublished"]);
@@ -219,14 +219,14 @@ export const services = pgTable(
 export const orders = pgTable(
   "orders",
   {
-    id: serial("id").primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey(),
     userId: integer("user_id").references(() => users.id, { onDelete: "set null" }),
     serviceId: integer("service_id")
       .references(() => services.id, { onDelete: "restrict" })
       .notNull(),
     customerName: text("customer_name").notNull(),
     customerEmail: text("customer_email").notNull(),
-    status: text("status").default("pending").notNull(), // pending, in-progress, completed, cancelled
+    status: text("status").default("pending").notNull(), // pending, in-progress, completed, cancelled, delivered, revision_requested
     addOnsSelected: jsonb("add_ons_selected").$type<string[]>().default([]).notNull(),
     totalAmount: integer("total_amount").notNull(),
     referenceNumber: text("reference_number").unique(),
@@ -242,7 +242,7 @@ export const transactions = pgTable(
   "transactions",
   {
     id: serial("id").primaryKey(),
-    orderId: integer("order_id")
+    orderId: uuid("order_id")
       .references(() => orders.id, { onDelete: "cascade" })
       .notNull(),
     amount: integer("amount").notNull(),
@@ -254,4 +254,21 @@ export const transactions = pgTable(
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => [index("transactions_order_id_idx").on(table.orderId), index("transactions_reference_number_idx").on(table.referenceNumber)]
+);
+
+export const orderMessages = pgTable(
+  "order_messages",
+  {
+    id: serial("id").primaryKey(),
+    orderId: uuid("order_id")
+      .references(() => orders.id, { onDelete: "cascade" })
+      .notNull(),
+    senderId: integer("sender_id").references(() => users.id, { onDelete: "set null" }),
+    senderRole: text("sender_role").notNull(), // 'admin', 'client', or 'system'
+    message: text("message").notNull(),
+    attachmentUrl: text("attachment_url"),
+    attachmentName: text("attachment_name"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("order_messages_order_id_idx").on(table.orderId)]
 );

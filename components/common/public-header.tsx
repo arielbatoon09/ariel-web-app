@@ -38,7 +38,7 @@ export function PublicHeader() {
             <div className="relative flex h-5 items-center">
               <Image
                 src="/icons/ab-logo-text-dark.png"
-                className="block h-10 w-auto object-contain dark:hidden"
+                className="block h-16 w-auto object-contain dark:hidden"
                 alt="ab logo"
                 width={80}
                 height={80}
@@ -46,15 +46,13 @@ export function PublicHeader() {
               />
               <Image
                 src="/icons/ab-logo-text-white.png"
-                className="hidden h-10 w-auto object-contain dark:block"
+                className="hidden h-16 w-auto object-contain dark:block"
                 alt="ab logo"
                 width={80}
                 height={80}
                 priority
               />
             </div>
-            <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-            <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">Ariel Batoon</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -115,24 +113,22 @@ export function PublicHeader() {
                     {/* Drawer Header Area with branding */}
                     <div className="flex items-center justify-between border-b border-dashed border-neutral-300 pb-6 dark:border-neutral-700">
                       <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center space-x-3">
-                        <div className="relative flex h-5 items-center">
+                        <div className="relative flex h-10 items-center">
                           <Image
                             src="/icons/ab-logo-text-dark.png"
-                            className="block h-8 w-auto object-contain dark:hidden"
+                            className="block h-16 w-auto object-contain dark:hidden"
                             alt="ab logo"
-                            width={64}
-                            height={64}
+                            width={80}
+                            height={80}
                           />
                           <Image
                             src="/icons/ab-logo-text-white.png"
-                            className="hidden h-8 w-auto object-contain dark:block"
+                            className="hidden h-16 w-auto object-contain dark:block"
                             alt="ab logo"
-                            width={64}
-                            height={64}
+                            width={80}
+                            height={80}
                           />
                         </div>
-                        <div className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
-                        <span className="font-mono text-[10px] tracking-[0.2em] text-neutral-500 uppercase dark:text-neutral-400">Ariel Batoon</span>
                       </Link>
                     </div>
 

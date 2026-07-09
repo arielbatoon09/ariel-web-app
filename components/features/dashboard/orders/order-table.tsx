@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useOrdersQuery, useUpdateOrderStatusMutation, useDeleteOrdersMutation } from "@/hooks/use-orders";
 import { useServicesQuery } from "@/hooks/use-services";
 import { DataTable } from "@/components/common/data-table";
@@ -10,6 +11,7 @@ import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { cn } from "@/lib/utils";
 
 export function OrderTable() {
+  const router = useRouter();
   const { setSelectedOrderId, setIsOrderDetailsOpen } = useDashboardStore();
 
   const { data: orders = [], isLoading } = useOrdersQuery();
@@ -127,8 +129,7 @@ export function OrderTable() {
         searchKey="customerName"
         searchPlaceholder="Search client orders..."
         onViewClick={(item) => {
-          setSelectedOrderId(item.id);
-          setIsOrderDetailsOpen(true);
+          router.push(`/admin/order/${item.id}`);
         }}
         onDeleteClick={handleDelete}
         onDeleteBulk={handleDeleteBulk}
