@@ -198,7 +198,7 @@ export function ArticleVisualEditor({
                     value={formData.seo?.title || ""}
                     onChange={(e) => handleSeoFieldChange("title", e.target.value)}
                     placeholder="e.g. Article Title | Ariel Batoon"
-                    className="w-full rounded border border-neutral-350 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 focus:ring-neutral-400 dark:border-neutral-700"
+                    className="border-neutral-350 w-full rounded border bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 focus:ring-neutral-400 dark:border-neutral-700"
                   />
                   <span className="font-mono text-[9px] text-neutral-400">{(formData.seo?.title || "").length} chars (rec: 50-60)</span>
                 </div>

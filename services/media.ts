@@ -36,7 +36,7 @@ export async function getMediaAction(folder?: string) {
     const assets = await getAllMediaQuery(folder);
     return { success: true, assets };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to load media.")};
+    return { success: false, error: getErrorMessage(err, "Failed to load media.") };
   }
 }
 
@@ -76,7 +76,7 @@ export async function getMediaPresignedUrlAction(filename: string, contentType: 
 
     return { success: true, presignedUrl, key, url: cdnUrl, folder };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to generate upload URL.")};
+    return { success: false, error: getErrorMessage(err, "Failed to generate upload URL.") };
   }
 }
 
@@ -113,7 +113,7 @@ export async function getReceiptPresignedUrlAction(filename: string, contentType
       key,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to generate receipt upload link." )};
+    return { success: false, error: getErrorMessage(err, "Failed to generate receipt upload link.") };
   }
 }
 
@@ -138,7 +138,7 @@ export async function insertMediaRecordAction(data: {
     const asset = await insertMediaQuery(data);
     return { success: true, asset };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to save media record.")};
+    return { success: false, error: getErrorMessage(err, "Failed to save media record.") };
   }
 }
 
@@ -169,7 +169,7 @@ export async function deleteMediaAction(ids: number[]) {
     await deleteMediaByIdsQuery(ids);
     return { success: true };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to delete media." )};
+    return { success: false, error: getErrorMessage(err, "Failed to delete media.") };
   }
 }
 
@@ -184,6 +184,6 @@ export async function updateMediaAltAction(id: number, altText: string) {
 
     return { success: true, asset: updated };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to update alt text." )};
+    return { success: false, error: getErrorMessage(err, "Failed to update alt text.") };
   }
 }

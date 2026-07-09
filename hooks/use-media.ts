@@ -133,7 +133,9 @@ export function useUploadMedia() {
 
             setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "done", progress: 100, url: asset.url } : u)));
           } catch (err: unknown) {
-            setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "error", error: getErrorMessage(err, "Failed to upload media.") } : u)));
+            setUploads((prev) =>
+              prev.map((u) => (u.id === item.id ? { ...u, status: "error", error: getErrorMessage(err, "Failed to upload media.") } : u))
+            );
             console.error(getErrorMessage(err, "Failed to upload media."));
           }
         })

@@ -39,7 +39,7 @@ export async function getTransactionsAction() {
       transactions: transactionsList,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch transactions.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch transactions.") };
   }
 }
 
@@ -66,7 +66,7 @@ export async function createTransactionAction(data: {
       transaction: newTx,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to submit transaction receipt.")};
+    return { success: false, error: getErrorMessage(err, "Failed to submit transaction receipt.") };
   }
 }
 
@@ -87,6 +87,6 @@ export async function updateTransactionStatusAction(id: string, status: "success
       transaction: updated,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to update transaction status.")};
+    return { success: false, error: getErrorMessage(err, "Failed to update transaction status.") };
   }
 }

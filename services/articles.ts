@@ -45,7 +45,7 @@ export async function getArticlesAction() {
       })),
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch articles.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch articles.") };
   }
 }
 
@@ -62,7 +62,7 @@ export async function getArticleByIdAction(id: string) {
       article: { ...article, id: article.id.toString() },
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch article details.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch article details.") };
   }
 }
 
@@ -78,7 +78,7 @@ export async function getArticleBySlugAction(slug: string) {
       article: { ...article, id: article.id.toString() },
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch article by slug.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch article by slug.") };
   }
 }
 
@@ -130,7 +130,7 @@ export async function createArticleAction(data: {
 
     return { success: true, article: { ...inserted, id: inserted.id.toString() } };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to create article.")};
+    return { success: false, error: getErrorMessage(err, "Failed to create article.") };
   }
 }
 
@@ -150,7 +150,7 @@ export async function updateArticleAction(
     readTime: string;
     author: string;
     sections: Array<{ title: string; body: string }>;
-    seo: NonNullable<Parameters<typeof insertArticleQuery>[0]['seo']>;
+    seo: NonNullable<Parameters<typeof insertArticleQuery>[0]["seo"]>;
     status: "draft" | "published" | "unpublished";
     isDraftSave?: boolean;
   }>
@@ -160,13 +160,13 @@ export async function updateArticleAction(
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericId = parseInt(id, 10);
-    
+
     // Cleaned up: Removed unused parameters completely from destructuring to stop the warnings
     const { isDraftSave, ...fields } = data;
 
     // Look up exactly what the query function expects as a payload
     type UpdateQueryPayload = Parameters<typeof updateArticleQuery>[1];
-    type DraftPayload = NonNullable<UpdateQueryPayload['draft']>;
+    type DraftPayload = NonNullable<UpdateQueryPayload["draft"]>;
 
     let updatePayload: UpdateQueryPayload;
 
@@ -201,7 +201,7 @@ export async function updateArticleAction(
 
     return { success: true, article: { ...updated, id: updated.id.toString() } };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to update article.")};
+    return { success: false, error: getErrorMessage(err, "Failed to update article.") };
   }
 }
 
@@ -220,7 +220,7 @@ export async function toggleArticleStatusAction(id: string) {
 
     return { success: true, status: updated?.status };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to toggle status.")};
+    return { success: false, error: getErrorMessage(err, "Failed to toggle status.") };
   }
 }
 
@@ -235,6 +235,6 @@ export async function deleteArticlesAction(ids: string[]) {
 
     return { success: true };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to delete articles.")};
+    return { success: false, error: getErrorMessage(err, "Failed to delete articles.") };
   }
 }

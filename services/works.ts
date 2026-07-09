@@ -41,7 +41,7 @@ export async function getWorksAction() {
       })),
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to load works.")};
+    return { success: false, error: getErrorMessage(err, "Failed to load works.") };
   }
 }
 
@@ -61,14 +61,14 @@ export async function getWorkByIdAction(id: string) {
       },
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to load work details.")};
+    return { success: false, error: getErrorMessage(err, "Failed to load work details.") };
   }
 }
 
 type CaseStudy = {
   role: string;
   timeline: string;
- challenge: string;
+  challenge: string;
   solution: string;
   features: {
     title: string;
@@ -147,7 +147,7 @@ export async function createWorkAction(data: {
 
     return { success: true, work: { ...inserted, id: inserted.id.toString() } };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to create work.")};
+    return { success: false, error: getErrorMessage(err, "Failed to create work.") };
   }
 }
 
@@ -180,9 +180,9 @@ export async function updateWorkAction(
 
     // Extract the exact payload type expected by the DB query
     type UpdateQueryPayload = Parameters<typeof updateWorkQuery>[1];
-    
+
     // Extract the exact type expected by the 'draft' property specifically
-    type DraftPayload = NonNullable<UpdateQueryPayload['draft']>;
+    type DraftPayload = NonNullable<UpdateQueryPayload["draft"]>;
 
     let updatePayload: UpdateQueryPayload;
 
@@ -214,7 +214,7 @@ export async function updateWorkAction(
 
     return { success: true, work: { ...updated, id: updated.id.toString() } };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to update work.")};
+    return { success: false, error: getErrorMessage(err, "Failed to update work.") };
   }
 }
 
@@ -233,7 +233,7 @@ export async function toggleWorkStatusAction(id: string) {
 
     return { success: true, status: updated?.status };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to toggle status.")};
+    return { success: false, error: getErrorMessage(err, "Failed to toggle status.") };
   }
 }
 
@@ -248,7 +248,7 @@ export async function deleteWorksAction(ids: string[]) {
 
     return { success: true };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to delete works.")};
+    return { success: false, error: getErrorMessage(err, "Failed to delete works.") };
   }
 }
 
@@ -280,7 +280,6 @@ export async function getPresignedUploadUrlAction(filename: string, contentType:
 
     return { success: true, presignedUrl, key, url: cdnUrl };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to generate upload URL.")};
-
+    return { success: false, error: getErrorMessage(err, "Failed to generate upload URL.") };
   }
 }

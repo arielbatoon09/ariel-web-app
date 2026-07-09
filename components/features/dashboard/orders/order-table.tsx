@@ -71,7 +71,7 @@ export function OrderTable() {
     },
     {
       header: "Total Price",
-      accessorKey: (item: Order) => <span className="font-mono text-xs font-bold text-foreground">₱{item.totalAmount.toLocaleString()}</span>,
+      accessorKey: (item: Order) => <span className="font-mono text-xs text-foreground">₱{item.totalAmount.toLocaleString()}</span>,
     },
     {
       header: "Workflow Status",

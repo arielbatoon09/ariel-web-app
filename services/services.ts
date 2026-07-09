@@ -42,7 +42,7 @@ export async function getServicesAction() {
       services: servicesList,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch services.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch services.") };
   }
 }
 
@@ -58,7 +58,7 @@ export async function getServiceByIdAction(id: string) {
       service,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch service details.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch service details.") };
   }
 }
 
@@ -74,7 +74,7 @@ export async function getServiceBySlugAction(slug: string) {
       service,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch service details.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch service details.") };
   }
 }
 
@@ -92,7 +92,7 @@ export async function createServiceAction(data: Omit<Service, "id">) {
       service: newService,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to create service.")};
+    return { success: false, error: getErrorMessage(err, "Failed to create service.") };
   }
 }
 
@@ -113,7 +113,7 @@ export async function updateServiceAction(id: string, data: Partial<Service>) {
       service: updated,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to update service.")};
+    return { success: false, error: getErrorMessage(err, "Failed to update service.") };
   }
 }
 
@@ -136,7 +136,7 @@ export async function toggleServiceStatusAction(id: string) {
       disabled: updated?.disabled,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to toggle service status.")};
+    return { success: false, error: getErrorMessage(err, "Failed to toggle service status.") };
   }
 }
 
@@ -154,6 +154,6 @@ export async function deleteServicesAction(ids: string[]) {
       services: deleted,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to delete services.")};
+    return { success: false, error: getErrorMessage(err, "Failed to delete services.") };
   }
 }

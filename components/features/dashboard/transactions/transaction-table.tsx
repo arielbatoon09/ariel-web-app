@@ -25,11 +25,11 @@ export function TransactionTable() {
     },
     {
       header: "Reference Number",
-      accessorKey: (item: Transaction) => <code className="font-mono text-xs font-bold text-foreground">{item.referenceNumber}</code>,
+      accessorKey: (item: Transaction) => <code className="font-mono text-xs text-foreground">{item.referenceNumber}</code>,
     },
     {
       header: "Gross Amount",
-      accessorKey: (item: Transaction) => <span className="font-mono text-xs font-bold text-foreground">₱{item.amount.toLocaleString()}</span>,
+      accessorKey: (item: Transaction) => <span className="font-mono text-xs text-foreground">₱{item.amount.toLocaleString()}</span>,
     },
     {
       header: "Payment Channel",

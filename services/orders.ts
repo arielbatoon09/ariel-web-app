@@ -41,7 +41,7 @@ export async function getOrdersAction() {
       orders: ordersList,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch orders.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch orders.") };
   }
 }
 
@@ -75,7 +75,7 @@ export async function getOrderByIdAction(id: string) {
       order,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to fetch order details.")};
+    return { success: false, error: getErrorMessage(err, "Failed to fetch order details.") };
   }
 }
 
@@ -146,7 +146,7 @@ export async function createOrderAction(data: {
       order: newOrder,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to create order.")};
+    return { success: false, error: getErrorMessage(err, "Failed to create order.") };
   }
 }
 
@@ -167,7 +167,7 @@ export async function updateOrderStatusAction(id: string, status: "pending" | "i
       order: updated,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to update order status.")};
+    return { success: false, error: getErrorMessage(err, "Failed to update order status.") };
   }
 }
 
@@ -185,6 +185,6 @@ export async function deleteOrdersAction(ids: string[]) {
       orders: deleted,
     };
   } catch (err: unknown) {
-    return { success: false, error: getErrorMessage(err, "Failed to delete orders." )};
+    return { success: false, error: getErrorMessage(err, "Failed to delete orders.") };
   }
 }

@@ -142,16 +142,13 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
       data: { ...formData, isDraftSave: true },
     };
 
-    await updateArticleMutation.mutateAsync(
-      payload,
-      {
-        onSuccess: () => toast.success("Draft saved. Changes are staged and not yet live."),
-        onError: (err: unknown) => {
-          const message = err instanceof Error ? err.message : "Failed to save draft.";
-          toast.error(message);
-        },
-      }
-    );
+    await updateArticleMutation.mutateAsync(payload, {
+      onSuccess: () => toast.success("Draft saved. Changes are staged and not yet live."),
+      onError: (err: unknown) => {
+        const message = err instanceof Error ? err.message : "Failed to save draft.";
+        toast.error(message);
+      },
+    });
   };
 
   const handlePublish = async (status: "published" | "draft" | "unpublished") => {
@@ -174,20 +171,17 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
       },
     };
 
-    await updateArticleMutation.mutateAsync(
-      payload,
-      {
-        onSuccess: () => {
-          if (status === "published") toast.success("Article published successfully.");
-          else if (status === "unpublished") toast.success("Article unpublished.");
-          else toast.success("Article reverted to draft.");
-        },
-        onError: (err: unknown) => {
-          const message = err instanceof Error ? err.message : "Failed to publish article.";
-          toast.error(message);
-        },
-      }
-    );
+    await updateArticleMutation.mutateAsync(payload, {
+      onSuccess: () => {
+        if (status === "published") toast.success("Article published successfully.");
+        else if (status === "unpublished") toast.success("Article unpublished.");
+        else toast.success("Article reverted to draft.");
+      },
+      onError: (err: unknown) => {
+        const message = err instanceof Error ? err.message : "Failed to publish article.";
+        toast.error(message);
+      },
+    });
   };
 
   return {
