@@ -1,6 +1,6 @@
 import { DashboardSidebar, type NavItem } from "@/components/features/dashboard/shared/dashboard-sidebar";
 import { AdminHeader } from "@/components/features/dashboard/shared/admin-header";
-import { LayoutDashboard, ShoppingBag, Settings, User } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Settings } from "lucide-react";
 
 import { redirect } from "next/navigation";
 import { getCurrentSessionUser } from "@/data/auth";

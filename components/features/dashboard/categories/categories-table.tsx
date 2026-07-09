@@ -9,7 +9,7 @@ import { useCategoriesQuery, useToggleCategoryStatusMutation, useDeleteCategorie
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 
 export function CategoriesTable() {
-  const { setSelectedCategoryId, setIsCategoryDetailsOpen, setIsCategoryAddOpen } = useDashboardStore();
+  const { setSelectedCategoryId, setIsCategoryDetailsOpen } = useDashboardStore();
 
   const { data: categories = [], isLoading: isLoadingCategories } = useCategoriesQuery();
   const toggleStatusMutation = useToggleCategoryStatusMutation();

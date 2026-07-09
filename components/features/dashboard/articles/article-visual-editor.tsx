@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
-import { Plus, Trash2, Calendar, Clock, User, Tag, GripVertical, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Trash2, Calendar, Clock, User, GripVertical, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RichTextarea } from "@/components/ui/textarea";
 import type { Article, SeoMeta } from "@/schemas/dashboard";

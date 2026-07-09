@@ -82,10 +82,6 @@ export function ArticleTable() {
     },
   ];
 
-  const handleToggleStatus = (item: Article) => {
-    toggleStatusMutation.mutate(item.id);
-  };
-
   const handleDelete = (item: Article) => {
     setItemsToDelete([item]);
     setShowDeleteConfirm(true);

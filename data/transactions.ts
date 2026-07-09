@@ -1,6 +1,6 @@
 import { db } from "@/drizzle";
 import { transactions } from "@/drizzle/schema";
-import { eq, inArray, desc } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 export async function getTransactionsQuery() {
   const results = await db.select().from(transactions).orderBy(desc(transactions.createdAt));

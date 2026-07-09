@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { ArrowLeft, Loader2, Plus, Trash2, Settings } from "lucide-react";
 import { toast } from "sonner";
-import type { Service, ServiceAddOn } from "@/schemas/dashboard";
+import type { ServiceAddOn } from "@/schemas/dashboard";
 
 import { MediaPickerDialog } from "@/components/common/media-picker-dialog";
 

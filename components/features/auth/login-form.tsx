@@ -147,7 +147,7 @@ export function LoginForm() {
 
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => {
+          children={([isSubmitting]) => {
             const activeLoading = isLoading || isSubmitting;
             return (
               <Button

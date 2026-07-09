@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useWorkDetailQuery, useUpdateWorkMutation } from "@/hooks/use-works";
 import type { Project, SeoMeta } from "@/schemas/dashboard";
 import { toast } from "sonner";
 
 export function useWorkEditor(projectId: string, initialData?: Project) {
-  const router = useRouter();
   const { data: project, isLoading: isFetching } = useWorkDetailQuery(projectId);
   const updateWorkMutation = useUpdateWorkMutation(projectId);
 

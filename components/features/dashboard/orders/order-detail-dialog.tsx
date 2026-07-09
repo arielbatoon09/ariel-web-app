@@ -51,14 +51,18 @@ function OrderDetailDialogContent({ id, open, onOpenChange }: { id: string; open
     try {
       await updateTxStatusMutation.mutateAsync({ id: txId, status: "successful" });
       await updateStatusMutation.mutateAsync({ id: order.id, status: "in-progress" });
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const handleRejectPayment = async (txId: string) => {
     try {
       await updateTxStatusMutation.mutateAsync({ id: txId, status: "failed" });
       await updateStatusMutation.mutateAsync({ id: order.id, status: "pending" });
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

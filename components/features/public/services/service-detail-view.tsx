@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/common/section";
 import type { Service } from "@/schemas/dashboard";
-import { Clock, CheckCircle2, ArrowRight, ShieldCheck, Check, Sparkles, Layers, Award } from "lucide-react";
+import { Clock, CheckCircle2, ArrowRight, ShieldCheck, Check, Sparkles, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BannerShowcase } from "@/components/common/banner-showcase";
 import { BackButton } from "@/components/common/back-button";

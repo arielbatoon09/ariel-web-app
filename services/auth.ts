@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";

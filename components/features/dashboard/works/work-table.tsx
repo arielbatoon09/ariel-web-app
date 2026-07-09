@@ -88,10 +88,6 @@ export function WorkTable() {
     },
   ];
 
-  const handleToggleStatus = (item: Project) => {
-    toggleStatusMutation.mutate(item.id);
-  };
-
   const handleDelete = (item: Project) => {
     setItemsToDelete([item]);
     setShowDeleteConfirm(true);

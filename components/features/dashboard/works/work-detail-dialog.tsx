@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
@@ -15,9 +16,9 @@ export function WorkDetailDialog() {
   const { data: works = [] } = useWorksQuery();
   const toggleStatusMutation = useToggleWorkStatusMutation();
 
-  const [confirmStatus, setConfirmStatus] = React.useState(false);
+  const [confirmStatus, setConfirmStatus] = useState(false);
 
-  const currentWork = React.useMemo(() => {
+  const currentWork = useMemo(() => {
     if (!selectedWorkId) return null;
     return works.find((w) => w.id === selectedWorkId) || null;
   }, [works, selectedWorkId]);

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Monitor, Tablet, Smartphone } from "lucide-react";
 import { PreviewFrame } from "@/components/features/dashboard/shared/preview-frame";
@@ -14,7 +15,7 @@ interface ArticlePreviewModeProps {
 }
 
 export function ArticlePreviewMode({ formData }: ArticlePreviewModeProps) {
-  const [previewMode, setPreviewMode] = React.useState<"desktop" | "tablet" | "mobile">("desktop");
+  const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile">("desktop");
 
   return (
     <div className="space-y-4">

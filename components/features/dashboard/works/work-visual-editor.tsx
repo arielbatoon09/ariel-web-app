@@ -27,10 +27,7 @@ export function WorkVisualEditor({
   handleFieldChange,
   handleSeoFieldChange,
   handleCaseStudyFieldChange,
-  handleFeatureChange,
   handleResultChange,
-  addFeature,
-  removeFeature,
   addResult,
   removeResult,
 }: WorkVisualEditorProps) {
