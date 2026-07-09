@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { ImageIcon, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { MediaPickerDialog } from "@/components/common/media-picker-dialog";
 import { cn } from "@/lib/utils";
 
@@ -27,15 +26,8 @@ interface MediaPickerButtonProps {
  *     onChange={(url) => form.setValue("imageSrc", url)}
  *   />
  */
-export function MediaPickerButton({
-  value,
-  onChange,
-  onClear,
-  label = "Select from Media Library",
-  className,
-  disabled,
-}: MediaPickerButtonProps) {
-  const [open, setOpen] = React.useState(false);
+export function MediaPickerButton({ value, onChange, onClear, label = "Select from Media Library", className, disabled }: MediaPickerButtonProps) {
+  const [open, setOpen] = useState(false);
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -60,24 +52,16 @@ export function MediaPickerButton({
           // Show selected image preview
           <div className="relative">
             <div className="relative aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-              <Image
-                src={value}
-                alt="Selected media"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+              <Image src={value} alt="Selected media" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
               <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
-                <span className="font-mono text-[10px] uppercase text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  Change Image
-                </span>
+                <span className="font-mono text-[10px] text-white uppercase opacity-0 transition-opacity group-hover:opacity-100">Change Image</span>
               </div>
             </div>
             {/* Clear button */}
             {!disabled && (
               <button
                 onClick={handleClear}
-                className="absolute right-2 top-2 z-10 flex size-6 items-center justify-center bg-black/60 text-white backdrop-blur-sm transition-opacity hover:bg-black/80"
+                className="absolute top-2 right-2 z-10 flex size-6 items-center justify-center bg-black/60 text-white backdrop-blur-sm transition-opacity hover:bg-black/80"
                 title="Remove image"
               >
                 <X className="size-3" />
@@ -91,23 +75,14 @@ export function MediaPickerButton({
               <ImageIcon className="size-4 text-neutral-400" />
             </div>
             <div>
-              <p className="font-mono text-[10px] font-medium text-neutral-600 dark:text-neutral-400">
-                {label}
-              </p>
-              <p className="font-mono text-[9px] text-neutral-400 uppercase">
-                Click to open Media Library
-              </p>
+              <p className="font-mono text-[10px] font-medium text-neutral-600 dark:text-neutral-400">{label}</p>
+              <p className="font-mono text-[9px] text-neutral-400 uppercase">Click to open Media Library</p>
             </div>
           </div>
         )}
       </div>
 
-      <MediaPickerDialog
-        open={open}
-        onOpenChange={setOpen}
-        onSelect={onChange}
-        selectedUrl={value}
-      />
+      <MediaPickerDialog open={open} onOpenChange={setOpen} onSelect={onChange} selectedUrl={value} />
     </>
   );
 }

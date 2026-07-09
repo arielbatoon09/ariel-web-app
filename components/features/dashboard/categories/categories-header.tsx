@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { ManagementHeader } from "@/components/common/management-header";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 

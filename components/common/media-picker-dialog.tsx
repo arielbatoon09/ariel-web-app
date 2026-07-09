@@ -1,13 +1,12 @@
 "use client";
 
-import * as React from "react";
 import Image from "next/image";
+import { useMemo, useState } from "react";
 import { X, Search, Upload, Check, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useMediaQuery, useUploadMedia } from "@/hooks/use-media";
+import { useMediaQuery } from "@/hooks/use-media";
 import { MediaUploadZone } from "@/components/features/dashboard/media/media-upload-zone";
-import { formatFileSize } from "@/lib/media-config";
 import { cn } from "@/lib/utils";
 import type { MediaAsset } from "@/data/media";
 
@@ -18,20 +17,12 @@ interface MediaPickerDialogProps {
   selectedUrl?: string;
 }
 
-function MediaPickerGrid({
-  assets,
-  selectedUrl,
-  onSelect,
-}: {
-  assets: MediaAsset[];
-  selectedUrl?: string;
-  onSelect: (url: string) => void;
-}) {
+function MediaPickerGrid({ assets, selectedUrl, onSelect }: { assets: MediaAsset[]; selectedUrl?: string; onSelect: (url: string) => void }) {
   if (assets.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-16">
         <ImageIcon className="size-10 text-neutral-300 dark:text-neutral-600" />
-        <p className="font-mono text-[10px] uppercase text-neutral-400">No media found</p>
+        <p className="font-mono text-[10px] text-neutral-400 uppercase">No media found</p>
       </div>
     );
   }
@@ -56,13 +47,7 @@ function MediaPickerGrid({
           >
             <div className="relative aspect-square w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800">
               {isImage && !isSvg ? (
-                <Image
-                  src={asset.url}
-                  alt={asset.altText || asset.filename}
-                  fill
-                  className="object-cover"
-                  sizes="120px"
-                />
+                <Image src={asset.url} alt={asset.altText || asset.filename} fill className="object-cover" sizes="120px" />
               ) : isSvg ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={asset.url} alt={asset.altText || asset.filename} className="h-full w-full object-contain p-3" />
@@ -92,10 +77,10 @@ function MediaPickerGrid({
 
 export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }: MediaPickerDialogProps) {
   const { data: assets = [], isLoading } = useMediaQuery();
-  const [tab, setTab] = React.useState<"browse" | "upload">("browse");
-  const [search, setSearch] = React.useState("");
+  const [tab, setTab] = useState<"browse" | "upload">("browse");
+  const [search, setSearch] = useState("");
 
-  const filteredAssets = React.useMemo(() => {
+  const filteredAssets = useMemo(() => {
     if (!search.trim()) return assets;
     return assets.filter((a) => a.filename.toLowerCase().includes(search.toLowerCase()));
   }, [assets, search]);
@@ -110,19 +95,14 @@ export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }:
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={() => onOpenChange(false)}
-      />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => onOpenChange(false)} />
 
       {/* Dialog */}
       <div className="relative z-10 flex max-h-[85vh] w-full max-w-3xl flex-col border border-neutral-300 bg-background shadow-2xl dark:border-neutral-700">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-dashed border-neutral-300 px-4 py-3 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-foreground">
-              Media Library
-            </h2>
+            <h2 className="font-mono text-sm font-bold tracking-wider text-foreground uppercase">Media Library</h2>
             <div className="flex gap-1">
               <button
                 onClick={() => setTab("browse")}
@@ -160,7 +140,7 @@ export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }:
             <div className="space-y-3">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-2.5 top-1/2 size-3 -translate-y-1/2 text-neutral-400" />
+                <Search className="absolute top-1/2 left-2.5 size-3 -translate-y-1/2 text-neutral-400" />
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -176,11 +156,7 @@ export function MediaPickerDialog({ open, onOpenChange, onSelect, selectedUrl }:
                   ))}
                 </div>
               ) : (
-                <MediaPickerGrid
-                  assets={filteredAssets}
-                  selectedUrl={selectedUrl}
-                  onSelect={handleSelect}
-                />
+                <MediaPickerGrid assets={filteredAssets} selectedUrl={selectedUrl} onSelect={handleSelect} />
               )}
             </div>
           ) : (

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { isValidElement } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
@@ -39,7 +39,7 @@ export function ConnectDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          React.isValidElement(children) ? (
+          isValidElement(children) ? (
             children
           ) : children ? (
             <span>{children}</span>

@@ -14,9 +14,7 @@ export const users = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index("users_auth_id_idx").on(table.authId),
-  ]
+  (table) => [index("users_auth_id_idx").on(table.authId)]
 );
 
 export const userRoles = pgTable(
@@ -30,10 +28,7 @@ export const userRoles = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index("user_roles_user_id_idx").on(table.userId),
-    index("user_roles_role_idx").on(table.role),
-  ]
+  (table) => [index("user_roles_user_id_idx").on(table.userId), index("user_roles_role_idx").on(table.role)]
 );
 
 export const categories = pgTable(
@@ -67,17 +62,19 @@ export const works = pgTable(
     tags: jsonb("tags").$type<string[]>().default([]).notNull(),
     link: text("link").notNull(),
     categories: jsonb("categories").$type<string[]>().default([]).notNull(),
-    caseStudy: jsonb("case_study").$type<{
-      role: string;
-      timeline: string;
-      challenge: string;
-      solution: string;
-      features: Array<{ title: string; description: string }>;
-      results: string[];
-      client?: string;
-      liveUrl?: string;
-      githubUrl?: string;
-    }>().notNull(),
+    caseStudy: jsonb("case_study")
+      .$type<{
+        role: string;
+        timeline: string;
+        challenge: string;
+        solution: string;
+        features: Array<{ title: string; description: string }>;
+        results: string[];
+        client?: string;
+        liveUrl?: string;
+        githubUrl?: string;
+      }>()
+      .notNull(),
     seo: jsonb("seo").$type<{
       title?: string;
       description?: string;
@@ -122,10 +119,7 @@ export const works = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index("works_slug_idx").on(table.slug),
-    index("works_title_idx").on(table.title),
-  ]
+  (table) => [index("works_slug_idx").on(table.slug), index("works_title_idx").on(table.title)]
 );
 
 export const mediaAssets = pgTable(
@@ -200,10 +194,7 @@ export const articles = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index("articles_slug_idx").on(table.slug),
-    index("articles_title_idx").on(table.title),
-  ]
+  (table) => [index("articles_slug_idx").on(table.slug), index("articles_title_idx").on(table.title)]
 );
 
 export const services = pgTable(
@@ -222,10 +213,7 @@ export const services = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index("services_name_idx").on(table.name),
-    index("services_slug_idx").on(table.slug),
-  ]
+  (table) => [index("services_name_idx").on(table.name), index("services_slug_idx").on(table.slug)]
 );
 
 export const orders = pgTable(
@@ -233,7 +221,9 @@ export const orders = pgTable(
   {
     id: serial("id").primaryKey(),
     userId: integer("user_id").references(() => users.id, { onDelete: "set null" }),
-    serviceId: integer("service_id").references(() => services.id, { onDelete: "restrict" }).notNull(),
+    serviceId: integer("service_id")
+      .references(() => services.id, { onDelete: "restrict" })
+      .notNull(),
     customerName: text("customer_name").notNull(),
     customerEmail: text("customer_email").notNull(),
     status: text("status").default("pending").notNull(), // pending, in-progress, completed, cancelled
@@ -245,17 +235,16 @@ export const orders = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index("orders_user_id_idx").on(table.userId),
-    index("orders_service_id_idx").on(table.serviceId),
-  ]
+  (table) => [index("orders_user_id_idx").on(table.userId), index("orders_service_id_idx").on(table.serviceId)]
 );
 
 export const transactions = pgTable(
   "transactions",
   {
     id: serial("id").primaryKey(),
-    orderId: integer("order_id").references(() => orders.id, { onDelete: "cascade" }).notNull(),
+    orderId: integer("order_id")
+      .references(() => orders.id, { onDelete: "cascade" })
+      .notNull(),
     amount: integer("amount").notNull(),
     status: text("status").default("pending").notNull(), // pending, successful, failed
     paymentMethod: text("payment_method").notNull(), // GCash, Maya, BPI, Wise
@@ -264,8 +253,5 @@ export const transactions = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index("transactions_order_id_idx").on(table.orderId),
-    index("transactions_reference_number_idx").on(table.referenceNumber),
-  ]
+  (table) => [index("transactions_order_id_idx").on(table.orderId), index("transactions_reference_number_idx").on(table.referenceNumber)]
 );

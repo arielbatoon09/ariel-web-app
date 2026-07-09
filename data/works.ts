@@ -17,10 +17,7 @@ export async function getWorkBySlugQuery(slug: string) {
 }
 
 export async function insertWorkQuery(data: typeof works.$inferInsert) {
-  const [inserted] = await db
-    .insert(works)
-    .values(data)
-    .returning();
+  const [inserted] = await db.insert(works).values(data).returning();
   return inserted;
 }
 
@@ -37,8 +34,5 @@ export async function updateWorkQuery(id: number, data: Partial<typeof works.$in
 }
 
 export async function deleteWorksQuery(ids: number[]) {
-  return await db
-    .delete(works)
-    .where(inArray(works.id, ids))
-    .returning();
+  return await db.delete(works).where(inArray(works.id, ids)).returning();
 }

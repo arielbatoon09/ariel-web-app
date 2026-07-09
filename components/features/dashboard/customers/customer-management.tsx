@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/features/dashboard/data-table";
 import { ManagementHeader } from "@/components/common/management-header";
@@ -11,20 +11,16 @@ import type { Customer } from "@/schemas/dashboard";
 import { AddCustomerDialog } from "@/components/features/dashboard/customers/add-customer-dialog";
 import { CustomerProfileView } from "@/components/features/dashboard/customers/customer-profile-view";
 import { toast } from "sonner";
-import {
-  getCustomersAction,
-  updateCustomerRoleAction,
-  toggleCustomerBlockStatusAction,
-} from "@/services/customers";
+import { getCustomersAction, updateCustomerRoleAction, toggleCustomerBlockStatusAction } from "@/services/customers";
 
 export function CustomerManagement() {
   const { customers, updateCustomerRole, toggleCustomerBlockStatus, addCustomer, setCustomers } = useDashboardStore();
-  const [selectedCustomer, setSelectedCustomer] = React.useState<Customer | null>(null);
-  const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
-  const [isAddOpen, setIsAddOpen] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function loadCustomers() {
       try {
         setIsLoading(true);
@@ -44,7 +40,7 @@ export function CustomerManagement() {
   }, [setCustomers]);
 
   // Sync selectedCustomer state with store changes when they happen
-  const currentCustomer = React.useMemo(() => {
+  const currentCustomer = useMemo(() => {
     if (!selectedCustomer) return null;
     return customers.find((c) => c.id === selectedCustomer.id) || null;
   }, [customers, selectedCustomer]);

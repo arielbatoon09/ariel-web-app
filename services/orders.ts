@@ -3,14 +3,9 @@
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
-import {
-  getOrdersQuery,
-  getOrderByIdQuery,
-  insertOrderQuery,
-  updateOrderStatusQuery,
-  deleteOrdersQuery,
-} from "@/data/orders";
-import type { Order } from "@/schemas/dashboard";
+import { getOrdersQuery, getOrderByIdQuery, insertOrderQuery, updateOrderStatusQuery, deleteOrdersQuery } from "@/data/orders";
+import { resend } from "@/lib/email";
+import { orderConfirmationHtml, orderConfirmationText } from "@/lib/emails/order-confirmation";
 
 async function checkAdminAccess() {
   const currentUser = await getCurrentSessionUser();
@@ -86,9 +81,12 @@ export async function getOrderByIdAction(id: string) {
 // 3. Create order (Public - guest or logged-in user checkout)
 export async function createOrderAction(data: {
   serviceId: string;
+  serviceName: string;
+  serviceBasePrice: number;
   customerName: string;
   customerEmail: string;
   addOnsSelected: string[];
+  addOns: Array<{ name: string; price: number }>;
   totalAmount: number;
   referenceNumber?: string;
   customerPhone?: string;
@@ -116,6 +114,31 @@ export async function createOrderAction(data: {
       customerPhone: data.customerPhone,
       requirements: data.requirements,
     });
+
+    // Send confirmation email (non-blocking — failure won't break checkout)
+    try {
+      const emailPayload = {
+        customerName: data.customerName,
+        customerEmail: data.customerEmail,
+        serviceName: data.serviceName,
+        serviceBasePrice: data.serviceBasePrice,
+        referenceNumber: newOrder.referenceNumber ?? "",
+        totalAmount: data.totalAmount,
+        addOns: data.addOns,
+        requirements: data.requirements,
+        isNewClient: !userId, // treat logged-out users as new clients
+      };
+
+      await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev",
+        to: [data.customerEmail],
+        subject: `Order Received — ${newOrder.referenceNumber ?? "Your Order"}`,
+        html: orderConfirmationHtml(emailPayload),
+        text: orderConfirmationText(emailPayload),
+      });
+    } catch (emailErr) {
+      console.warn("[Email] Failed to send order confirmation:", emailErr);
+    }
 
     return {
       success: true,

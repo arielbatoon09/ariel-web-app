@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Target, CheckCircle2, Cpu, FileText, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Trash2, Target, CheckCircle2, Cpu, ChevronDown, ChevronUp } from "lucide-react";
 import type { Project, SeoMeta } from "@/schemas/dashboard";
 import { MediaPickerDialog } from "@/components/common/media-picker-dialog";
 import { useCustomersQuery } from "@/hooks/use-customers";
@@ -34,22 +34,22 @@ export function WorkVisualEditor({
   addResult,
   removeResult,
 }: WorkVisualEditorProps) {
-  const [isBannerPickerOpen, setIsBannerPickerOpen] = React.useState(false);
-  const [isGalleryPickerOpen, setIsGalleryPickerOpen] = React.useState(false);
-  const [seoOpen, setSeoOpen] = React.useState(false);
+  const [isBannerPickerOpen, setIsBannerPickerOpen] = useState(false);
+  const [isGalleryPickerOpen, setIsGalleryPickerOpen] = useState(false);
+  const [seoOpen, setSeoOpen] = useState(false);
 
   const { data: customers = [] } = useCustomersQuery();
   const { data: categoriesData = [] } = useCategoriesQuery();
 
-  const [tagsInput, setTagsInput] = React.useState("");
+  const [tagsInput, setTagsInput] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (formData.tags && document.activeElement?.id !== "tags-input") {
       setTagsInput((formData.tags || []).join(", "));
     }
   }, [formData.tags]);
 
-  const activeWorksCategories = React.useMemo(() => {
+  const activeWorksCategories = useMemo(() => {
     return categoriesData.length > 0
       ? categoriesData.filter((c) => (c.target === "works" || c.target === "both") && !c.disabled)
       : [
@@ -62,15 +62,13 @@ export function WorkVisualEditor({
 
   const toggleCategory = (slug: string) => {
     const current = (formData.categories || []) as string[];
-    const next = current.includes(slug)
-      ? current.filter((c) => c !== slug)
-      : [...current, slug];
+    const next = current.includes(slug) ? current.filter((c) => c !== slug) : [...current, slug];
     handleFieldChange("categories", next);
   };
 
   return (
     <>
-      <div className="space-y-16 border border-dashed border-neutral-300 bg-background p-6 dark:border-neutral-700 font-mono text-xs">
+      <div className="space-y-16 border border-dashed border-neutral-300 bg-background p-6 font-mono text-xs dark:border-neutral-700">
         <div className="pointer-events-none w-full border border-dashed border-amber-300 bg-amber-500/10 py-2 text-center font-mono text-[10px] tracking-widest text-amber-600 uppercase select-none dark:text-amber-500">
           Visual Editor Mode Active — Click text components to edit directly.
         </div>
@@ -97,12 +95,12 @@ export function WorkVisualEditor({
               placeholder="Project Description Summary..."
               rows={5}
             />
-            
+
             {/* Banner Image Showcase Editor */}
             <div className="space-y-1.5 pt-2">
               <span className="block font-mono text-[9px] text-neutral-400 uppercase">Project Banner Image:</span>
               {formData.imageSrc ? (
-                <div className="group relative aspect-[16/6] w-full overflow-hidden border border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 transition-all duration-300">
+                <div className="group relative aspect-[16/6] w-full overflow-hidden border border-neutral-300 bg-neutral-100 transition-all duration-300 dark:border-neutral-700 dark:bg-neutral-900">
                   <Image
                     src={formData.imageSrc}
                     alt="Project Banner Preview"
@@ -139,7 +137,7 @@ export function WorkVisualEditor({
                   onClick={() => setIsBannerPickerOpen(true)}
                   className="hover:border-neutral-450 flex aspect-[16/6] w-full flex-col items-center justify-center gap-1 border-2 border-dashed border-neutral-300 bg-neutral-50/50 font-mono text-xs text-neutral-400 uppercase transition-colors dark:border-neutral-700 dark:bg-neutral-900/10 dark:hover:bg-neutral-800"
                 >
-                  <Plus className="size-5 mb-1" />
+                  <Plus className="mb-1 size-5" />
                   <span>Select Project Banner Image</span>
                   <span className="text-[9px] text-neutral-400 normal-case">(Click to select from Media Library)</span>
                 </button>
@@ -208,7 +206,10 @@ export function WorkVisualEditor({
                   value={tagsInput}
                   onChange={(e) => {
                     setTagsInput(e.target.value);
-                    const val = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+                    const val = e.target.value
+                      .split(",")
+                      .map((s) => s.trim())
+                      .filter(Boolean);
                     handleFieldChange("tags", val);
                   }}
                   className="focus:ring-dashed focus:ring-neutral-450 w-48 rounded border-none bg-transparent p-0.5 text-right font-bold text-foreground outline-none focus:ring-1"
@@ -235,7 +236,7 @@ export function WorkVisualEditor({
               </div>
               <div className="flex flex-col gap-2 py-1">
                 <span className="text-neutral-400">Categories:</span>
-                <div className="flex flex-wrap gap-1.5 justify-end">
+                <div className="flex flex-wrap justify-end gap-1.5">
                   {activeWorksCategories.map((cat) => {
                     const selected = ((formData.categories || []) as string[]).includes(cat.slug);
                     return (
@@ -243,10 +244,10 @@ export function WorkVisualEditor({
                         key={cat.slug}
                         type="button"
                         onClick={() => toggleCategory(cat.slug)}
-                        className={`px-2 py-0.5 font-mono text-[9px] uppercase border transition-all duration-150 ${
+                        className={`border px-2 py-0.5 font-mono text-[9px] uppercase transition-all duration-150 ${
                           selected
-                            ? "bg-neutral-900 text-white border-neutral-900 dark:bg-neutral-100 dark:text-neutral-900 dark:border-neutral-100"
-                            : "bg-transparent text-neutral-400 border-dashed border-neutral-300 hover:border-neutral-600 dark:border-neutral-700"
+                            ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+                            : "border-dashed border-neutral-300 bg-transparent text-neutral-400 hover:border-neutral-600 dark:border-neutral-700"
                         }`}
                       >
                         {cat.name}
@@ -292,19 +293,19 @@ export function WorkVisualEditor({
                     className="group relative aspect-[16/10] overflow-hidden border border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900"
                   >
                     <Image
-                       src={src}
-                       alt={`Thumb ${idx}`}
-                       fill
-                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 150px"
-                       className="object-cover"
-                     />
+                      src={src}
+                      alt={`Thumb ${idx}`}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 150px"
+                      className="object-cover"
+                    />
                     {/* Delete Overlay */}
                     <button
                       onClick={() => {
                         const updated = (formData.gallery || []).filter((_, i) => i !== idx);
                         handleFieldChange("gallery", updated);
                       }}
-                      className="bg-red-600/80 absolute inset-0 flex items-center justify-center font-mono text-[8px] font-bold tracking-wider text-white uppercase opacity-0 transition-opacity group-hover:opacity-100"
+                      className="absolute inset-0 flex items-center justify-center bg-red-600/80 font-mono text-[8px] font-bold tracking-wider text-white uppercase opacity-0 transition-opacity group-hover:opacity-100"
                     >
                       Remove
                     </button>
@@ -373,12 +374,7 @@ export function WorkVisualEditor({
               <Cpu className="size-4.5 text-neutral-400" />
               <h2 className="font-sans text-lg font-bold tracking-tight">Key Architecture & Features</h2>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={addResult}
-              className="h-7 rounded-none border-dashed px-2.5 font-mono text-[9px] uppercase"
-            >
+            <Button variant="outline" size="sm" onClick={addResult} className="h-7 rounded-none border-dashed px-2.5 font-mono text-[9px] uppercase">
               <Plus className="mr-1 size-3" /> Add Outcome
             </Button>
           </div>
@@ -407,11 +403,7 @@ export function WorkVisualEditor({
 
       {/* Section 4: SEO Metadata Settings */}
       <div className="border-t border-solid border-neutral-300 pt-8 dark:border-neutral-800">
-        <button
-          type="button"
-          onClick={() => setSeoOpen((v) => !v)}
-          className="flex w-full items-center justify-between text-left cursor-pointer"
-        >
+        <button type="button" onClick={() => setSeoOpen((v) => !v)} className="flex w-full cursor-pointer items-center justify-between text-left">
           <div>
             <h3 className="font-sans text-lg font-bold tracking-tight text-foreground">SEO Metadata Settings</h3>
             <p className="text-neutral-505 font-mono text-xs dark:text-neutral-400">

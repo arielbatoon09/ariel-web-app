@@ -89,7 +89,6 @@ export const ArticleSchema = z.object({
   status: z.enum(["draft", "published", "unpublished"]).default("draft"),
 });
 
-
 export const ServiceAddOnSchema = z.object({
   id: z.string().min(1, "ID is required"),
   name: z.string().min(1, "Name is required"),

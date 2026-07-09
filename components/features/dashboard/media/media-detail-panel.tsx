@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Copy, Check, Trash2, Save, FileImage } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,20 +18,22 @@ interface MediaDetailPanelProps {
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4 border-b border-dashed border-neutral-200 py-1.5 last:border-0 dark:border-neutral-800">
-      <span className="shrink-0 font-mono text-[10px] uppercase text-neutral-400">{label}</span>
-      <span className="truncate text-right font-mono text-[10px] text-foreground" title={value}>{value}</span>
+      <span className="shrink-0 font-mono text-[10px] text-neutral-400 uppercase">{label}</span>
+      <span className="truncate text-right font-mono text-[10px] text-foreground" title={value}>
+        {value}
+      </span>
     </div>
   );
 }
 
 export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
-  const [altText, setAltText] = React.useState("");
-  const [copied, setCopied] = React.useState(false);
-  const [confirmDelete, setConfirmDelete] = React.useState(false);
+  const [altText, setAltText] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const updateAltMutation = useUpdateMediaAltMutation();
   const deleteMutation = useDeleteMediaMutation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (asset) {
       setAltText(asset.altText || "");
       setConfirmDelete(false);
@@ -65,7 +67,9 @@ export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
   };
 
   const uploadDate = new Date(asset.createdAt).toLocaleDateString("en-US", {
-    year: "numeric", month: "short", day: "numeric",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 
   return (
@@ -74,13 +78,7 @@ export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
       <div className="border-b border-dashed border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
         <div className="relative aspect-video w-full overflow-hidden">
           {isImage && !isSvg ? (
-            <Image
-              src={asset.url}
-              alt={asset.altText || asset.filename}
-              fill
-              className="object-contain"
-              sizes="600px"
-            />
+            <Image src={asset.url} alt={asset.altText || asset.filename} fill className="object-contain" sizes="600px" />
           ) : isSvg ? (
             <div className="flex h-full items-center justify-center p-8">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -107,19 +105,10 @@ export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
 
         {/* CDN URL */}
         <div className="space-y-1.5">
-          <label className="font-mono text-[10px] uppercase text-neutral-500">CDN URL</label>
+          <label className="font-mono text-[10px] text-neutral-500 uppercase">CDN URL</label>
           <div className="flex gap-1.5">
-            <Input
-              value={asset.url}
-              readOnly
-              className="h-7 flex-1 rounded-none border-dashed font-mono text-[9px] text-neutral-500"
-            />
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={handleCopy}
-              className="h-7 w-7 shrink-0 rounded-none border-dashed p-0"
-            >
+            <Input value={asset.url} readOnly className="h-7 flex-1 rounded-none border-dashed font-mono text-[9px] text-neutral-500" />
+            <Button size="sm" variant="outline" onClick={handleCopy} className="h-7 w-7 shrink-0 rounded-none border-dashed p-0">
               {copied ? <Check className="size-3 text-green-600" /> : <Copy className="size-3" />}
             </Button>
           </div>
@@ -127,7 +116,7 @@ export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
 
         {/* Alt Text */}
         <div className="space-y-1.5">
-          <label className="font-mono text-[10px] uppercase text-neutral-500">Alt Text</label>
+          <label className="font-mono text-[10px] text-neutral-500 uppercase">Alt Text</label>
           <div className="flex gap-1.5">
             <Input
               value={altText}
@@ -155,7 +144,8 @@ export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
             disabled={deleteMutation.isPending}
             className={cn(
               "w-full rounded-none font-mono text-[10px] uppercase",
-              !confirmDelete && "border-dashed border-red-300 text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20"
+              !confirmDelete &&
+                "border-dashed border-red-300 text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20"
             )}
           >
             <Trash2 className="mr-1.5 size-3" />
@@ -164,7 +154,7 @@ export function MediaDetailPanel({ asset, onClose }: MediaDetailPanelProps) {
           {confirmDelete && (
             <button
               onClick={() => setConfirmDelete(false)}
-              className="mt-2 w-full font-mono text-[9px] uppercase text-neutral-400 hover:text-foreground"
+              className="mt-2 w-full font-mono text-[9px] text-neutral-400 uppercase hover:text-foreground"
             >
               Cancel
             </button>

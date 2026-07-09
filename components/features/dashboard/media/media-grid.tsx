@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Check, Copy, ImageIcon, FileImage } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ function MediaCard({
   index: number;
 }) {
   const isAboveFold = index < 6;
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
   const isImage = asset.mimeType.startsWith("image/");
   const isSvg = asset.mimeType === "image/svg+xml";
 
@@ -54,12 +54,15 @@ function MediaCard({
       {/* Checkbox */}
       <button
         className={cn(
-          "absolute left-2 top-2 z-10 flex size-4 items-center justify-center border transition-all duration-150",
+          "absolute top-2 left-2 z-10 flex size-4 items-center justify-center border transition-all duration-150",
           isSelected
             ? "border-neutral-800 bg-neutral-900 dark:border-neutral-200 dark:bg-neutral-100"
             : "border-neutral-300 bg-background/80 opacity-0 backdrop-blur-sm group-hover:opacity-100 dark:border-neutral-600 dark:bg-background/60"
         )}
-        onClick={(e) => { e.stopPropagation(); onToggleSelect(); }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleSelect();
+        }}
         aria-label="Select asset"
       >
         {isSelected && <Check className="size-2.5 text-white dark:text-neutral-900" />}

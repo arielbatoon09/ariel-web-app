@@ -15,14 +15,7 @@ export function BannerShowcase({ src, alt, className, ...props }: BannerShowcase
       )}
       {...props}
     >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover object-center"
-        sizes="100vw"
-        priority
-      />
+      <Image src={src} alt={alt} fill className="object-cover object-center" sizes="100vw" priority />
       {/* Soft scanline/grid overlay for premium look */}
       <div className="bg-grid-white/[0.02] pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -28,7 +28,7 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
   const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useAuthStore();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
     await signOut();

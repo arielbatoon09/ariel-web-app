@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 
 import { PortalContainerContext } from "@/components/context/portal-context";
@@ -10,11 +10,11 @@ interface PreviewFrameProps extends React.IframeHTMLAttributes<HTMLIFrameElement
 }
 
 export function PreviewFrame({ children, className, ...props }: PreviewFrameProps) {
-  const iframeRef = React.useRef<HTMLIFrameElement | null>(null);
-  const [mountNode, setMountNode] = React.useState<HTMLElement | null>(null);
-  const [isReady, setIsReady] = React.useState(false);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
-  const setIframeRef = React.useCallback((node: HTMLIFrameElement | null) => {
+  const setIframeRef = useCallback((node: HTMLIFrameElement | null) => {
     iframeRef.current = node;
     if (!node || !node.contentWindow) {
       setIsReady(false);
@@ -128,12 +128,13 @@ export function PreviewFrame({ children, className, ...props }: PreviewFrameProp
       className={`${className || ""} transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0"}`}
       style={{ border: "none", ...props.style }}
     >
-      {mountNode && createPortal(
-        <PortalContainerContext.Provider value={mountNode}>
-          <div className="min-h-screen bg-background text-foreground">{children}</div>
-        </PortalContainerContext.Provider>,
-        mountNode
-      )}
+      {mountNode &&
+        createPortal(
+          <PortalContainerContext.Provider value={mountNode}>
+            <div className="min-h-screen bg-background text-foreground">{children}</div>
+          </PortalContainerContext.Provider>,
+          mountNode
+        )}
     </iframe>
   );
 }

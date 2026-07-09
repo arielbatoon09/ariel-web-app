@@ -2,11 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import {
-  getTransactionsAction,
-  createTransactionAction,
-  updateTransactionStatusAction,
-} from "@/services/transactions";
+import { getTransactionsAction, createTransactionAction, updateTransactionStatusAction } from "@/services/transactions";
 import type { Transaction } from "@/schemas/dashboard";
 
 export const TRANSACTIONS_QUERY_KEY = ["transactions"];
@@ -28,13 +24,7 @@ export function useCreateTransactionMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: {
-      orderId: string;
-      amount: number;
-      paymentMethod: string;
-      referenceNumber: string;
-      screenshotUrl: string;
-    }) => {
+    mutationFn: async (data: { orderId: string; amount: number; paymentMethod: string; referenceNumber: string; screenshotUrl: string }) => {
       const res = await createTransactionAction(data);
       if (!res.success || !res.transaction) {
         throw new Error(res.error || "Failed to submit transaction receipt.");

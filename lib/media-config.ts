@@ -4,13 +4,7 @@
  * the client upload zone and server-side media actions.
  */
 
-export const MEDIA_ACCEPTED_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "image/svg+xml",
-] as const;
+export const MEDIA_ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"] as const;
 
 export type MediaMimeType = (typeof MEDIA_ACCEPTED_TYPES)[number];
 

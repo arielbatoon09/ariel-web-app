@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useArticlesQuery, useToggleArticleStatusMutation, useDeleteArticlesMutation } from "@/hooks/use-articles";
 import { DataTable } from "@/components/common/data-table";
@@ -16,8 +16,8 @@ export function ArticleTable() {
   const toggleStatusMutation = useToggleArticleStatusMutation();
   const deleteArticlesMutation = useDeleteArticlesMutation();
 
-  const [itemsToDelete, setItemsToDelete] = React.useState<Article[]>([]);
-  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+  const [itemsToDelete, setItemsToDelete] = useState<Article[]>([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const columns = [
     {
@@ -27,7 +27,7 @@ export function ArticleTable() {
           <div className="flex items-center gap-2">
             <span className="font-sans font-bold text-foreground">{item.title}</span>
             {item.status === "draft" && (
-              <span className="rounded border border-amber-200 bg-amber-50/20 px-1.5 py-0.5 font-mono text-[8px] text-amber-500 uppercase dark:border-amber-900/30 animate-pulse">
+              <span className="animate-pulse rounded border border-amber-200 bg-amber-50/20 px-1.5 py-0.5 font-mono text-[8px] text-amber-500 uppercase dark:border-amber-900/30">
                 Draft
               </span>
             )}
@@ -42,7 +42,7 @@ export function ArticleTable() {
               </span>
             )}
             {item.draft && (
-              <span className="rounded border border-purple-200 bg-purple-50/20 px-1.5 py-0.5 font-mono text-[8px] text-purple-500 uppercase dark:border-purple-900/30 animate-pulse">
+              <span className="animate-pulse rounded border border-purple-200 bg-purple-50/20 px-1.5 py-0.5 font-mono text-[8px] text-purple-500 uppercase dark:border-purple-900/30">
                 Staged Changes
               </span>
             )}

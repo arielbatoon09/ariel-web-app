@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useOrdersQuery, useUpdateOrderStatusMutation, useDeleteOrdersMutation } from "@/hooks/use-orders";
 import { useServicesQuery } from "@/hooks/use-services";
 import { DataTable } from "@/components/common/data-table";
@@ -14,12 +14,12 @@ export function OrderTable() {
 
   const { data: orders = [], isLoading } = useOrdersQuery();
   const { data: services = [] } = useServicesQuery();
-  
+
   const updateStatusMutation = useUpdateOrderStatusMutation();
   const deleteOrdersMutation = useDeleteOrdersMutation();
 
-  const [itemsToDelete, setItemsToDelete] = React.useState<Order[]>([]);
-  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+  const [itemsToDelete, setItemsToDelete] = useState<Order[]>([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const getServiceName = (serviceId: string) => {
     return services.find((s) => s.id === serviceId)?.name || "Unknown Package";
@@ -41,9 +41,7 @@ export function OrderTable() {
     {
       header: "Reference #",
       accessorKey: (item: Order) => (
-        <span className="font-mono text-xs font-bold text-neutral-600 dark:text-neutral-400">
-          {item.referenceNumber || "-"}
-        </span>
+        <span className="font-mono text-xs font-bold text-neutral-600 dark:text-neutral-400">{item.referenceNumber || "-"}</span>
       ),
     },
     {

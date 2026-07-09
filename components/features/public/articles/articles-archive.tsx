@@ -96,18 +96,21 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
             <ArchivePagination currentPage={currentPage} totalPages={totalPages} totalItems={filteredItems.length} onPageChange={setCurrentPage} />
           </div>
         ) : (
-          <Empty className="border border-dashed border-neutral-300 dark:border-neutral-700 py-20 rounded-none bg-neutral-50/20 dark:bg-neutral-900/10">
+          <Empty className="rounded-none border border-dashed border-neutral-300 bg-neutral-50/20 py-20 dark:border-neutral-700 dark:bg-neutral-900/10">
             <EmptyHeader>
-              <EmptyMedia variant="icon" className="border border-dashed border-neutral-300 dark:border-neutral-700 bg-background text-neutral-400 size-10 rounded-none mb-1">
+              <EmptyMedia
+                variant="icon"
+                className="mb-1 size-10 rounded-none border border-dashed border-neutral-300 bg-background text-neutral-400 dark:border-neutral-700"
+              >
                 <BookOpen className="size-6" />
               </EmptyMedia>
-              <EmptyTitle className="font-mono text-xs text-neutral-400 uppercase tracking-widest">No articles matched your criteria</EmptyTitle>
-              <EmptyDescription className="font-sans text-xs text-neutral-500 max-w-xs leading-relaxed">
+              <EmptyTitle className="font-mono text-xs tracking-widest text-neutral-400 uppercase">No articles matched your criteria</EmptyTitle>
+              <EmptyDescription className="max-w-xs font-sans text-xs leading-relaxed text-neutral-500">
                 Try selecting a different category or adjusting your search query to discover relevant engineering publications.
               </EmptyDescription>
             </EmptyHeader>
             <ConnectDialog triggerText="Let's Talk">
-              <Button className="mt-2 h-9 rounded-none font-mono text-[10px] uppercase gap-1.5">
+              <Button className="mt-2 h-9 gap-1.5 rounded-none font-mono text-[10px] uppercase">
                 Suggest a Topic / Ask
                 <ArrowUpRight className="size-3.5" />
               </Button>

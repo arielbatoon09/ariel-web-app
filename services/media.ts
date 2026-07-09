@@ -6,20 +6,8 @@ import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
-import {
-  getAllMediaQuery,
-  insertMediaQuery,
-  deleteMediaByIdsQuery,
-  getMediaByIdQuery,
-  updateMediaAltQuery,
-  type MediaAsset,
-} from "@/data/media";
-import {
-  MEDIA_ACCEPTED_TYPES,
-  MEDIA_MAX_SIZE_BYTES,
-  MEDIA_MAX_SIZE_LABEL,
-  type MediaMimeType,
-} from "@/lib/media-config";
+import { getAllMediaQuery, insertMediaQuery, deleteMediaByIdsQuery, getMediaByIdQuery, updateMediaAltQuery, type MediaAsset } from "@/data/media";
+import { MEDIA_ACCEPTED_TYPES, MEDIA_MAX_SIZE_BYTES, MEDIA_MAX_SIZE_LABEL, type MediaMimeType } from "@/lib/media-config";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -83,9 +71,7 @@ export async function getMediaPresignedUrlAction(filename: string, contentType: 
     const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 300 });
 
     const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
-    const cdnUrl = r2PublicUrl
-      ? `${r2PublicUrl}/${bucketName}/${key}`
-      : `https://pub-placeholder.r2.dev/${key}`;
+    const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-placeholder.r2.dev/${key}`;
 
     return { success: true, presignedUrl, key, url: cdnUrl, folder };
   } catch (err: any) {
@@ -117,9 +103,7 @@ export async function getReceiptPresignedUrlAction(filename: string, contentType
     const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 600 });
 
     const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
-    const cdnUrl = r2PublicUrl
-      ? `${r2PublicUrl}/${bucketName}/${key}`
-      : `https://pub-placeholder.r2.dev/${key}`;
+    const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-placeholder.r2.dev/${key}`;
 
     return {
       success: true,
@@ -176,9 +160,7 @@ export async function deleteMediaAction(ids: number[]) {
             const urlParts = asset.url.split(`/${bucketName}/`);
             const key = urlParts[1];
             if (!key) return Promise.resolve();
-            return r2Client.send(
-              new DeleteObjectCommand({ Bucket: bucketName, Key: key })
-            );
+            return r2Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: key }));
           })
       );
     }

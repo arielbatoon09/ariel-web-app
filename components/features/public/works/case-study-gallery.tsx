@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
@@ -11,11 +11,11 @@ interface CaseStudyGalleryProps {
 }
 
 export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const thumbnailRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) return;
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -26,7 +26,7 @@ export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
     });
   }, [api]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const activeThumbnail = thumbnailRefs.current[current];
     if (activeThumbnail) {
       activeThumbnail.scrollIntoView({
@@ -76,7 +76,7 @@ export function CaseStudyGallery({ images, title }: CaseStudyGalleryProps) {
 
       {/* Thumbnails Control Strip */}
       {images.length > 1 && (
-        <div className="flex gap-3 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex [scrollbar-width:none] gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {images.map((src, index) => (
             <button
               key={index}

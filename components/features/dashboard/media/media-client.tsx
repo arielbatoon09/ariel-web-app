@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useMediaQuery, useDeleteMediaMutation, useUpdateMediaAltMutation } from "@/hooks/use-media";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { MediaHeader } from "@/components/features/dashboard/media/media-header";
@@ -19,7 +19,9 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid grid-cols-3 gap-2">
       <span className="text-neutral-450 uppercase">{label}</span>
-      <span className="col-span-2 truncate font-mono text-neutral-500" title={value}>{value}</span>
+      <span className="col-span-2 truncate font-mono text-neutral-500" title={value}>
+        {value}
+      </span>
     </div>
   );
 }
@@ -32,7 +34,7 @@ export function MediaClient() {
   const search = useDashboardStore((s) => s.mediaSearch);
   const activeYear = useDashboardStore((s) => s.mediaActiveYear);
 
-  const filteredAssets = React.useMemo(() => {
+  const filteredAssets = useMemo(() => {
     let result = assets;
     if (activeYear) result = result.filter((a) => a.folder.includes(activeYear));
     if (search.trim()) {
@@ -42,16 +44,16 @@ export function MediaClient() {
     return result;
   }, [assets, activeYear, search]);
 
-  const [selectedIds, setSelectedIds] = React.useState<Set<number>>(new Set());
-  const [activeAsset, setActiveAsset] = React.useState<MediaAsset | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [activeAsset, setActiveAsset] = useState<MediaAsset | null>(null);
 
   // Detail panel state
-  const [altText, setAltText] = React.useState("");
-  const [copied, setCopied] = React.useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
-  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = React.useState(false);
+  const [altText, setAltText] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activeAsset) {
       setAltText(activeAsset.altText || "");
       setCopied(false);
@@ -121,13 +123,13 @@ export function MediaClient() {
             {selectedIds.size} asset{selectedIds.size !== 1 ? "s" : ""} selected
           </span>
           <div className="flex gap-2">
-            <button onClick={clearSelection} className="font-mono text-[9px] uppercase text-neutral-400 hover:text-foreground">
+            <button onClick={clearSelection} className="font-mono text-[9px] text-neutral-400 uppercase hover:text-foreground">
               Clear
             </button>
             <button
               onClick={() => setShowBulkDeleteConfirm(true)}
               disabled={deleteMutation.isPending}
-              className="font-mono text-[9px] uppercase text-red-600 hover:text-red-700 dark:text-red-400 disabled:opacity-50"
+              className="font-mono text-[9px] text-red-600 uppercase hover:text-red-700 disabled:opacity-50 dark:text-red-400"
             >
               Delete {selectedIds.size}
             </button>
@@ -146,7 +148,9 @@ export function MediaClient() {
       {/* Asset Detail Dialog */}
       <ManagementDetailDialog
         open={!!activeAsset}
-        onOpenChange={(open) => { if (!open) setActiveAsset(null); }}
+        onOpenChange={(open) => {
+          if (!open) setActiveAsset(null);
+        }}
         title="Asset Details"
         subtitle={activeAsset ? `ID: ${activeAsset.id} · ${activeAsset.filename}` : undefined}
         footerActions={
@@ -156,7 +160,7 @@ export function MediaClient() {
               size="sm"
               onClick={() => setShowDeleteConfirm(true)}
               disabled={deleteMutation.isPending}
-              className="rounded-none border-dashed border-red-300 font-mono text-[10px] uppercase text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20"
+              className="rounded-none border-dashed border-red-300 font-mono text-[10px] text-red-600 uppercase hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20"
             >
               <Trash2 className="mr-1 size-3" />
               Delete
@@ -178,13 +182,7 @@ export function MediaClient() {
             <div className="border border-dashed border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
               <div className="relative aspect-video w-full overflow-hidden">
                 {isImage && !isSvg ? (
-                  <Image
-                    src={activeAsset.url}
-                    alt={activeAsset.altText || activeAsset.filename}
-                    fill
-                    className="object-contain"
-                    sizes="560px"
-                  />
+                  <Image src={activeAsset.url} alt={activeAsset.altText || activeAsset.filename} fill className="object-contain" sizes="560px" />
                 ) : isSvg ? (
                   <div className="flex h-full items-center justify-center p-8">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -210,26 +208,15 @@ export function MediaClient() {
 
             {/* Administrative Actions */}
             <div className="space-y-4">
-              <span className="block text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                Administrative Actions
-              </span>
+              <span className="block text-[10px] font-bold tracking-widest text-neutral-400 uppercase">Administrative Actions</span>
 
               <div className="flex flex-col gap-3">
                 {/* CDN URL */}
                 <div className="flex flex-col gap-1.5">
                   <span className="text-neutral-450 text-[10px] uppercase">CDN URL</span>
                   <div className="flex gap-1.5">
-                    <Input
-                      value={activeAsset.url}
-                      readOnly
-                      className="h-7 flex-1 rounded-none border-dashed font-mono text-[9px] text-neutral-500"
-                    />
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleCopy}
-                      className="h-7 w-7 shrink-0 rounded-none border-dashed p-0"
-                    >
+                    <Input value={activeAsset.url} readOnly className="h-7 flex-1 rounded-none border-dashed font-mono text-[9px] text-neutral-500" />
+                    <Button size="sm" variant="outline" onClick={handleCopy} className="h-7 w-7 shrink-0 rounded-none border-dashed p-0">
                       {copied ? <Check className="size-3 text-green-600" /> : <Copy className="size-3" />}
                     </Button>
                   </div>

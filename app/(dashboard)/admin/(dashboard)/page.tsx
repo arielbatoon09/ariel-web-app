@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import * as React from "react";
+import { useMemo } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DollarSign, ShoppingBag, Briefcase, FileText, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ export default function AdminDashboardPage() {
 
   const activeOrdersCount = orders.filter((o) => o.status === "pending" || o.status === "in-progress").length;
 
-  const recentCustomers = React.useMemo(() => {
+  const recentCustomers = useMemo(() => {
     return [...customers].sort((a, b) => new Date(b.joinedAt).getTime() - new Date(a.joinedAt).getTime()).slice(0, 3);
   }, [customers]);
 

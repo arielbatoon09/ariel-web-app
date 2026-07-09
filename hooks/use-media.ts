@@ -1,16 +1,10 @@
 "use client";
 
-import * as React from "react";
+import { useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import {
-  getMediaAction,
-  insertMediaRecordAction,
-  deleteMediaAction,
-  updateMediaAltAction,
-  getMediaPresignedUrlAction,
-} from "@/services/media";
-import { validateMediaFile, MEDIA_MAX_SIZE_BYTES } from "@/lib/media-config";
+import { getMediaAction, insertMediaRecordAction, deleteMediaAction, updateMediaAltAction, getMediaPresignedUrlAction } from "@/services/media";
+import { validateMediaFile } from "@/lib/media-config";
 import type { MediaAsset } from "@/data/media";
 
 export const MEDIA_QUERY_KEY = ["media"];
@@ -41,10 +35,7 @@ export type UploadProgressItem = {
  * Upload a single file to R2 using XMLHttpRequest for real progress tracking.
  * Returns the inserted asset record.
  */
-async function uploadFileWithProgress(
-  file: File,
-  onProgress: (progress: number) => void
-): Promise<MediaAsset> {
+async function uploadFileWithProgress(file: File, onProgress: (progress: number) => void): Promise<MediaAsset> {
   // 1. Get presigned URL from server action
   const presignedRes = await getMediaPresignedUrlAction(file.name, file.type);
   if (!presignedRes.success || !presignedRes.presignedUrl || !presignedRes.url || !presignedRes.folder) {
@@ -96,9 +87,9 @@ async function uploadFileWithProgress(
  */
 export function useUploadMedia() {
   const queryClient = useQueryClient();
-  const [uploads, setUploads] = React.useState<UploadProgressItem[]>([]);
+  const [uploads, setUploads] = useState<UploadProgressItem[]>([]);
 
-  const uploadFiles = React.useCallback(
+  const uploadFiles = useCallback(
     async (files: File[]) => {
       // Validate all files first
       const validFiles: File[] = [];
@@ -132,28 +123,16 @@ export function useUploadMedia() {
       // Upload in parallel
       await Promise.allSettled(
         initialItems.map(async (item) => {
-          setUploads((prev) =>
-            prev.map((u) => (u.id === item.id ? { ...u, status: "uploading" } : u))
-          );
+          setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "uploading" } : u)));
 
           try {
             const asset = await uploadFileWithProgress(item.file, (progress) => {
-              setUploads((prev) =>
-                prev.map((u) => (u.id === item.id ? { ...u, progress } : u))
-              );
+              setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, progress } : u)));
             });
 
-            setUploads((prev) =>
-              prev.map((u) =>
-                u.id === item.id ? { ...u, status: "done", progress: 100, url: asset.url } : u
-              )
-            );
+            setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "done", progress: 100, url: asset.url } : u)));
           } catch (err: any) {
-            setUploads((prev) =>
-              prev.map((u) =>
-                u.id === item.id ? { ...u, status: "error", error: err.message } : u
-              )
-            );
+            setUploads((prev) => prev.map((u) => (u.id === item.id ? { ...u, status: "error", error: err.message } : u)));
           }
         })
       );
@@ -164,7 +143,7 @@ export function useUploadMedia() {
     [queryClient]
   );
 
-  const clearCompleted = React.useCallback(() => {
+  const clearCompleted = useCallback(() => {
     setUploads((prev) => prev.filter((u) => u.status === "uploading" || u.status === "queued"));
   }, []);
 

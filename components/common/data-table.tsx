@@ -1,15 +1,13 @@
 "use client";
 
-import * as React from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Search,
   Plus,
-  MoreHorizontal,
   Eye,
   Edit,
   ShieldAlert,
@@ -76,24 +74,24 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
     onRowClick,
   } = props;
 
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [statusFilter, setStatusFilter] = React.useState<"all" | "active" | "disabled">("all");
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "disabled">("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Sorting State
-  const [sortColumn, setSortColumn] = React.useState<keyof T | null>(null);
-  const [sortDirection, setSortDirection] = React.useState<"asc" | "desc" | null>(null);
+  const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc" | null>(null);
 
   // Selection State
-  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const hasStatusFilter = React.useMemo(() => {
+  const hasStatusFilter = useMemo(() => {
     return data.some((item) => "disabled" in item);
   }, [data]);
 
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     let result = data;
 
     // Search Filter
@@ -149,7 +147,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
   const safePage = currentPage > totalPages ? 1 : currentPage;
 
-  const paginatedData = React.useMemo(() => {
+  const paginatedData = useMemo(() => {
     const start = (safePage - 1) * pageSize;
     return filteredData.slice(start, start + pageSize);
   }, [filteredData, safePage, pageSize]);
@@ -157,7 +155,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
   const hasActions = onViewClick || onEditClick || onToggleStatusClick || onDeleteClick;
 
   // Reset page-specific selection if paginated data changes
-  React.useEffect(() => {
+  useEffect(() => {
     setSelectedIds((prev) => {
       const next = new Set<string>();
       const currentIds = new Set(paginatedData.map((item) => item.id));

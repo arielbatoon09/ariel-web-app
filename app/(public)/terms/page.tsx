@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 
@@ -18,9 +19,9 @@ export default function TermsPage() {
               <h2 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">1. Agreement to Terms</h2>
               <p>
                 By accessing or using our website at{" "}
-                <a href="https://arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
+                <Link href="https://arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
                   arielbatoon.com
-                </a>
+                </Link>
                 , you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree to all of these terms, please do not
                 access or use the site.
               </p>
@@ -79,9 +80,9 @@ export default function TermsPage() {
               <h2 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">7. Contact Us</h2>
               <p>
                 If you have any questions or concerns regarding these Terms and Conditions, please contact us by email at{" "}
-                <a href="mailto:hello@arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
+                <Link href="mailto:hello@arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
                   hello@arielbatoon.com
-                </a>
+                </Link>
                 .
               </p>
             </section>

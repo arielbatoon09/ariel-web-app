@@ -1,15 +1,15 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Sun, Moon } from "lucide-react";
 import { useCircularTheme } from "@/components/context/theme-provider";
 
 export function ThemeToggle() {
   const { toggleTheme, resolvedTheme } = useCircularTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);

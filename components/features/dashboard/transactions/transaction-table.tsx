@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useTransactionsQuery, useUpdateTransactionStatusMutation } from "@/hooks/use-transactions";
 import { DataTable } from "@/components/common/data-table";
 import type { Transaction } from "@/schemas/dashboard";
@@ -11,8 +10,7 @@ export function TransactionTable() {
   const updateStatusMutation = useUpdateTransactionStatusMutation();
 
   const handleToggleStatus = (tx: Transaction) => {
-    const nextStatus: Transaction["status"] =
-      tx.status === "successful" ? "failed" : tx.status === "failed" ? "pending" : "successful";
+    const nextStatus: Transaction["status"] = tx.status === "successful" ? "failed" : tx.status === "failed" ? "pending" : "successful";
     updateStatusMutation.mutate({ id: tx.id, status: nextStatus });
   };
 
@@ -35,7 +33,9 @@ export function TransactionTable() {
     },
     {
       header: "Payment Channel",
-      accessorKey: (item: Transaction) => <span className="font-sans font-medium uppercase text-neutral-600 dark:text-neutral-400">{item.paymentMethod}</span>,
+      accessorKey: (item: Transaction) => (
+        <span className="font-sans font-medium text-neutral-600 uppercase dark:text-neutral-400">{item.paymentMethod}</span>
+      ),
     },
     {
       header: "Submitted Time",

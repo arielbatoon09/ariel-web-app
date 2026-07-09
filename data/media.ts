@@ -37,10 +37,6 @@ export async function getMediaByIdQuery(id: number): Promise<MediaAsset | undefi
 
 /** Update alt text for a media asset */
 export async function updateMediaAltQuery(id: number, altText: string): Promise<MediaAsset | undefined> {
-  const [updated] = await db
-    .update(mediaAssets)
-    .set({ altText, updatedAt: new Date() })
-    .where(eq(mediaAssets.id, id))
-    .returning();
+  const [updated] = await db.update(mediaAssets).set({ altText, updatedAt: new Date() }).where(eq(mediaAssets.id, id)).returning();
   return updated;
 }

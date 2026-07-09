@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useRef } from "react";
 import { Upload, X, CheckCircle2, AlertCircle, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,9 @@ import { useUploadMedia, type UploadProgressItem } from "@/hooks/use-media";
 import { MEDIA_ACCEPTED_EXTENSIONS, MEDIA_MAX_SIZE_LABEL, formatFileSize } from "@/lib/media-config";
 
 function UploadFileCard({ item, onRemove }: { item: UploadProgressItem; onRemove: () => void }) {
-  const [preview, setPreview] = React.useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (item.file.type.startsWith("image/")) {
       const url = URL.createObjectURL(item.file);
       setPreview(url);
@@ -53,26 +53,32 @@ function UploadFileCard({ item, onRemove }: { item: UploadProgressItem; onRemove
           <div
             className={cn(
               "h-full transition-all duration-300",
-              item.status === "done" ? "bg-green-500" :
-              item.status === "error" ? "bg-red-500" :
-              "bg-neutral-900 dark:bg-neutral-100"
+              item.status === "done" ? "bg-green-500" : item.status === "error" ? "bg-red-500" : "bg-neutral-900 dark:bg-neutral-100"
             )}
             style={{ width: `${item.progress}%` }}
           />
         </div>
 
         <div className="flex items-center justify-between">
-          <span className={cn(
-            "font-mono text-[9px] uppercase",
-            item.status === "done" ? "text-green-600 dark:text-green-400" :
-            item.status === "error" ? "text-red-600 dark:text-red-400" :
-            item.status === "uploading" ? "text-neutral-600 dark:text-neutral-400" :
-            "text-neutral-400"
-          )}>
-            {item.status === "done" ? "✓ Done" :
-             item.status === "error" ? `✗ ${item.error || "Failed"}` :
-             item.status === "uploading" ? `Uploading ${item.progress}%` :
-             "Queued"}
+          <span
+            className={cn(
+              "font-mono text-[9px] uppercase",
+              item.status === "done"
+                ? "text-green-600 dark:text-green-400"
+                : item.status === "error"
+                  ? "text-red-600 dark:text-red-400"
+                  : item.status === "uploading"
+                    ? "text-neutral-600 dark:text-neutral-400"
+                    : "text-neutral-400"
+            )}
+          >
+            {item.status === "done"
+              ? "✓ Done"
+              : item.status === "error"
+                ? `✗ ${item.error || "Failed"}`
+                : item.status === "uploading"
+                  ? `Uploading ${item.progress}%`
+                  : "Queued"}
           </span>
           {(item.status === "done" || item.status === "error") && (
             <button onClick={onRemove} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300">
@@ -86,10 +92,10 @@ function UploadFileCard({ item, onRemove }: { item: UploadProgressItem; onRemove
 }
 
 export function MediaUploadZone() {
-  const { uploadFiles, uploads, clearCompleted } = useUploadMedia();
-  const [isDragging, setIsDragging] = React.useState(false);
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [removedIds, setRemovedIds] = React.useState<Set<string>>(new Set());
+  const { uploadFiles, uploads } = useUploadMedia();
+  const [isDragging, setIsDragging] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
 
   const handleFiles = (files: File[]) => {
     uploadFiles(files);
@@ -122,15 +128,22 @@ export function MediaUploadZone() {
             ? "border-neutral-600 bg-neutral-100 dark:border-neutral-400 dark:bg-neutral-800"
             : "cursor-pointer border-neutral-300 bg-neutral-50/50 hover:border-neutral-400 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/20 dark:hover:border-neutral-600"
         )}
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
       >
-        <div className={cn(
-          "flex size-12 items-center justify-center border border-dashed transition-colors",
-          isDragging ? "border-neutral-600 bg-neutral-200 dark:border-neutral-400 dark:bg-neutral-700" : "border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800"
-        )}>
+        <div
+          className={cn(
+            "flex size-12 items-center justify-center border border-dashed transition-colors",
+            isDragging
+              ? "border-neutral-600 bg-neutral-200 dark:border-neutral-400 dark:bg-neutral-700"
+              : "border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800"
+          )}
+        >
           <Upload className="size-5 text-neutral-500 dark:text-neutral-400" />
         </div>
         <div className="text-center">
@@ -143,20 +156,13 @@ export function MediaUploadZone() {
         </div>
       </div>
 
-      <input
-        ref={inputRef}
-        type="file"
-        multiple
-        accept={MEDIA_ACCEPTED_EXTENSIONS}
-        className="hidden"
-        onChange={handleChange}
-      />
+      <input ref={inputRef} type="file" multiple accept={MEDIA_ACCEPTED_EXTENSIONS} className="hidden" onChange={handleChange} />
 
       {/* Upload progress cards */}
       {visibleUploads.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase text-neutral-500">
+            <span className="font-mono text-[10px] text-neutral-500 uppercase">
               {visibleUploads.length} file{visibleUploads.length !== 1 ? "s" : ""}
             </span>
             {hasCompleted && (
@@ -164,9 +170,7 @@ export function MediaUploadZone() {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const completedIds = visibleUploads
-                    .filter((u) => u.status === "done" || u.status === "error")
-                    .map((u) => u.id);
+                  const completedIds = visibleUploads.filter((u) => u.status === "done" || u.status === "error").map((u) => u.id);
                   setRemovedIds((prev) => new Set([...prev, ...completedIds]));
                 }}
                 className="h-6 rounded-none px-2 font-mono text-[9px] uppercase"
@@ -176,11 +180,7 @@ export function MediaUploadZone() {
             )}
           </div>
           {visibleUploads.map((item) => (
-            <UploadFileCard
-              key={item.id}
-              item={item}
-              onRemove={() => setRemovedIds((prev) => new Set([...prev, item.id]))}
-            />
+            <UploadFileCard key={item.id} item={item} onRemove={() => setRemovedIds((prev) => new Set([...prev, item.id]))} />
           ))}
         </div>
       )}

@@ -29,14 +29,15 @@ export function WorkAddDialog() {
   const createWorkMutation = useCreateWorkMutation();
   const { data: categoriesData = [] } = useCategoriesQuery();
 
-  const activeWorkCategories = categoriesData.length > 0
-    ? categoriesData.filter((c) => (c.target === "works" || c.target === "both") && !c.disabled)
-    : [
-        { name: "Web Development", slug: "web" },
-        { name: "Mobile Apps", slug: "mobile" },
-        { name: "AI & Data", slug: "ai-data" },
-        { name: "Open Source", slug: "open-source" },
-      ];
+  const activeWorkCategories =
+    categoriesData.length > 0
+      ? categoriesData.filter((c) => (c.target === "works" || c.target === "both") && !c.disabled)
+      : [
+          { name: "Web Development", slug: "web" },
+          { name: "Mobile Apps", slug: "mobile" },
+          { name: "AI & Data", slug: "ai-data" },
+          { name: "Open Source", slug: "open-source" },
+        ];
 
   const form = useForm({
     defaultValues: {
@@ -58,9 +59,7 @@ export function WorkAddDialog() {
         timeline: "3 Months (2026)",
         challenge: "Describe the core challenge faced by this client/project here.",
         solution: "Describe the technical architecture and solutions implemented here.",
-        features: [
-          { title: "Core Ingestion API", description: "Realtime coordinates checking and data validation." },
-        ],
+        features: [{ title: "Core Ingestion API", description: "Realtime coordinates checking and data validation." }],
         results: ["Reduced overhead operational inefficiencies entirely."],
       };
 
@@ -93,7 +92,7 @@ export function WorkAddDialog() {
 
   return (
     <Dialog open={isWorkAddOpen} onOpenChange={setIsWorkAddOpen}>
-      <DialogContent className="max-h-[90vh] overflow-x-hidden overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden rounded-none border border-neutral-300 bg-background/95 p-6 font-mono text-xs backdrop-blur-md sm:max-w-[480px] dark:border-neutral-700">
+      <DialogContent className="max-h-[90vh] [scrollbar-width:none] overflow-x-hidden overflow-y-auto rounded-none border border-neutral-300 bg-background/95 p-6 font-mono text-xs backdrop-blur-md [-ms-overflow-style:none] sm:max-w-[480px] dark:border-neutral-700 [&::-webkit-scrollbar]:hidden">
         {/* Decorative corner brackets */}
         <div className="pointer-events-none absolute -top-px -left-px z-50 size-2.5 border-t-2 border-l-2 border-neutral-400 dark:border-neutral-500" />
         <div className="pointer-events-none absolute -top-px -right-px z-50 size-2.5 border-t-2 border-r-2 border-neutral-400 dark:border-neutral-500" />
@@ -181,9 +180,12 @@ export function WorkAddDialog() {
               children={(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 const selectedCategories = field.state.value
-                  ? field.state.value.split(",").map((c) => c.trim()).filter(Boolean)
+                  ? field.state.value
+                      .split(",")
+                      .map((c) => c.trim())
+                      .filter(Boolean)
                   : [];
-                
+
                 const handleToggle = (slug: string) => {
                   let next;
                   if (selectedCategories.includes(slug)) {
@@ -196,9 +198,7 @@ export function WorkAddDialog() {
 
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel className="text-[10px] tracking-widest text-neutral-400 uppercase">
-                      Categories
-                    </FieldLabel>
+                    <FieldLabel className="text-[10px] tracking-widest text-neutral-400 uppercase">Categories</FieldLabel>
                     <div className="flex flex-wrap gap-2 pt-1">
                       {activeWorkCategories.map((cat) => {
                         const isSelected = selectedCategories.includes(cat.slug);
@@ -209,10 +209,10 @@ export function WorkAddDialog() {
                             disabled={isPending}
                             onClick={() => handleToggle(cat.slug)}
                             className={cn(
-                              "px-2.5 py-1 text-[10px] font-mono transition-all duration-150 uppercase select-none border",
+                              "border px-2.5 py-1 font-mono text-[10px] uppercase transition-all duration-150 select-none",
                               isSelected
-                                ? "bg-neutral-900 text-white border-neutral-900 dark:bg-neutral-100 dark:text-neutral-900 dark:border-neutral-100"
-                                : "bg-background/50 text-neutral-500 border-dashed border-neutral-300 hover:border-neutral-900 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-100"
+                                ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+                                : "border-dashed border-neutral-300 bg-background/50 text-neutral-500 hover:border-neutral-900 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-100"
                             )}
                           >
                             {cat.name}

@@ -61,12 +61,7 @@ export function CaseStudyHero({ project, categoryNames }: CaseStudyHeroProps) {
               label="GitHub:"
               value={
                 caseStudy.githubUrl ? (
-                  <Link
-                    href={caseStudy.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline hover:text-foreground"
-                  >
+                  <Link href={caseStudy.githubUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
                     Repository
                   </Link>
                 ) : (

@@ -1,13 +1,13 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 export function AdminHeader() {
   const pathname = usePathname();
-  const [time, setTime] = React.useState("");
+  const [time, setTime] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const updateTime = () => {
       const now = new Date();
       setTime(
@@ -24,7 +24,7 @@ export function AdminHeader() {
     return () => clearInterval(interval);
   }, []);
 
-  // Format page path to breadcrumbs (e.g., /admin/works -> CONTROL PANEL / WORKS)
+  // Format page path to breadcrumbs
   const pathParts = pathname.split("/").filter(Boolean);
 
   const isEditorPage = (pathParts[1] === "works" && pathParts.length > 2) || (pathParts[1] === "articles" && pathParts.length > 2);

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 
@@ -20,9 +21,9 @@ export default function PrivacyPage() {
                 Welcome to the website of Ariel Batoon (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;). We respect your privacy and are
                 committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you
                 visit our website at{" "}
-                <a href="https://arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
+                <Link href="https://arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
                   arielbatoon.com
-                </a>{" "}
+                </Link>{" "}
                 and utilize our freelance software engineering and consultancy services.
               </p>
             </section>
@@ -94,9 +95,9 @@ export default function PrivacyPage() {
               </ul>
               <p>
                 To exercise any of these rights, please contact us at{" "}
-                <a href="mailto:hello@arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
+                <Link href="mailto:hello@arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
                   hello@arielbatoon.com
-                </a>
+                </Link>
                 .
               </p>
             </section>

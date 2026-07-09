@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useMediaQuery, useDeleteMediaMutation } from "@/hooks/use-media";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { MediaGrid } from "@/components/features/dashboard/media/media-grid";
@@ -17,7 +17,9 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid grid-cols-3 gap-2">
       <span className="text-neutral-450 uppercase">{label}</span>
-      <span className="col-span-2 truncate font-mono text-neutral-500" title={value}>{value}</span>
+      <span className="col-span-2 truncate font-mono text-neutral-500" title={value}>
+        {value}
+      </span>
     </div>
   );
 }
@@ -35,19 +37,19 @@ export function MediaContent() {
   const clearMediaSelection = useDashboardStore((s) => s.clearMediaSelection);
   const setMediaActiveAsset = useDashboardStore((s) => s.setMediaActiveAsset);
 
-  const [altText, setAltText] = React.useState("");
-  const [copied, setCopied] = React.useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
-  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = React.useState(false);
+  const [altText, setAltText] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (mediaActiveAsset) {
       setAltText(mediaActiveAsset.altText || "");
       setCopied(false);
     }
   }, [mediaActiveAsset]);
 
-  const filteredAssets = React.useMemo(() => {
+  const filteredAssets = useMemo(() => {
     let result = assets;
     if (mediaActiveYear) result = result.filter((a) => a.folder.includes(mediaActiveYear));
     if (mediaSearch.trim()) {
@@ -108,13 +110,13 @@ export function MediaContent() {
             {mediaSelectedIds.size} asset{mediaSelectedIds.size !== 1 ? "s" : ""} selected
           </span>
           <div className="flex gap-2">
-            <button onClick={clearMediaSelection} className="font-mono text-[9px] uppercase text-neutral-400 hover:text-foreground">
+            <button onClick={clearMediaSelection} className="font-mono text-[9px] text-neutral-400 uppercase hover:text-foreground">
               Clear
             </button>
             <button
               onClick={() => setShowBulkDeleteConfirm(true)}
               disabled={deleteMutation.isPending}
-              className="font-mono text-[9px] uppercase text-red-600 hover:text-red-700 dark:text-red-400 disabled:opacity-50"
+              className="font-mono text-[9px] text-red-600 uppercase hover:text-red-700 disabled:opacity-50 dark:text-red-400"
             >
               Delete {mediaSelectedIds.size}
             </button>
@@ -133,7 +135,9 @@ export function MediaContent() {
       {/* Asset Detail Dialog */}
       <ManagementDetailDialog
         open={!!mediaActiveAsset}
-        onOpenChange={(open) => { if (!open) setMediaActiveAsset(null); }}
+        onOpenChange={(open) => {
+          if (!open) setMediaActiveAsset(null);
+        }}
         title="Asset Details"
         subtitle={mediaActiveAsset ? `ID: ${mediaActiveAsset.id} · ${mediaActiveAsset.filename}` : undefined}
         footerActions={
@@ -143,7 +147,7 @@ export function MediaContent() {
               size="sm"
               onClick={() => setShowDeleteConfirm(true)}
               disabled={deleteMutation.isPending}
-              className="rounded-none border-dashed border-red-300 font-mono text-[10px] uppercase text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20"
+              className="rounded-none border-dashed border-red-300 font-mono text-[10px] text-red-600 uppercase hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20"
             >
               <Trash2 className="mr-1 size-3" />
               Delete
@@ -175,7 +179,11 @@ export function MediaContent() {
                 ) : isSvg ? (
                   <div className="flex h-full items-center justify-center p-8">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={mediaActiveAsset.url} alt={mediaActiveAsset.altText || mediaActiveAsset.filename} className="max-h-full max-w-full object-contain" />
+                    <img
+                      src={mediaActiveAsset.url}
+                      alt={mediaActiveAsset.altText || mediaActiveAsset.filename}
+                      className="max-h-full max-w-full object-contain"
+                    />
                   </div>
                 ) : (
                   <div className="flex h-full flex-col items-center justify-center gap-2 text-neutral-400">
@@ -197,9 +205,7 @@ export function MediaContent() {
 
             {/* Administrative Actions */}
             <div className="space-y-4">
-              <span className="block text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                Administrative Actions
-              </span>
+              <span className="block text-[10px] font-bold tracking-widest text-neutral-400 uppercase">Administrative Actions</span>
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-1.5">
                   <span className="text-neutral-450 text-[10px] uppercase">CDN URL</span>
@@ -223,7 +229,12 @@ export function MediaContent() {
                       placeholder="Describe this image..."
                       className="h-7 flex-1 rounded-none border-dashed border-neutral-300 bg-background/50 font-mono text-[10px] transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
-                    <Button size="sm" onClick={handleSaveAlt} disabled={updateAltMutation.isPending || !canSaveAlt} className="h-7 w-7 shrink-0 rounded-none p-0">
+                    <Button
+                      size="sm"
+                      onClick={handleSaveAlt}
+                      disabled={updateAltMutation.isPending || !canSaveAlt}
+                      className="h-7 w-7 shrink-0 rounded-none p-0"
+                    >
                       <Save className="size-3" />
                     </Button>
                   </div>

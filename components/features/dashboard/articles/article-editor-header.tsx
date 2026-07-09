@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -48,22 +47,22 @@ export function ArticleEditorHeader({
             <h1 className="font-sans text-xl font-bold tracking-tight text-foreground">Article Editor</h1>
             {status === "published" ? (
               <span className="flex items-center gap-1 border border-green-500/20 bg-green-500/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-green-600 uppercase dark:text-green-500">
-                <span className="size-1 bg-green-500 animate-pulse rounded-full" />
+                <span className="size-1 animate-pulse rounded-full bg-green-500" />
                 Published
               </span>
             ) : status === "unpublished" ? (
               <span className="flex items-center gap-1 border border-red-500/20 bg-red-500/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-red-600 uppercase dark:text-red-500">
-                <span className="size-1 bg-red-500 rounded-full" />
+                <span className="size-1 rounded-full bg-red-500" />
                 Unpublished
               </span>
             ) : (
               <span className="flex items-center gap-1 border border-amber-500/20 bg-amber-500/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-amber-600 uppercase dark:text-amber-500">
-                <span className="size-1 bg-amber-500 rounded-full" />
+                <span className="size-1 rounded-full bg-amber-500" />
                 Draft
               </span>
             )}
             {hasDraft && (
-              <span className="border border-purple-500/20 bg-purple-500/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-purple-600 uppercase dark:text-purple-500 animate-pulse">
+              <span className="animate-pulse border border-purple-500/20 bg-purple-500/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-purple-600 uppercase dark:text-purple-500">
                 Staged Changes
               </span>
             )}
@@ -77,14 +76,14 @@ export function ArticleEditorHeader({
                 href={`/article/${slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-mono text-[9px] text-neutral-450 hover:text-foreground dark:text-neutral-500 underline ml-1"
+                className="text-neutral-450 ml-1 inline-flex items-center gap-1 font-mono text-[9px] underline hover:text-foreground dark:text-neutral-500"
               >
                 View Live
                 <ExternalLink className="size-2.5" />
               </a>
             )}
           </div>
-          <p className="font-mono text-[9px] text-neutral-450 dark:text-neutral-500">
+          <p className="text-neutral-450 font-mono text-[9px] dark:text-neutral-500">
             Write and structure your article, then preview or publish when ready.
           </p>
         </div>
@@ -92,14 +91,12 @@ export function ArticleEditorHeader({
 
       <div className="flex flex-wrap items-center gap-3">
         {/* Segmented Control for Editor Mode */}
-        <div className="inline-flex border border-neutral-300 dark:border-neutral-700 p-0.5 bg-neutral-50 dark:bg-neutral-900/60 rounded">
+        <div className="inline-flex rounded border border-neutral-300 bg-neutral-50 p-0.5 dark:border-neutral-700 dark:bg-neutral-900/60">
           <button
             onClick={() => setActiveTab("edit")}
             className={cn(
-              "px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider transition-all duration-150 rounded-sm cursor-pointer",
-              activeTab === "edit"
-                ? "bg-background text-foreground shadow-sm font-bold"
-                : "text-neutral-400 hover:text-foreground"
+              "cursor-pointer rounded-sm px-2.5 py-1 font-mono text-[9px] tracking-wider uppercase transition-all duration-150",
+              activeTab === "edit" ? "bg-background font-bold text-foreground shadow-sm" : "text-neutral-400 hover:text-foreground"
             )}
           >
             Edit
@@ -107,10 +104,8 @@ export function ArticleEditorHeader({
           <button
             onClick={() => setActiveTab("preview")}
             className={cn(
-              "px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider transition-all duration-150 rounded-sm cursor-pointer",
-              activeTab === "preview"
-                ? "bg-background text-foreground shadow-sm font-bold"
-                : "text-neutral-400 hover:text-foreground"
+              "cursor-pointer rounded-sm px-2.5 py-1 font-mono text-[9px] tracking-wider uppercase transition-all duration-150",
+              activeTab === "preview" ? "bg-background font-bold text-foreground shadow-sm" : "text-neutral-400 hover:text-foreground"
             )}
           >
             Preview
@@ -118,7 +113,7 @@ export function ArticleEditorHeader({
         </div>
 
         {/* Separator */}
-        <div className="h-6 w-[1px] bg-neutral-200 dark:bg-neutral-800 hidden sm:block" />
+        <div className="hidden h-6 w-[1px] bg-neutral-200 sm:block dark:bg-neutral-800" />
 
         <Button
           size="sm"
@@ -126,11 +121,7 @@ export function ArticleEditorHeader({
           disabled={!isDirty || isSaving}
           className="h-8 rounded-none border border-dashed border-neutral-300 bg-background px-3 font-mono text-[10px] text-foreground uppercase hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:bg-transparent dark:hover:bg-neutral-900"
         >
-          {isSaving ? (
-            <Loader2 className="mr-1.5 size-3 animate-spin" />
-          ) : (
-            <Save className="mr-1.5 size-3" />
-          )}
+          {isSaving ? <Loader2 className="mr-1.5 size-3 animate-spin" /> : <Save className="mr-1.5 size-3" />}
           Save Draft
         </Button>
 
@@ -152,16 +143,19 @@ export function ArticleEditorHeader({
                   <Button
                     variant="outline"
                     size="icon"
-                    className="h-8 w-8 rounded-none border border-neutral-300 bg-background p-0 dark:border-neutral-700 dark:bg-transparent hover:bg-neutral-100 dark:hover:bg-neutral-900 focus:ring-0 cursor-pointer"
+                    className="h-8 w-8 cursor-pointer rounded-none border border-neutral-300 bg-background p-0 hover:bg-neutral-100 focus:ring-0 dark:border-neutral-700 dark:bg-transparent dark:hover:bg-neutral-900"
                   >
                     <MoreHorizontal className="size-4" />
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end" className="rounded-none border border-neutral-300 bg-background font-mono text-[10px] dark:border-neutral-700">
+              <DropdownMenuContent
+                align="end"
+                className="rounded-none border border-neutral-300 bg-background font-mono text-[10px] dark:border-neutral-700"
+              >
                 <DropdownMenuItem
                   onClick={() => handlePublish("unpublished")}
-                  className="justify-center text-red-500 font-mono hover:text-red-650 cursor-pointer focus:bg-red-500/10 focus:text-red-600 dark:focus:bg-red-950/20"
+                  className="hover:text-red-650 cursor-pointer justify-center font-mono text-red-500 focus:bg-red-500/10 focus:text-red-600 dark:focus:bg-red-950/20"
                 >
                   Unpublish
                 </DropdownMenuItem>
@@ -173,7 +167,7 @@ export function ArticleEditorHeader({
             size="sm"
             onClick={() => handlePublish("published")}
             disabled={isSaving}
-            className="justify-center h-8 rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
+            className="h-8 justify-center rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
           >
             Publish
           </Button>

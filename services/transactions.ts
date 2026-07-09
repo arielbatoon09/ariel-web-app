@@ -3,11 +3,7 @@
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
-import {
-  getTransactionsQuery,
-  insertTransactionQuery,
-  updateTransactionStatusQuery,
-} from "@/data/transactions";
+import { getTransactionsQuery, insertTransactionQuery, updateTransactionStatusQuery } from "@/data/transactions";
 import type { Transaction } from "@/schemas/dashboard";
 
 async function checkAdminAccess() {

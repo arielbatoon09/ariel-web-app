@@ -19,9 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const cleanDesc = service.description.length > 150
-    ? `${service.description.substring(0, 150)}...`
-    : service.description;
+  const cleanDesc = service.description.length > 150 ? `${service.description.substring(0, 150)}...` : service.description;
 
   return {
     title: `${service.name} Package Cebu | Software Development & MVP`,

@@ -15,8 +15,8 @@ export function ArticleContent({ article }: ArticleContentProps) {
           {article.sections.map((section, idx) => (
             <div key={idx} className="space-y-4">
               <h2 className="font-sans text-xl font-bold tracking-tight text-foreground md:text-2xl">{section.title}</h2>
-              <div 
-                className="dark:text-neutral-455 font-sans text-sm leading-relaxed text-neutral-600 md:text-base prose dark:prose-invert max-w-none"
+              <div
+                className="dark:text-neutral-455 prose dark:prose-invert max-w-none font-sans text-sm leading-relaxed text-neutral-600 md:text-base"
                 dangerouslySetInnerHTML={{ __html: section.body }}
               />
             </div>

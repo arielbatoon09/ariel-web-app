@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { AddCustomerDialog as RawAddCustomerDialog } from "@/components/features/dashboard/customers/add-customer-dialog";
 import { useQueryClient } from "@tanstack/react-query";

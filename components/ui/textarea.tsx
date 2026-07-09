@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Bold, Italic, Underline, List, ListOrdered } from "lucide-react";
 
@@ -24,10 +24,10 @@ interface RichTextareaProps {
 }
 
 function RichTextarea({ value, onChange, placeholder, className, disabled }: RichTextareaProps) {
-  const editorRef = React.useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
 
   // Sync value from props to editor if it changes externally
-  React.useEffect(() => {
+  useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== value) {
       editorRef.current.innerHTML = value || "";
     }
@@ -45,14 +45,19 @@ function RichTextarea({ value, onChange, placeholder, className, disabled }: Ric
   };
 
   return (
-    <div className={cn("border rounded-md overflow-hidden border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50", className)}>
+    <div
+      className={cn(
+        "overflow-hidden rounded-md border border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
+        className
+      )}
+    >
       {/* Toolbar */}
-      <div className="flex items-center gap-1 p-1 border-b border-input bg-muted/20 dark:bg-muted/10">
+      <div className="flex items-center gap-1 border-b border-input bg-muted/20 p-1 dark:bg-muted/10">
         <button
           type="button"
           onClick={() => execCommand("bold")}
           disabled={disabled}
-          className="p-1 rounded hover:bg-muted dark:hover:bg-muted/30 text-foreground transition"
+          className="rounded p-1 text-foreground transition hover:bg-muted dark:hover:bg-muted/30"
           title="Bold"
         >
           <Bold className="size-3.5" />
@@ -61,7 +66,7 @@ function RichTextarea({ value, onChange, placeholder, className, disabled }: Ric
           type="button"
           onClick={() => execCommand("italic")}
           disabled={disabled}
-          className="p-1 rounded hover:bg-muted dark:hover:bg-muted/30 text-foreground transition"
+          className="rounded p-1 text-foreground transition hover:bg-muted dark:hover:bg-muted/30"
           title="Italic"
         >
           <Italic className="size-3.5" />
@@ -70,17 +75,17 @@ function RichTextarea({ value, onChange, placeholder, className, disabled }: Ric
           type="button"
           onClick={() => execCommand("underline")}
           disabled={disabled}
-          className="p-1 rounded hover:bg-muted dark:hover:bg-muted/30 text-foreground transition"
+          className="rounded p-1 text-foreground transition hover:bg-muted dark:hover:bg-muted/30"
           title="Underline"
         >
           <Underline className="size-3.5" />
         </button>
-        <div className="w-px h-4 bg-input mx-1" />
+        <div className="mx-1 h-4 w-px bg-input" />
         <button
           type="button"
           onClick={() => execCommand("insertUnorderedList")}
           disabled={disabled}
-          className="p-1 rounded hover:bg-muted dark:hover:bg-muted/30 text-foreground transition"
+          className="rounded p-1 text-foreground transition hover:bg-muted dark:hover:bg-muted/30"
           title="Bullet List"
         >
           <List className="size-3.5" />
@@ -89,7 +94,7 @@ function RichTextarea({ value, onChange, placeholder, className, disabled }: Ric
           type="button"
           onClick={() => execCommand("insertOrderedList")}
           disabled={disabled}
-          className="p-1 rounded hover:bg-muted dark:hover:bg-muted/30 text-foreground transition"
+          className="rounded p-1 text-foreground transition hover:bg-muted dark:hover:bg-muted/30"
           title="Numbered List"
         >
           <ListOrdered className="size-3.5" />
@@ -102,7 +107,7 @@ function RichTextarea({ value, onChange, placeholder, className, disabled }: Ric
         contentEditable={!disabled}
         onInput={handleInput}
         data-placeholder={placeholder}
-        className="min-h-32 p-2.5 text-sm focus:outline-none overflow-y-auto prose prose-sm dark:prose-invert max-w-none select-text"
+        className="prose prose-sm dark:prose-invert min-h-32 max-w-none overflow-y-auto p-2.5 text-sm select-text focus:outline-none"
         style={{ outline: "none" }}
       />
     </div>

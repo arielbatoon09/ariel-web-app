@@ -97,14 +97,10 @@ export function GridCard({
         {/* Title & Description */}
         <div className="space-y-2">
           <h3 className={cn("font-sans text-lg font-bold tracking-tight text-foreground", titleClassName)}>{title}</h3>
-          
+
           {(price || deliveryTime) && (
             <div className="flex items-center gap-3 text-xs font-medium text-neutral-500 dark:text-neutral-400">
-              {price && (
-                <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                  {price}
-                </span>
-              )}
+              {price && <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100">{price}</span>}
               {price && deliveryTime && <span className="text-neutral-300 dark:text-neutral-700">|</span>}
               {deliveryTime && (
                 <span className="flex items-center gap-1">
@@ -115,7 +111,7 @@ export function GridCard({
             </div>
           )}
 
-          <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 line-clamp-2" title={description}>
+          <p className="line-clamp-2 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400" title={description}>
             {description}
           </p>
         </div>

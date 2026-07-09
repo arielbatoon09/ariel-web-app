@@ -23,12 +23,7 @@ export default async function WorksPage() {
   const usedCategorySlugs = new Set<string>(publishedProjects.flatMap((p) => p.categories || []));
 
   const activeWorksCategories = categoriesData
-    .filter(
-      (c) =>
-        (c.target === "works" || c.target === "both") &&
-        !c.disabled &&
-        usedCategorySlugs.has(c.slug)
-    )
+    .filter((c) => (c.target === "works" || c.target === "both") && !c.disabled && usedCategorySlugs.has(c.slug))
     .map((c) => ({
       id: c.id,
       name: c.name,

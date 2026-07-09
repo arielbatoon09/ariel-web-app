@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useMemo } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { ManagementDetailDialog } from "@/components/common/management-detail-dialog";
 import { CustomerProfileView } from "@/components/features/dashboard/customers/customer-profile-view";
@@ -14,9 +14,9 @@ export function CustomerDetailDialog() {
   const updateRoleMutation = useUpdateCustomerRoleMutation();
   const toggleBlockMutation = useToggleCustomerBlockMutation();
 
-  const [confirmType, setConfirmType] = React.useState<"role" | "block" | null>(null);
+  const [confirmType, setConfirmType] = useState<"role" | "block" | null>(null);
 
-  const currentCustomer = React.useMemo(() => {
+  const currentCustomer = useMemo(() => {
     if (!selectedCustomerId) return null;
     return customers.find((c) => c.id === selectedCustomerId) || null;
   }, [customers, selectedCustomerId]);

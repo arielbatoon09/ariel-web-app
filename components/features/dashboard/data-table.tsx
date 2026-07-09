@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -48,15 +48,15 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
     isLoading = false,
   } = props;
 
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [statusFilter, setStatusFilter] = React.useState<"all" | "active" | "disabled">("all");
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "disabled">("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const hasStatusFilter = React.useMemo(() => {
+  const hasStatusFilter = useMemo(() => {
     return data.some((item) => "disabled" in item);
   }, [data]);
 
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     let result = data;
     if (searchQuery && searchKey) {
       result = result.filter((item) => {
@@ -82,7 +82,7 @@ export function DataTable<T extends { id: string; name?: string; title?: string;
 
   const safePage = currentPage > totalPages ? 1 : currentPage;
 
-  const paginatedData = React.useMemo(() => {
+  const paginatedData = useMemo(() => {
     const start = (safePage - 1) * pageSize;
     return filteredData.slice(start, start + pageSize);
   }, [filteredData, safePage, pageSize]);

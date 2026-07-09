@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -15,7 +15,7 @@ export function MediaFilters() {
   const setSearch = useDashboardStore((s) => s.setMediaSearch);
   const setActiveYear = useDashboardStore((s) => s.setMediaActiveYear);
 
-  const years = React.useMemo(() => {
+  const years = useMemo(() => {
     const yearSet = new Set<string>();
     assets.forEach((a) => {
       const parts = a.folder.split("/");
@@ -56,7 +56,7 @@ export function MediaFilters() {
       </div>
 
       <div className="relative w-full sm:w-60">
-        <Search className="absolute left-2.5 top-1/2 size-3 -translate-y-1/2 text-neutral-400" />
+        <Search className="absolute top-1/2 left-2.5 size-3 -translate-y-1/2 text-neutral-400" />
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -66,7 +66,7 @@ export function MediaFilters() {
         {search && (
           <button
             onClick={() => setSearch("")}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+            className="absolute top-1/2 right-2.5 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
           >
             <X className="size-3" />
           </button>

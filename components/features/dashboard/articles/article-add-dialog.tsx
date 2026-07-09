@@ -30,14 +30,15 @@ export function ArticleAddDialog() {
   const createArticleMutation = useCreateArticleMutation();
   const { data: categoriesData = [] } = useCategoriesQuery();
 
-  const activeArticleCategories = categoriesData.length > 0
-    ? categoriesData.filter((c) => (c.target === "articles" || c.target === "both") && !c.disabled)
-    : [
-        { name: "Engineering", slug: "engineering" },
-        { name: "Design", slug: "design" },
-        { name: "AI & Data", slug: "ai" },
-        { name: "Business & Strategy", slug: "business" },
-      ];
+  const activeArticleCategories =
+    categoriesData.length > 0
+      ? categoriesData.filter((c) => (c.target === "articles" || c.target === "both") && !c.disabled)
+      : [
+          { name: "Engineering", slug: "engineering" },
+          { name: "Design", slug: "design" },
+          { name: "AI & Data", slug: "ai" },
+          { name: "Business & Strategy", slug: "business" },
+        ];
 
   const form = useForm({
     defaultValues: {
@@ -51,7 +52,10 @@ export function ArticleAddDialog() {
     },
     onSubmit: async ({ value }) => {
       const categories = value.categoriesRaw
-        ? value.categoriesRaw.split(",").map((c) => c.trim()).filter(Boolean)
+        ? value.categoriesRaw
+            .split(",")
+            .map((c) => c.trim())
+            .filter(Boolean)
         : [];
 
       const today = new Date();
@@ -92,7 +96,7 @@ export function ArticleAddDialog() {
 
   return (
     <Dialog open={isArticleAddOpen} onOpenChange={setIsArticleAddOpen}>
-      <DialogContent className="max-h-[90vh] overflow-x-hidden overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden rounded-none border border-neutral-300 bg-background/95 p-6 font-mono text-xs backdrop-blur-md sm:max-w-[480px] dark:border-neutral-700">
+      <DialogContent className="max-h-[90vh] [scrollbar-width:none] overflow-x-hidden overflow-y-auto rounded-none border border-neutral-300 bg-background/95 p-6 font-mono text-xs backdrop-blur-md [-ms-overflow-style:none] sm:max-w-[480px] dark:border-neutral-700 [&::-webkit-scrollbar]:hidden">
         {/* Decorative corner brackets */}
         <div className="pointer-events-none absolute -top-px -left-px z-50 size-2.5 border-t-2 border-l-2 border-neutral-400 dark:border-neutral-500" />
         <div className="pointer-events-none absolute -top-px -right-px z-50 size-2.5 border-t-2 border-r-2 border-neutral-400 dark:border-neutral-500" />
@@ -205,7 +209,10 @@ export function ArticleAddDialog() {
               name="categoriesRaw"
               children={(field) => {
                 const selectedCategories = field.state.value
-                  ? field.state.value.split(",").map((c) => c.trim()).filter(Boolean)
+                  ? field.state.value
+                      .split(",")
+                      .map((c) => c.trim())
+                      .filter(Boolean)
                   : [];
 
                 const handleToggle = (slug: string) => {
@@ -221,7 +228,7 @@ export function ArticleAddDialog() {
                 return (
                   <Field>
                     <FieldLabel className="text-[10px] tracking-widest text-neutral-400 uppercase">
-                      Categories <span className="normal-case text-neutral-400">(optional)</span>
+                      Categories <span className="text-neutral-400 normal-case">(optional)</span>
                     </FieldLabel>
                     <div className="flex flex-wrap gap-2 pt-1">
                       {activeArticleCategories.map((cat) => {
@@ -233,10 +240,10 @@ export function ArticleAddDialog() {
                             disabled={isPending}
                             onClick={() => handleToggle(cat.slug)}
                             className={cn(
-                              "px-2.5 py-1 text-[10px] font-mono transition-all duration-150 uppercase select-none border",
+                              "border px-2.5 py-1 font-mono text-[10px] uppercase transition-all duration-150 select-none",
                               isSelected
-                                ? "bg-neutral-900 text-white border-neutral-900 dark:bg-neutral-100 dark:text-neutral-900 dark:border-neutral-100"
-                                : "bg-background/50 text-neutral-500 border-dashed border-neutral-300 hover:border-neutral-900 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-100"
+                                ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+                                : "border-dashed border-neutral-300 bg-background/50 text-neutral-500 hover:border-neutral-900 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-100"
                             )}
                           >
                             {cat.name}

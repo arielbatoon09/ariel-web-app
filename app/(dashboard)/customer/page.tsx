@@ -1,9 +1,7 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
 import { useAuthStore } from "@/hooks/use-auth-store";
-import { ShoppingBag, Settings, LayoutDashboard, Clock, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
+import { ShoppingBag, Clock, CheckCircle } from "lucide-react";
 
 export default function CustomerDashboardPage() {
   const { user } = useAuthStore();

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { ManagementDetailDialog } from "@/components/common/management-detail-dialog";
 import { useCategoriesQuery, useUpdateCategoryMutation, useToggleCategoryStatusMutation } from "@/hooks/use-categories";
@@ -16,26 +16,26 @@ export function CategoriesDetailDialog() {
   const updateCategoryMutation = useUpdateCategoryMutation();
   const toggleStatusMutation = useToggleCategoryStatusMutation();
 
-  const [confirmType, setConfirmType] = React.useState<"status" | "scope" | null>(null);
-  const [pendingScope, setPendingScope] = React.useState<"works" | "articles" | "both" | null>(null);
+  const [confirmType, setConfirmType] = useState<"status" | "scope" | null>(null);
+  const [pendingScope, setPendingScope] = useState<"works" | "articles" | "both" | null>(null);
 
-  const [isEditing, setIsEditing] = React.useState(false);
-  const [name, setName] = React.useState("");
-  const [slug, setSlug] = React.useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
 
-  const currentCategory = React.useMemo(() => {
+  const currentCategory = useMemo(() => {
     if (!selectedCategoryId) return null;
     return categories.find((c) => c.id === selectedCategoryId) || null;
   }, [categories, selectedCategoryId]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentCategory) {
       setName(currentCategory.name);
       setSlug(currentCategory.slug);
     }
   }, [currentCategory]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isCategoryDetailsOpen) {
       setIsEditing(false);
     }
@@ -152,7 +152,7 @@ export function CategoriesDetailDialog() {
             <div className="space-y-4 border-b border-dashed border-neutral-200 pb-4 dark:border-neutral-800">
               {isEditing ? (
                 <>
-                  <div className="grid grid-cols-3 gap-2 items-center">
+                  <div className="grid grid-cols-3 items-center gap-2">
                     <span className="text-neutral-450 uppercase">Name:</span>
                     <Input
                       value={name}
@@ -164,15 +164,15 @@ export function CategoriesDetailDialog() {
                           .replace(/(^-|-$)/g, "");
                         setSlug(autoSlug);
                       }}
-                      className="col-span-2 h-8 rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100 font-sans"
+                      className="col-span-2 h-8 rounded-none border-dashed border-neutral-300 bg-background/50 font-sans transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                   </div>
-                  <div className="grid grid-cols-3 gap-2 items-center">
+                  <div className="grid grid-cols-3 items-center gap-2">
                     <span className="text-neutral-450 uppercase">Slug:</span>
                     <Input
                       value={slug}
                       onChange={(e) => setSlug(e.target.value)}
-                      className="col-span-2 h-8 rounded-none border-dashed border-neutral-300 bg-background/50 transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100 font-mono"
+                      className="col-span-2 h-8 rounded-none border-dashed border-neutral-300 bg-background/50 font-mono transition-all duration-200 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                     />
                   </div>
                 </>

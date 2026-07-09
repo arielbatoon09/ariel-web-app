@@ -1,5 +1,5 @@
 "use client";
 
-import * as React from "react";
+import { createContext } from "react";
 
-export const PortalContainerContext = React.createContext<HTMLElement | null>(null);
+export const PortalContainerContext = createContext<HTMLElement | null>(null);

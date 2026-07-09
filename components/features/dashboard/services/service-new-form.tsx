@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
@@ -22,30 +22,20 @@ const serviceFormSchema = z.object({
   imageSrc: z.string(),
 });
 
-interface AddOnInput {
-  name: string;
-  price: number;
-  description: string;
-}
-
 export function ServiceNewForm() {
   const router = useRouter();
   const createServiceMutation = useCreateServiceMutation();
-  const [isPickerOpen, setIsPickerOpen] = React.useState(false);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   // Features state
-  const [features, setFeatures] = React.useState<string[]>([
-    "Custom Web Application",
-    "Responsive Styling",
-    "Database Integration",
-  ]);
-  const [newFeatureText, setNewFeatureText] = React.useState("");
+  const [features, setFeatures] = useState<string[]>(["Custom Web Application", "Responsive Styling", "Database Integration"]);
+  const [newFeatureText, setNewFeatureText] = useState("");
 
   // Add-ons state
-  const [addOns, setAddOns] = React.useState<{ id: string; name: string; price: number; description: string }[]>([]);
-  const [addonName, setAddonName] = React.useState("");
-  const [addonPrice, setAddonPrice] = React.useState<number>(15000);
-  const [addonDesc, setAddonDesc] = React.useState("");
+  const [addOns, setAddOns] = useState<{ id: string; name: string; price: number; description: string }[]>([]);
+  const [addonName, setAddonName] = useState("");
+  const [addonPrice, setAddonPrice] = useState<number>(15000);
+  const [addonDesc, setAddonDesc] = useState("");
 
   const handleAddFeature = () => {
     if (newFeatureText.trim()) {
@@ -123,7 +113,7 @@ export function ServiceNewForm() {
         <Button
           variant="ghost"
           onClick={() => router.push("/admin/services")}
-          className="-ml-3 h-8 cursor-pointer rounded-none px-3 font-mono text-[10px] uppercase tracking-wider text-neutral-450 hover:bg-neutral-100 hover:text-foreground dark:hover:bg-neutral-800"
+          className="text-neutral-450 -ml-3 h-8 cursor-pointer rounded-none px-3 font-mono text-[10px] tracking-wider uppercase hover:bg-neutral-100 hover:text-foreground dark:hover:bg-neutral-800"
         >
           <ArrowLeft className="mr-1.5 size-3.5" /> Back to Packages
         </Button>
@@ -132,10 +122,10 @@ export function ServiceNewForm() {
       {/* Main Container */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Left Column: Form Core Details */}
-        <div className="border border-dashed border-neutral-300 bg-neutral-50/50 p-6 dark:border-neutral-700 dark:bg-neutral-900/40 lg:col-span-2 space-y-6">
+        <div className="space-y-6 border border-dashed border-neutral-300 bg-neutral-50/50 p-6 lg:col-span-2 dark:border-neutral-700 dark:bg-neutral-900/40">
           <div className="border-b border-dashed border-neutral-300 pb-4 dark:border-neutral-700">
             <h2 className="font-sans text-sm font-bold tracking-widest text-foreground uppercase">Package Specifications</h2>
-            <p className="font-mono text-[10px] text-neutral-400 uppercase mt-1">Core details, pricing parameters and delivery estimates</p>
+            <p className="mt-1 font-mono text-[10px] text-neutral-400 uppercase">Core details, pricing parameters and delivery estimates</p>
           </div>
 
           <form
@@ -240,20 +230,16 @@ export function ServiceNewForm() {
                 <div className="space-y-2">
                   <span className="block text-[10px] tracking-widest text-neutral-400 uppercase">Banner Image</span>
                   {field.state.value ? (
-                    <div className="relative border border-dashed border-neutral-300 p-2 dark:border-neutral-700 bg-background/50">
+                    <div className="relative border border-dashed border-neutral-300 bg-background/50 p-2 dark:border-neutral-700">
                       <div className="relative aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
-                        <img
-                          src={field.state.value}
-                          alt="Banner Preview"
-                          className="object-cover w-full h-full"
-                        />
+                        <img src={field.state.value} alt="Banner Preview" className="h-full w-full object-cover" />
                       </div>
-                      <div className="flex gap-1.5 mt-2 font-mono text-[10px] items-center text-neutral-400">
+                      <div className="mt-2 flex items-center gap-1.5 font-mono text-[10px] text-neutral-400">
                         <Button
                           type="button"
                           variant="ghost"
                           onClick={() => setIsPickerOpen(true)}
-                          className="h-7 rounded-none px-2 font-mono text-[9px] uppercase text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                          className="h-7 rounded-none px-2 font-mono text-[9px] text-neutral-500 uppercase hover:bg-neutral-100 hover:text-foreground dark:hover:bg-neutral-800"
                         >
                           Change Image
                         </Button>
@@ -262,7 +248,7 @@ export function ServiceNewForm() {
                           type="button"
                           variant="ghost"
                           onClick={() => field.handleChange("")}
-                          className="h-7 rounded-none px-2 font-mono text-[9px] uppercase text-red-500 hover:text-red-600 hover:bg-red-500/10"
+                          className="h-7 rounded-none px-2 font-mono text-[9px] text-red-500 uppercase hover:bg-red-500/10 hover:text-red-600"
                         >
                           Remove
                         </Button>
@@ -271,10 +257,10 @@ export function ServiceNewForm() {
                   ) : (
                     <div
                       onClick={() => setIsPickerOpen(true)}
-                      className="cursor-pointer border border-dashed border-neutral-300 hover:border-neutral-500 py-6 text-center text-neutral-400 dark:border-neutral-700 bg-background/50 flex flex-col items-center justify-center space-y-1.5"
+                      className="flex cursor-pointer flex-col items-center justify-center space-y-1.5 border border-dashed border-neutral-300 bg-background/50 py-6 text-center text-neutral-400 hover:border-neutral-500 dark:border-neutral-700"
                     >
                       <Plus className="size-4" />
-                      <span className="font-mono text-[9px] uppercase tracking-wider">Select Banner Image</span>
+                      <span className="font-mono text-[9px] tracking-wider uppercase">Select Banner Image</span>
                     </div>
                   )}
 
@@ -362,20 +348,19 @@ export function ServiceNewForm() {
                     }
                   }}
                 />
-                <Button type="button" onClick={handleAddFeature} className="h-9 w-9 rounded-none cursor-pointer p-0 shrink-0">
+                <Button type="button" onClick={handleAddFeature} className="h-9 w-9 shrink-0 cursor-pointer rounded-none p-0">
                   <Plus className="size-4" />
                 </Button>
               </div>
 
-              <div className="max-h-[160px] overflow-y-auto border border-dashed border-neutral-300 bg-background p-2.5 space-y-1.5 dark:border-neutral-700">
+              <div className="max-h-[160px] space-y-1.5 overflow-y-auto border border-dashed border-neutral-300 bg-background p-2.5 dark:border-neutral-700">
                 {features.map((feature, idx) => (
-                  <div key={idx} className="flex items-center justify-between gap-4 border-b border-dashed border-neutral-100 pb-1.5 last:border-0 last:pb-0 dark:border-neutral-800">
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between gap-4 border-b border-dashed border-neutral-100 pb-1.5 last:border-0 last:pb-0 dark:border-neutral-800"
+                  >
                     <span className="truncate">{feature}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveFeature(idx)}
-                      className="text-neutral-450 hover:text-red-500 cursor-pointer"
-                    >
+                    <button type="button" onClick={() => handleRemoveFeature(idx)} className="text-neutral-450 cursor-pointer hover:text-red-500">
                       <Trash2 className="size-3.5" />
                     </button>
                   </div>
@@ -384,7 +369,7 @@ export function ServiceNewForm() {
             </div>
 
             {/* Submit Action buttons */}
-            <div className="flex justify-end gap-3 pt-4 border-t border-dashed border-neutral-300 dark:border-neutral-700">
+            <div className="flex justify-end gap-3 border-t border-dashed border-neutral-300 pt-4 dark:border-neutral-700">
               <Button
                 type="button"
                 variant="outline"
@@ -394,7 +379,11 @@ export function ServiceNewForm() {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending} className="h-9 rounded-none bg-foreground font-mono text-[10px] text-background uppercase hover:bg-foreground/90">
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="h-9 rounded-none bg-foreground font-mono text-[10px] text-background uppercase hover:bg-foreground/90"
+              >
                 {isPending ? (
                   <>
                     <Loader2 className="mr-1.5 size-3.5 animate-spin" /> Staging Package...
@@ -408,12 +397,12 @@ export function ServiceNewForm() {
         </div>
 
         {/* Right Column: Add-ons Visibility during creation */}
-        <div className="border border-dashed border-neutral-300 bg-neutral-50/50 p-6 dark:border-neutral-700 dark:bg-neutral-900/40 space-y-6">
+        <div className="space-y-6 border border-dashed border-neutral-300 bg-neutral-50/50 p-6 dark:border-neutral-700 dark:bg-neutral-900/40">
           <div className="border-b border-dashed border-neutral-300 pb-4 dark:border-neutral-700">
-            <h2 className="font-sans text-sm font-bold tracking-widest text-foreground uppercase flex items-center gap-1.5">
+            <h2 className="flex items-center gap-1.5 font-sans text-sm font-bold tracking-widest text-foreground uppercase">
               <Settings className="size-4" /> Add-on Upgrades
             </h2>
-            <p className="font-mono text-[10px] text-neutral-400 uppercase mt-1">Configure optional package addons</p>
+            <p className="mt-1 font-mono text-[10px] text-neutral-400 uppercase">Configure optional package addons</p>
           </div>
 
           {/* Add-on Creator Inputs */}
@@ -449,41 +438,32 @@ export function ServiceNewForm() {
               />
             </Field>
 
-            <Button
-              type="button"
-              onClick={handleAddAddon}
-              className="w-full h-8 rounded-none font-mono text-[9px] uppercase tracking-wider"
-            >
+            <Button type="button" onClick={handleAddAddon} className="h-8 w-full rounded-none font-mono text-[9px] tracking-wider uppercase">
               <Plus className="mr-1.5 size-3.5" /> Add to Package
             </Button>
           </div>
 
           {/* Current Add-ons List */}
-          <div className="space-y-2 pt-2 border-t border-dashed border-neutral-200 dark:border-neutral-800">
+          <div className="space-y-2 border-t border-dashed border-neutral-200 pt-2 dark:border-neutral-800">
             <span className="block font-mono text-[9px] text-neutral-400 uppercase">Staged Add-ons ({addOns.length})</span>
             {addOns.length === 0 ? (
-              <div className="text-center py-6 text-neutral-400 font-mono text-[10px] border border-dashed border-neutral-350 dark:border-neutral-750">
+              <div className="border-neutral-350 dark:border-neutral-750 border border-dashed py-6 text-center font-mono text-[10px] text-neutral-400">
                 No optional upgrades configured yet.
               </div>
             ) : (
-              <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+              <div className="max-h-[220px] space-y-2 overflow-y-auto pr-1">
                 {addOns.map((addon) => (
-                  <div
-                    key={addon.id}
-                    className="border border-dashed border-neutral-300 bg-background p-2.5 relative group dark:border-neutral-700"
-                  >
+                  <div key={addon.id} className="group relative border border-dashed border-neutral-300 bg-background p-2.5 dark:border-neutral-700">
                     <button
                       type="button"
                       onClick={() => handleRemoveAddon(addon.id)}
-                      className="absolute top-2 right-2 text-neutral-450 hover:text-red-500 cursor-pointer"
+                      className="text-neutral-450 absolute top-2 right-2 cursor-pointer hover:text-red-500"
                     >
                       <Trash2 className="size-3.5" />
                     </button>
-                    <div className="font-bold text-foreground pr-5 font-sans text-xs">{addon.name}</div>
-                    <div className="text-[10px] text-neutral-500 font-mono mt-0.5">₱{addon.price.toLocaleString()}</div>
-                    {addon.description && (
-                      <p className="text-[10px] text-neutral-500 mt-1 font-sans leading-normal">{addon.description}</p>
-                    )}
+                    <div className="pr-5 font-sans text-xs font-bold text-foreground">{addon.name}</div>
+                    <div className="mt-0.5 font-mono text-[10px] text-neutral-500">₱{addon.price.toLocaleString()}</div>
+                    {addon.description && <p className="mt-1 font-sans text-[10px] leading-normal text-neutral-500">{addon.description}</p>}
                   </div>
                 ))}
               </div>

@@ -2,13 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import {
-  getOrdersAction,
-  getOrderByIdAction,
-  createOrderAction,
-  updateOrderStatusAction,
-  deleteOrdersAction,
-} from "@/services/orders";
+import { getOrdersAction, getOrderByIdAction, createOrderAction, updateOrderStatusAction, deleteOrdersAction } from "@/services/orders";
 import type { Order } from "@/schemas/dashboard";
 
 export const ORDERS_QUERY_KEY = ["orders"];
@@ -46,9 +40,12 @@ export function useCreateOrderMutation() {
   return useMutation({
     mutationFn: async (data: {
       serviceId: string;
+      serviceName: string;
+      serviceBasePrice: number;
       customerName: string;
       customerEmail: string;
       addOnsSelected: string[];
+      addOns: Array<{ name: string; price: number }>;
       totalAmount: number;
       referenceNumber?: string;
       customerPhone?: string;

@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
@@ -78,12 +77,7 @@ export function WorkDetailDialog() {
             {/* Banner Preview */}
             {currentWork.imageSrc && (
               <div className="relative aspect-[16/6] w-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
-                <Image
-                  src={currentWork.imageSrc}
-                  alt={currentWork.title}
-                  fill
-                  className="object-cover"
-                />
+                <Image src={currentWork.imageSrc} alt={currentWork.title} fill className="object-cover" />
               </div>
             )}
 
@@ -106,21 +100,15 @@ export function WorkDetailDialog() {
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="text-neutral-450 uppercase">Categories:</span>
-                <span className="col-span-2 font-mono uppercase text-neutral-500">
-                  {currentWork.categories.join(", ")}
-                </span>
+                <span className="col-span-2 font-mono text-neutral-500 uppercase">{currentWork.categories.join(", ")}</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="text-neutral-450 uppercase">Tech Stack:</span>
-                <span className="col-span-2 font-mono text-neutral-500">
-                  {currentWork.tags.join(", ")}
-                </span>
+                <span className="col-span-2 font-mono text-neutral-500">{currentWork.tags.join(", ")}</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="text-neutral-450 uppercase">Status:</span>
-                <span className="col-span-2 font-sans font-bold uppercase">
-                  {currentWork.status}
-                </span>
+                <span className="col-span-2 font-sans font-bold uppercase">{currentWork.status}</span>
               </div>
             </div>
 

@@ -1,20 +1,18 @@
 "use client";
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useMemo, useState, useEffect } from "react";
 import { useArticleDetailQuery, useUpdateArticleMutation } from "@/hooks/use-articles";
 import { useCategoriesQuery } from "@/hooks/use-categories";
 import { toast } from "sonner";
 import type { Article, SeoMeta } from "@/schemas/dashboard";
 
 export function useArticleEditor(articleId: string, initialData?: Article) {
-  const router = useRouter();
   const { data: article } = useArticleDetailQuery(articleId);
   const updateArticleMutation = useUpdateArticleMutation(articleId);
   const { data: categoriesData = [] } = useCategoriesQuery();
 
   // Merge staged draft changes on top of original data
-  const mergedActiveArticle = React.useMemo(() => {
+  const mergedActiveArticle = useMemo(() => {
     const activeArticle = article || initialData;
     if (!activeArticle) return null;
     if (activeArticle.draft) {
@@ -29,9 +27,9 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
   }, [article, initialData]);
 
   // Form state
-  const [formData, setFormData] = React.useState<Article | null>(mergedActiveArticle || null);
+  const [formData, setFormData] = useState<Article | null>(mergedActiveArticle || null);
 
-  const isDirty = React.useMemo(() => {
+  const isDirty = useMemo(() => {
     if (!mergedActiveArticle || !formData) return false;
     const cleanActive = { ...mergedActiveArticle, draft: undefined, isDraftSave: undefined };
     const cleanForm = { ...formData, draft: undefined, isDraftSave: undefined };
@@ -40,14 +38,14 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
 
   const isSaving = updateArticleMutation.isPending;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (mergedActiveArticle) {
       setFormData(JSON.parse(JSON.stringify(mergedActiveArticle)) as Article);
     }
   }, [mergedActiveArticle]);
 
   // Dirty check navigation guard
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isDirty) return;
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -145,7 +143,7 @@ export function useArticleEditor(articleId: string, initialData?: Article) {
 
   const handlePublish = async (status: "published" | "draft" | "unpublished") => {
     if (!formData) return;
-    
+
     // Automatic date update on publish
     const today = new Date();
     const formattedDate = today.toLocaleDateString("en-US", {

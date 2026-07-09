@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useWorkDetailQuery, useUpdateWorkMutation } from "@/hooks/use-works";
 import type { Project, SeoMeta } from "@/schemas/dashboard";
@@ -12,14 +12,14 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
   const updateWorkMutation = useUpdateWorkMutation(projectId);
 
   // Merge staged draft changes on top of original data
-  const mergedActiveProject = React.useMemo(() => {
+  const mergedActiveProject = useMemo(() => {
     const activeProject = project || initialData;
     if (!activeProject) return null;
     if (activeProject.draft) {
       return {
         ...activeProject,
         ...(activeProject.draft || {}),
-        categories: (activeProject.draft.categories || activeProject.categories),
+        categories: activeProject.draft.categories || activeProject.categories,
         seo: activeProject.draft.seo || activeProject.seo || undefined,
         caseStudy: activeProject.draft.caseStudy || activeProject.caseStudy,
       } as Project;
@@ -28,23 +28,23 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
   }, [project, initialData]);
 
   // Form State
-  const [formData, setFormData] = React.useState<Project | null>(mergedActiveProject || null);
+  const [formData, setFormData] = useState<Project | null>(mergedActiveProject || null);
 
-  const isDirty = React.useMemo(() => {
+  const isDirty = useMemo(() => {
     if (!mergedActiveProject || !formData) return false;
     const cleanActive = { ...mergedActiveProject, draft: undefined, isDraftSave: undefined };
     const cleanForm = { ...formData, draft: undefined, isDraftSave: undefined };
     return JSON.stringify(cleanActive) !== JSON.stringify(cleanForm);
   }, [mergedActiveProject, formData]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (mergedActiveProject) {
       setFormData(JSON.parse(JSON.stringify(mergedActiveProject)) as Project); // Deep clone for local edits
     }
   }, [mergedActiveProject]);
 
   // Dirty check navigation alert
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isDirty) return;
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();

@@ -2,7 +2,7 @@ import { getPresignedUploadUrlAction } from "@/services/works";
 
 /**
  * Uploads a file directly to Cloudflare R2 bucket using a secure presigned PUT URL.
- * 
+ *
  * @param file The file object to upload.
  * @param folder Optional bucket folder directory prefix (e.g. 'works', 'articles').
  * @returns The public URL of the uploaded asset.
@@ -10,7 +10,7 @@ import { getPresignedUploadUrlAction } from "@/services/works";
 export async function uploadToR2(file: File, folder = "works"): Promise<string> {
   // 1. Request presigned upload URL from the server action
   const res = await getPresignedUploadUrlAction(file.name, file.type, folder);
-  
+
   if (!res.success || !res.presignedUrl || !res.url) {
     throw new Error(res.error || "Failed to generate presigned upload URL.");
   }

@@ -1,26 +1,24 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useServicesQuery, useToggleServiceStatusMutation, useDeleteServicesMutation } from "@/hooks/use-services";
 import { DataTable } from "@/components/common/data-table";
 import type { Service } from "@/schemas/dashboard";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
-import { useRouter } from "next/navigation";
 
 export function ServiceTable() {
   const { setSelectedServiceId, setIsServiceDetailsOpen } = useDashboardStore();
-  const router = useRouter();
 
   const { data: services = [], isLoading } = useServicesQuery();
   const toggleStatusMutation = useToggleServiceStatusMutation();
   const deleteServicesMutation = useDeleteServicesMutation();
 
-  const [itemsToDelete, setItemsToDelete] = React.useState<Service[]>([]);
-  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+  const [itemsToDelete, setItemsToDelete] = useState<Service[]>([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const [showToggleConfirm, setShowToggleConfirm] = React.useState(false);
-  const [itemToToggle, setItemToToggle] = React.useState<Service | null>(null);
+  const [showToggleConfirm, setShowToggleConfirm] = useState(false);
+  const [itemToToggle, setItemToToggle] = useState<Service | null>(null);
 
   const columns = [
     {
@@ -40,13 +38,13 @@ export function ServiceTable() {
               </span>
             )}
           </div>
-          <p className="max-w-md text-xs leading-relaxed text-neutral-400 dark:text-neutral-500 line-clamp-2">{item.description}</p>
+          <p className="line-clamp-2 max-w-md text-xs leading-relaxed text-neutral-400 dark:text-neutral-500">{item.description}</p>
         </div>
       ),
     },
     {
       header: "Base Price",
-      accessorKey: (item: Service) => <span className="font-mono text-xs font-mono text-foreground">₱{item.price.toLocaleString()}</span>,
+      accessorKey: (item: Service) => <span className="font-mono text-xs text-foreground">₱{item.price.toLocaleString()}</span>,
     },
     {
       header: "Timeline",
@@ -56,7 +54,7 @@ export function ServiceTable() {
       header: "Features & Add-ons",
       accessorKey: (item: Service) => (
         <div className="flex flex-col gap-1">
-          <span className="text-neutral-400 font-mono text-[10px]">{item.features.length} Features included</span>
+          <span className="font-mono text-[10px] text-neutral-400">{item.features.length} Features included</span>
           <div className="flex flex-wrap gap-1">
             {item.addOns.slice(0, 1).map((add) => (
               <span
@@ -154,9 +152,7 @@ export function ServiceTable() {
         open={showToggleConfirm}
         onOpenChange={setShowToggleConfirm}
         title={itemToToggle?.disabled ? "Enable Service Package" : "Disable Service Package"}
-        description={`Are you sure you want to ${
-          itemToToggle?.disabled ? "enable" : "disable"
-        } the service package "${itemToToggle?.name}"? ${
+        description={`Are you sure you want to ${itemToToggle?.disabled ? "enable" : "disable"} the service package "${itemToToggle?.name}"? ${
           itemToToggle?.disabled
             ? "This will make it visible to clients on the public pricing page."
             : "This will temporarily hide it from the public pricing page."

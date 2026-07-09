@@ -17,10 +17,7 @@ export async function getArticleBySlugQuery(slug: string) {
 }
 
 export async function insertArticleQuery(data: typeof articles.$inferInsert) {
-  const [inserted] = await db
-    .insert(articles)
-    .values(data)
-    .returning();
+  const [inserted] = await db.insert(articles).values(data).returning();
   return inserted;
 }
 
@@ -37,8 +34,5 @@ export async function updateArticleQuery(id: number, data: Partial<typeof articl
 }
 
 export async function deleteArticlesQuery(ids: number[]) {
-  return await db
-    .delete(articles)
-    .where(inArray(articles.id, ids))
-    .returning();
+  return await db.delete(articles).where(inArray(articles.id, ids)).returning();
 }

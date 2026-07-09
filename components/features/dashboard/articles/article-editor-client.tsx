@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -34,9 +34,7 @@ export function ArticleEditorClient({ articleId, initialData }: ArticleEditorCli
     handlePublish,
   } = useArticleEditor(articleId, initialData);
 
-  const [activeTab, setActiveTab] = React.useState<"edit" | "preview">(
-    searchParams.get("edit") === "true" ? "edit" : "preview"
-  );
+  const [activeTab, setActiveTab] = useState<"edit" | "preview">(searchParams.get("edit") === "true" ? "edit" : "preview");
 
   if (!formData) {
     return (

@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { Button } from "@/components/ui/button";
-import { Clock, ArrowRight, Layers, ArrowUpRight } from "lucide-react";
+import { Layers, ArrowUpRight } from "lucide-react";
 import { useServicesQuery } from "@/hooks/use-services";
 import type { Service } from "@/schemas/dashboard";
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
@@ -18,10 +17,9 @@ interface ServicesListProps {
 }
 
 export function ServicesList({ initialServices }: ServicesListProps) {
-  const router = useRouter();
   const { data: dbServices = initialServices } = useServicesQuery(initialServices);
 
-  const activeServices = React.useMemo(() => {
+  const activeServices = useMemo(() => {
     return dbServices.filter((s) => !s.disabled);
   }, [dbServices]);
 
@@ -53,18 +51,22 @@ export function ServicesList({ initialServices }: ServicesListProps) {
             ))}
           </div>
         ) : (
-          <Empty className="border border-dashed border-neutral-300 dark:border-neutral-700 py-16 rounded-none bg-neutral-50/20 dark:bg-neutral-900/10">
+          <Empty className="rounded-none border border-dashed border-neutral-300 bg-neutral-50/20 py-16 dark:border-neutral-700 dark:bg-neutral-900/10">
             <EmptyHeader>
-              <EmptyMedia variant="icon" className="border border-dashed border-neutral-300 dark:border-neutral-700 bg-background text-neutral-400 size-10 rounded-none mb-1">
+              <EmptyMedia
+                variant="icon"
+                className="mb-1 size-10 rounded-none border border-dashed border-neutral-300 bg-background text-neutral-400 dark:border-neutral-700"
+              >
                 <Layers className="size-6" />
               </EmptyMedia>
-              <EmptyTitle className="font-mono text-xs text-neutral-400 uppercase tracking-widest">No active packages listed</EmptyTitle>
-              <EmptyDescription className="font-sans text-xs text-neutral-500 max-w-xs leading-relaxed">
-                We don&apos;t have any pre-configured packages published at the moment. Please get in touch directly to discuss custom scope or consulting.
+              <EmptyTitle className="font-mono text-xs tracking-widest text-neutral-400 uppercase">No active packages listed</EmptyTitle>
+              <EmptyDescription className="max-w-xs font-sans text-xs leading-relaxed text-neutral-500">
+                We don&apos;t have any pre-configured packages published at the moment. Please get in touch directly to discuss custom scope or
+                consulting.
               </EmptyDescription>
             </EmptyHeader>
             <ConnectDialog triggerText="Let's Talk">
-              <Button className="mt-2 h-9 rounded-none font-mono text-[10px] uppercase gap-1.5">
+              <Button className="mt-2 h-9 gap-1.5 rounded-none font-mono text-[10px] uppercase">
                 Connect Directly
                 <ArrowUpRight className="size-3.5" />
               </Button>

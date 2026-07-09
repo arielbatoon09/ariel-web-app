@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/common/data-table";
 import { cn } from "@/lib/utils";
@@ -15,9 +15,9 @@ export function CategoriesTable() {
   const toggleStatusMutation = useToggleCategoryStatusMutation();
   const deleteCategoriesMutation = useDeleteCategoriesMutation();
 
-  const [itemsToDelete, setItemsToDelete] = React.useState<Category[]>([]);
-  const [categoryToToggle, setCategoryToToggle] = React.useState<Category | null>(null);
-  const [confirmType, setConfirmType] = React.useState<"delete" | "status" | null>(null);
+  const [itemsToDelete, setItemsToDelete] = useState<Category[]>([]);
+  const [categoryToToggle, setCategoryToToggle] = useState<Category | null>(null);
+  const [confirmType, setConfirmType] = useState<"delete" | "status" | null>(null);
 
   const columns = [
     {
@@ -72,11 +72,7 @@ export function CategoriesTable() {
     setConfirmType(null);
   };
 
-  const confirmTitle = confirmType === "delete"
-    ? "Delete Category"
-    : categoryToToggle?.disabled
-      ? "Enable Category"
-      : "Disable Category";
+  const confirmTitle = confirmType === "delete" ? "Delete Category" : categoryToToggle?.disabled ? "Enable Category" : "Disable Category";
 
   const confirmDescription =
     confirmType === "delete"
@@ -85,11 +81,7 @@ export function CategoriesTable() {
         ? `Are you sure you want to enable the category "${categoryToToggle?.name}"? This will make it visible across public works and article categories.`
         : `Are you sure you want to disable the category "${categoryToToggle?.name}"? Disabling this category will hide it and all its associated items from public view.`;
 
-  const confirmText = confirmType === "delete"
-    ? "Delete"
-    : categoryToToggle?.disabled
-      ? "Enable"
-      : "Disable";
+  const confirmText = confirmType === "delete" ? "Delete" : categoryToToggle?.disabled ? "Enable" : "Disable";
 
   const confirmVariant = confirmType === "delete" ? "destructive" : "default";
 

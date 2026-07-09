@@ -6,13 +6,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
-import {
-  getWorksQuery,
-  getWorkByIdQuery,
-  insertWorkQuery,
-  updateWorkQuery,
-  deleteWorksQuery,
-} from "@/data/works";
+import { getWorksQuery, getWorkByIdQuery, insertWorkQuery, updateWorkQuery, deleteWorksQuery } from "@/data/works";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -246,9 +240,7 @@ export async function getPresignedUploadUrlAction(filename: string, contentType:
     const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 300 });
 
     const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
-    const cdnUrl = r2PublicUrl 
-      ? `${r2PublicUrl}/${bucketName}/${key}` 
-      : `https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/${key}`;
+    const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/${key}`;
 
     return { success: true, presignedUrl, key, url: cdnUrl };
   } catch (err: any) {

@@ -1,5 +1,6 @@
 "use client";
-import * as React from "react";
+
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
@@ -15,14 +16,14 @@ export function ArticleDetailDialog() {
   const { data: articles = [] } = useArticlesQuery();
   const toggleStatusMutation = useToggleArticleStatusMutation();
 
-  const [confirmStatus, setConfirmStatus] = React.useState(false);
+  const [confirmStatus, setConfirmStatus] = useState(false);
 
-  const currentArticle = React.useMemo(() => {
+  const currentArticle = useMemo(() => {
     if (!selectedArticleId) return null;
     return articles.find((a) => a.id === selectedArticleId) || null;
   }, [articles, selectedArticleId]);
 
-  const displayArticle = React.useMemo(() => {
+  const displayArticle = useMemo(() => {
     if (!currentArticle) return null;
     if (currentArticle.draft) {
       return {
@@ -88,16 +89,11 @@ export function ArticleDetailDialog() {
             {/* Banner Preview */}
             {displayArticle.imageSrc ? (
               <div className="relative aspect-[16/6] w-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
-                <Image
-                  src={displayArticle.imageSrc}
-                  alt={displayArticle.title}
-                  fill
-                  className="object-cover"
-                />
+                <Image src={displayArticle.imageSrc} alt={displayArticle.title} fill className="object-cover" />
               </div>
             ) : (
               <div className="flex aspect-[16/6] w-full flex-col items-center justify-center border border-dashed border-neutral-300 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900/40">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-400">No Banner Image</span>
+                <span className="font-mono text-[9px] tracking-wider text-neutral-400 uppercase">No Banner Image</span>
               </div>
             )}
 
@@ -120,29 +116,23 @@ export function ArticleDetailDialog() {
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="text-neutral-450 uppercase">Banner URL:</span>
-                <span className="col-span-2 font-mono text-neutral-500 break-all">{displayArticle.imageSrc || "None"}</span>
+                <span className="col-span-2 font-mono break-all text-neutral-500">{displayArticle.imageSrc || "None"}</span>
               </div>
               {displayArticle.categories && displayArticle.categories.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                   <span className="text-neutral-450 uppercase">Categories:</span>
-                  <span className="col-span-2 font-mono uppercase text-neutral-500">
-                    {displayArticle.categories.join(", ")}
-                  </span>
+                  <span className="col-span-2 font-mono text-neutral-500 uppercase">{displayArticle.categories.join(", ")}</span>
                 </div>
               )}
               {displayArticle.tags && displayArticle.tags.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                   <span className="text-neutral-450 uppercase">Keywords:</span>
-                  <span className="col-span-2 font-mono text-neutral-500">
-                    {displayArticle.tags.join(", ")}
-                  </span>
+                  <span className="col-span-2 font-mono text-neutral-500">{displayArticle.tags.join(", ")}</span>
                 </div>
               )}
               <div className="grid grid-cols-3 gap-2">
                 <span className="text-neutral-450 uppercase">Status:</span>
-                <span className="col-span-2 font-sans font-bold uppercase">
-                  {currentArticle?.status}
-                </span>
+                <span className="col-span-2 font-sans font-bold uppercase">{currentArticle?.status}</span>
               </div>
             </div>
 

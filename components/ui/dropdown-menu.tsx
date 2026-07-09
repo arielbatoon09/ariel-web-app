@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useContext } from "react";
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 
 import { cn } from "@/lib/utils";
@@ -12,7 +12,7 @@ function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
 }
 
 function DropdownMenuPortal({ ...props }: MenuPrimitive.Portal.Props) {
-  const container = React.useContext(PortalContainerContext);
+  const container = useContext(PortalContainerContext);
   return <MenuPrimitive.Portal data-slot="dropdown-menu-portal" container={container || undefined} {...props} />;
 }
 

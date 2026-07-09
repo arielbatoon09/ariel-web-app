@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from "react";
+import { useCallback, useEffect } from "react";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 
 export function useCircularTheme() {
   const { resolvedTheme, setTheme } = useTheme();
 
-  const toggleTheme = React.useCallback(
+  const toggleTheme = useCallback(
     (event?: React.MouseEvent | MouseEvent) => {
       const isDark = resolvedTheme === "dark";
 
@@ -69,7 +69,7 @@ function isTypingTarget(target: EventTarget | null) {
 function ThemeHotkey() {
   const { toggleTheme } = useCircularTheme();
 
-  React.useEffect(() => {
+  useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.defaultPrevented || event.repeat) {
         return;

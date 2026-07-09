@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/common/data-table";
 import { cn } from "@/lib/utils";
@@ -15,9 +15,9 @@ export function CustomerTable() {
   const toggleBlockMutation = useToggleCustomerBlockMutation();
   const deleteCustomersMutation = useDeleteCustomersMutation();
 
-  const [itemsToDelete, setItemsToDelete] = React.useState<Customer[]>([]);
-  const [customerToBlock, setCustomerToBlock] = React.useState<Customer | null>(null);
-  const [confirmType, setConfirmType] = React.useState<"delete" | "block" | null>(null);
+  const [itemsToDelete, setItemsToDelete] = useState<Customer[]>([]);
+  const [customerToBlock, setCustomerToBlock] = useState<Customer | null>(null);
+  const [confirmType, setConfirmType] = useState<"delete" | "block" | null>(null);
 
   const columns = [
     {
