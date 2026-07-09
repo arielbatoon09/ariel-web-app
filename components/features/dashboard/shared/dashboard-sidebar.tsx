@@ -79,16 +79,16 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
       {/* Main Sidebar Wrapper */}
       <aside
         className={cn(
-          "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col justify-between border-r border-neutral-300 bg-neutral-50/50 backdrop-blur-md transition-transform duration-300 ease-out lg:translate-x-0 dark:border-neutral-700 dark:bg-neutral-950/30",
-          isOpen ? "translate-x-0" : "-translate-x-full",
-          "lg:sticky lg:h-screen"
+          "fixed top-0 bottom-0 right-0 left-auto z-50 flex w-64 flex-col justify-between border-l border-neutral-300 bg-neutral-50/50 backdrop-blur-md transition-transform duration-300 ease-out dark:border-neutral-700 dark:bg-neutral-950/30",
+          isOpen ? "translate-x-0" : "translate-x-full",
+          "lg:left-0 lg:right-auto lg:border-r lg:border-l-0 lg:translate-x-0 lg:sticky lg:h-screen"
         )}
       >
         {/* Dynamic Intersection Plus Markers */}
-        <div className="pointer-events-none absolute top-0 right-0 z-20 translate-x-1/2 -translate-y-1/2 text-[10px] font-light text-neutral-300 select-none dark:text-neutral-700">
+        <div className="pointer-events-none absolute top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2 text-[10px] font-light text-neutral-300 select-none dark:text-neutral-700 lg:left-auto lg:right-0 lg:translate-x-1/2">
           +
         </div>
-        <div className="pointer-events-none absolute right-0 bottom-0 z-20 translate-x-1/2 translate-y-1/2 text-[10px] font-light text-neutral-300 select-none dark:text-neutral-700">
+        <div className="pointer-events-none absolute left-0 bottom-0 z-20 -translate-x-1/2 translate-y-1/2 text-[10px] font-light text-neutral-300 select-none dark:text-neutral-700 lg:left-auto lg:right-0 lg:translate-x-1/2">
           +
         </div>
 
