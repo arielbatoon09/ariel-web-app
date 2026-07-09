@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { useOrderDetailQuery, useUpdateOrderStatusMutation } from "@/hooks/use-orders";
 import { useServicesQuery } from "@/hooks/use-services";
+import { useUpdateTransactionStatusMutation } from "@/hooks/use-transactions";
 import {
   useOrderChatQuery,
   useSendOrderMessageMutation,
@@ -37,8 +38,39 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
   const { data: messages = [], isLoading: isChatLoading, refetch: refetchChat } = useOrderChatQuery(orderId);
 
   const updateStatusMutation = useUpdateOrderStatusMutation(orderIdStr);
+  const updateTxStatusMutation = useUpdateTransactionStatusMutation();
   const sendMessageMutation = useSendOrderMessageMutation(orderId);
   const deliverOrderMutation = useDeliverOrderMutation(orderId);
+
+  const handleApprovePayment = async () => {
+    if (!transaction) return;
+    try {
+      await updateTxStatusMutation.mutateAsync({ id: transaction.id, status: "successful" });
+      await updateStatusMutation.mutateAsync({ id: order.id, status: "in-progress" });
+      setIsPaymentModalOpen(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleRejectPayment = async () => {
+    if (!transaction) return;
+    try {
+      await updateTxStatusMutation.mutateAsync({ id: transaction.id, status: "failed" });
+      await updateStatusMutation.mutateAsync({ id: order.id, status: "pending" });
+      setIsPaymentModalOpen(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleVerifyOrder = async () => {
+    if (transaction && transaction.status === "pending") {
+      await handleApprovePayment();
+    } else {
+      await updateStatusMutation.mutateAsync({ id: order.id, status: "in-progress" });
+    }
+  };
 
   const [messageText, setMessageText] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -154,11 +186,11 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
       )}
       {order.status === "pending" && (
         <Button
-          disabled={updateStatusMutation.isPending}
-          onClick={() => updateStatusMutation.mutate({ id: order.id, status: "in-progress" })}
+          disabled={updateStatusMutation.isPending || updateTxStatusMutation.isPending}
+          onClick={handleVerifyOrder}
           className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] uppercase text-white dark:bg-neutral-100 dark:text-neutral-900"
         >
-          {updateStatusMutation.isPending ? "..." : "Verify"}
+          {updateStatusMutation.isPending || updateTxStatusMutation.isPending ? "..." : "Verify"}
         </Button>
       )}
       {(order.status === "in-progress" || order.status === "revision_requested") && (
@@ -343,14 +375,36 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
               </div>
             </div>
 
-            <div className="flex justify-end border-t border-dashed border-neutral-200 px-6 py-4 dark:border-neutral-800">
-              <Button
-                type="button"
-                className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] uppercase text-white dark:bg-neutral-100 dark:text-neutral-900"
-                onClick={() => setIsPaymentModalOpen(false)}
-              >
-                Close
-              </Button>
+            <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 px-6 py-4 dark:border-neutral-800">
+              {transaction.status === "pending" ? (
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={updateTxStatusMutation.isPending || updateStatusMutation.isPending}
+                    className="h-8 rounded-none border-dashed font-mono text-[10px] uppercase text-rose-500 hover:bg-rose-50 dark:border-rose-800"
+                    onClick={handleRejectPayment}
+                  >
+                    Reject Payment
+                  </Button>
+                  <Button
+                    type="button"
+                    disabled={updateTxStatusMutation.isPending || updateStatusMutation.isPending}
+                    className="h-8 rounded-none bg-green-600 font-mono text-[10px] uppercase text-white hover:bg-green-700"
+                    onClick={handleApprovePayment}
+                  >
+                    Approve Payment
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  type="button"
+                  className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] uppercase text-white dark:bg-neutral-100 dark:text-neutral-900"
+                  onClick={() => setIsPaymentModalOpen(false)}
+                >
+                  Close
+                </Button>
+              )}
             </div>
           </DialogContent>
         )}

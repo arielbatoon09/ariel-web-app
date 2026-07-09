@@ -40,7 +40,14 @@ export default async function CustomerLayout({ children }: { children: React.Rea
   }
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-background lg:flex-row">
-      <DashboardSidebar role="customer" navItems={CUSTOMER_NAV_ITEMS} />
+      <DashboardSidebar
+        role="customer"
+        navItems={CUSTOMER_NAV_ITEMS}
+        userProfile={{
+          name: dbUser.fullName || user.email || "Client",
+          email: user.email || "",
+        }}
+      />
       <main className="h-full flex-1 overflow-x-hidden overflow-y-auto px-4 pt-0 pb-6 md:px-8 md:pt-0 md:pb-8">
         <div className="mx-auto max-w-6xl space-y-6">
           <AdminHeader />

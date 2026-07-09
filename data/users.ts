@@ -27,3 +27,16 @@ export async function insertUser(values: { authId: string; fullName: string; pho
 export async function deleteUserById(id: number) {
   await db.delete(users).where(eq(users.id, id));
 }
+
+export async function updateUserByAuthId(authId: string, values: { fullName: string; phone?: string | null }) {
+  const [updated] = await db
+    .update(users)
+    .set({
+      fullName: values.fullName,
+      phone: values.phone || null,
+      updatedAt: new Date(),
+    })
+    .where(eq(users.authId, authId))
+    .returning();
+  return updated || null;
+}

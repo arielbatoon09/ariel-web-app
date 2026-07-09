@@ -1,6 +1,6 @@
 import { DashboardSidebar, type NavItem } from "@/components/features/dashboard/shared/dashboard-sidebar";
 import { AdminHeader } from "@/components/features/dashboard/shared/admin-header";
-import { LayoutDashboard, Briefcase, FileText, Layers, ShoppingBag, CreditCard, User, Package, ImageIcon } from "lucide-react";
+import { LayoutDashboard, Briefcase, FileText, Layers, ShoppingBag, CreditCard, User, Package, ImageIcon, Settings } from "lucide-react";
 
 import { redirect } from "next/navigation";
 import { getCurrentSessionUser } from "@/data/auth";
@@ -22,6 +22,7 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
   { label: "Services", href: "/admin/services", icon: <Package className="size-4" /> },
   { label: "Orders", href: "/admin/orders", icon: <ShoppingBag className="size-4" /> },
   { label: "Transactions", href: "/admin/transactions", icon: <CreditCard className="size-4" /> },
+  { label: "Settings", href: "/admin/settings", icon: <Settings className="size-4" /> },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -46,7 +47,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-background lg:flex-row">
-      <DashboardSidebar role="admin" navItems={ADMIN_NAV_ITEMS} />
+      <DashboardSidebar
+        role="admin"
+        navItems={ADMIN_NAV_ITEMS}
+        userProfile={{
+          name: dbUser.fullName || user.email || "Admin",
+          email: user.email || "",
+        }}
+      />
       <main className="h-full flex-1 overflow-x-hidden overflow-y-auto px-4 pt-0 pb-6 md:px-8 md:pt-0 md:pb-8">
         <div className="mx-auto max-w-6xl space-y-6">
           <AdminHeader />
