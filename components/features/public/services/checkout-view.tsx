@@ -270,7 +270,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                   </div>
                   <div>
                     <h4 className="font-sans text-xs font-bold text-foreground">Order Staged</h4>
-                    <p className="mt-0.5 text-[10px] text-neutral-400">Booking details & payment receipt uploaded successfully.</p>
+                    <p className="mt-0.5 text-[10px] text-neutral-400">Order details & payment receipt uploaded successfully.</p>
                   </div>
                 </div>
 
@@ -330,7 +330,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
         {/* Title */}
         <div className="border border-dashed border-neutral-300 bg-neutral-50/50 p-6 dark:border-neutral-700 dark:bg-neutral-900/10">
           <span className="font-mono text-[9px] tracking-widest text-neutral-400 uppercase">Service Checkout</span>
-          <h1 className="mt-1 font-sans text-2xl font-bold tracking-tight text-foreground md:text-3xl">Complete Booking: {service.name}</h1>
+          <h1 className="mt-1 font-sans text-2xl font-bold tracking-tight text-foreground md:text-3xl">Complete Order: {service.name}</h1>
         </div>
 
         <form onSubmit={handleSubmitCheckout} className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -639,10 +639,10 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="mr-1.5 size-3.5 animate-spin" /> Booking...
+                      <Loader2 className="mr-1.5 size-3.5 animate-spin" /> Processing...
                     </>
                   ) : (
-                    <>Submit Booking</>
+                    <>Submit Order</>
                   )}
                 </Button>
               </div>

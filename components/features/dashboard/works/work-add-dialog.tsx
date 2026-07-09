@@ -20,7 +20,7 @@ const workFormSchema = z.object({
     .string()
     .min(2, "Slug must be at least 2 characters.")
     .regex(/^[a-z0-9-]+$/, "Invalid slug format. Use lowercase letters, numbers, and dashes."),
-  categoriesRaw: z.string().min(2, "At least one category is required."),
+  categoriesRaw: z.string().min(2, ""),
 });
 
 export function WorkAddDialog() {
@@ -29,21 +29,15 @@ export function WorkAddDialog() {
   const createWorkMutation = useCreateWorkMutation();
   const { data: categoriesData = [] } = useCategoriesQuery();
 
-  const activeWorkCategories =
-    categoriesData.length > 0
-      ? categoriesData.filter((c) => (c.target === "works" || c.target === "both") && !c.disabled)
-      : [
-          { name: "Web Development", slug: "web" },
-          { name: "Mobile Apps", slug: "mobile" },
-          { name: "AI & Data", slug: "ai-data" },
-          { name: "Open Source", slug: "open-source" },
-        ];
+  const activeWorkCategories = categoriesData.filter(
+    (c) => (c.target === "works" || c.target === "both") && !c.disabled
+  );
 
   const form = useForm({
     defaultValues: {
       title: "",
       slug: "",
-      categoriesRaw: "web",
+      categoriesRaw: "",
     },
     validators: {
       onSubmit: workFormSchema,
@@ -197,25 +191,42 @@ export function WorkAddDialog() {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel className="text-[10px] tracking-widest text-neutral-400 uppercase">Categories</FieldLabel>
                     <div className="flex flex-wrap gap-2 pt-1">
-                      {activeWorkCategories.map((cat) => {
-                        const isSelected = selectedCategories.includes(cat.slug);
-                        return (
-                          <button
-                            key={cat.slug}
+                      {activeWorkCategories.length === 0 ? (
+                        <div className="flex w-full flex-col gap-2">
+                          <p className="text-[10px] text-neutral-450 uppercase">No active portfolio categories found in DB.</p>
+                          <Button
                             type="button"
-                            disabled={isPending}
-                            onClick={() => handleToggle(cat.slug)}
-                            className={cn(
-                              "border px-2.5 py-1 font-mono text-[10px] uppercase transition-all duration-150 select-none",
-                              isSelected
-                                ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
-                                : "border-dashed border-neutral-300 bg-background/50 text-neutral-500 hover:border-neutral-900 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-100"
-                            )}
+                            variant="outline"
+                            onClick={() => {
+                              setIsWorkAddOpen(false);
+                              router.push("/admin/categories");
+                            }}
+                            className="h-8 w-full rounded-none border border-dashed border-neutral-300 font-mono text-[10px] uppercase hover:bg-neutral-50 dark:border-neutral-700"
                           >
-                            {cat.name}
-                          </button>
-                        );
-                      })}
+                            Add Category
+                          </Button>
+                        </div>
+                      ) : (
+                        activeWorkCategories.map((cat) => {
+                          const isSelected = selectedCategories.includes(cat.slug);
+                          return (
+                            <button
+                              key={cat.slug}
+                              type="button"
+                              disabled={isPending}
+                              onClick={() => handleToggle(cat.slug)}
+                              className={cn(
+                                "border px-2.5 py-1 font-mono text-[10px] uppercase transition-all duration-150 select-none",
+                                isSelected
+                                  ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+                                  : "border-dashed border-neutral-300 bg-background/50 text-neutral-500 hover:border-neutral-900 hover:text-foreground dark:border-neutral-700 dark:hover:border-neutral-100"
+                              )}
+                            >
+                              {cat.name}
+                            </button>
+                          );
+                        })
+                      )}
                     </div>
                     {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
                   </Field>

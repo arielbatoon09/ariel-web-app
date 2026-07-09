@@ -126,7 +126,7 @@ export function WorkEditorHeader({
               <Button
                 size="sm"
                 onClick={() => handlePublish("published")}
-                disabled={isSaving}
+                disabled={isSaving || isDirty}
                 className="h-8 rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
               >
                 Publish Changes
@@ -161,7 +161,7 @@ export function WorkEditorHeader({
           <Button
             size="sm"
             onClick={() => handlePublish("published")}
-            disabled={isSaving}
+            disabled={isSaving || isDirty}
             className="h-8 justify-center rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
           >
             Publish

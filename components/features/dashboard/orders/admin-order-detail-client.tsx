@@ -161,7 +161,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
           {updateStatusMutation.isPending ? "..." : "Verify"}
         </Button>
       )}
-      {order.status !== "completed" && order.status !== "cancelled" && (
+      {(order.status === "in-progress" || order.status === "revision_requested") && (
         <Button
           className="h-8 rounded-none bg-green-600 font-mono text-[10px] uppercase text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
           onClick={() => setIsDeliveryOpen(true)}

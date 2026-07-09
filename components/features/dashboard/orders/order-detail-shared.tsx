@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import {
   AlertCircle,
+  ArrowLeft,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
@@ -34,6 +35,9 @@ export const ORDER_WORKFLOW_STEPS = [
 export function getTimelineStepStatus(stepIndex: number, currentStatus: Order["status"]) {
   const statuses = ["pending", "in-progress", "delivered", "completed"];
   const normalized = currentStatus === "revision_requested" ? "in-progress" : currentStatus;
+  
+  if (normalized === "completed") return "completed";
+  
   const currentIdx = statuses.indexOf(normalized);
 
   if (currentIdx > stepIndex) return "completed";
@@ -519,9 +523,9 @@ export function OrderCompactBar({
           <Link
             href={backHref}
             title={backLabel}
-            className="inline-flex shrink-0 items-center gap-1 font-mono text-[10px] tracking-wider text-neutral-500 uppercase hover:text-foreground"
+            className="flex size-8 shrink-0 items-center justify-center border border-dashed border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900/60"
           >
-            ←
+            <ArrowLeft className="size-4" />
           </Link>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">

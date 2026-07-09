@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Checkout - ${service.name} | Software Engineering Cebu`,
-    description: `Complete your booking for the ${service.name} package.`,
+    description: `Complete your orders for the ${service.name} package.`,
   };
 }
 

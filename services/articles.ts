@@ -162,7 +162,7 @@ export async function updateArticleAction(
     const numericId = parseInt(id, 10);
 
     // Cleaned up: Removed unused parameters completely from destructuring to stop the warnings
-    const { isDraftSave, ...fields } = data;
+    const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as any;
 
     // Look up exactly what the query function expects as a payload
     type UpdateQueryPayload = Parameters<typeof updateArticleQuery>[1];

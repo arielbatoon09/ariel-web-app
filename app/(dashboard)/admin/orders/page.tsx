@@ -4,7 +4,7 @@ import { OrderDetailDialog } from "@/components/features/dashboard/orders/order-
 
 export const metadata = {
   title: "Orders Management | Admin",
-  description: "Track bookings, verify manual GCash/Maya receipts, and process development workflows.",
+  description: "Track orders, verify manual GCash/Maya receipts, and process development workflows.",
 };
 
 export default function AdminOrdersPage() {
