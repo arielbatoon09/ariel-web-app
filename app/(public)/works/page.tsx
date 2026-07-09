@@ -1,7 +1,9 @@
 import { WorksArchive } from "@/components/features/public/works/works-archive";
 import { getWorksQuery } from "@/data/works";
 import { getCategoriesQuery } from "@/data/categories";
-import type { Project } from "@/constants/projects";
+import type { Project } from "@/schemas/dashboard";
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "Portfolio | Creative Works & Projects Cebu",
@@ -17,6 +19,7 @@ export default async function WorksPage() {
       ...p,
       id: p.id.toString(),
       categories: p.categories as ("web" | "mobile" | "ai-data" | "open-source")[],
+      seo: p.seo ?? undefined,
     }));
 
   const categoriesData = await getCategoriesQuery();

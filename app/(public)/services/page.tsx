@@ -1,6 +1,8 @@
 import { ServicesList } from "@/components/features/public/services/services-list";
 import { getServicesQuery } from "@/data/services";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "Services & Pricing | Web Design & Software Dev Cebu",
   description:

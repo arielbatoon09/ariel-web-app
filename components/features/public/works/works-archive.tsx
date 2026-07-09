@@ -7,11 +7,12 @@ import { GridCard } from "@/components/common/grid-card";
 import { ArchiveFilterBar } from "@/components/common/archive-filter-bar";
 import { ArchivePagination } from "@/components/common/archive-pagination";
 import { useArchiveFilter } from "@/hooks/use-archive-filter";
+import { useWorksQuery } from "@/hooks/use-works";
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import { FolderX, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConnectDialog } from "@/components/common/connect-dialog";
-import type { Project } from "@/constants/projects";
+import type { Project } from "@/schemas/dashboard";
 
 interface WorksCategory {
   id: string;
@@ -34,9 +35,24 @@ function resolveCategories(slugs: string[], categories: WorksCategory[]): string
 }
 
 export function WorksArchive({ initialProjects, categories }: WorksArchiveProps) {
+  const { data: allProjects = initialProjects } = useWorksQuery(initialProjects);
+
+  const projects = useMemo(
+    () =>
+      allProjects
+        .filter((p) => p.status === "published")
+        .map((p) => ({
+          ...p,
+          id: p.id.toString(),
+          categories: p.categories as ("web" | "mobile" | "ai-data" | "open-source")[],
+          seo: p.seo ?? undefined,
+        })),
+    [allProjects]
+  );
+
   const { activeCategory, setActiveCategory, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, filteredItems, paginatedItems } =
     useArchiveFilter({
-      items: initialProjects,
+      items: projects,
       searchKeys: ["title", "description", "tags", "tag"],
       itemsPerPage: 6,
     });

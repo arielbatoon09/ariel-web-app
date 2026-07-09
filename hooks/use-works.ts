@@ -8,7 +8,7 @@ import type { Project } from "@/schemas/dashboard";
 
 export const WORKS_QUERY_KEY = ["works"];
 
-export function useWorksQuery() {
+export function useWorksQuery(initialData?: Project[]) {
   return useQuery({
     queryKey: WORKS_QUERY_KEY,
     queryFn: async () => {
@@ -18,6 +18,7 @@ export function useWorksQuery() {
       }
       return res.works as Project[];
     },
+    initialData,
   });
 }
 

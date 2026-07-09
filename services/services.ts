@@ -13,6 +13,7 @@ import {
   getServiceBySlugQuery,
 } from "@/data/services";
 import type { Service } from "@/schemas/dashboard";
+import { revalidateServicesPaths } from "@/lib/revalidate-cms";
 
 async function checkAdminAccess() {
   const currentUser = await getCurrentSessionUser();
@@ -87,6 +88,7 @@ export async function createServiceAction(data: Omit<Service, "id">) {
 
   try {
     const newService = await insertServiceQuery(data);
+    revalidateServicesPaths(newService.slug);
     return {
       success: true,
       service: newService,
@@ -104,9 +106,14 @@ export async function updateServiceAction(id: string, data: Partial<Service>) {
   }
 
   try {
+    const existing = await getServiceByIdQuery(id);
     const updated = await updateServiceQuery(id, data);
     if (!updated) {
       return { success: false, error: "Service not found or update failed." };
+    }
+    revalidateServicesPaths(updated.slug);
+    if (existing?.slug && existing.slug !== updated.slug) {
+      revalidateServicesPaths(existing.slug);
     }
     return {
       success: true,
@@ -131,6 +138,7 @@ export async function toggleServiceStatusAction(id: string) {
     }
 
     const updated = await updateServiceQuery(id, { disabled: !service.disabled });
+    revalidateServicesPaths(service.slug);
     return {
       success: true,
       disabled: updated?.disabled,
@@ -149,6 +157,10 @@ export async function deleteServicesAction(ids: string[]) {
 
   try {
     const deleted = await deleteServicesQuery(ids);
+    revalidateServicesPaths();
+    for (const service of deleted) {
+      revalidateServicesPaths(service.slug);
+    }
     return {
       success: true,
       services: deleted,

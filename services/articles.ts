@@ -12,6 +12,7 @@ import {
   deleteArticlesQuery,
 } from "@/data/articles";
 import { getErrorMessage } from "@/lib/error-utils";
+import { revalidateArticlesPaths } from "@/lib/revalidate-cms";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -128,6 +129,10 @@ export async function createArticleAction(data: {
       status: data.status || "draft",
     });
 
+    if (inserted.status === "published") {
+      revalidateArticlesPaths(inserted.slug);
+    }
+
     return { success: true, article: { ...inserted, id: inserted.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to create article.") };
@@ -160,6 +165,7 @@ export async function updateArticleAction(
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericId = parseInt(id, 10);
+    const existing = await getArticleByIdQuery(numericId);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as any;
@@ -199,6 +205,13 @@ export async function updateArticleAction(
     const updated = await updateArticleQuery(numericId, updatePayload);
     if (!updated) return { success: false, error: "Article not found." };
 
+    if (!isDraftSave) {
+      revalidateArticlesPaths(updated.slug);
+      if (existing?.slug && existing.slug !== updated.slug) {
+        revalidateArticlesPaths(existing.slug);
+      }
+    }
+
     return { success: true, article: { ...updated, id: updated.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to update article.") };
@@ -218,6 +231,8 @@ export async function toggleArticleStatusAction(id: string) {
     const newStatus = article.status === "published" ? "draft" : "published";
     const updated = await updateArticleQuery(numericId, { status: newStatus });
 
+    revalidateArticlesPaths(article.slug);
+
     return { success: true, status: updated?.status };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to toggle status.") };
@@ -231,7 +246,12 @@ export async function deleteArticlesAction(ids: string[]) {
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericIds = ids.map((id) => parseInt(id, 10));
-    await deleteArticlesQuery(numericIds);
+    const deleted = await deleteArticlesQuery(numericIds);
+
+    revalidateArticlesPaths();
+    for (const article of deleted) {
+      revalidateArticlesPaths(article.slug);
+    }
 
     return { success: true };
   } catch (err: unknown) {

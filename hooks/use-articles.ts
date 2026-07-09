@@ -15,7 +15,7 @@ import type { Article } from "@/schemas/dashboard";
 
 export const ARTICLES_QUERY_KEY = ["articles"];
 
-export function useArticlesQuery() {
+export function useArticlesQuery(initialData?: Article[]) {
   return useQuery({
     queryKey: ARTICLES_QUERY_KEY,
     queryFn: async () => {
@@ -25,6 +25,7 @@ export function useArticlesQuery() {
       }
       return res.articles as Article[];
     },
+    initialData,
   });
 }
 

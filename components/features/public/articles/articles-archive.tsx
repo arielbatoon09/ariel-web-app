@@ -7,6 +7,7 @@ import { GridCard } from "@/components/common/grid-card";
 import { ArchiveFilterBar } from "@/components/common/archive-filter-bar";
 import { ArchivePagination } from "@/components/common/archive-pagination";
 import { useArchiveFilter } from "@/hooks/use-archive-filter";
+import { useArticlesQuery } from "@/hooks/use-articles";
 import type { Article } from "@/schemas/dashboard";
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import { BookOpen, ArrowUpRight } from "lucide-react";
@@ -34,6 +35,21 @@ function resolveCategories(slugs: string[], categories: ArticleCategory[]): stri
 }
 
 export function ArticlesArchive({ initialArticles, categories }: ArticlesArchiveProps) {
+  const { data: allArticles = initialArticles } = useArticlesQuery(initialArticles);
+
+  const articles = useMemo(
+    () =>
+      allArticles
+        .filter((a) => a.status === "published")
+        .map((a) => ({
+          ...a,
+          id: a.id.toString(),
+          categories: a.categories as string[],
+          seo: a.seo ?? undefined,
+        })),
+    [allArticles]
+  );
+
   const dynamicCategories = useMemo(() => {
     return [
       { id: "all", label: "All Articles" },
@@ -46,7 +62,7 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
 
   const { activeCategory, setActiveCategory, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, filteredItems, paginatedItems } =
     useArchiveFilter({
-      items: initialArticles,
+      items: articles,
       searchKeys: ["title", "description", "tags"],
       itemsPerPage: 6,
     });

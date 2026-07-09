@@ -8,6 +8,7 @@ import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
 import { getWorksQuery, getWorkByIdQuery, insertWorkQuery, updateWorkQuery, deleteWorksQuery } from "@/data/works";
 import { getErrorMessage } from "@/lib/error-utils";
+import { revalidateWorksPaths } from "@/lib/revalidate-cms";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -145,6 +146,10 @@ export async function createWorkAction(data: {
       status: data.status || "draft",
     });
 
+    if (inserted.status === "published") {
+      revalidateWorksPaths(inserted.slug);
+    }
+
     return { success: true, work: { ...inserted, id: inserted.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to create work.") };
@@ -175,6 +180,7 @@ export async function updateWorkAction(
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericId = parseInt(id, 10);
+    const existing = await getWorkByIdQuery(numericId);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as UpdateWorkInput;
 
@@ -212,6 +218,13 @@ export async function updateWorkAction(
     const updated = await updateWorkQuery(numericId, updatePayload);
     if (!updated) return { success: false, error: "Work not found." };
 
+    if (!isDraftSave) {
+      revalidateWorksPaths(updated.slug);
+      if (existing?.slug && existing.slug !== updated.slug) {
+        revalidateWorksPaths(existing.slug);
+      }
+    }
+
     return { success: true, work: { ...updated, id: updated.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to update work.") };
@@ -231,6 +244,8 @@ export async function toggleWorkStatusAction(id: string) {
     const newStatus = work.status === "published" ? "draft" : "published";
     const updated = await updateWorkQuery(numericId, { status: newStatus });
 
+    revalidateWorksPaths(work.slug);
+
     return { success: true, status: updated?.status };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to toggle status.") };
@@ -244,7 +259,12 @@ export async function deleteWorksAction(ids: string[]) {
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericIds = ids.map((id) => parseInt(id, 10));
-    await deleteWorksQuery(numericIds);
+    const deleted = await deleteWorksQuery(numericIds);
+
+    revalidateWorksPaths();
+    for (const work of deleted) {
+      revalidateWorksPaths(work.slug);
+    }
 
     return { success: true };
   } catch (err: unknown) {

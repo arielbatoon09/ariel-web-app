@@ -3,6 +3,8 @@ import { getArticlesQuery } from "@/data/articles";
 import { getCategoriesQuery } from "@/data/categories";
 import type { Article } from "@/schemas/dashboard";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "Articles & Insights | Web Engineering Blog Cebu",
   description:
