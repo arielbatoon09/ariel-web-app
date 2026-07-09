@@ -1,4 +1,5 @@
 import { ServicesList } from "@/components/features/public/services/services-list";
+import { getServicesQuery } from "@/data/services";
 
 export const metadata = {
   title: "Services & Pricing | Web Design & Software Dev Cebu",
@@ -6,7 +7,10 @@ export const metadata = {
     "Explore professional software development pricing in Cebu. Packages for high-performance MVPs, custom SaaS dashboard systems, mobile apps, and technical scoping.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  // Fetch services directly on the server
+  const dbServices = await getServicesQuery();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -24,24 +28,14 @@ export default function ServicesPage() {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Software Engineering Packages",
-      itemListElement: [
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: "Startup MVP Package",
-            description: "Rapid development of a performance-optimized web dashboard or mobile app MVP, completed within 20 days.",
-          },
+      itemListElement: dbServices.map((s) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: s.name,
+          description: s.description,
         },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: "SaaS Platform Package",
-            description: "Premium full-scale web platform engineering, custom API setups, and integrations.",
-          },
-        },
-      ],
+      })),
     },
   };
 
@@ -49,7 +43,7 @@ export default function ServicesPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="min-h-screen bg-background">
-        <ServicesList />
+        <ServicesList initialServices={dbServices} />
       </div>
     </>
   );

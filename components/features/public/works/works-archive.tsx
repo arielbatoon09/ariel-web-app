@@ -6,6 +6,10 @@ import { GridCard } from "@/components/common/grid-card";
 import { ArchiveFilterBar } from "@/components/common/archive-filter-bar";
 import { ArchivePagination } from "@/components/common/archive-pagination";
 import { useArchiveFilter } from "@/hooks/use-archive-filter";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
+import { FolderX, ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ConnectDialog } from "@/components/common/connect-dialog";
 
 import * as React from "react";
 import type { Project } from "@/constants/projects";
@@ -90,9 +94,23 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
             <ArchivePagination currentPage={currentPage} totalPages={totalPages} totalItems={filteredItems.length} onPageChange={setCurrentPage} />
           </div>
         ) : (
-          <div className="dark:text-neutral-450 border border-dashed border-neutral-300 py-20 text-center font-mono text-xs text-neutral-500 dark:border-neutral-700">
-            No projects matched your criteria.
-          </div>
+          <Empty className="border border-dashed border-neutral-300 dark:border-neutral-700 py-20 rounded-none bg-neutral-50/20 dark:bg-neutral-900/10">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="border border-dashed border-neutral-300 dark:border-neutral-700 bg-background text-neutral-400 size-10 rounded-none mb-1">
+                <FolderX className="size-6" />
+              </EmptyMedia>
+              <EmptyTitle className="font-mono text-xs text-neutral-400 uppercase tracking-widest">No projects matched your criteria</EmptyTitle>
+              <EmptyDescription className="font-sans text-xs text-neutral-500 max-w-xs leading-relaxed">
+                Try selecting a different category or adjusting your search term to discover relevant engineering works.
+              </EmptyDescription>
+            </EmptyHeader>
+            <ConnectDialog triggerText="Let's Talk">
+              <Button className="mt-2 h-9 rounded-none font-mono text-[10px] uppercase gap-1.5">
+                Discuss Custom Scope
+                <ArrowUpRight className="size-3.5" />
+              </Button>
+            </ConnectDialog>
+          </Empty>
         )}
       </div>
     </Section>

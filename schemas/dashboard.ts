@@ -100,11 +100,13 @@ export const ServiceAddOnSchema = z.object({
 export const ServiceSchema = z.object({
   id: z.string().min(1, "ID is required"),
   name: z.string().min(1, "Name is required"),
+  slug: z.string().min(1, "Slug is required"),
   description: z.string().min(1, "Description is required"),
   price: z.number().min(0, "Price must be positive"),
   deliveryTime: z.string().min(1, "Delivery time is required"),
   features: z.array(z.string()).min(1, "At least one feature is required"),
   addOns: z.array(ServiceAddOnSchema).default([]),
+  imageSrc: z.string().optional().nullable(),
   disabled: z.boolean().optional(),
 });
 
@@ -117,6 +119,9 @@ export const OrderSchema = z.object({
   addOnsSelected: z.array(z.string()).default([]),
   totalAmount: z.number().min(0, "Total amount must be positive"),
   createdAt: z.string().min(1, "Creation date is required"),
+  referenceNumber: z.string().optional().nullable(),
+  customerPhone: z.string().optional().nullable(),
+  requirements: z.string().optional().nullable(),
 });
 
 export const TransactionSchema = z.object({
@@ -126,6 +131,8 @@ export const TransactionSchema = z.object({
   status: z.enum(["successful", "failed", "pending"]),
   paymentMethod: z.string().min(1, "Payment method is required"),
   date: z.string().min(1, "Transaction date is required"),
+  referenceNumber: z.string().min(1, "Reference number is required"),
+  screenshotUrl: z.string().min(1, "Screenshot is required"),
 });
 
 export const CustomerActivitySchema = z.object({

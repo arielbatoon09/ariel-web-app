@@ -93,6 +93,45 @@ export async function getMediaPresignedUrlAction(filename: string, contentType: 
   }
 }
 
+/** Generate a presigned PUT URL for uploading receipt screenshots publicly (without admin check) */
+export async function getReceiptPresignedUrlAction(filename: string, contentType: string) {
+  try {
+    if (!contentType.startsWith("image/")) {
+      return { success: false, error: "Only image files are allowed as receipt proof." };
+    }
+
+    const bucketName = process.env.R2_BUCKET_NAME;
+    if (!bucketName) {
+      return { success: false, error: "Cloudflare R2 Bucket Name is not configured." };
+    }
+
+    const cleanFilename = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+    const key = `receipts/${cleanFilename}`;
+
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+      ContentType: contentType,
+    });
+
+    const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 600 });
+
+    const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+    const cdnUrl = r2PublicUrl
+      ? `${r2PublicUrl}/${bucketName}/${key}`
+      : `https://pub-placeholder.r2.dev/${key}`;
+
+    return {
+      success: true,
+      presignedUrl,
+      url: cdnUrl,
+      key,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to generate receipt upload link." };
+  }
+}
+
 /** Insert a media record after a successful R2 upload */
 export async function insertMediaRecordAction(data: {
   filename: string;

@@ -205,3 +205,67 @@ export const articles = pgTable(
     index("articles_title_idx").on(table.title),
   ]
 );
+
+export const services = pgTable(
+  "services",
+  {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    description: text("description").notNull(),
+    slug: text("slug").unique().notNull(),
+    price: integer("price").notNull(),
+    deliveryTime: text("delivery_time").notNull(),
+    features: jsonb("features").$type<string[]>().default([]).notNull(),
+    addOns: jsonb("add_ons").$type<Array<{ id: string; name: string; price: number; description: string }>>().default([]).notNull(),
+    imageSrc: text("image_src"),
+    disabled: boolean("disabled").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("services_name_idx").on(table.name),
+    index("services_slug_idx").on(table.slug),
+  ]
+);
+
+export const orders = pgTable(
+  "orders",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").references(() => users.id, { onDelete: "set null" }),
+    serviceId: integer("service_id").references(() => services.id, { onDelete: "restrict" }).notNull(),
+    customerName: text("customer_name").notNull(),
+    customerEmail: text("customer_email").notNull(),
+    status: text("status").default("pending").notNull(), // pending, in-progress, completed, cancelled
+    addOnsSelected: jsonb("add_ons_selected").$type<string[]>().default([]).notNull(),
+    totalAmount: integer("total_amount").notNull(),
+    referenceNumber: text("reference_number").unique(),
+    customerPhone: text("customer_phone"),
+    requirements: text("requirements"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("orders_user_id_idx").on(table.userId),
+    index("orders_service_id_idx").on(table.serviceId),
+  ]
+);
+
+export const transactions = pgTable(
+  "transactions",
+  {
+    id: serial("id").primaryKey(),
+    orderId: integer("order_id").references(() => orders.id, { onDelete: "cascade" }).notNull(),
+    amount: integer("amount").notNull(),
+    status: text("status").default("pending").notNull(), // pending, successful, failed
+    paymentMethod: text("payment_method").notNull(), // GCash, Maya, BPI, Wise
+    referenceNumber: text("reference_number").notNull(),
+    screenshotUrl: text("screenshot_url").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("transactions_order_id_idx").on(table.orderId),
+    index("transactions_reference_number_idx").on(table.referenceNumber),
+  ]
+);

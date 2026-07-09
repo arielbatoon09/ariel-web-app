@@ -1,0 +1,158 @@
+"use server";
+
+import { getCurrentSessionUser } from "@/data/auth";
+import { getUserByAuthId } from "@/data/users";
+import { getUserRoleByUserId } from "@/data/roles";
+import {
+  getServicesQuery,
+  getServiceByIdQuery,
+  insertServiceQuery,
+  updateServiceQuery,
+  deleteServicesQuery,
+  getServiceBySlugQuery,
+} from "@/data/services";
+import type { Service } from "@/schemas/dashboard";
+
+async function checkAdminAccess() {
+  const currentUser = await getCurrentSessionUser();
+  if (!currentUser) {
+    return { authorized: false, error: "Unauthorized: Please log in." };
+  }
+
+  const dbUser = await getUserByAuthId(currentUser.id);
+  if (!dbUser) {
+    return { authorized: false, error: "Unauthorized: Account not found." };
+  }
+
+  const role = await getUserRoleByUserId(dbUser.id);
+  if (role !== "admin") {
+    return { authorized: false, error: "Unauthorized: Admin privileges required." };
+  }
+
+  return { authorized: true };
+}
+
+// 1. Get all services (Public/Admin)
+export async function getServicesAction() {
+  try {
+    const servicesList = await getServicesQuery();
+    return {
+      success: true,
+      services: servicesList,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to fetch services." };
+  }
+}
+
+// 2. Get single service by ID
+export async function getServiceByIdAction(id: string) {
+  try {
+    const service = await getServiceByIdQuery(id);
+    if (!service) {
+      return { success: false, error: "Service not found." };
+    }
+    return {
+      success: true,
+      service,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to fetch service details." };
+  }
+}
+
+// 2b. Get single service by Slug
+export async function getServiceBySlugAction(slug: string) {
+  try {
+    const service = await getServiceBySlugQuery(slug);
+    if (!service) {
+      return { success: false, error: "Service not found." };
+    }
+    return {
+      success: true,
+      service,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to fetch service details." };
+  }
+}
+
+// 3. Create service (Admin only)
+export async function createServiceAction(data: Omit<Service, "id">) {
+  const auth = await checkAdminAccess();
+  if (!auth.authorized) {
+    return { success: false, error: auth.error };
+  }
+
+  try {
+    const newService = await insertServiceQuery(data);
+    return {
+      success: true,
+      service: newService,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to create service." };
+  }
+}
+
+// 4. Update service (Admin only)
+export async function updateServiceAction(id: string, data: Partial<Service>) {
+  const auth = await checkAdminAccess();
+  if (!auth.authorized) {
+    return { success: false, error: auth.error };
+  }
+
+  try {
+    const updated = await updateServiceQuery(id, data);
+    if (!updated) {
+      return { success: false, error: "Service not found or update failed." };
+    }
+    return {
+      success: true,
+      service: updated,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to update service." };
+  }
+}
+
+// 5. Toggle service status (Admin only)
+export async function toggleServiceStatusAction(id: string) {
+  const auth = await checkAdminAccess();
+  if (!auth.authorized) {
+    return { success: false, error: auth.error };
+  }
+
+  try {
+    const service = await getServiceByIdQuery(id);
+    if (!service) {
+      return { success: false, error: "Service not found." };
+    }
+
+    const updated = await updateServiceQuery(id, { disabled: !service.disabled });
+    return {
+      success: true,
+      disabled: updated?.disabled,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to toggle service status." };
+  }
+}
+
+// 6. Delete services (Admin only)
+export async function deleteServicesAction(ids: string[]) {
+  const auth = await checkAdminAccess();
+  if (!auth.authorized) {
+    return { success: false, error: auth.error };
+  }
+
+  try {
+    const deleted = await deleteServicesQuery(ids);
+    return {
+      success: true,
+      services: deleted,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to delete services." };
+  }
+}

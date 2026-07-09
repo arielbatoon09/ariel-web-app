@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -16,9 +16,25 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
     label: string;
   };
   titleClassName?: string;
+  price?: string;
+  deliveryTime?: string;
 }
 
-export function GridCard({ number, tag, icon, title, description, imageSrc, tags, link, className, titleClassName, ...props }: GridCardProps) {
+export function GridCard({
+  number,
+  tag,
+  icon,
+  title,
+  description,
+  imageSrc,
+  tags,
+  link,
+  className,
+  titleClassName,
+  price,
+  deliveryTime,
+  ...props
+}: GridCardProps) {
   return (
     <div
       className={cn(
@@ -81,7 +97,27 @@ export function GridCard({ number, tag, icon, title, description, imageSrc, tags
         {/* Title & Description */}
         <div className="space-y-2">
           <h3 className={cn("font-sans text-lg font-bold tracking-tight text-foreground", titleClassName)}>{title}</h3>
-          <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{description}</p>
+          
+          {(price || deliveryTime) && (
+            <div className="flex items-center gap-3 text-xs font-medium text-neutral-500 dark:text-neutral-400">
+              {price && (
+                <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                  {price}
+                </span>
+              )}
+              {price && deliveryTime && <span className="text-neutral-300 dark:text-neutral-700">|</span>}
+              {deliveryTime && (
+                <span className="flex items-center gap-1">
+                  <Clock className="size-3 text-neutral-400" />
+                  {deliveryTime}
+                </span>
+              )}
+            </div>
+          )}
+
+          <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 line-clamp-2" title={description}>
+            {description}
+          </p>
         </div>
       </div>
 

@@ -85,6 +85,20 @@ interface DashboardState {
   setIsArticleDetailsOpen: (open: boolean) => void;
   setIsArticleAddOpen: (open: boolean) => void;
 
+  // Services UI State & Actions
+  selectedServiceId: string | null;
+  isServiceDetailsOpen: boolean;
+  isServiceAddOpen: boolean;
+  setSelectedServiceId: (id: string | null) => void;
+  setIsServiceDetailsOpen: (open: boolean) => void;
+  setIsServiceAddOpen: (open: boolean) => void;
+
+  // Orders UI State & Actions
+  selectedOrderId: string | null;
+  isOrderDetailsOpen: boolean;
+  setSelectedOrderId: (id: string | null) => void;
+  setIsOrderDetailsOpen: (open: boolean) => void;
+
   // Media UI State & Actions
   mediaSelectedIds: Set<number>;
   mediaActiveAsset: MediaAsset | null;
@@ -115,6 +129,7 @@ const INITIAL_SERVICES: Service[] = [
   {
     id: "srv-1",
     name: "Startup MVP Launch",
+    slug: "startup-mvp-launch",
     description:
       "Validate your ideas with a fast-to-market, feature-complete Minimal Viable Product (MVP) designed to impress users and pitch to investors.",
     price: 150000,
@@ -134,6 +149,7 @@ const INITIAL_SERVICES: Service[] = [
   {
     id: "srv-2",
     name: "Production Web App & SaaS",
+    slug: "production-web-app-and-saas",
     description:
       "A full-scale, secure, and highly optimized Software-as-a-Service (SaaS) web application ready for production, high user traffic, and operational scale.",
     price: 350000,
@@ -153,6 +169,7 @@ const INITIAL_SERVICES: Service[] = [
   {
     id: "srv-3",
     name: "AI Integration & Agents",
+    slug: "ai-integration-and-agents",
     description:
       "Inject intelligent capabilities into your workflow, including vector search engines, retrieval-augmented generation (RAG), and autonomous agents.",
     price: 200000,
@@ -210,6 +227,8 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     status: "successful",
     paymentMethod: "Stripe Card",
     date: "2026-06-28 10:15 AM",
+    referenceNumber: "ref-stripe-001",
+    screenshotUrl: "",
   },
   {
     id: "tx-2",
@@ -218,6 +237,8 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     status: "pending",
     paymentMethod: "Bank Transfer",
     date: "2026-07-04 02:30 PM",
+    referenceNumber: "ref-bank-002",
+    screenshotUrl: "",
   },
   {
     id: "tx-3",
@@ -226,6 +247,8 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     status: "successful",
     paymentMethod: "PayPal",
     date: "2026-05-15 11:00 AM",
+    referenceNumber: "ref-paypal-003",
+    screenshotUrl: "",
   },
 ];
 
@@ -375,6 +398,20 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   setSelectedArticleId: (id) => set(() => ({ selectedArticleId: id })),
   setIsArticleDetailsOpen: (open) => set(() => ({ isArticleDetailsOpen: open })),
   setIsArticleAddOpen: (open) => set(() => ({ isArticleAddOpen: open })),
+
+  // Services UI State & Actions
+  selectedServiceId: null,
+  isServiceDetailsOpen: false,
+  isServiceAddOpen: false,
+  setSelectedServiceId: (id) => set(() => ({ selectedServiceId: id })),
+  setIsServiceDetailsOpen: (open) => set(() => ({ isServiceDetailsOpen: open })),
+  setIsServiceAddOpen: (open) => set(() => ({ isServiceAddOpen: open })),
+
+  // Orders UI State & Actions
+  selectedOrderId: null,
+  isOrderDetailsOpen: false,
+  setSelectedOrderId: (id) => set(() => ({ selectedOrderId: id })),
+  setIsOrderDetailsOpen: (open) => set(() => ({ isOrderDetailsOpen: open })),
 
   // Media UI State & Actions
   mediaSelectedIds: new Set<number>(),

@@ -72,15 +72,26 @@ export function CategoriesTable() {
     setConfirmType(null);
   };
 
-  const confirmTitle = confirmType === "delete" ? "Delete Category" : "Toggle Status";
+  const confirmTitle = confirmType === "delete"
+    ? "Delete Category"
+    : categoryToToggle?.disabled
+      ? "Enable Category"
+      : "Disable Category";
+
   const confirmDescription =
     confirmType === "delete"
       ? "This action cannot be undone. This will permanently delete the selected category/categories."
       : categoryToToggle?.disabled
-        ? `Are you sure you want to enable the category "${categoryToToggle?.name}"?`
-        : `Are you sure you want to disable the category "${categoryToToggle?.name}"?`;
+        ? `Are you sure you want to enable the category "${categoryToToggle?.name}"? This will make it visible across public works and article categories.`
+        : `Are you sure you want to disable the category "${categoryToToggle?.name}"? Disabling this category will hide it and all its associated items from public view.`;
 
-  const confirmVariant = confirmType === "delete" || (confirmType === "status" && !categoryToToggle?.disabled) ? "destructive" : "default";
+  const confirmText = confirmType === "delete"
+    ? "Delete"
+    : categoryToToggle?.disabled
+      ? "Enable"
+      : "Disable";
+
+  const confirmVariant = confirmType === "delete" ? "destructive" : "default";
 
   return (
     <div className="relative">
@@ -101,6 +112,8 @@ export function CategoriesTable() {
         onOpenChange={(open) => !open && setConfirmType(null)}
         title={confirmTitle}
         description={confirmDescription}
+        confirmText={confirmText}
+        cancelText="Cancel"
         onConfirm={handleConfirm}
         variant={confirmVariant}
         isLoading={deleteCategoriesMutation.isPending || toggleStatusMutation.isPending}
