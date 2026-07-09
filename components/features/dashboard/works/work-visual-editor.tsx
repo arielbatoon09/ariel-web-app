@@ -3,10 +3,11 @@
 import * as React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Target, CheckCircle2, Cpu, FileText } from "lucide-react";
+import { Plus, Trash2, Target, CheckCircle2, Cpu, FileText, ChevronDown, ChevronUp } from "lucide-react";
 import type { Project, SeoMeta } from "@/schemas/dashboard";
 import { MediaPickerDialog } from "@/components/common/media-picker-dialog";
 import { useCustomersQuery } from "@/hooks/use-customers";
+import { useCategoriesQuery } from "@/hooks/use-categories";
 
 interface WorkVisualEditorProps {
   formData: Project;
@@ -35,11 +36,12 @@ export function WorkVisualEditor({
 }: WorkVisualEditorProps) {
   const [isBannerPickerOpen, setIsBannerPickerOpen] = React.useState(false);
   const [isGalleryPickerOpen, setIsGalleryPickerOpen] = React.useState(false);
+  const [seoOpen, setSeoOpen] = React.useState(false);
 
   const { data: customers = [] } = useCustomersQuery();
+  const { data: categoriesData = [] } = useCategoriesQuery();
 
   const [tagsInput, setTagsInput] = React.useState("");
-  const [categoriesInput, setCategoriesInput] = React.useState("");
 
   React.useEffect(() => {
     if (formData.tags && document.activeElement?.id !== "tags-input") {
@@ -47,11 +49,24 @@ export function WorkVisualEditor({
     }
   }, [formData.tags]);
 
-  React.useEffect(() => {
-    if (formData.categories && document.activeElement?.id !== "categories-input") {
-      setCategoriesInput((formData.categories || []).join(", "));
-    }
-  }, [formData.categories]);
+  const activeWorksCategories = React.useMemo(() => {
+    return categoriesData.length > 0
+      ? categoriesData.filter((c) => (c.target === "works" || c.target === "both") && !c.disabled)
+      : [
+          { name: "Web Development", slug: "web" },
+          { name: "Mobile Apps", slug: "mobile" },
+          { name: "AI & Data", slug: "ai-data" },
+          { name: "Open Source", slug: "open-source" },
+        ];
+  }, [categoriesData]);
+
+  const toggleCategory = (slug: string) => {
+    const current = (formData.categories || []) as string[];
+    const next = current.includes(slug)
+      ? current.filter((c) => c !== slug)
+      : [...current, slug];
+    handleFieldChange("categories", next);
+  };
 
   return (
     <>
@@ -218,19 +233,27 @@ export function WorkVisualEditor({
                   placeholder="https://github.com/..."
                 />
               </div>
-              <div className="flex items-center justify-between py-1">
+              <div className="flex flex-col gap-2 py-1">
                 <span className="text-neutral-400">Categories:</span>
-                <input
-                  id="categories-input"
-                  value={categoriesInput}
-                  onChange={(e) => {
-                    setCategoriesInput(e.target.value);
-                    const val = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
-                    handleFieldChange("categories", val);
-                  }}
-                  className="focus:ring-dashed focus:ring-neutral-450 w-48 rounded border-none bg-transparent p-0.5 text-right font-bold text-foreground outline-none focus:ring-1"
-                  placeholder="e.g. web, mobile"
-                />
+                <div className="flex flex-wrap gap-1.5 justify-end">
+                  {activeWorksCategories.map((cat) => {
+                    const selected = ((formData.categories || []) as string[]).includes(cat.slug);
+                    return (
+                      <button
+                        key={cat.slug}
+                        type="button"
+                        onClick={() => toggleCategory(cat.slug)}
+                        className={`px-2 py-0.5 font-mono text-[9px] uppercase border transition-all duration-150 ${
+                          selected
+                            ? "bg-neutral-900 text-white border-neutral-900 dark:bg-neutral-100 dark:text-neutral-900 dark:border-neutral-100"
+                            : "bg-transparent text-neutral-400 border-dashed border-neutral-300 hover:border-neutral-600 dark:border-neutral-700"
+                        }`}
+                      >
+                        {cat.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -383,112 +406,123 @@ export function WorkVisualEditor({
       </div>
 
       {/* Section 4: SEO Metadata Settings */}
-      <div className="space-y-6 border-t border-solid border-neutral-300 pt-8 dark:border-neutral-800">
-        <div>
-          <h3 className="font-sans text-lg font-bold tracking-tight text-foreground">SEO Metadata Settings</h3>
-          <p className="text-neutral-505 font-mono text-xs dark:text-neutral-400">
-            Configure page-level titles and descriptions for search engine indexing.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="space-y-2">
-            <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Meta Title</label>
-            <input
-              type="text"
-              value={formData.seo?.title || ""}
-              onChange={(e) => handleSeoFieldChange("title", e.target.value)}
-              placeholder="e.g. Project Name | Ariel Batoon Portfolio"
-              className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
-            />
-            <span className="block font-mono text-[10px] text-neutral-400">
-              Characters: {(formData.seo?.title || "").length} (Recommended: 50-60)
-            </span>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Meta Keywords</label>
-            <input
-              type="text"
-              value={formData.seo?.keywords || ""}
-              onChange={(e) => handleSeoFieldChange("keywords", e.target.value)}
-              placeholder="e.g. portfolio, react, nextjs, frontend"
-              className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
-            />
-            <span className="block font-mono text-[10px] text-neutral-400">Comma-separated tags</span>
-          </div>
-
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Canonical URL Override</label>
-            <input
-              type="text"
-              value={formData.seo?.canonicalUrl || ""}
-              onChange={(e) => handleSeoFieldChange("canonicalUrl", e.target.value)}
-              placeholder="e.g. https://medium.com/@username/original-post"
-              className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
-            />
-            <span className="block font-mono text-[10px] text-neutral-400">Leave empty to automatically point to this page&apos;s URL</span>
-          </div>
-
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Meta Description</label>
-            <textarea
-              value={formData.seo?.description || ""}
-              onChange={(e) => handleSeoFieldChange("description", e.target.value)}
-              placeholder="Brief summary of the project for search engine listings..."
-              className="focus:ring-neutral-450 w-full resize-none rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
-              rows={3}
-            />
-            <span className="block font-mono text-[10px] text-neutral-400">
-              Characters: {(formData.seo?.description || "").length} (Recommended: 150-160)
-            </span>
-          </div>
-        </div>
-
-        {/* Social Share Settings (Open Graph) */}
-        <div className="space-y-4 border-t border-solid border-neutral-300 pt-6 dark:border-neutral-800">
+      <div className="border-t border-solid border-neutral-300 pt-8 dark:border-neutral-800">
+        <button
+          type="button"
+          onClick={() => setSeoOpen((v) => !v)}
+          className="flex w-full items-center justify-between text-left cursor-pointer"
+        >
           <div>
-            <h4 className="font-sans text-sm font-bold tracking-tight text-foreground">Social Sharing (Open Graph Overrides)</h4>
-            <p className="font-mono text-[10px] text-neutral-500 dark:text-neutral-400">
-              Override metadata titles, descriptions, and images when shared on social channels (Facebook, Twitter/X, LinkedIn).
+            <h3 className="font-sans text-lg font-bold tracking-tight text-foreground">SEO Metadata Settings</h3>
+            <p className="text-neutral-505 font-mono text-xs dark:text-neutral-400">
+              Configure page-level titles and descriptions for search engine indexing.
             </p>
           </div>
+          {seoOpen ? <ChevronUp className="size-5 text-neutral-400" /> : <ChevronDown className="size-5 text-neutral-400" />}
+        </button>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">OG Title</label>
-              <input
-                type="text"
-                value={formData.seo?.ogTitle || ""}
-                onChange={(e) => handleSeoFieldChange("ogTitle", e.target.value)}
-                placeholder="Custom sharing title..."
-                className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
-              />
+        {seoOpen && (
+          <div className="mt-8 space-y-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Meta Title</label>
+                <input
+                  type="text"
+                  value={formData.seo?.title || ""}
+                  onChange={(e) => handleSeoFieldChange("title", e.target.value)}
+                  placeholder="e.g. Project Name | Ariel Batoon Portfolio"
+                  className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
+                />
+                <span className="block font-mono text-[10px] text-neutral-400">
+                  Characters: {(formData.seo?.title || "").length} (Recommended: 50-60)
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Meta Keywords</label>
+                <input
+                  type="text"
+                  value={formData.seo?.keywords || ""}
+                  onChange={(e) => handleSeoFieldChange("keywords", e.target.value)}
+                  placeholder="e.g. portfolio, react, nextjs, frontend"
+                  className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
+                />
+                <span className="block font-mono text-[10px] text-neutral-400">Comma-separated tags</span>
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Canonical URL Override</label>
+                <input
+                  type="text"
+                  value={formData.seo?.canonicalUrl || ""}
+                  onChange={(e) => handleSeoFieldChange("canonicalUrl", e.target.value)}
+                  placeholder="e.g. https://medium.com/@username/original-post"
+                  className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
+                />
+                <span className="block font-mono text-[10px] text-neutral-400">Leave empty to automatically point to this page&apos;s URL</span>
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">Meta Description</label>
+                <textarea
+                  value={formData.seo?.description || ""}
+                  onChange={(e) => handleSeoFieldChange("description", e.target.value)}
+                  placeholder="Brief summary of the project for search engine listings..."
+                  className="focus:ring-neutral-450 w-full resize-none rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
+                  rows={3}
+                />
+                <span className="block font-mono text-[10px] text-neutral-400">
+                  Characters: {(formData.seo?.description || "").length} (Recommended: 150-160)
+                </span>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">OG Image URL</label>
-              <input
-                type="text"
-                value={formData.seo?.ogImage || ""}
-                onChange={(e) => handleSeoFieldChange("ogImage", e.target.value)}
-                placeholder="e.g. /projects/banner-og.png"
-                className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
-              />
-            </div>
+            {/* Social Share Settings (Open Graph) */}
+            <div className="space-y-4 border-t border-solid border-neutral-300 pt-6 dark:border-neutral-800">
+              <div>
+                <h4 className="font-sans text-sm font-bold tracking-tight text-foreground">Social Sharing (Open Graph Overrides)</h4>
+                <p className="font-mono text-[10px] text-neutral-500 dark:text-neutral-400">
+                  Override metadata titles, descriptions, and images when shared on social channels (Facebook, Twitter/X, LinkedIn).
+                </p>
+              </div>
 
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">OG Description</label>
-              <textarea
-                value={formData.seo?.ogDescription || ""}
-                onChange={(e) => handleSeoFieldChange("ogDescription", e.target.value)}
-                placeholder="Custom sharing snippet..."
-                className="focus:ring-neutral-450 w-full resize-none rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
-                rows={2}
-              />
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">OG Title</label>
+                  <input
+                    type="text"
+                    value={formData.seo?.ogTitle || ""}
+                    onChange={(e) => handleSeoFieldChange("ogTitle", e.target.value)}
+                    placeholder="Custom sharing title..."
+                    className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">OG Image URL</label>
+                  <input
+                    type="text"
+                    value={formData.seo?.ogImage || ""}
+                    onChange={(e) => handleSeoFieldChange("ogImage", e.target.value)}
+                    placeholder="e.g. /projects/banner-og.png"
+                    className="focus:ring-neutral-450 w-full rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
+                  />
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-neutral-455 block font-mono text-xs uppercase dark:text-neutral-500">OG Description</label>
+                  <textarea
+                    value={formData.seo?.ogDescription || ""}
+                    onChange={(e) => handleSeoFieldChange("ogDescription", e.target.value)}
+                    placeholder="Custom sharing snippet..."
+                    className="focus:ring-neutral-450 w-full resize-none rounded border border-neutral-300 bg-transparent p-2.5 font-sans text-xs text-foreground focus:ring-1 dark:border-neutral-700"
+                    rows={2}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <MediaPickerDialog

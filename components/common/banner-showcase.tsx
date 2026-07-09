@@ -19,7 +19,7 @@ export function BannerShowcase({ src, alt, className, ...props }: BannerShowcase
         src={src}
         alt={alt}
         fill
-        className="object-cover object-center grayscale transition-all duration-700 ease-out hover:grayscale-0"
+        className="object-cover object-center"
         sizes="100vw"
         priority
       />

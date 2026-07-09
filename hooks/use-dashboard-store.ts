@@ -77,6 +77,14 @@ interface DashboardState {
   setIsWorkDetailsOpen: (open: boolean) => void;
   setIsWorkAddOpen: (open: boolean) => void;
 
+  // Articles UI State & Actions
+  selectedArticleId: string | null;
+  isArticleDetailsOpen: boolean;
+  isArticleAddOpen: boolean;
+  setSelectedArticleId: (id: string | null) => void;
+  setIsArticleDetailsOpen: (open: boolean) => void;
+  setIsArticleAddOpen: (open: boolean) => void;
+
   // Media UI State & Actions
   mediaSelectedIds: Set<number>;
   mediaActiveAsset: MediaAsset | null;
@@ -359,6 +367,14 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   setSelectedWorkId: (id) => set(() => ({ selectedWorkId: id })),
   setIsWorkDetailsOpen: (open) => set(() => ({ isWorkDetailsOpen: open })),
   setIsWorkAddOpen: (open) => set(() => ({ isWorkAddOpen: open })),
+
+  // Articles UI State & Actions
+  selectedArticleId: null,
+  isArticleDetailsOpen: false,
+  isArticleAddOpen: false,
+  setSelectedArticleId: (id) => set(() => ({ selectedArticleId: id })),
+  setIsArticleDetailsOpen: (open) => set(() => ({ isArticleDetailsOpen: open })),
+  setIsArticleAddOpen: (open) => set(() => ({ isArticleAddOpen: open })),
 
   // Media UI State & Actions
   mediaSelectedIds: new Set<number>(),

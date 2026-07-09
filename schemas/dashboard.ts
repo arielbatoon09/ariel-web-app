@@ -74,17 +74,21 @@ export const ArticleSchema = z.object({
   tag: z.string().min(1, "Tag subtitle is required"),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  imageSrc: z.string().min(1, "Image source is required"),
-  tags: z.array(z.string()).min(1, "At least one tag is required"),
+  imageSrc: z.string(),
+  tags: z.array(z.string()).default([]),
   link: z.string().min(1, "Link path is required"),
-  categories: z.array(z.enum(["engineering", "design", "ai", "business"])).min(1, "At least one category is required"),
+  categories: z.array(z.string()).default([]),
   date: z.string().min(1, "Date is required"),
   readTime: z.string().min(1, "Read time is required"),
   author: z.string().min(1, "Author is required"),
-  sections: z.array(ArticleSectionSchema).min(1, "At least one section is required"),
+  sections: z.array(ArticleSectionSchema).default([]),
   disabled: z.boolean().optional(),
   seo: SeoMetaSchema.optional(),
+  draft: z.any().nullable().optional(),
+  isDraftSave: z.boolean().optional(),
+  status: z.enum(["draft", "published", "unpublished"]).default("draft"),
 });
+
 
 export const ServiceAddOnSchema = z.object({
   id: z.string().min(1, "ID is required"),

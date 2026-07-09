@@ -15,7 +15,7 @@ import {
   getCustomersAction,
   updateCustomerRoleAction,
   toggleCustomerBlockStatusAction,
-} from "@/components/features/dashboard/customers/customers-action";
+} from "@/services/customers";
 
 export function CustomerManagement() {
   const { customers, updateCustomerRole, toggleCustomerBlockStatus, addCustomer, setCustomers } = useDashboardStore();

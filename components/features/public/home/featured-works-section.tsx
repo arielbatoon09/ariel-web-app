@@ -21,7 +21,6 @@ export function FeaturedWorksSection() {
           {FEATURED_PROJECTS.map((project) => (
             <GridCard
               key={project.id}
-              number={project.id}
               tag={project.tag}
               title={project.title}
               description={project.description}

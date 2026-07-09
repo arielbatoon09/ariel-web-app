@@ -9,9 +9,10 @@ import type { Project } from "@/constants/projects";
 
 interface CaseStudyHeroProps {
   project: Project;
+  categoryNames?: string;
 }
 
-export function CaseStudyHero({ project }: CaseStudyHeroProps) {
+export function CaseStudyHero({ project, categoryNames }: CaseStudyHeroProps) {
   const { caseStudy } = project;
 
   return (
@@ -20,7 +21,7 @@ export function CaseStudyHero({ project }: CaseStudyHeroProps) {
         <div className="space-y-6 lg:col-span-7">
           <BackButton href="/works" label="Back to Archive" />
 
-          <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">{project.tag}</span>
+          <span className="block font-mono text-[10px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">{categoryNames}</span>
           <h1 className="font-sans text-3xl leading-tight font-bold tracking-tight text-foreground md:text-5xl">{project.title}</h1>
           <p className="max-w-2xl font-sans text-base leading-relaxed text-neutral-600 md:text-lg dark:text-neutral-400">{project.description}</p>
 

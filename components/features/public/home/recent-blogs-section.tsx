@@ -20,7 +20,6 @@ export function RecentBlogsSection() {
           {RECENT_BLOGS.map((post) => (
             <GridCard
               key={post.id}
-              number={post.id}
               tag={`${post.date} • ${post.readTime}`}
               title={post.title}
               titleClassName="text-base font-bold tracking-tight text-foreground"

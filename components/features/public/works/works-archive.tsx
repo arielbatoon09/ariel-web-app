@@ -21,6 +21,15 @@ interface WorksArchiveProps {
   categories: WorksCategory[];
 }
 
+function resolveCategories(slugs: string[], categories: WorksCategory[]): string {
+  if (!slugs || slugs.length === 0) return "";
+  return slugs
+    .map((slug) => categories.find((c) => c.slug === slug))
+    .filter((match): match is WorksCategory => !!match)
+    .map((match) => match.name.toUpperCase())
+    .join(" • ");
+}
+
 export function WorksArchive({ initialProjects, categories }: WorksArchiveProps) {
   const { activeCategory, setActiveCategory, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, filteredItems, paginatedItems } =
     useArchiveFilter({
@@ -64,8 +73,7 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
               {paginatedItems.map((project: Project) => (
                 <GridCard
                   key={project.id}
-                  number={project.id}
-                  tag={project.tag}
+                  tag={resolveCategories(project.categories, categories)}
                   title={project.title}
                   description={project.description}
                   imageSrc={project.imageSrc}

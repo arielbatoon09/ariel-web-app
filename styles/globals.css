@@ -179,3 +179,12 @@ h1 + p.text-muted-foreground,
 h1 + p {
   margin-top: 0.625rem !important; /* Forces breathing room space globally */
 }
+
+/* Placeholder support for contenteditable divs */
+[contenteditable="true"]:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-muted-foreground);
+  opacity: 0.6;
+  pointer-events: none;
+  display: block;
+}

@@ -1,6 +1,6 @@
 import { Section } from "@/components/common/section";
-import { ShareButtons } from "@/components/features/articles/share-buttons";
-import type { Article } from "@/constants/articles";
+import { ShareButtons } from "@/components/features/public/articles/share-buttons";
+import type { Article } from "@/schemas/dashboard";
 
 interface ArticleContentProps {
   article: Article;
@@ -15,9 +15,10 @@ export function ArticleContent({ article }: ArticleContentProps) {
           {article.sections.map((section, idx) => (
             <div key={idx} className="space-y-4">
               <h2 className="font-sans text-xl font-bold tracking-tight text-foreground md:text-2xl">{section.title}</h2>
-              <p className="dark:text-neutral-455 font-sans text-sm leading-relaxed whitespace-pre-line text-neutral-600 md:text-base">
-                {section.body}
-              </p>
+              <div 
+                className="dark:text-neutral-455 font-sans text-sm leading-relaxed text-neutral-600 md:text-base prose dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: section.body }}
+              />
             </div>
           ))}
         </div>

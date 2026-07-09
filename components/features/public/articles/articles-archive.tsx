@@ -1,27 +1,49 @@
 "use client";
 
+import { useMemo } from "react";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { GridCard } from "@/components/common/grid-card";
 import { ArchiveFilterBar } from "@/components/common/archive-filter-bar";
 import { ArchivePagination } from "@/components/common/archive-pagination";
 import { useArchiveFilter } from "@/hooks/use-archive-filter";
+import type { Article } from "@/schemas/dashboard";
 
-import { ALL_ARTICLES, type Article } from "@/constants/articles";
+interface ArticleCategory {
+  id: string;
+  name: string;
+  slug: string;
+}
 
-const CATEGORIES = [
-  { id: "all", label: "All Articles" },
-  { id: "engineering", label: "Engineering" },
-  { id: "design", label: "Design" },
-  { id: "ai", label: "Artificial Intelligence" },
-  { id: "business", label: "Business & Strategy" },
-] as const;
+interface ArticlesArchiveProps {
+  initialArticles: Article[];
+  categories: ArticleCategory[];
+}
 
-export function ArticlesArchive() {
+function resolveCategories(slugs: string[], categories: ArticleCategory[]): string {
+  if (!slugs || slugs.length === 0) return "";
+  return slugs
+    .map((slug) => categories.find((c) => c.slug === slug))
+    .filter((match): match is ArticleCategory => !!match)
+    .map((match) => match.name.toUpperCase())
+    .join(" • ");
+}
+
+export function ArticlesArchive({ initialArticles, categories }: ArticlesArchiveProps) {
+  const dynamicCategories = useMemo(() => {
+    return [
+      { id: "all", label: "All Articles" },
+      ...categories.map((c) => ({
+        id: c.slug,
+        label: c.name,
+      })),
+    ];
+  }, [categories]);
+
   const { activeCategory, setActiveCategory, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, filteredItems, paginatedItems } =
     useArchiveFilter({
-      items: ALL_ARTICLES,
-      searchKeys: ["title", "description", "tags", "tag"],
+      items: initialArticles,
+      searchKeys: ["title", "description", "tags"],
       itemsPerPage: 6,
     });
 
@@ -37,7 +59,7 @@ export function ArticlesArchive() {
 
         {/* Filter Control Center */}
         <ArchiveFilterBar
-          categories={CATEGORIES}
+          categories={dynamicCategories}
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
           searchQuery={searchQuery}
@@ -53,11 +75,10 @@ export function ArticlesArchive() {
               {paginatedItems.map((article: Article) => (
                 <GridCard
                   key={article.id}
-                  number={article.id}
-                  tag={`${article.date} • ${article.readTime}`}
+                  tag={resolveCategories(article.categories, categories)}
+                  number={`${article.date} • ${article.readTime}`}
                   title={article.title}
                   description={article.description}
-                  imageSrc={article.imageSrc}
                   tags={article.tags}
                   link={{
                     href: article.link,

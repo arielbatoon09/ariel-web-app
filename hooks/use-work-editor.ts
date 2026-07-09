@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useWorkDetailQuery, useUpdateWorkMutation } from "@/hooks/use-works";
 import type { Project, SeoMeta } from "@/schemas/dashboard";
+import { toast } from "sonner";
 
 export function useWorkEditor(projectId: string, initialData?: Project) {
   const router = useRouter();
@@ -196,7 +197,10 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
       },
       {
         onSuccess: () => {
-          router.push("/admin/works");
+          toast.success("Draft saved. Changes are staged and not yet live.");
+        },
+        onError: (err: any) => {
+          toast.error(err?.message || "Failed to save draft.");
         },
       }
     );
@@ -226,7 +230,16 @@ export function useWorkEditor(projectId: string, initialData?: Project) {
       },
       {
         onSuccess: () => {
-          router.push("/admin/works");
+          if (targetStatus === "published") {
+            toast.success("Project published successfully.");
+          } else if (targetStatus === "unpublished") {
+            toast.success("Project unpublished.");
+          } else {
+            toast.success("Project reverted to draft.");
+          }
+        },
+        onError: (err: any) => {
+          toast.error(err?.message || "Failed to publish project.");
         },
       }
     );

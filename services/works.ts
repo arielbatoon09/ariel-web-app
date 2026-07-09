@@ -152,7 +152,7 @@ export async function updateWorkAction(
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
     const numericId = parseInt(id, 10);
-    const { isDraftSave, ...fields } = data;
+    const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as any;
 
     let updatePayload: any = {};
 

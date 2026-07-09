@@ -1,13 +1,14 @@
 import { Section } from "@/components/common/section";
 import { BackButton } from "@/components/common/back-button";
 import { BannerShowcase } from "@/components/common/banner-showcase";
-import type { Article } from "@/constants/articles";
+import type { Article } from "@/schemas/dashboard";
 
 interface ArticleHeroProps {
   article: Article;
+  categoryNames?: string;
 }
 
-export function ArticleHero({ article }: ArticleHeroProps) {
+export function ArticleHero({ article, categoryNames }: ArticleHeroProps) {
   return (
     <Section id="article-hero" containerClassName="pt-6 md:pt-10 pb-12 md:pb-20" showTopLine={false} showBottomLine={true}>
       <div className="mx-auto max-w-3xl space-y-6">
@@ -15,8 +16,8 @@ export function ArticleHero({ article }: ArticleHeroProps) {
 
         <div className="space-y-3">
           <div className="text-neutral-450 flex flex-wrap items-center gap-2 font-mono text-[10px] tracking-wider uppercase dark:text-neutral-500">
-            <span>{article.tag}</span>
-            <span>•</span>
+            <span>{categoryNames}</span>
+            {categoryNames && <span>•</span>}
             <span>{article.date}</span>
             <span>•</span>
             <span>{article.readTime}</span>

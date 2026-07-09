@@ -2,6 +2,7 @@ import { pgEnum, pgTable, serial, text, varchar, timestamp, integer, boolean, in
 
 export const roleEnum = pgEnum("role", ["admin", "client"]);
 export const workStatusEnum = pgEnum("work_status", ["draft", "published", "unpublished"]);
+export const articleStatusEnum = pgEnum("article_status", ["draft", "published", "unpublished"]);
 
 export const users = pgTable(
   "users",
@@ -144,5 +145,63 @@ export const mediaAssets = pgTable(
     index("media_assets_folder_idx").on(table.folder),
     index("media_assets_mime_type_idx").on(table.mimeType),
     index("media_assets_created_at_idx").on(table.createdAt),
+  ]
+);
+
+export const articles = pgTable(
+  "articles",
+  {
+    id: serial("id").primaryKey(),
+    slug: text("slug").unique().notNull(),
+    tag: text("tag").notNull(),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    imageSrc: text("image_src").notNull(),
+    tags: jsonb("tags").$type<string[]>().default([]).notNull(),
+    link: text("link").notNull(),
+    categories: jsonb("categories").$type<string[]>().default([]).notNull(),
+    date: text("date").notNull(),
+    readTime: text("read_time").notNull(),
+    author: text("author").notNull(),
+    sections: jsonb("sections").$type<Array<{ title: string; body: string }>>().default([]).notNull(),
+    seo: jsonb("seo").$type<{
+      title?: string;
+      description?: string;
+      keywords?: string;
+      ogTitle?: string;
+      ogDescription?: string;
+      ogImage?: string;
+      canonicalUrl?: string;
+    }>(),
+    draft: jsonb("draft").$type<{
+      slug: string;
+      tag: string;
+      title: string;
+      description: string;
+      imageSrc: string;
+      tags: string[];
+      link: string;
+      categories: string[];
+      date: string;
+      readTime: string;
+      author: string;
+      sections: Array<{ title: string; body: string }>;
+      seo?: {
+        title?: string;
+        description?: string;
+        keywords?: string;
+        ogTitle?: string;
+        ogDescription?: string;
+        ogImage?: string;
+        canonicalUrl?: string;
+      };
+    }>(),
+    status: articleStatusEnum("status").default("draft").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("articles_slug_idx").on(table.slug),
+    index("articles_title_idx").on(table.title),
   ]
 );

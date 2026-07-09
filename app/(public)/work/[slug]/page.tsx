@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getWorkBySlugQuery, getWorksQuery } from "@/data/works";
+import { getCategoriesQuery } from "@/data/categories";
 import { CaseStudyHero } from "@/components/features/public/works/case-study-hero";
 import { CaseStudyDetails } from "@/components/features/public/works/case-study-details";
 import { CaseStudyOutcomes } from "@/components/features/public/works/case-study-outcomes";
@@ -76,9 +77,16 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
     categories: project.categories as ("web" | "mobile" | "ai-data" | "open-source")[],
   };
 
+  const categoriesData = await getCategoriesQuery();
+  const categoryNames = mappedProject.categories
+    .map((slug) => categoriesData.find((c) => c.slug === slug))
+    .filter((match) => !!match && !match.disabled)
+    .map((match) => match!.name)
+    .join(" • ");
+
   return (
     <div className="min-h-screen bg-background">
-      <CaseStudyHero project={mappedProject} />
+      <CaseStudyHero project={mappedProject} categoryNames={categoryNames} />
       <CaseStudyDetails caseStudy={mappedProject.caseStudy} />
       <CaseStudyOutcomes caseStudy={mappedProject.caseStudy} />
       <CtaSection />
