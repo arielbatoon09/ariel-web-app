@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 
+import { ReCaptchaV2 } from "@/components/common/recaptcha-v2";
+import { verifyReCaptchaAction } from "@/services/recaptcha";
 import { useAuthStore } from "@/hooks/use-auth-store";
 import { getUserRoleAction } from "@/services/auth";
 
@@ -24,6 +26,7 @@ export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, isLoading } = useAuthStore();
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
   const form = useForm({
     defaultValues: {
@@ -34,22 +37,38 @@ export function LoginForm() {
       onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
-      const res = await signIn(value.email, value.password);
-      if (res.success) {
-        toast.success("Successfully logged in!");
-        try {
-          const roleRes = await getUserRoleAction();
-          if (roleRes.success && roleRes.role === "admin") {
-            router.push("/admin");
-          } else {
+      if (!recaptchaToken) {
+        toast.error("Please complete the reCAPTCHA challenge.");
+        return;
+      }
+
+      try {
+        // Verify reCAPTCHA token
+        const verification = await verifyReCaptchaAction(recaptchaToken);
+        if (!verification.success) {
+          toast.error(verification.error || "Security validation failed. Please try again.");
+          return;
+        }
+
+        const res = await signIn(value.email, value.password);
+        if (res.success) {
+          toast.success("Successfully logged in!");
+          try {
+            const roleRes = await getUserRoleAction();
+            if (roleRes.success && roleRes.role === "admin") {
+              router.push("/admin");
+            } else {
+              router.push("/customer");
+            }
+          } catch {
+            // Default fallback
             router.push("/customer");
           }
-        } catch {
-          // Default fallback
-          router.push("/customer");
+        } else {
+          toast.error(res.error || "Failed to log in.");
         }
-      } else {
-        toast.error(res.error || "Failed to log in.");
+      } catch {
+        toast.error("An error occurred during submission.");
       }
     },
   });
@@ -142,6 +161,8 @@ export function LoginForm() {
             }}
           </form.Field>
         </FieldGroup>
+
+        <ReCaptchaV2 onChange={setRecaptchaToken} />
 
         <form.Subscribe selector={(state) => state.isSubmitting}>
           {(isSubmitting) => {

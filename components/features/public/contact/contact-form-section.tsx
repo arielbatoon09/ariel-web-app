@@ -8,22 +8,48 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, Loader2, Calendar } from "lucide-react";
 import Link from "next/link";
 
+import { toast } from "sonner";
+import { ReCaptchaV2 } from "@/components/common/recaptcha-v2";
+import { verifyReCaptchaAction } from "@/services/recaptcha";
+
 export function ContactFormSection() {
   const [view, setView] = useState<"form" | "success">("form");
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) return;
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    if (!recaptchaToken) {
+      toast.error("Please complete the reCAPTCHA challenge.");
+      return;
+    }
 
     setLoading(true);
-    // Simulate API submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setLoading(false);
-    setView("success");
+    try {
+      // 1. Verify reCAPTCHA token with the server action
+      const verification = await verifyReCaptchaAction(recaptchaToken);
+      if (!verification.success) {
+        toast.error(verification.error || "Security validation failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Simulate API submission
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setView("success");
+    } catch {
+      toast.error("Failed to submit message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -72,6 +98,8 @@ export function ContactFormSection() {
                     className="min-h-[180px] rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                   />
                 </div>
+
+                <ReCaptchaV2 onChange={setRecaptchaToken} />
 
                 <Button
                   type="submit"

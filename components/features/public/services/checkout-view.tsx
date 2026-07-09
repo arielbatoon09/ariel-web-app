@@ -18,6 +18,8 @@ import { getErrorMessage } from "@/lib/error-utils";
 import { Order } from "@/schemas/dashboard";
 import { useAuthStore } from "@/hooks/use-auth-store";
 import { getCurrentUserProfileAction } from "@/services/auth";
+import { ReCaptchaV2 } from "@/components/common/recaptcha-v2";
+import { verifyReCaptchaAction } from "@/services/recaptcha";
 
 interface CheckoutViewProps {
   service: Service;
@@ -30,6 +32,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
   const createTransaction = useCreateTransactionMutation();
 
   const { user, initialize } = useAuthStore();
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
   useEffect(() => {
     initialize();
@@ -139,9 +142,20 @@ export function CheckoutView({ service }: CheckoutViewProps) {
       return;
     }
 
+    if (!recaptchaToken) {
+      toast.error("Please complete the reCAPTCHA challenge.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      // 0. Verify reCAPTCHA token
+      const verification = await verifyReCaptchaAction(recaptchaToken);
+      if (!verification.success) {
+        throw new Error(verification.error || "Security validation failed. Please try again.");
+      }
+
       // 1. Request presigned URL for upload
       const presignedRes = await getReceiptPresignedUrlAction(receiptFile.name, receiptFile.type);
       if (!presignedRes.success || !presignedRes.presignedUrl || !presignedRes.url) {
@@ -631,6 +645,8 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                   <span>Investment Total:</span>
                   <span>₱{totalAmount.toLocaleString()}</span>
                 </div>
+
+                <ReCaptchaV2 onChange={setRecaptchaToken} />
 
                 <Button
                   type="submit"
