@@ -7,6 +7,9 @@ import { getUserRoleByUserId } from "@/data/roles";
 import { cookies } from "next/headers";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { r2Client } from "@/lib/r2/client";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 export async function getUserRoleAction() {
   try {
@@ -56,6 +59,7 @@ export async function getCurrentUserProfileAction() {
         fullName: dbUser.fullName,
         phone: dbUser.phone,
         email: user.email,
+        avatarUrl: user.user_metadata?.avatar_url || null,
       },
     };
   } catch (err: unknown) {
@@ -113,5 +117,72 @@ export async function updateUserPasswordAction(password: string) {
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to update password") };
+  }
+}
+
+export async function getAvatarPresignedUrlAction(filename: string, contentType: string) {
+  try {
+    const user = await getCurrentSessionUser();
+    if (!user) {
+      return { success: false, error: "Not logged in" };
+    }
+
+    if (!contentType.startsWith("image/")) {
+      return { success: false, error: "Only image files are allowed as profile avatars." };
+    }
+
+    const bucketName = process.env.R2_BUCKET_NAME;
+    if (!bucketName) {
+      return { success: false, error: "Cloudflare R2 Bucket Name is not configured." };
+    }
+
+    const cleanFilename = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+    const key = `avatars/${user.id}/${cleanFilename}`;
+
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+      ContentType: contentType,
+    });
+
+    const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 600 });
+
+    const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+    const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-placeholder.r2.dev/${key}`;
+
+    return {
+      success: true,
+      presignedUrl,
+      url: cdnUrl,
+      key,
+    };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to generate avatar upload link.") };
+  }
+}
+
+export async function updateUserAvatarAction(avatarUrl: string) {
+  try {
+    const user = await getCurrentSessionUser();
+    if (!user) {
+      return { success: false, error: "Not logged in" };
+    }
+
+    const cookieStore = await cookies();
+    const supabase = createSupabaseServerClient(cookieStore);
+
+    const { error } = await supabase.auth.updateUser({
+      data: { avatar_url: avatarUrl },
+    });
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/", "layout");
+
+    return { success: true };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to update profile avatar.") };
   }
 }

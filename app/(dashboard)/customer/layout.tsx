@@ -46,6 +46,7 @@ export default async function CustomerLayout({ children }: { children: React.Rea
         userProfile={{
           name: dbUser.fullName || user.email || "Client",
           email: user.email || "",
+          avatarUrl: user.user_metadata?.avatar_url || null,
         }}
       />
       <main className="h-full flex-1 overflow-x-hidden overflow-y-auto px-4 pt-0 pb-6 md:px-8 md:pt-0 md:pb-8">

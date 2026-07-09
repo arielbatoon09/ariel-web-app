@@ -35,6 +35,22 @@ export function CheckoutView({ service }: CheckoutViewProps) {
     initialize();
   }, [initialize]);
 
+  // Load preselected addons from query params
+  const initialAddons = useMemo(() => {
+    const addonsParam = searchParams.get("addons");
+    return addonsParam ? addonsParam.split(",").filter(Boolean) : [];
+  }, [searchParams]);
+
+  // Form states
+  const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [selectedAddons, setSelectedAddons] = useState<string[]>(initialAddons);
+  const [paymentMethod, setPaymentMethod] = useState<"gcash" | "maya" | "bpi" | "wise">("gcash");
+  const [referenceNumber, setReferenceNumber] = useState("");
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+
   // Prepopulate form states when user info is loaded
   useEffect(() => {
     async function loadUserProfile() {
@@ -68,22 +84,6 @@ export function CheckoutView({ service }: CheckoutViewProps) {
 
     loadUserProfile();
   }, [user]);
-
-  // Load preselected addons from query params
-  const initialAddons = useMemo(() => {
-    const addonsParam = searchParams.get("addons");
-    return addonsParam ? addonsParam.split(",").filter(Boolean) : [];
-  }, [searchParams]);
-
-  // Form states
-  const [customerName, setCustomerName] = useState("");
-  const [customerEmail, setCustomerEmail] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [requirements, setRequirements] = useState("");
-  const [selectedAddons, setSelectedAddons] = useState<string[]>(initialAddons);
-  const [paymentMethod, setPaymentMethod] = useState<"gcash" | "maya" | "bpi" | "wise">("gcash");
-  const [referenceNumber, setReferenceNumber] = useState("");
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
 
   // States for flow
   const [isSubmitting, setIsSubmitting] = useState(false);

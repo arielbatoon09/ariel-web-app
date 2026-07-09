@@ -21,10 +21,11 @@ interface DashboardSidebarProps {
   userProfile?: {
     name: string;
     email: string;
+    avatarUrl?: string | null;
   };
 }
 
-export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel Batoon", email: "ariel@batoon.com" } }: DashboardSidebarProps) {
+export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel Batoon", email: "ariel@batoon.com", avatarUrl: null } }: DashboardSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useAuthStore();
@@ -157,8 +158,18 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
         <div className="space-y-4 border-t border-neutral-300 p-4 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex size-8 items-center justify-center border border-neutral-300 bg-neutral-100 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400">
-                <User className="size-4" />
+              <div className="flex size-8 items-center justify-center overflow-hidden border border-neutral-300 bg-neutral-100 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400">
+                {userProfile.avatarUrl ? (
+                  <Image
+                    src={userProfile.avatarUrl}
+                    alt={userProfile.name}
+                    width={32}
+                    height={32}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <User className="size-4" />
+                )}
               </div>
               <div className="max-w-[120px] overflow-hidden">
                 <p className="truncate font-sans text-xs font-bold text-foreground">{userProfile.name}</p>

@@ -161,7 +161,7 @@ export async function updateArticleAction(
 
     const numericId = parseInt(id, 10);
 
-    // Cleaned up: Removed unused parameters completely from destructuring to stop the warnings
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     const { isDraftSave, id: _id, createdAt: _createdAt, updatedAt: _updatedAt, draft: _draft, ...fields } = data as any;
 
     // Look up exactly what the query function expects as a payload

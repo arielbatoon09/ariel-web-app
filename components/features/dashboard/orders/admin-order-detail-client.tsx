@@ -11,7 +11,7 @@ import {
   useDeliverOrderMutation,
 } from "@/hooks/use-order-chat";
 import { getChatAttachmentPresignedUrlAction } from "@/services/media";
-import { Gift, Paperclip, X } from "lucide-react";
+import { Gift, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import type { Order, Service } from "@/schemas/dashboard";

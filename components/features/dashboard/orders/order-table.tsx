@@ -2,22 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useOrdersQuery, useUpdateOrderStatusMutation, useDeleteOrdersMutation } from "@/hooks/use-orders";
+import { useOrdersQuery, useDeleteOrdersMutation } from "@/hooks/use-orders";
 import { useServicesQuery } from "@/hooks/use-services";
 import { DataTable } from "@/components/common/data-table";
 import type { Order } from "@/schemas/dashboard";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
-import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { cn } from "@/lib/utils";
 
 export function OrderTable() {
   const router = useRouter();
-  const { setSelectedOrderId, setIsOrderDetailsOpen } = useDashboardStore();
 
   const { data: orders = [], isLoading } = useOrdersQuery();
   const { data: services = [] } = useServicesQuery();
 
-  const updateStatusMutation = useUpdateOrderStatusMutation();
   const deleteOrdersMutation = useDeleteOrdersMutation();
 
   const [itemsToDelete, setItemsToDelete] = useState<Order[]>([]);
