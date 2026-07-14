@@ -58,6 +58,7 @@ export const ProjectSchema = z.object({
   draft: z.any().nullable().optional(),
   isDraftSave: z.boolean().optional(),
   status: z.enum(["draft", "published", "unpublished"]).default("draft"),
+  isFeatured: z.boolean().default(false).optional(),
 });
 
 export const ArticleSectionSchema = z.object({
@@ -149,6 +150,7 @@ export const CustomerSchema = z.object({
   disabled: z.boolean().default(false),
   joinedAt: z.string().min(1, "Joined date is required"),
   activities: z.array(CustomerActivitySchema).default([]),
+  avatarUrl: z.string().optional().nullable(),
 });
 
 // Infer TS Types

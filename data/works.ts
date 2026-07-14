@@ -1,9 +1,21 @@
 import { db } from "@/drizzle";
 import { works } from "@/drizzle/schema";
-import { eq, inArray, desc } from "drizzle-orm";
+import { eq, inArray, desc, and } from "drizzle-orm";
 
 export async function getWorksQuery() {
   return await db.select().from(works).orderBy(desc(works.createdAt));
+}
+
+export async function getFeaturedWorksQuery() {
+  return await db.select().from(works).where(eq(works.isFeatured, true)).orderBy(desc(works.createdAt));
+}
+
+export async function getPublishedFeaturedWorksQuery() {
+  return await db
+    .select()
+    .from(works)
+    .where(and(eq(works.isFeatured, true), eq(works.status, "published")))
+    .orderBy(desc(works.createdAt));
 }
 
 export async function getWorkByIdQuery(id: number) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 
-import { ReCaptchaV2 } from "@/components/common/recaptcha-v2";
+import { ReCaptchaV2, ReCaptchaV2Ref } from "@/components/common/recaptcha-v2";
 import { verifyReCaptchaAction } from "@/services/recaptcha";
 import { useAuthStore } from "@/hooks/use-auth-store";
 import { getUserRoleAction } from "@/services/auth";
@@ -27,6 +27,7 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, isLoading } = useAuthStore();
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCaptchaV2Ref>(null);
 
   const form = useForm({
     defaultValues: {
@@ -47,6 +48,7 @@ export function LoginForm() {
         const verification = await verifyReCaptchaAction(recaptchaToken);
         if (!verification.success) {
           toast.error(verification.error || "Security validation failed. Please try again.");
+          recaptchaRef.current?.reset();
           return;
         }
 
@@ -66,9 +68,11 @@ export function LoginForm() {
           }
         } else {
           toast.error(res.error || "Failed to log in.");
+          recaptchaRef.current?.reset();
         }
       } catch {
         toast.error("An error occurred during submission.");
+        recaptchaRef.current?.reset();
       }
     },
   });
@@ -162,7 +166,7 @@ export function LoginForm() {
           </form.Field>
         </FieldGroup>
 
-        <ReCaptchaV2 onChange={setRecaptchaToken} />
+        <ReCaptchaV2 ref={recaptchaRef} onChange={setRecaptchaToken} />
 
         <form.Subscribe selector={(state) => state.isSubmitting}>
           {(isSubmitting) => {

@@ -56,7 +56,7 @@ const TESTIMONIALS: Testimonial[] = [
 
 export function TestimonialSection() {
   const [isHovered, setIsHovered] = useState(false);
-  const { scrollRef, activeIndex, scrollToCard, handleScroll } = useScrollCarousel({
+  const { scrollRef, activeIndex, dotsCount, scrollToCard, handleScroll } = useScrollCarousel({
     itemCount: TESTIMONIALS.length,
     gap: 24,
     cardSelector: ".testimonial-card",
@@ -65,7 +65,7 @@ export function TestimonialSection() {
   });
 
   const canScrollLeft = activeIndex > 0;
-  const canScrollRight = activeIndex < TESTIMONIALS.length - 1;
+  const canScrollRight = activeIndex < dotsCount - 1;
 
   return (
     <Section id="testimonials" containerClassName="py-12 md:py-16 overflow-hidden" showTopLine={false} showBottomLine={true}>
@@ -94,7 +94,7 @@ export function TestimonialSection() {
                   "flex size-10 cursor-pointer items-center justify-center rounded-none border border-dashed border-neutral-300 bg-background text-foreground transition-all duration-300 hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-100",
                   !canScrollRight && "pointer-events-none opacity-30"
                 )}
-                onClick={() => scrollToCard(Math.min(TESTIMONIALS.length - 1, activeIndex + 1))}
+                onClick={() => scrollToCard(Math.min(dotsCount - 1, activeIndex + 1))}
                 aria-label="Next testimonial"
               >
                 <ArrowRight className="size-4" />
@@ -166,9 +166,9 @@ export function TestimonialSection() {
         </div>
 
         {/* Pagination Dots (Calculated based on actual scroll pages) */}
-        {TESTIMONIALS.length > 1 && (
+        {dotsCount > 1 && (
           <div className="flex items-center justify-center gap-3 pt-2">
-            {TESTIMONIALS.map((_, index) => (
+            {Array.from({ length: dotsCount }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToCard(index)}

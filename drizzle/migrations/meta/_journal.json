@@ -8,6 +8,13 @@
       "when": 1783600062590,
       "tag": "0000_massive_gamora",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784041174469,
+      "tag": "0001_living_taskmaster",
+      "breakpoints": true
     }
   ]
 }

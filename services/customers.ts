@@ -130,6 +130,7 @@ export async function getCustomersAction() {
         disabled: isBlocked,
         joinedAt: dbUser.createdAt.toISOString().split("T")[0],
         activities: [],
+        avatarUrl: (authUser?.user_metadata?.avatar_url || null) as string | null,
       };
     });
 

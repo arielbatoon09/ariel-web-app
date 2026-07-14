@@ -114,8 +114,10 @@ export const works = pgTable(
         ogImage?: string;
         canonicalUrl?: string;
       };
+      isFeatured?: boolean;
     }>(),
     status: workStatusEnum("status").default("draft").notNull(),
+    isFeatured: boolean("is_featured").default(false).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },

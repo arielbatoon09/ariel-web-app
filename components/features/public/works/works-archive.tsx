@@ -98,6 +98,7 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
                     href: project.link,
                     label: "View Project Details",
                   }}
+                  showEmptyImageState={true}
                 />
               ))}
             </div>

@@ -4,11 +4,16 @@ import { GridCard } from "@/components/common/grid-card";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-import { ALL_ARTICLES } from "@/constants/articles";
+import { getPublishedArticlesQuery } from "@/data/articles";
 
-const RECENT_BLOGS = ALL_ARTICLES.slice(0, 3);
+export async function RecentBlogsSection() {
+  const publishedArticles = await getPublishedArticlesQuery();
+  const recentBlogs = publishedArticles.slice(0, 3);
 
-export function RecentBlogsSection() {
+  if (recentBlogs.length === 0) {
+    return null;
+  }
+
   return (
     <Section id="blog" containerClassName="pt-8 md:pt-12 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-8">
@@ -17,7 +22,7 @@ export function RecentBlogsSection() {
 
         {/* 3-Column Blog Grid utilizing the common GridCard */}
         <div className="grid grid-cols-1 border-t border-l border-dashed border-neutral-300 lg:grid-cols-3 dark:border-neutral-700">
-          {RECENT_BLOGS.map((post) => (
+          {recentBlogs.map((post) => (
             <GridCard
               key={post.id}
               tag={`${post.date} • ${post.readTime}`}

@@ -18,21 +18,21 @@ export function PublicHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-dashed border-neutral-300 bg-background/80 backdrop-blur-md dark:border-neutral-700">
-      <div className="relative mx-auto h-16 max-w-7xl px-6 md:px-8">
+      <div className="relative mx-auto h-16 max-w-7xl px-4 md:px-8">
         {/* Left/Right Vertical Lines (Dashed) */}
-        <div className="pointer-events-none absolute top-0 bottom-0 left-6 w-0 border-l border-dashed border-neutral-300 md:left-8 dark:border-neutral-700" />
-        <div className="pointer-events-none absolute top-0 right-6 bottom-0 w-0 border-l border-dashed border-neutral-300 md:right-8 dark:border-neutral-700" />
+        <div className="pointer-events-none absolute top-0 bottom-0 left-4 w-0 border-l border-dashed border-neutral-300 md:left-8 dark:border-neutral-700" />
+        <div className="pointer-events-none absolute top-0 right-4 bottom-0 w-0 border-l border-dashed border-neutral-300 md:right-8 dark:border-neutral-700" />
 
         {/* Intersecting Plus (+) symbols at the bottom border */}
-        <div className="pointer-events-none absolute bottom-0 left-6 z-10 -translate-x-1/2 translate-y-1/2 bg-background px-1 text-xs font-light text-neutral-400/80 select-none md:left-8 dark:text-neutral-600/80">
+        <div className="pointer-events-none absolute bottom-0 left-4 z-10 -translate-x-1/2 translate-y-1/2 bg-background px-1 text-xs font-light text-neutral-400/80 select-none md:left-8 dark:text-neutral-600/80">
           +
         </div>
-        <div className="pointer-events-none absolute right-6 bottom-0 z-10 translate-x-1/2 translate-y-1/2 bg-background px-1 text-xs font-light text-neutral-400/80 select-none md:right-8 dark:text-neutral-600/80">
+        <div className="pointer-events-none absolute right-4 bottom-0 z-10 translate-x-1/2 translate-y-1/2 bg-background px-1 text-xs font-light text-neutral-400/80 select-none md:right-8 dark:text-neutral-600/80">
           +
         </div>
 
         {/* Content Wrapper aligned with Section Content */}
-        <div className="flex h-full w-full items-center justify-between px-4 md:px-8">
+        <div className="flex h-full w-full items-center justify-between px-2 sm:px-4 md:px-8">
           {/* Logo & Brand */}
           <Link href="/" className="flex items-center space-x-3">
             <div className="relative flex h-5 items-center">

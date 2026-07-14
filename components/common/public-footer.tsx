@@ -12,7 +12,7 @@ export function PublicFooter() {
     <Section showTopLine={true} showBottomLine={false} containerClassName="py-0 md:py-0 relative overflow-hidden">
       {/* Huge low-contrast background watermark */}
       <div className="pointer-events-none absolute inset-x-0 top-0 bottom-10 z-[-1] flex items-end justify-center overflow-hidden select-none">
-        <div className="translate-y-[25%] text-[10rem] leading-none font-black tracking-tighter text-neutral-100/80 uppercase select-none md:translate-y-[10%] dark:text-neutral-800/35">
+        <div className="translate-y-[25%] text-[12vw] sm:text-[10vw] md:text-[10rem] leading-none font-black tracking-tighter text-neutral-100/80 uppercase select-none whitespace-nowrap md:translate-y-[10%] dark:text-neutral-800/35">
           Ariel Batoon
         </div>
       </div>

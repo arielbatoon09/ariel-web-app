@@ -5,11 +5,15 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-import { ALL_PROJECTS } from "@/constants/projects";
+import { getPublishedFeaturedWorksQuery } from "@/data/works";
 
-const FEATURED_PROJECTS = ALL_PROJECTS.slice(0, 3);
+export async function FeaturedWorksSection() {
+  const featuredProjects = await getPublishedFeaturedWorksQuery();
 
-export function FeaturedWorksSection() {
+  if (featuredProjects.length === 0) {
+    return null;
+  }
+
   return (
     <Section id="work" containerClassName="pt-8 md:pt-12 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-8">
@@ -18,7 +22,7 @@ export function FeaturedWorksSection() {
 
         {/* 3-Column Architectural Project Grid using the common GridCard component */}
         <div className="grid grid-cols-1 border-t border-l border-dashed border-neutral-300 lg:grid-cols-3 dark:border-neutral-700">
-          {FEATURED_PROJECTS.map((project) => (
+          {featuredProjects.map((project) => (
             <GridCard
               key={project.id}
               tag={project.tag}
@@ -30,6 +34,7 @@ export function FeaturedWorksSection() {
                 href: project.link,
                 label: "View Project",
               }}
+              showEmptyImageState={true}
             />
           ))}
         </div>

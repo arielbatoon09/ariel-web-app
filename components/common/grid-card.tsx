@@ -19,6 +19,7 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
   price?: string;
   deliveryTime?: string;
   truncate?: boolean;
+  showEmptyImageState?: boolean;
 }
 
 export function GridCard({
@@ -35,6 +36,7 @@ export function GridCard({
   price,
   deliveryTime,
   truncate,
+  showEmptyImageState,
   ...props
 }: GridCardProps) {
   return (
@@ -55,8 +57,8 @@ export function GridCard({
 
       <div className="space-y-4">
         {/* Optional Visual Image Showcase */}
-        {imageSrc &&
-          (link ? (
+        {imageSrc ? (
+          link ? (
             <Link href={link.href} className="block cursor-pointer">
               <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/50 dark:bg-neutral-900/80">
                 <Image
@@ -78,7 +80,20 @@ export function GridCard({
                 className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
               />
             </div>
-          ))}
+          )
+        ) : showEmptyImageState ? (
+          link ? (
+            <Link href={link.href} className="block cursor-pointer">
+              <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/30 dark:bg-neutral-900/40 flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-600 gap-1.5 select-none">
+                <span className="font-mono text-[9px] tracking-wider uppercase">No Banner Image</span>
+              </div>
+            </Link>
+          ) : (
+            <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/30 dark:bg-neutral-900/40 flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-600 gap-1.5 select-none">
+              <span className="font-mono text-[9px] tracking-wider uppercase">No Banner Image</span>
+            </div>
+          )
+        ) : null}
 
         {/* Optional Icon Block */}
         {icon && (

@@ -1,9 +1,17 @@
 import { db } from "@/drizzle";
 import { articles } from "@/drizzle/schema";
-import { eq, inArray, desc } from "drizzle-orm";
+import { eq, inArray, desc, asc } from "drizzle-orm";
 
 export async function getArticlesQuery() {
   return await db.select().from(articles).orderBy(desc(articles.createdAt));
+}
+
+export async function getPublishedArticlesQuery() {
+  return await db
+    .select()
+    .from(articles)
+    .where(eq(articles.status, "published"))
+    .orderBy(desc(articles.createdAt), asc(articles.title));
 }
 
 export async function getArticleByIdQuery(id: number) {

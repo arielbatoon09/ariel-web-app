@@ -6,7 +6,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
-import { getWorksQuery, getWorkByIdQuery, insertWorkQuery, updateWorkQuery, deleteWorksQuery } from "@/data/works";
+import { getWorksQuery, getWorkByIdQuery, insertWorkQuery, updateWorkQuery, deleteWorksQuery, getFeaturedWorksQuery, getPublishedFeaturedWorksQuery } from "@/data/works";
 import { getErrorMessage } from "@/lib/error-utils";
 import { revalidateWorksPaths } from "@/lib/revalidate-cms";
 
@@ -104,6 +104,7 @@ type UpdateWorkInput = Partial<{
   caseStudy: CaseStudy;
   seo: Seo;
   status: "draft" | "published" | "unpublished";
+  isFeatured: boolean;
   isDraftSave: boolean;
 
   id: string;
@@ -172,6 +173,7 @@ export async function updateWorkAction(
     caseStudy: Partial<CaseStudy>;
     seo: Partial<Seo>;
     status: "draft" | "published" | "unpublished";
+    isFeatured: boolean;
     isDraftSave?: boolean;
   }>
 ) {
@@ -206,6 +208,7 @@ export async function updateWorkAction(
           categories: fields.categories,
           caseStudy: fields.caseStudy,
           seo: fields.seo,
+          isFeatured: fields.isFeatured,
         } as DraftPayload,
       };
     } else {
@@ -303,3 +306,57 @@ export async function getPresignedUploadUrlAction(filename: string, contentType:
     return { success: false, error: getErrorMessage(err, "Failed to generate upload URL.") };
   }
 }
+
+// 7. Get featured works (Public)
+export async function getFeaturedWorksAction() {
+  try {
+    const worksList = await getPublishedFeaturedWorksQuery();
+    return {
+      success: true,
+      works: worksList.map((w) => ({
+        ...w,
+        id: w.id.toString(),
+      })),
+    };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to load featured works.") };
+  }
+}
+
+// 8. Toggle featured status (Admin, limit 3)
+export async function toggleWorkFeaturedAction(id: string, isFeatured: boolean) {
+  try {
+    const authCheck = await checkAdminAccess();
+    if (!authCheck.authorized) return { success: false, error: authCheck.error };
+
+    const numericId = parseInt(id, 10);
+    const work = await getWorkByIdQuery(numericId);
+    if (!work) return { success: false, error: "Work not found." };
+
+    if (isFeatured) {
+      const featuredWorks = await getFeaturedWorksQuery();
+      if (featuredWorks.length >= 3) {
+        return {
+          success: false,
+          error: "You can only feature up to 3 works. Please unfeature another project first.",
+        };
+      }
+    }
+
+    const updated = await updateWorkQuery(numericId, { isFeatured });
+    if (!updated) return { success: false, error: "Failed to update featured status." };
+
+    revalidateWorksPaths(updated.slug);
+
+    return {
+      success: true,
+      work: {
+        ...updated,
+        id: updated.id.toString(),
+      },
+    };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Failed to toggle featured status.") };
+  }
+}
+

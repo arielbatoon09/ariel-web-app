@@ -46,7 +46,15 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
           id: a.id.toString(),
           categories: a.categories as string[],
           seo: a.seo ?? undefined,
-        })),
+        }))
+        .sort((a, b) => {
+          const dateA = new Date(a.date).getTime() || 0;
+          const dateB = new Date(b.date).getTime() || 0;
+          if (dateB !== dateA) {
+            return dateB - dateA;
+          }
+          return a.title.localeCompare(b.title);
+        }),
     [allArticles]
   );
 

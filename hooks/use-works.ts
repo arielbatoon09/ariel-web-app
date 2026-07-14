@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/error-utils";
-import { getWorksAction, getWorkByIdAction, createWorkAction, updateWorkAction, toggleWorkStatusAction, deleteWorksAction } from "@/services/works";
+import { getWorksAction, getWorkByIdAction, createWorkAction, updateWorkAction, toggleWorkStatusAction, deleteWorksAction, toggleWorkFeaturedAction } from "@/services/works";
 import type { Project } from "@/schemas/dashboard";
 
 export const WORKS_QUERY_KEY = ["works"];
@@ -121,6 +121,32 @@ export function useDeleteWorksMutation() {
     },
     onError: (err: unknown) => {
       toast.error(getErrorMessage(err, "Failed to delete projects."));
+    },
+  });
+}
+
+export function useToggleWorkFeaturedMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: { id: string; isFeatured: boolean }) => {
+      const res = await toggleWorkFeaturedAction(payload.id, payload.isFeatured);
+      if (!res.success) {
+        throw new Error(res.error || "Failed to update featured status.");
+      }
+      return { id: payload.id, isFeatured: payload.isFeatured };
+    },
+    onSuccess: (data) => {
+      toast.success(
+        data.isFeatured
+          ? "Project added to Top 3 featured works!"
+          : "Project removed from featured works."
+      );
+      queryClient.invalidateQueries({ queryKey: WORKS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [...WORKS_QUERY_KEY, data.id] });
+    },
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Failed to update featured status."));
     },
   });
 }

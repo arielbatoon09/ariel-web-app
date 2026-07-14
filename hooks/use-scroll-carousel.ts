@@ -10,7 +10,33 @@ interface ScrollCarouselOptions {
 
 export function useScrollCarousel({ itemCount, gap = 24, cardSelector, autoPlay = false, autoPlayInterval = 8000 }: ScrollCarouselOptions) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [dotsCount, setDotsCount] = useState(itemCount);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Calculate dynamic dots count based on viewport scroll capacity
+  const updateDots = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const cards = container.querySelectorAll(cardSelector);
+    if (!cards || cards.length === 0) return;
+
+    const cardWidth = (cards[0] as HTMLElement).clientWidth;
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+
+    if (maxScrollLeft <= 0) {
+      setDotsCount(1);
+    } else {
+      const steps = Math.round(maxScrollLeft / (cardWidth + gap));
+      setDotsCount(steps + 1);
+    }
+  }, [cardSelector, gap]);
+
+  useEffect(() => {
+    updateDots();
+    window.addEventListener("resize", updateDots);
+    return () => window.removeEventListener("resize", updateDots);
+  }, [updateDots]);
 
   // Synchronize index on manual scroll/swipe
   const handleScroll = useCallback(() => {
@@ -23,16 +49,13 @@ export function useScrollCarousel({ itemCount, gap = 24, cardSelector, autoPlay 
     const cardWidth = (cards[0] as HTMLElement).clientWidth;
     const scrollPosition = container.scrollLeft;
 
-    // Determine current index based on which card is closest to the left boundary
     const computedIndex = Math.round(scrollPosition / (cardWidth + gap));
-
-    // Clamp values safety check
-    const clampedIndex = Math.max(0, Math.min(computedIndex, itemCount - 1));
+    const clampedIndex = Math.max(0, Math.min(computedIndex, dotsCount - 1));
 
     if (clampedIndex !== activeIndex) {
       setActiveIndex(clampedIndex);
     }
-  }, [activeIndex, gap, itemCount, cardSelector]);
+  }, [activeIndex, gap, dotsCount, cardSelector]);
 
   const scrollToCard = useCallback(
     (index: number) => {
@@ -57,19 +80,20 @@ export function useScrollCarousel({ itemCount, gap = 24, cardSelector, autoPlay 
 
   // Hook up autoplay side effect
   useEffect(() => {
-    if (!autoPlay) return;
+    if (!autoPlay || dotsCount <= 1) return;
 
     const interval = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % itemCount;
+      const nextIndex = (activeIndex + 1) % dotsCount;
       scrollToCard(nextIndex);
     }, autoPlayInterval);
 
     return () => clearInterval(interval);
-  }, [autoPlay, autoPlayInterval, activeIndex, itemCount, scrollToCard]);
+  }, [autoPlay, autoPlayInterval, activeIndex, dotsCount, scrollToCard]);
 
   return {
     scrollRef,
     activeIndex,
+    dotsCount,
     scrollToCard,
     handleScroll,
   };
