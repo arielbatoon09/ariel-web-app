@@ -89,7 +89,7 @@ export function ArticleDetailDialog() {
             {/* Banner Preview */}
             {displayArticle.imageSrc ? (
               <div className="relative aspect-[16/6] w-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
-                <Image src={displayArticle.imageSrc} alt={displayArticle.title} fill className="object-cover" />
+                <Image src={displayArticle.imageSrc} alt={displayArticle.title} fill sizes="(max-width: 768px) 100vw, 600px" className="object-cover" />
               </div>
             ) : (
               <div className="flex aspect-[16/6] w-full flex-col items-center justify-center border border-dashed border-neutral-300 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900/40">

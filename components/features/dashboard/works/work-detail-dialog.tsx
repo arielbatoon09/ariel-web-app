@@ -78,7 +78,7 @@ export function WorkDetailDialog() {
             {/* Banner Preview */}
             {currentWork.imageSrc && (
               <div className="relative aspect-[16/6] w-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
-                <Image src={currentWork.imageSrc} alt={currentWork.title} fill className="object-cover" />
+                <Image src={currentWork.imageSrc} alt={currentWork.title} fill sizes="(max-width: 768px) 100vw, 600px" className="object-cover" />
               </div>
             )}
 

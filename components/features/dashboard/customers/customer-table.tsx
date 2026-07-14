@@ -37,7 +37,7 @@ export function CustomerTable() {
           <div className="flex items-center gap-2.5">
             <div className="relative flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-neutral-300 bg-neutral-200 font-mono text-[10px] font-bold text-neutral-600 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 select-none uppercase">
               {item.avatarUrl ? (
-                <Image src={item.avatarUrl} alt={item.name} fill className="object-cover" />
+                <Image src={item.avatarUrl} alt={item.name} fill sizes="32px" className="object-cover" />
               ) : (
                 initials
               )}

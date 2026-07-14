@@ -26,7 +26,7 @@ export function ArticleTable() {
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-16 shrink-0 overflow-hidden rounded border border-dashed border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900/60">
             {item.imageSrc ? (
-              <Image src={item.imageSrc} alt={item.title} fill className="object-cover" />
+              <Image src={item.imageSrc} alt={item.title} fill sizes="64px" className="object-cover" />
             ) : (
               <div className="flex h-full w-full items-center justify-center font-mono text-[8px] text-neutral-400 dark:text-neutral-600 uppercase select-none">
                 No Banner
