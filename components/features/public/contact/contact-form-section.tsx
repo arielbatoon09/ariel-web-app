@@ -1,56 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Section } from "@/components/common/section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, Loader2, Calendar } from "lucide-react";
 import Link from "next/link";
+import { useForm } from "@tanstack/react-form";
+import * as z from "zod";
 
 import { toast } from "sonner";
-import { ReCaptchaV2 } from "@/components/common/recaptcha-v2";
-import { verifyReCaptchaAction } from "@/services/recaptcha";
+import { ReCaptchaV2, ReCaptchaV2Ref } from "@/components/common/recaptcha-v2";
+import { sendContactMessageAction } from "@/services/contact";
+import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
+
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required."),
+  email: z.string().min(1, "Email address is required.").email("Please enter a valid email address."),
+  message: z.string().min(1, "Message is required."),
+});
 
 export function ContactFormSection() {
   const [view, setView] = useState<"form" | "success">("form");
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [submittedName, setSubmittedName] = useState("");
+  const recaptchaRef = useRef<ReCaptchaV2Ref>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim() || !message.trim()) {
-      toast.error("Please fill in all required fields.");
-      return;
-    }
-
-    if (!recaptchaToken) {
-      toast.error("Please complete the reCAPTCHA challenge.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // 1. Verify reCAPTCHA token with the server action
-      const verification = await verifyReCaptchaAction(recaptchaToken);
-      if (!verification.success) {
-        toast.error(verification.error || "Security validation failed. Please try again.");
-        setLoading(false);
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+    validators: {
+      onSubmit: contactSchema,
+    },
+    onSubmit: async ({ value }) => {
+      if (!recaptchaToken) {
+        toast.error("Please complete the reCAPTCHA challenge.");
         return;
       }
 
-      // Simulate API submission
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setView("success");
-    } catch {
-      toast.error("Failed to submit message. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+      setLoading(true);
+      try {
+        const res = await sendContactMessageAction({
+          name: value.name,
+          email: value.email,
+          message: value.message,
+          recaptchaToken,
+        });
+
+        if (res.success) {
+          setSubmittedName(value.name);
+          setView("success");
+          form.reset();
+        } else {
+          toast.error(res.error || "Failed to send message.");
+          recaptchaRef.current?.reset();
+        }
+      } catch {
+        toast.error("Failed to submit message. Please try again.");
+        recaptchaRef.current?.reset();
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
   return (
     <Section containerClassName="py-12 md:py-16" showTopLine={false} showBottomLine={true}>
@@ -62,44 +79,86 @@ export function ContactFormSection() {
             <div className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 text-[10px] text-neutral-300 dark:text-neutral-700">+</div>
 
             {view === "form" ? (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">Your Name</label>
-                  <Input
-                    required
-                    placeholder="e.g. John Doe"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="h-11 rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
-                  />
-                </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  form.handleSubmit();
+                }}
+                className="space-y-6"
+              >
+                <FieldGroup>
+                  <form.Field name="name">
+                    {(field) => {
+                      const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel htmlFor={field.name} className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                            Your Name
+                          </FieldLabel>
+                          <Input
+                            id={field.name}
+                            required
+                            placeholder="e.g. John Doe"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                            className="h-11 rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
+                          />
+                          {isInvalid && <FieldError className="text-[10px] text-red-500 mt-1 font-mono">{field.state.meta.errors.join(", ")}</FieldError>}
+                        </Field>
+                      );
+                    }}
+                  </form.Field>
 
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">Email Address</label>
-                  <Input
-                    required
-                    type="email"
-                    placeholder="e.g. john@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-11 rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
-                  />
-                </div>
+                  <form.Field name="email">
+                    {(field) => {
+                      const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel htmlFor={field.name} className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                            Email Address
+                          </FieldLabel>
+                          <Input
+                            id={field.name}
+                            required
+                            type="email"
+                            placeholder="e.g. john@company.com"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                            className="h-11 rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
+                          />
+                          {isInvalid && <FieldError className="text-[10px] text-red-500 mt-1 font-mono">{field.state.meta.errors.join(", ")}</FieldError>}
+                        </Field>
+                      );
+                    }}
+                  </form.Field>
 
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
-                    Project Details & Message
-                  </label>
-                  <Textarea
-                    required
-                    placeholder="Describe your project, goals, estimated budget, and timeline..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="min-h-[180px] rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
-                  />
-                </div>
+                  <form.Field name="message">
+                    {(field) => {
+                      const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel htmlFor={field.name} className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                            Project Details & Message
+                          </FieldLabel>
+                          <Textarea
+                            id={field.name}
+                            required
+                            placeholder="Describe your project, goals, estimated budget, and timeline..."
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                            className="min-h-[180px] rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
+                          />
+                          {isInvalid && <FieldError className="text-[10px] text-red-500 mt-1 font-mono">{field.state.meta.errors.join(", ")}</FieldError>}
+                        </Field>
+                      );
+                    }}
+                  </form.Field>
+                </FieldGroup>
 
-                <ReCaptchaV2 onChange={setRecaptchaToken} />
+                <ReCaptchaV2 ref={recaptchaRef} onChange={setRecaptchaToken} />
 
                 <Button
                   type="submit"
@@ -124,15 +183,13 @@ export function ContactFormSection() {
                 <div className="space-y-2">
                   <h3 className="font-sans text-xl font-bold tracking-tight text-foreground">Message Sent Successfully</h3>
                   <p className="dark:text-neutral-455 mx-auto max-w-sm text-xs leading-relaxed text-neutral-500 md:text-sm">
-                    Thank you for reaching out, {name}. I have received your message and will review it. Expect a response within 24 hours.
+                    Thank you for reaching out, {submittedName}. I have received your message and will review it. Expect a response within 24 hours.
                   </p>
                 </div>
                 <Button
                   onClick={() => {
                     setView("form");
-                    setName("");
-                    setEmail("");
-                    setMessage("");
+                    setSubmittedName("");
                   }}
                   variant="outline"
                   className="h-11 cursor-pointer rounded-none px-6 font-mono text-xs tracking-wider uppercase"

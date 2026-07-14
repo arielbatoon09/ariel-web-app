@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useArticlesQuery, useDeleteArticlesMutation } from "@/hooks/use-articles";
@@ -19,7 +19,7 @@ export function ArticleTable() {
   const [itemsToDelete, setItemsToDelete] = useState<Article[]>([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       header: "Article Details",
       accessorKey: (item: Article) => (
@@ -91,19 +91,19 @@ export function ArticleTable() {
         </div>
       ),
     },
-  ];
+  ], []);
 
-  const handleDelete = (item: Article) => {
+  const handleDelete = useCallback((item: Article) => {
     setItemsToDelete([item]);
     setShowDeleteConfirm(true);
-  };
+  }, []);
 
-  const handleDeleteBulk = (items: Article[]) => {
+  const handleDeleteBulk = useCallback((items: Article[]) => {
     setItemsToDelete(items);
     setShowDeleteConfirm(true);
-  };
+  }, []);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     deleteArticlesMutation.mutate(
       itemsToDelete.map((item) => item.id),
       {
@@ -113,12 +113,12 @@ export function ArticleTable() {
         },
       }
     );
-  };
+  }, [deleteArticlesMutation, itemsToDelete]);
 
-  const handleView = (item: Article) => {
+  const handleView = useCallback((item: Article) => {
     setSelectedArticleId(item.id);
     setIsArticleDetailsOpen(true);
-  };
+  }, [setSelectedArticleId, setIsArticleDetailsOpen]);
 
   const isBulkDelete = itemsToDelete.length > 1;
   const confirmTitle = isBulkDelete ? "Delete Selected Articles" : "Delete Article";

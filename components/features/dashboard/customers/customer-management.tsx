@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
-import { DataTable } from "@/components/features/dashboard/data-table";
+import { DataTable } from "@/components/common/data-table";
 import { ManagementHeader } from "@/components/common/management-header";
 import { ManagementDetailDialog } from "@/components/common/management-detail-dialog";
 import { Shield, ShieldAlert, User, Clock } from "lucide-react";

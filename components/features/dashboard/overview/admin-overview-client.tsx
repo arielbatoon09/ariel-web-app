@@ -2,32 +2,31 @@
 
 import { useMemo } from "react";
 import { Loader2 } from "lucide-react";
-import { useOrdersQuery } from "@/hooks/use-orders";
-import { useTransactionsQuery } from "@/hooks/use-transactions";
-import { useWorksQuery } from "@/hooks/use-works";
-import { useArticlesQuery } from "@/hooks/use-articles";
-import { useCustomersQuery } from "@/hooks/use-customers";
+import { useAdminOverviewQuery } from "@/hooks/use-overview";
+import type { Order, Transaction } from "@/schemas/dashboard";
 
 import { AdminOverviewHeader } from "./admin-overview-header";
 import { AdminOverviewMetrics } from "./admin-overview-metrics";
 import { AdminOverviewDetails } from "./admin-overview-details";
 
 export function AdminOverviewClient() {
-  const { data: orders = [], isLoading: isLoadingOrders } = useOrdersQuery();
-  const { data: transactions = [], isLoading: isLoadingTx } = useTransactionsQuery();
-  const { data: works = [], isLoading: isLoadingWorks } = useWorksQuery();
-  const { data: articles = [], isLoading: isLoadingArticles } = useArticlesQuery();
-  const { data: customers = [], isLoading: isLoadingCustomers } = useCustomersQuery();
+  const { data: overview, isLoading } = useAdminOverviewQuery();
+
+  const orders = useMemo(() => overview?.orders || [], [overview?.orders]);
+  const transactions = useMemo(() => overview?.transactions || [], [overview?.transactions]);
+  const works = useMemo(() => overview?.works || [], [overview?.works]);
+  const articles = useMemo(() => overview?.articles || [], [overview?.articles]);
+  const customers = useMemo(() => overview?.customers || [], [overview?.customers]);
 
   // Calculations
   const totalSales = useMemo(() => {
     return transactions
-      .filter((tx) => tx.status === "successful")
-      .reduce((sum, tx) => sum + tx.amount, 0);
+      .filter((tx: Transaction) => tx.status === "successful")
+      .reduce((sum: number, tx: Transaction) => sum + tx.amount, 0);
   }, [transactions]);
 
   const activeOrdersCount = useMemo(() => {
-    return orders.filter((o) => o.status === "pending" || o.status === "in-progress" || o.status === "revision_requested").length;
+    return orders.filter((o: Order) => o.status === "pending" || o.status === "in-progress" || o.status === "revision_requested").length;
   }, [orders]);
 
   const recentCustomers = useMemo(() => {
@@ -35,8 +34,6 @@ export function AdminOverviewClient() {
       .sort((a, b) => new Date(b.joinedAt).getTime() - new Date(a.joinedAt).getTime())
       .slice(0, 3);
   }, [customers]);
-
-  const isLoading = isLoadingOrders || isLoadingTx || isLoadingWorks || isLoadingArticles || isLoadingCustomers;
 
   if (isLoading) {
     return (

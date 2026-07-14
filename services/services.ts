@@ -14,6 +14,7 @@ import {
 } from "@/data/services";
 import type { Service } from "@/schemas/dashboard";
 import { revalidateServicesPaths } from "@/lib/revalidate-cms";
+import { redisGet, redisSet, redisDel } from "@/lib/redis";
 
 async function checkAdminAccess() {
   const currentUser = await getCurrentSessionUser();
@@ -34,10 +35,24 @@ async function checkAdminAccess() {
   return { authorized: true };
 }
 
+async function invalidateServicesCache() {
+  await Promise.all([
+    redisDel("admin:services"),
+    redisDel("admin:overview"),
+  ]);
+}
+
 // 1. Get all services (Public/Admin)
 export async function getServicesAction() {
   try {
+    const cacheKey = "admin:services";
+    const cachedServices = await redisGet<Service[]>(cacheKey);
+    if (cachedServices) {
+      return { success: true, services: cachedServices };
+    }
+
     const servicesList = await getServicesQuery();
+    await redisSet(cacheKey, servicesList, 3600); // 1 hour TTL
     return {
       success: true,
       services: servicesList,
@@ -89,6 +104,7 @@ export async function createServiceAction(data: Omit<Service, "id">) {
   try {
     const newService = await insertServiceQuery(data);
     revalidateServicesPaths(newService.slug);
+    await invalidateServicesCache();
     return {
       success: true,
       service: newService,
@@ -115,6 +131,7 @@ export async function updateServiceAction(id: string, data: Partial<Service>) {
     if (existing?.slug && existing.slug !== updated.slug) {
       revalidateServicesPaths(existing.slug);
     }
+    await invalidateServicesCache();
     return {
       success: true,
       service: updated,
@@ -139,6 +156,7 @@ export async function toggleServiceStatusAction(id: string) {
 
     const updated = await updateServiceQuery(id, { disabled: !service.disabled });
     revalidateServicesPaths(service.slug);
+    await invalidateServicesCache();
     return {
       success: true,
       disabled: updated?.disabled,
@@ -161,6 +179,7 @@ export async function deleteServicesAction(ids: string[]) {
     for (const service of deleted) {
       revalidateServicesPaths(service.slug);
     }
+    await invalidateServicesCache();
     return {
       success: true,
       services: deleted,

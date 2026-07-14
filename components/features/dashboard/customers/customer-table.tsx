@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
 import { DataTable } from "@/components/common/data-table";
@@ -20,7 +20,7 @@ export function CustomerTable() {
   const [customerToBlock, setCustomerToBlock] = useState<Customer | null>(null);
   const [confirmType, setConfirmType] = useState<"delete" | "block" | null>(null);
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       header: "Name",
       accessorKey: ((item: Customer) => {
@@ -72,24 +72,24 @@ export function CustomerTable() {
       accessorKey: "joinedAt" as const,
       className: "font-mono text-neutral-400 dark:text-neutral-500",
     },
-  ];
+  ], []);
 
-  const handleViewDetails = (customer: Customer) => {
+  const handleViewDetails = useCallback((customer: Customer) => {
     setSelectedCustomerId(customer.id);
     setIsDetailsOpen(true);
-  };
+  }, [setSelectedCustomerId, setIsDetailsOpen]);
 
-  const handleToggleBlock = (customer: Customer) => {
+  const handleToggleBlock = useCallback((customer: Customer) => {
     setCustomerToBlock(customer);
     setConfirmType("block");
-  };
+  }, []);
 
-  const handleDeleteBulk = (items: Customer[]) => {
+  const handleDeleteBulk = useCallback((items: Customer[]) => {
     setItemsToDelete(items);
     setConfirmType("delete");
-  };
+  }, []);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     if (confirmType === "delete") {
       const ids = itemsToDelete.map((item) => item.id);
       deleteCustomersMutation.mutate(ids);
@@ -98,7 +98,7 @@ export function CustomerTable() {
       toggleBlockMutation.mutate({ customerId: customerToBlock.id, isBlocked: targetStatus });
     }
     setConfirmType(null);
-  };
+  }, [confirmType, itemsToDelete, customerToBlock, deleteCustomersMutation, toggleBlockMutation]);
 
   const confirmTitle = confirmType === "delete" ? "Delete Customer(s)" : "Update Login Status";
 

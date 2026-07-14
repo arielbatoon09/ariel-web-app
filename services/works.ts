@@ -9,6 +9,8 @@ import { getUserRoleByUserId } from "@/data/roles";
 import { getWorksQuery, getWorkByIdQuery, insertWorkQuery, updateWorkQuery, deleteWorksQuery, getFeaturedWorksQuery, getPublishedFeaturedWorksQuery } from "@/data/works";
 import { getErrorMessage } from "@/lib/error-utils";
 import { revalidateWorksPaths } from "@/lib/revalidate-cms";
+import { redisGet, redisSet, redisDel } from "@/lib/redis";
+import type { Project } from "@/schemas/dashboard";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -30,16 +32,32 @@ async function checkAdminAccess() {
   return { authorized: true };
 }
 
+async function invalidateWorksCache() {
+  await Promise.all([
+    redisDel("admin:works"),
+    redisDel("admin:overview"),
+  ]);
+}
+
 // 1. Get all works (Public)
 export async function getWorksAction() {
   try {
+    const cacheKey = "admin:works";
+    const cachedWorks = await redisGet<Project[]>(cacheKey);
+    if (cachedWorks) {
+      return { success: true, works: cachedWorks };
+    }
+
     const worksList = await getWorksQuery();
+    const mappedWorks = worksList.map((w) => ({
+      ...w,
+      id: w.id.toString(),
+    }));
+
+    await redisSet(cacheKey, mappedWorks, 3600); // 1 hour TTL
     return {
       success: true,
-      works: worksList.map((w) => ({
-        ...w,
-        id: w.id.toString(),
-      })),
+      works: mappedWorks,
     };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to load works.") };
@@ -151,6 +169,8 @@ export async function createWorkAction(data: {
       revalidateWorksPaths(inserted.slug);
     }
 
+    await invalidateWorksCache();
+
     return { success: true, work: { ...inserted, id: inserted.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to create work.") };
@@ -228,6 +248,8 @@ export async function updateWorkAction(
       }
     }
 
+    await invalidateWorksCache();
+
     return { success: true, work: { ...updated, id: updated.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to update work.") };
@@ -249,6 +271,8 @@ export async function toggleWorkStatusAction(id: string) {
 
     revalidateWorksPaths(work.slug);
 
+    await invalidateWorksCache();
+
     return { success: true, status: updated?.status };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to toggle status.") };
@@ -268,6 +292,8 @@ export async function deleteWorksAction(ids: string[]) {
     for (const work of deleted) {
       revalidateWorksPaths(work.slug);
     }
+
+    await invalidateWorksCache();
 
     return { success: true };
   } catch (err: unknown) {
@@ -347,6 +373,8 @@ export async function toggleWorkFeaturedAction(id: string, isFeatured: boolean) 
     if (!updated) return { success: false, error: "Failed to update featured status." };
 
     revalidateWorksPaths(updated.slug);
+
+    await invalidateWorksCache();
 
     return {
       success: true,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
@@ -64,7 +64,7 @@ export function WorkTable() {
   const [itemsToDelete, setItemsToDelete] = useState<Project[]>([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       header: "",
       accessorKey: (item: Project) => <FeaturedToggleCell item={item} />,
@@ -147,19 +147,19 @@ export function WorkTable() {
         </div>
       ),
     },
-  ];
+  ], []);
 
-  const handleDelete = (item: Project) => {
+  const handleDelete = useCallback((item: Project) => {
     setItemsToDelete([item]);
     setShowDeleteConfirm(true);
-  };
+  }, []);
 
-  const handleDeleteBulk = (items: Project[]) => {
+  const handleDeleteBulk = useCallback((items: Project[]) => {
     setItemsToDelete(items);
     setShowDeleteConfirm(true);
-  };
+  }, []);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     deleteWorksMutation.mutate(
       itemsToDelete.map((item) => item.id),
       {
@@ -169,12 +169,12 @@ export function WorkTable() {
         },
       }
     );
-  };
+  }, [deleteWorksMutation, itemsToDelete]);
 
-  const handleView = (item: Project) => {
+  const handleView = useCallback((item: Project) => {
     setSelectedWorkId(item.id);
     setIsWorkDetailsOpen(true);
-  };
+  }, [setSelectedWorkId, setIsWorkDetailsOpen]);
 
   const isBulkDelete = itemsToDelete.length > 1;
   const confirmTitle = isBulkDelete ? "Delete Selected Projects" : "Delete Project";

@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/context/theme-provider";
 
+import { Analytics } from "@vercel/analytics/next";
+
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const fontMono = Geist_Mono({
@@ -126,6 +128,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <QueryProvider>
             <TooltipProvider>
               {children}
+              <Analytics />
               <Toaster />
               <CrispChat />
               <CookiesBanner />

@@ -8,6 +8,7 @@ import type { Customer } from "@/schemas/dashboard";
 import { getCurrentSessionUser, getSupabaseAdminClient } from "@/data/auth";
 import { getUserByAuthId, getUserById, insertUser, deleteUserById } from "@/data/users";
 import { getUserRoleByUserId, upsertUserRole } from "@/data/roles";
+import { redisGet, redisSet, redisDel } from "@/lib/redis";
 
 interface CreateCustomerInput {
   email: string;
@@ -87,6 +88,8 @@ export async function createCustomerAction(input: CreateCustomerInput) {
     // 5. Insert into the userRoles table using helper
     await upsertUserRole(insertedUser.id, input.role);
 
+    await invalidateCustomersCache();
+
     return { success: true, user: insertedUser };
   } catch (err: unknown) {
     console.error("CREATE CUSTOMER ACTION ERROR:", err);
@@ -95,8 +98,21 @@ export async function createCustomerAction(input: CreateCustomerInput) {
   }
 }
 
+async function invalidateCustomersCache() {
+  await Promise.all([
+    redisDel("admin:customers"),
+    redisDel("admin:overview"),
+  ]);
+}
+
 export async function getCustomersAction() {
   try {
+    const cacheKey = "admin:customers";
+    const cachedCustomers = await redisGet<Customer[]>(cacheKey);
+    if (cachedCustomers) {
+      return { success: true, customers: cachedCustomers };
+    }
+
     const adminClient = getSupabaseAdminClient();
     const {
       data: { users: authUsers },
@@ -134,6 +150,7 @@ export async function getCustomersAction() {
       };
     });
 
+    await redisSet(cacheKey, customers, 3600); // 1 hour TTL
     return { success: true, customers };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "An unexpected server error occurred.") };
@@ -144,6 +161,7 @@ export async function updateCustomerRoleAction(customerId: string, role: "admin"
   try {
     const numericId = parseInt(customerId, 10);
     await upsertUserRole(numericId, role);
+    await invalidateCustomersCache();
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to update role.") };
@@ -172,6 +190,8 @@ export async function toggleCustomerBlockStatusAction(customerId: string, isBloc
       if (error) throw error;
     }
 
+    await invalidateCustomersCache();
+
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to update block status.") };
@@ -196,6 +216,7 @@ export async function deleteCustomersAction(customerIds: string[]) {
       // Delete from local DB using helper
       await deleteUserById(numericId);
     }
+    await invalidateCustomersCache();
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to delete customers.") };

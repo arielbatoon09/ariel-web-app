@@ -10,6 +10,22 @@ import { revalidatePath } from "next/cache";
 import { r2Client } from "@/lib/r2/client";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { checkRateLimit } from "@/lib/rate-limit";
+
+export async function checkLoginRateLimitAction() {
+  try {
+    const rateLimit = await checkRateLimit("rate_limit:login", 5, 60);
+    if (!rateLimit.success) {
+      return {
+        success: false,
+        error: `Too many login attempts. Please wait ${rateLimit.reset} seconds before trying again.`,
+      };
+    }
+    return { success: true };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Rate limit check failed.") };
+  }
+}
 
 export async function getUserRoleAction() {
   try {

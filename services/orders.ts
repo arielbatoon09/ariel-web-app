@@ -10,6 +10,7 @@ import { orderConfirmationHtml, orderConfirmationText } from "@/lib/emails/order
 import { db } from "@/drizzle";
 import { transactions, orders } from "@/drizzle/schema";
 import { eq, desc, or } from "drizzle-orm";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 async function checkAdminAccess() {
   const currentUser = await getCurrentSessionUser();
@@ -114,6 +115,15 @@ export async function createOrderAction(data: {
   requirements?: string;
 }) {
   try {
+    // Check Rate Limit (max 3 checkouts per minute per IP)
+    const rateLimit = await checkRateLimit("rate_limit:checkout", 3, 60);
+    if (!rateLimit.success) {
+      return {
+        success: false,
+        error: `Too many checkout attempts. Please wait ${rateLimit.reset} seconds before trying again.`,
+      };
+    }
+
     let userId: string | null = null;
     const currentUser = await getCurrentSessionUser();
     if (currentUser) {

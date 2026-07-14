@@ -15,8 +15,7 @@ import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field
 import { ReCaptchaV2, ReCaptchaV2Ref } from "@/components/common/recaptcha-v2";
 import { verifyReCaptchaAction } from "@/services/recaptcha";
 import { useAuthStore } from "@/hooks/use-auth-store";
-import { getUserRoleAction } from "@/services/auth";
-
+import { getUserRoleAction, checkLoginRateLimitAction } from "@/services/auth";
 const loginSchema = z.object({
   email: z.string().min(1, "Email address is required.").email("Please enter a valid email address."),
   password: z.string().min(1, "Password is required."),
@@ -38,13 +37,20 @@ export function LoginForm() {
       onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
-      if (!recaptchaToken) {
-        toast.error("Please complete the reCAPTCHA challenge.");
-        return;
-      }
-
       try {
-        // Verify reCAPTCHA token
+        // 1. Check Rate Limit
+        const rateLimit = await checkLoginRateLimitAction();
+        if (!rateLimit.success) {
+          toast.error(rateLimit.error || "Too many attempts. Please try again later.");
+          return;
+        }
+
+        // 2. Verify reCAPTCHA
+        if (!recaptchaToken) {
+          toast.error("Please complete the reCAPTCHA challenge.");
+          return;
+        }
+
         const verification = await verifyReCaptchaAction(recaptchaToken);
         if (!verification.success) {
           toast.error(verification.error || "Security validation failed. Please try again.");

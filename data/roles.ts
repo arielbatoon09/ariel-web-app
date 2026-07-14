@@ -2,10 +2,12 @@ import { db } from "@/drizzle";
 import { userRoles } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
-export async function getUserRoleByUserId(userId: number) {
+import { cache } from "react";
+
+export const getUserRoleByUserId = cache(async (userId: number) => {
   const [roleRecord] = await db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, userId)).limit(1);
   return roleRecord ? roleRecord.role : null;
-}
+});
 
 export async function upsertUserRole(userId: number, role: "admin" | "client") {
   const existing = await db.select().from(userRoles).where(eq(userRoles.userId, userId)).limit(1);

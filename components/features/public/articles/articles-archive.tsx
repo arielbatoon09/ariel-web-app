@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { GridCard } from "@/components/common/grid-card";
@@ -58,6 +58,11 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
     [allArticles]
   );
 
+  const getCategoriesLabel = useCallback(
+    (slugs: string[]) => resolveCategories(slugs, categories),
+    [categories]
+  );
+
   const dynamicCategories = useMemo(() => {
     return [
       { id: "all", label: "All Articles" },
@@ -103,7 +108,7 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
               {paginatedItems.map((article: Article) => (
                 <GridCard
                   key={article.id}
-                  tag={resolveCategories(article.categories, categories)}
+                  tag={getCategoriesLabel(article.categories)}
                   number={`${article.date} • ${article.readTime}`}
                   title={article.title}
                   description={article.description}

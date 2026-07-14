@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 
 interface UseArchiveFilterOptions<T> {
   items: T[];
@@ -12,15 +12,15 @@ export function useArchiveFilter<T>({ items, searchKeys, itemsPerPage = 6 }: Use
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleCategoryChange = (category: string) => {
+  const handleCategoryChange = useCallback((category: string) => {
     setActiveCategory(category);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleSearchChange = (query: string) => {
+  const handleSearchChange = useCallback((query: string) => {
     setSearchQuery(query);
     setCurrentPage(1);
-  };
+  }, []);
 
   // Filter & Search Logic
   const filteredItems = useMemo(() => {

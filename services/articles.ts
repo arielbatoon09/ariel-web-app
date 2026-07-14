@@ -13,6 +13,8 @@ import {
 } from "@/data/articles";
 import { getErrorMessage } from "@/lib/error-utils";
 import { revalidateArticlesPaths } from "@/lib/revalidate-cms";
+import { redisGet, redisSet, redisDel } from "@/lib/redis";
+import type { Article } from "@/schemas/dashboard";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -34,16 +36,32 @@ async function checkAdminAccess() {
   return { authorized: true };
 }
 
+async function invalidateArticlesCache() {
+  await Promise.all([
+    redisDel("admin:articles"),
+    redisDel("admin:overview"),
+  ]);
+}
+
 // 1. Get all articles (Public)
 export async function getArticlesAction() {
   try {
+    const cacheKey = "admin:articles";
+    const cachedArticles = await redisGet<Article[]>(cacheKey);
+    if (cachedArticles) {
+      return { success: true, articles: cachedArticles };
+    }
+
     const articlesList = await getArticlesQuery();
+    const mappedArticles = articlesList.map((a) => ({
+      ...a,
+      id: a.id.toString(),
+    }));
+
+    await redisSet(cacheKey, mappedArticles, 3600); // 1 hour TTL
     return {
       success: true,
-      articles: articlesList.map((a) => ({
-        ...a,
-        id: a.id.toString(),
-      })),
+      articles: mappedArticles,
     };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to fetch articles.") };
@@ -133,6 +151,8 @@ export async function createArticleAction(data: {
       revalidateArticlesPaths(inserted.slug);
     }
 
+    await invalidateArticlesCache();
+
     return { success: true, article: { ...inserted, id: inserted.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to create article.") };
@@ -212,6 +232,8 @@ export async function updateArticleAction(
       }
     }
 
+    await invalidateArticlesCache();
+
     return { success: true, article: { ...updated, id: updated.id.toString() } };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to update article.") };
@@ -233,6 +255,8 @@ export async function toggleArticleStatusAction(id: string) {
 
     revalidateArticlesPaths(article.slug);
 
+    await invalidateArticlesCache();
+
     return { success: true, status: updated?.status };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to toggle status.") };
@@ -252,6 +276,8 @@ export async function deleteArticlesAction(ids: string[]) {
     for (const article of deleted) {
       revalidateArticlesPaths(article.slug);
     }
+
+    await invalidateArticlesCache();
 
     return { success: true };
   } catch (err: unknown) {

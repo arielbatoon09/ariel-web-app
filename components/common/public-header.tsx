@@ -120,6 +120,7 @@ export function PublicHeader() {
                             alt="ab logo"
                             width={80}
                             height={80}
+                            priority
                           />
                           <Image
                             src="/icons/ab-logo-text-white.png"
@@ -127,6 +128,7 @@ export function PublicHeader() {
                             alt="ab logo"
                             width={80}
                             height={80}
+                            priority
                           />
                         </div>
                       </Link>

@@ -2,15 +2,17 @@ import { db } from "@/drizzle";
 import { users } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
-export async function getUserByAuthId(authId: string) {
+import { cache } from "react";
+
+export const getUserByAuthId = cache(async (authId: string) => {
   const [user] = await db.select().from(users).where(eq(users.authId, authId)).limit(1);
   return user || null;
-}
+});
 
-export async function getUserById(id: number) {
+export const getUserById = cache(async (id: number) => {
   const [user] = await db.select().from(users).where(eq(users.id, id)).limit(1);
   return user || null;
-}
+});
 
 export async function insertUser(values: { authId: string; fullName: string; phone?: string | null }) {
   const [inserted] = await db

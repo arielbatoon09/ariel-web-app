@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
 import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
+import { cache } from "react";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -23,7 +24,7 @@ export function getSupabaseAdminClient() {
   return cachedAdminClient;
 }
 
-export async function getCurrentSessionUser() {
+export const getCurrentSessionUser = cache(async () => {
   const cookieStore = await cookies();
   const supabase = createSupabaseServerClient(cookieStore);
   const {
@@ -33,4 +34,4 @@ export async function getCurrentSessionUser() {
 
   if (error || !user) return null;
   return user;
-}
+});

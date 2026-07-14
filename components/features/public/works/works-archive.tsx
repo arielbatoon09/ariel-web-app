@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { GridCard } from "@/components/common/grid-card";
@@ -50,6 +50,11 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
     [allProjects]
   );
 
+  const getCategoriesLabel = useCallback(
+    (slugs: string[]) => resolveCategories(slugs, categories),
+    [categories]
+  );
+
   const { activeCategory, setActiveCategory, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, filteredItems, paginatedItems } =
     useArchiveFilter({
       items: projects,
@@ -89,7 +94,7 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
               {paginatedItems.map((project: Project) => (
                 <GridCard
                   key={project.id}
-                  tag={resolveCategories(project.categories, categories)}
+                  tag={getCategoriesLabel(project.categories)}
                   title={project.title}
                   description={project.description}
                   imageSrc={project.imageSrc}
