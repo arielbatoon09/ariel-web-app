@@ -12,8 +12,8 @@ export async function sendContactMessageAction(input: {
   recaptchaToken: string;
 }) {
   try {
-    // 1. Apply Rate Limiting (max 3 contact submissions per minute per IP)
-    const rateLimit = await checkRateLimit("rate_limit:contact", 3, 60);
+    // 1. Apply Rate Limiting (max 3 contact submissions per minute per IP/Email)
+    const rateLimit = await checkRateLimit("rate_limit:contact", 3, 60, input.email);
     if (!rateLimit.success) {
       return {
         success: false,

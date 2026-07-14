@@ -12,9 +12,9 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { checkRateLimit } from "@/lib/rate-limit";
 
-export async function checkLoginRateLimitAction() {
+export async function checkLoginRateLimitAction(email: string) {
   try {
-    const rateLimit = await checkRateLimit("rate_limit:login", 5, 60);
+    const rateLimit = await checkRateLimit("rate_limit:login", 5, 60, email);
     if (!rateLimit.success) {
       return {
         success: false,

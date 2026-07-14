@@ -39,7 +39,7 @@ export function LoginForm() {
     onSubmit: async ({ value }) => {
       try {
         // 1. Check Rate Limit
-        const rateLimit = await checkLoginRateLimitAction();
+        const rateLimit = await checkLoginRateLimitAction(value.email);
         if (!rateLimit.success) {
           toast.error(rateLimit.error || "Too many attempts. Please try again later.");
           return;

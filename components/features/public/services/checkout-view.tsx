@@ -193,6 +193,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
           return { name: addon?.name ?? id, price: addon?.price ?? 0 };
         }),
         totalAmount,
+        recaptchaToken: recaptchaToken || "",
         referenceNumber: orderRefCode,
         customerPhone: customerPhone || undefined,
         requirements: requirements || undefined,

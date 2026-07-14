@@ -11,6 +11,7 @@ import { db } from "@/drizzle";
 import { transactions, orders } from "@/drizzle/schema";
 import { eq, desc, or } from "drizzle-orm";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { verifyReCaptchaAction } from "./recaptcha";
 
 async function checkAdminAccess() {
   const currentUser = await getCurrentSessionUser();
@@ -110,13 +111,23 @@ export async function createOrderAction(data: {
   addOnsSelected: string[];
   addOns: Array<{ name: string; price: number }>;
   totalAmount: number;
+  recaptchaToken: string;
   referenceNumber?: string;
   customerPhone?: string;
   requirements?: string;
 }) {
   try {
-    // Check Rate Limit (max 3 checkouts per minute per IP)
-    const rateLimit = await checkRateLimit("rate_limit:checkout", 3, 60);
+    // 1. Verify reCAPTCHA
+    const recaptchaRes = await verifyReCaptchaAction(data.recaptchaToken);
+    if (!recaptchaRes.success) {
+      return {
+        success: false,
+        error: recaptchaRes.error || "Security validation failed. Please try again.",
+      };
+    }
+
+    // 2. Check Rate Limit (max 3 checkouts per minute per IP/Email)
+    const rateLimit = await checkRateLimit("rate_limit:checkout", 3, 60, data.customerEmail);
     if (!rateLimit.success) {
       return {
         success: false,

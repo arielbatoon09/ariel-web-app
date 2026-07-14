@@ -51,6 +51,7 @@ export function useCreateOrderMutation() {
       addOnsSelected: string[];
       addOns: Array<{ name: string; price: number }>;
       totalAmount: number;
+      recaptchaToken: string;
       referenceNumber?: string;
       customerPhone?: string;
       requirements?: string;
