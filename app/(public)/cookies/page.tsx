@@ -4,6 +4,9 @@ import { SectionHeading } from "@/components/common/section-heading";
 export const metadata = {
   title: "Cookies Policy | Ariel Batoon - Software Engineer",
   description: "Cookies Policy for Ariel Batoon's website. Understand what cookies we use and how to manage them. Last updated July 6, 2026.",
+  alternates: {
+    canonical: "/cookies",
+  },
 };
 
 export default function CookiesPage() {

@@ -5,6 +5,9 @@ export const metadata = {
   title: "Book a Call | Ariel Batoon",
   description:
     "Select a convenient time on the calendar to discuss your project, technical requirements, or potential collaborations with Ariel Batoon.",
+  alternates: {
+    canonical: "/book",
+  },
 };
 
 export default function BookCallPage() {

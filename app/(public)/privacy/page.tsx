@@ -5,6 +5,9 @@ import { SectionHeading } from "@/components/common/section-heading";
 export const metadata = {
   title: "Privacy Policy | Ariel Batoon - Software Engineer",
   description: "Privacy Policy for Ariel Batoon's website and software services. Last updated July 6, 2026.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 export default function PrivacyPage() {

@@ -5,8 +5,25 @@ import { Code2, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
-import { TECH_STACK, lucideIconMap } from "@/constants/about";
+import { TECH_STACK } from "@/constants/about";
 import Image from "next/image";
+
+function TechIcon({ src, alt }: { src: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src || "/technology/empty.svg");
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      width={18}
+      height={18}
+      className="size-4.5 object-contain transition-all duration-300 group-hover:scale-110"
+      onError={() => {
+        setImgSrc("/technology/empty.svg");
+      }}
+    />
+  );
+}
 
 export function AboutTechStackSection() {
   const [activeCategory, setActiveCategory] = useState("Frontend");
@@ -59,8 +76,6 @@ export function AboutTechStackSection() {
         {/* Compact Grid of Interactive Tech Cards */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {TECH_STACK.find((group) => group.category === activeCategory)?.skills.map((skill, idx) => {
-            const LucideIconComponent = skill.lucideIcon ? lucideIconMap[skill.lucideIcon] : null;
-
             return (
               <div
                 key={idx}
@@ -76,27 +91,7 @@ export function AboutTechStackSection() {
 
                 {/* Tech Icon Container */}
                 <div className="relative flex size-5 shrink-0 items-center justify-center">
-                  {skill.iconUrl ? (
-                    <Image
-                      src={skill.iconUrl}
-                      alt={skill.name}
-                      width={18}
-                      height={18}
-                      className="size-4.5 object-contain transition-all duration-300 group-hover:scale-110"
-                    />
-                  ) : skill.slug ? (
-                    <Image
-                      src={`https://cdn.simpleicons.org/${skill.slug}`}
-                      alt={skill.name}
-                      width={18}
-                      height={18}
-                      className="size-4.5 object-contain filter transition-all duration-300 group-hover:scale-110 dark:brightness-95"
-                    />
-                  ) : LucideIconComponent ? (
-                    <LucideIconComponent className="size-4.5 transition-all duration-300 group-hover:scale-110" style={{ color: skill.color }} />
-                  ) : (
-                    <Code2 className="size-4.5 text-neutral-400" />
-                  )}
+                  <TechIcon key={skill.iconPath} src={skill.iconPath} alt={skill.name} />
                 </div>
 
                 {/* Tech Name */}

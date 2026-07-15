@@ -9,6 +9,9 @@ export const metadata = {
   title: "Articles & Insights | Web Engineering Blog Cebu",
   description:
     "Read technical articles on React Performance, Next.js optimization, and API architecture written by Ariel Batoon, software engineer in Cebu City.",
+  alternates: {
+    canonical: "/articles",
+  },
 };
 
 export default async function ArticlesPage() {

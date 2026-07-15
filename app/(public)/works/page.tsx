@@ -9,6 +9,9 @@ export const metadata = {
   title: "Portfolio | Creative Works & Projects Cebu",
   description:
     "Browse software projects engineered by Ariel Batoon in Cebu. Custom SaaS dashboards, performance-driven web apps, and native mobile apps.",
+  alternates: {
+    canonical: "/works",
+  },
 };
 
 export default async function WorksPage() {

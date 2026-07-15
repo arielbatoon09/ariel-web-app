@@ -7,9 +7,26 @@ import { AboutEducationSection } from "@/components/features/public/about/about-
 import { CtaSection } from "@/components/common/cta-section";
 
 export const metadata = {
-  title: "About Me | Full-Stack Developer Cebu",
+  title: "About Me & Professional Bio",
   description:
-    "Learn more about Ariel Batoon, a Cebu-based Software Engineer specializing in Next.js, mobile apps, database design, and premium SaaS architecture.",
+    "Learn more about Ariel Batoon, a Cebu-based Software Engineer specializing in Full-stack architecture.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Me & Professional Bio",
+    description:
+      "Learn more about Ariel Batoon, a Cebu-based Software Engineer specializing in Full-stack architecture.",
+    url: "https://arielbatoon.com/about",
+    images: [
+      {
+        url: "/ariel-batoon-profile-night.png",
+        width: 1200,
+        height: 630,
+        alt: "Ariel Batoon",
+      },
+    ],
+  },
 };
 
 export default function AboutPage() {

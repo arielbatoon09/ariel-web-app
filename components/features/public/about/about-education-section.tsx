@@ -1,6 +1,7 @@
 import { GraduationCap } from "lucide-react";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
+import { GridCard } from "@/components/common/grid-card";
 
 export function AboutEducationSection() {
   return (
@@ -8,7 +9,7 @@ export function AboutEducationSection() {
       <div className="space-y-8">
         <SectionHeading icon={<GraduationCap className="size-5" />} title="Education" variant="sub" />
 
-        <div className="w-full space-y-2 border border-dashed border-neutral-300 bg-neutral-50 p-6 dark:border-neutral-700 dark:bg-neutral-900/60">
+        <GridCard className="w-full space-y-2 border border-dashed border-neutral-300 p-5 md:p-6">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h4 className="font-sans text-sm font-bold text-foreground">Bachelor of Science in Information Technology</h4>
@@ -22,7 +23,7 @@ export function AboutEducationSection() {
             Focus on systems analysis, database design structures, object-oriented concepts, and project management. Completed advanced electives in
             secure application architecture and web-based solutions.
           </p>
-        </div>
+        </GridCard>
       </div>
     </Section>
   );

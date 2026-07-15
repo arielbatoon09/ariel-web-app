@@ -4,6 +4,9 @@ import { ContactFormSection } from "@/components/features/public/contact/contact
 export const metadata = {
   title: "Contact | Hire Web Developer Cebu City",
   description: "Send a message or schedule a live project scoping call with Ariel Batoon, software developer based in Cebu City, Philippines.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {

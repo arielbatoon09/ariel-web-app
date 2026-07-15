@@ -5,6 +5,9 @@ import { SectionHeading } from "@/components/common/section-heading";
 export const metadata = {
   title: "Terms and Conditions | Ariel Batoon - Software Engineer",
   description: "Terms and conditions for visiting the Ariel Batoon website and booking services. Last updated July 6, 2026.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 export default function TermsPage() {

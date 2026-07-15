@@ -7,6 +7,9 @@ export const metadata = {
   title: "Services & Pricing | Web Design & Software Dev Cebu",
   description:
     "Explore professional software development pricing in Cebu. Packages for high-performance MVPs, custom SaaS dashboard systems, mobile apps, and technical scoping.",
+  alternates: {
+    canonical: "/services",
+  },
 };
 
 export default async function ServicesPage() {

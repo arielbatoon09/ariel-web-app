@@ -31,14 +31,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const metadata: Metadata = {
     title: article.seo?.title || `${article.title} | Ariel Batoon`,
     description: article.seo?.description || article.description,
+    alternates: {
+      canonical: article.seo?.canonicalUrl || `/article/${resolvedParams.slug}`,
+    },
   };
 
   if (article.seo?.keywords) {
     metadata.keywords = article.seo.keywords.split(",").map((k) => k.trim());
-  }
-
-  if (article.seo?.canonicalUrl) {
-    metadata.alternates = { canonical: article.seo.canonicalUrl };
   }
 
   const ogTitle = article.seo?.ogTitle || article.seo?.title || `${article.title} | Ariel Batoon`;

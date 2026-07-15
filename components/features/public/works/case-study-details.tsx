@@ -1,6 +1,7 @@
 import { Target, CheckCircle2, Cpu } from "lucide-react";
 import { Section } from "@/components/common/section";
 import type { CaseStudy } from "@/constants/projects";
+import { GridCard } from "@/components/common/grid-card";
 
 interface CaseStudyDetailsProps {
   caseStudy: CaseStudy;
@@ -44,16 +45,14 @@ export function CaseStudyDetails({ caseStudy }: CaseStudyDetailsProps) {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {caseStudy.features.map((feature, idx) => (
-              <div
+              <GridCard
                 key={idx}
-                className="hover:border-neutral-450 border border-dashed border-neutral-300 bg-neutral-50 p-5 transition-colors duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:bg-neutral-900/90"
-              >
-                <h4 className="mb-2 flex items-center gap-2 text-sm font-bold text-foreground">
-                  <span className="font-mono text-xs text-neutral-400 dark:text-neutral-500">0{idx + 1}.</span>
-                  {feature.title}
-                </h4>
-                <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{feature.description}</p>
-              </div>
+                number={`0${idx + 1}`}
+                title={feature.title}
+                titleClassName="text-sm font-bold text-foreground"
+                description={feature.description}
+                className="rounded-none border border-dashed border-neutral-300 p-5 dark:border-neutral-700"
+              />
             ))}
           </div>
         </div>

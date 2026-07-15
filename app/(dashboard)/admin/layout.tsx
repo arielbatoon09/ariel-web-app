@@ -10,6 +10,10 @@ import { getUserRoleByUserId } from "@/data/roles";
 export const metadata = {
   title: "Admin Dashboard | Ariel Batoon",
   description: "Administrative control portal for managing projects, blog articles, services, and transactions.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 const ADMIN_NAV_ITEMS: NavItem[] = [

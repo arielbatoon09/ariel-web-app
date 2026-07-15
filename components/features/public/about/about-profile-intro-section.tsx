@@ -9,7 +9,7 @@ export function AboutProfileIntroSection() {
         {/* Header Title */}
         <SectionHeading
           label="About Me"
-          title="Ariel Batoon. Software Engineer & Product Builder."
+          title="Ariel Batoon"
           description="A detailed look at my experience, technical skillset, philosophy, and professional background."
         />
 

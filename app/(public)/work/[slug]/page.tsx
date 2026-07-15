@@ -33,16 +33,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const metadata: Metadata = {
     title: project.seo?.title || `${project.title} | Case Study`,
     description: project.seo?.description || project.description,
+    alternates: {
+      canonical: project.seo?.canonicalUrl || `/work/${resolvedParams.slug}`,
+    },
   };
 
   if (project.seo?.keywords) {
     metadata.keywords = project.seo.keywords.split(",").map((k) => k.trim());
-  }
-
-  if (project.seo?.canonicalUrl) {
-    metadata.alternates = {
-      canonical: project.seo.canonicalUrl,
-    };
   }
 
   // Open Graph / Social Sharing

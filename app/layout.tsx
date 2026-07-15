@@ -16,13 +16,10 @@ const fontMono = Geist_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://arielbatoon.com"),
+  metadataBase: new URL("https://www.arielbatoon.com"),
   robots: {
-    index: false,
-    follow: false,
-  },
-  alternates: {
-    canonical: "https://arielbatoon.com",
+    index: true,
+    follow: true,
   },
   title: {
     default: "Ariel Batoon — Software Engineer",

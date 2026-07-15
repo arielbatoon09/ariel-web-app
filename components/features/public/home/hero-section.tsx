@@ -18,7 +18,7 @@ export function HeroSection() {
           {/* Left Column (Copy and CTAs) */}
           <div className="flex flex-col items-center lg:items-start mx-auto lg:mx-0 max-w-xl animate-in space-y-8 duration-1000 ease-out fade-in slide-in-from-top-4 lg:col-span-6">
             {/* Availability Badge */}
-            <div className="group/badge inline-flex cursor-pointer items-center gap-2.5 border border-neutral-200/50 bg-neutral-50 px-3 py-1 font-mono text-[10px] tracking-wider text-neutral-500 uppercase transition-all duration-300 select-none hover:border-neutral-300 hover:bg-neutral-100/60 hover:text-foreground dark:border-neutral-800/50 dark:bg-neutral-900/50 dark:text-neutral-400 dark:hover:border-neutral-700 dark:hover:bg-neutral-800/50">
+            <div className="group/badge inline-flex items-center gap-2.5 border border-neutral-200/50 bg-neutral-50 px-3 py-1 font-mono text-[10px] tracking-wider text-neutral-500 uppercase transition-all duration-300 select-none hover:border-neutral-300 hover:bg-neutral-100/60 hover:text-foreground dark:border-neutral-800/50 dark:bg-neutral-900/50 dark:text-neutral-400 dark:hover:border-neutral-700 dark:hover:bg-neutral-800/50">
               <span className="relative flex h-2 w-2 flex-shrink-0 items-center justify-center">
                 <span className="absolute h-2 w-2 animate-ping rounded-full bg-emerald-400/80 opacity-75 transition-transform duration-300 group-hover/badge:scale-125 dark:bg-emerald-300/80"></span>
                 <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
@@ -28,7 +28,7 @@ export function HeroSection() {
 
             {/* Heading */}
             <div className="space-y-4 text-center lg:text-left">
-              <h1 className="w-full lg:max-w-2xl font-sans text-5xl leading-[1.15] font-bold tracking-tight text-foreground lg:[3rem]">
+              <h1 className="w-full lg:max-w-2xl font-sans text-4xl md:text-5xl leading-[1.15] font-bold tracking-tight text-foreground lg:[3rem]">
                 Hi, I&apos;m Ariel Batoon. <br className="hidden sm:inline" />
                 Software Engineer.
               </h1>

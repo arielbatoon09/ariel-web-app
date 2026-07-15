@@ -24,6 +24,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${service.name} Package Cebu | Software Development & MVP`,
     description: `Explore details for the ${service.name} package. Base Price: ₱${service.price.toLocaleString()} with ${service.deliveryTime} delivery. ${cleanDesc}`,
+    alternates: {
+      canonical: `/service/${slug}`,
+    },
     openGraph: {
       title: `${service.name} Package Cebu | Software Development & MVP`,
       description: cleanDesc,

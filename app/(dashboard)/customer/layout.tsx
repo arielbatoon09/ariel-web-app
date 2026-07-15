@@ -10,6 +10,10 @@ import { getUserRoleByUserId } from "@/data/roles";
 export const metadata = {
   title: "Client Portal | Ariel Batoon",
   description: "Customer access portal for managing orders, checking progress, and updating account settings.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 const CUSTOMER_NAV_ITEMS: NavItem[] = [

@@ -3,6 +3,7 @@ import { SectionHeading } from "@/components/common/section-heading";
 import { Button } from "@/components/ui/button";
 import { FileText, Calendar, Code2, Rocket, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { GridCard } from "@/components/common/grid-card";
 
 interface Step {
   id: string;
@@ -57,42 +58,17 @@ export function ProcessSection() {
         {/* 2-Column Custom Timeline Grid */}
         <div className="grid grid-cols-1 border-t border-l border-dashed border-neutral-300 md:grid-cols-2 dark:border-neutral-700">
           {PROCESS_STEPS.map((step) => (
-            <div
+            <GridCard
               key={step.id}
-              className="group relative space-y-6 overflow-hidden border-r border-b border-dashed border-neutral-300 bg-neutral-50 p-8 transition-colors duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:bg-neutral-900/90"
-            >
-              {/* Interactive Corner Plus (+) Markers */}
-              <div className="pointer-events-none absolute top-0 right-0 z-20 translate-x-1/2 -translate-y-1/2 text-[10px] font-light text-neutral-300 transition-all duration-300 select-none group-hover:scale-150 group-hover:text-neutral-600 dark:text-neutral-700 dark:group-hover:text-neutral-400">
-                +
-              </div>
-              <div className="pointer-events-none absolute right-0 bottom-0 z-20 translate-x-1/2 translate-y-1/2 text-[10px] font-light text-neutral-300 transition-all duration-300 select-none group-hover:scale-150 group-hover:text-neutral-600 dark:text-neutral-700 dark:group-hover:text-neutral-400">
-                +
-              </div>
-
-              {/* Animated Progress Line at the top border of the cell on hover */}
-              <div className="absolute top-0 left-0 z-10 h-[2px] w-0 bg-emerald-500/80 transition-all duration-500 ease-out group-hover:w-full dark:bg-emerald-400/80" />
-
-              {/* Giant background step number watermark */}
-              <div className="pointer-events-none absolute top-4 right-6 z-0 font-mono text-7xl font-black tracking-tighter text-neutral-100 transition-colors duration-300 select-none group-hover:text-neutral-200 md:text-8xl dark:text-neutral-900/30 dark:group-hover:text-neutral-800/40">
-                {step.id}
-              </div>
-
-              {/* Foreground Card Content */}
-              <div className="relative z-10 space-y-6">
-                {/* Icon Wrapper with subtle rotation hover */}
-                <div className="flex size-9 items-center justify-center rounded-lg border border-dashed border-neutral-300 bg-background text-neutral-500 transition-all duration-300 group-hover:rotate-6 group-hover:border-neutral-400 group-hover:text-foreground dark:border-neutral-700 dark:text-neutral-400 dark:group-hover:border-neutral-600">
-                  {step.icon}
-                </div>
-
-                <div className="space-y-2">
-                  <span className="block font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
-                    Step {step.id} / {step.tag}
-                  </span>
-                  <h3 className="font-sans text-lg font-bold tracking-tight text-foreground">{step.title}</h3>
-                  <p className="max-w-md text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{step.description}</p>
-                </div>
-              </div>
-            </div>
+              watermark={step.id}
+              showHoverLine={true}
+              icon={step.icon}
+              iconClassName="size-9 rounded-lg group-hover:rotate-6"
+              tag={`Step ${step.id} / ${step.tag}`}
+              title={step.title}
+              description={step.description}
+              className="p-5 md:p-8"
+            />
           ))}
         </div>
 

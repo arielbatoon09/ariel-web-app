@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/common/section-heading";
 import { Quote, ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useScrollCarousel } from "@/hooks/use-scroll-carousel";
+import { GridCard } from "@/components/common/grid-card";
 
 interface Testimonial {
   id: string;
@@ -122,18 +123,10 @@ export function TestimonialSection() {
             }}
           >
             {TESTIMONIALS.map((item) => (
-              <div
+              <GridCard
                 key={item.id}
-                className="testimonial-card group relative w-[280px] shrink-0 snap-start border border-dashed border-neutral-300 bg-neutral-50 p-6 transition-all duration-300 select-none hover:border-neutral-900 hover:bg-neutral-100 sm:w-[360px] md:w-[420px] md:p-8 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:border-neutral-100 dark:hover:bg-neutral-900/90"
+                className="testimonial-card w-[280px] shrink-0 snap-start select-none border border-dashed border-neutral-300 sm:w-[360px] md:w-[420px] p-5 md:p-8"
               >
-                {/* Plus (+) Corner Markers */}
-                <div className="group-hover:text-neutral-550 absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] text-neutral-300 transition-all duration-300 group-hover:scale-125 dark:text-neutral-700 dark:group-hover:text-neutral-400">
-                  +
-                </div>
-                <div className="group-hover:text-neutral-550 absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 text-[10px] text-neutral-300 transition-all duration-300 group-hover:scale-125 dark:text-neutral-700 dark:group-hover:text-neutral-400">
-                  +
-                </div>
-
                 <div className="flex h-full flex-col justify-between space-y-6">
                   <div className="space-y-4">
                     {/* Quote Icon */}
@@ -160,7 +153,7 @@ export function TestimonialSection() {
                     )}
                   </div>
                 </div>
-              </div>
+              </GridCard>
             ))}
           </div>
         </div>

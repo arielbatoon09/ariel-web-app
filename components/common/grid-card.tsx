@@ -7,8 +7,8 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
   number?: string;
   tag?: string;
   icon?: React.ReactNode;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   imageSrc?: string;
   tags?: string[];
   link?: {
@@ -16,10 +16,15 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
     label: string;
   };
   titleClassName?: string;
+  descriptionClassName?: string;
+  iconClassName?: string;
   price?: string;
   deliveryTime?: string;
   truncate?: boolean;
   showEmptyImageState?: boolean;
+  watermark?: string;
+  showHoverLine?: boolean;
+  children?: React.ReactNode;
 }
 
 export function GridCard({
@@ -33,16 +38,21 @@ export function GridCard({
   link,
   className,
   titleClassName,
+  descriptionClassName,
+  iconClassName,
   price,
   deliveryTime,
   truncate,
   showEmptyImageState,
+  watermark,
+  showHoverLine,
+  children,
   ...props
 }: GridCardProps) {
   return (
     <div
       className={cn(
-        "group relative flex flex-col justify-between border-r border-b border-dashed border-neutral-300 bg-neutral-50 p-6 transition-colors duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:bg-neutral-900/90",
+        "group relative flex flex-col justify-between border-r border-b border-dashed border-neutral-300 bg-neutral-50 p-5 md:p-6 transition-colors duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:bg-neutral-900/90",
         className
       )}
       {...props}
@@ -55,85 +65,103 @@ export function GridCard({
         +
       </div>
 
-      <div className="space-y-4">
-        {/* Optional Visual Image Showcase */}
-        {imageSrc ? (
-          link ? (
-            <Link href={link.href} className="block cursor-pointer">
+      {/* Animated Progress Line at the top border of the cell on hover */}
+      {showHoverLine && (
+        <div className="absolute top-0 left-0 z-10 h-[2px] w-0 bg-emerald-500/80 transition-all duration-500 ease-out group-hover:w-full dark:bg-emerald-400/80" />
+      )}
+
+      {/* Giant background step number watermark */}
+      {watermark && (
+        <div className="pointer-events-none absolute top-4 right-6 z-0 font-mono text-7xl font-black tracking-tighter text-neutral-100 transition-colors duration-300 select-none group-hover:text-neutral-200 md:text-8xl dark:text-neutral-900/30 dark:group-hover:text-neutral-800/40">
+          {watermark}
+        </div>
+      )}
+
+      {children ? (
+        children
+      ) : (
+        <div className="space-y-4">
+          {/* Optional Visual Image Showcase */}
+          {imageSrc ? (
+            link ? (
+              <Link href={link.href} className="block cursor-pointer">
+                <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/50 dark:bg-neutral-900/80">
+                  <Image
+                    src={imageSrc}
+                    alt={title || ""}
+                    fill
+                    sizes="(max-w-768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  />
+                </div>
+              </Link>
+            ) : (
               <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/50 dark:bg-neutral-900/80">
                 <Image
                   src={imageSrc}
-                  alt={title}
+                  alt={title || ""}
                   fill
                   sizes="(max-w-768px) 100vw, 33vw"
                   className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                 />
               </div>
-            </Link>
-          ) : (
-            <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/50 dark:bg-neutral-900/80">
-              <Image
-                src={imageSrc}
-                alt={title}
-                fill
-                sizes="(max-w-768px) 100vw, 33vw"
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-              />
-            </div>
-          )
-        ) : showEmptyImageState ? (
-          link ? (
-            <Link href={link.href} className="block cursor-pointer">
+            )
+          ) : showEmptyImageState ? (
+            link ? (
+              <Link href={link.href} className="block cursor-pointer">
+                <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 flex aspect-[16/10] w-full flex-col items-center justify-center gap-1.5 overflow-hidden rounded border border-dashed bg-neutral-100/30 text-neutral-400 select-none dark:bg-neutral-900/40 dark:text-neutral-600">
+                  <span className="font-mono text-[9px] tracking-wider uppercase">No Banner Image</span>
+                </div>
+              </Link>
+            ) : (
               <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 flex aspect-[16/10] w-full flex-col items-center justify-center gap-1.5 overflow-hidden rounded border border-dashed bg-neutral-100/30 text-neutral-400 select-none dark:bg-neutral-900/40 dark:text-neutral-600">
                 <span className="font-mono text-[9px] tracking-wider uppercase">No Banner Image</span>
               </div>
-            </Link>
-          ) : (
-            <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 flex aspect-[16/10] w-full flex-col items-center justify-center gap-1.5 overflow-hidden rounded border border-dashed bg-neutral-100/30 text-neutral-400 select-none dark:bg-neutral-900/40 dark:text-neutral-600">
-              <span className="font-mono text-[9px] tracking-wider uppercase">No Banner Image</span>
-            </div>
-          )
-        ) : null}
+            )
+          ) : null}
 
-        {/* Optional Icon Block */}
-        {icon && (
-          <div className="flex size-8 items-center justify-center rounded border border-dashed border-neutral-300 text-neutral-500 transition-all duration-300 group-hover:border-neutral-400 group-hover:text-foreground dark:border-neutral-700 dark:text-neutral-400 dark:group-hover:border-neutral-600">
-            {icon}
-          </div>
-        )}
-
-        {/* Optional ID & Category Tag */}
-        {(number || tag) && (
-          <div className="flex items-center gap-2.5">
-            {number && <span className="font-mono text-[10px] text-neutral-400 dark:text-neutral-500">{number}</span>}
-            {number && tag && <div className="h-2.5 w-[1px] bg-neutral-300 dark:bg-neutral-800" />}
-            {tag && <span className="font-mono text-[9px] tracking-wider text-neutral-500 uppercase dark:text-neutral-400">{tag}</span>}
-          </div>
-        )}
-
-        {/* Title & Description */}
-        <div className="space-y-2">
-          <h3 className={cn("font-sans text-lg font-bold tracking-tight text-foreground", titleClassName)}>{title}</h3>
-
-          {(price || deliveryTime) && (
-            <div className="flex items-center gap-3 text-xs font-medium text-neutral-500 dark:text-neutral-400">
-              {price && <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100">{price}</span>}
-              {price && deliveryTime && <span className="text-neutral-300 dark:text-neutral-700">|</span>}
-              {deliveryTime && (
-                <span className="flex items-center gap-1">
-                  <Clock className="size-3 text-neutral-400" />
-                  {deliveryTime}
-                </span>
-              )}
+          {/* Optional Icon Block */}
+          {icon && (
+            <div className={cn("flex size-8 items-center justify-center rounded border border-dashed border-neutral-300 text-neutral-500 transition-all duration-300 group-hover:border-neutral-400 group-hover:text-foreground dark:border-neutral-700 dark:text-neutral-400 dark:group-hover:border-neutral-600", iconClassName)}>
+              {icon}
             </div>
           )}
 
-          <p className={cn("text-xs leading-relaxed text-neutral-500 dark:text-neutral-400", truncate && "line-clamp-4")}>{description}</p>
+          {/* Optional ID & Category Tag */}
+          {(number || tag) && (
+            <div className="flex items-center gap-2.5">
+              {number && <span className="font-mono text-[10px] text-neutral-400 dark:text-neutral-500">{number}</span>}
+              {number && tag && <div className="h-2.5 w-[1px] bg-neutral-300 dark:bg-neutral-800" />}
+              {tag && <span className="font-mono text-[9px] tracking-wider text-neutral-500 uppercase dark:text-neutral-400">{tag}</span>}
+            </div>
+          )}
+
+          {/* Title & Description */}
+          {(title || description) && (
+            <div className="space-y-2">
+              {title && <h3 className={cn("font-sans text-lg font-bold tracking-tight text-foreground", titleClassName)}>{title}</h3>}
+
+              {(price || deliveryTime) && (
+                <div className="flex items-center gap-3 text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                  {price && <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100">{price}</span>}
+                  {price && deliveryTime && <span className="text-neutral-300 dark:text-neutral-700">|</span>}
+                  {deliveryTime && (
+                    <span className="flex items-center gap-1">
+                      <Clock className="size-3 text-neutral-400" />
+                      {deliveryTime}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {description && <p className={cn("text-xs leading-relaxed text-neutral-500 dark:text-neutral-400", truncate && "line-clamp-4", descriptionClassName)}>{description}</p>}
+            </div>
+          )}
         </div>
-      </div>
+      )}
 
       {/* Footer Details (Tags & Actions) */}
-      {(tags || link) && (
+      {!children && (tags || link) && (
         <div className="mt-6 space-y-4 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">
           {/* Tag Badges */}
           {tags && tags.length > 0 && (

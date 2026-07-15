@@ -1,7 +1,7 @@
 import { HeroSection } from "@/components/features/public/home/hero-section";
 import { FeaturedWorksSection } from "@/components/features/public/home/featured-works-section";
 import { ProcessSection } from "@/components/features/public/home/process-section";
-import { TestimonialSection } from "@/components/features/public/home/testimonial-section";
+// import { TestimonialSection } from "@/components/features/public/home/testimonial-section";
 import { RecentBlogsSection } from "@/components/features/public/home/recent-blogs-section";
 import { FaqSection } from "@/components/features/public/home/faq-section";
 import { BookCallSection } from "@/components/features/public/home/book-call-section";
@@ -10,6 +10,9 @@ export const metadata = {
   title: "Software Engineer & Indie Builder in Cebu City",
   description:
     "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function HomePage() {
@@ -68,7 +71,7 @@ export default function HomePage() {
       <FeaturedWorksSection />
       <ProcessSection />
       <RecentBlogsSection />
-      <TestimonialSection />
+      {/* <TestimonialSection /> */}
       <BookCallSection />
       <FaqSection />
     </>
