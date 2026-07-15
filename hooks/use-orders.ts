@@ -76,7 +76,10 @@ export function useUpdateOrderStatusMutation(id?: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: { id: string; status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested" }) => {
+    mutationFn: async (payload: {
+      id: string;
+      status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested";
+    }) => {
       const res = await updateOrderStatusAction(payload.id, payload.status);
       if (!res.success || !res.order) {
         throw new Error(res.error || "Failed to update order status.");

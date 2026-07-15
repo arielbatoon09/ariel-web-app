@@ -75,11 +75,16 @@ cp .env.example .env
 ### 2. Development Setup
 
 ```bash
+# Node.js Version 20+
+
 # Install dependencies
 npm install
 
+# Generate database schema
+npm run db:generate
+
 # Run database migrations
-npm run db:push
+npm run db:migrate
 
 # Launch development server
 npm run dev

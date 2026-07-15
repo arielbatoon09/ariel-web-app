@@ -6,7 +6,15 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
-import { getWorksQuery, getWorkByIdQuery, insertWorkQuery, updateWorkQuery, deleteWorksQuery, getFeaturedWorksQuery, getPublishedFeaturedWorksQuery } from "@/data/works";
+import {
+  getWorksQuery,
+  getWorkByIdQuery,
+  insertWorkQuery,
+  updateWorkQuery,
+  deleteWorksQuery,
+  getFeaturedWorksQuery,
+  getPublishedFeaturedWorksQuery,
+} from "@/data/works";
 import { getErrorMessage } from "@/lib/error-utils";
 import { revalidateWorksPaths } from "@/lib/revalidate-cms";
 import { redisGet, redisSet, redisDel } from "@/lib/redis";
@@ -33,10 +41,7 @@ async function checkAdminAccess() {
 }
 
 async function invalidateWorksCache() {
-  await Promise.all([
-    redisDel("admin:works"),
-    redisDel("admin:overview"),
-  ]);
+  await Promise.all([redisDel("admin:works"), redisDel("admin:overview")]);
 }
 
 // 1. Get all works (Public)
@@ -387,4 +392,3 @@ export async function toggleWorkFeaturedAction(id: string, isFeatured: boolean) 
     return { success: false, error: getErrorMessage(err, "Failed to toggle featured status.") };
   }
 }
-

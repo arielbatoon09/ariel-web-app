@@ -50,10 +50,7 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
     [allProjects]
   );
 
-  const getCategoriesLabel = useCallback(
-    (slugs: string[]) => resolveCategories(slugs, categories),
-    [categories]
-  );
+  const getCategoriesLabel = useCallback((slugs: string[]) => resolveCategories(slugs, categories), [categories]);
 
   const { activeCategory, setActiveCategory, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, filteredItems, paginatedItems } =
     useArchiveFilter({

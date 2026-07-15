@@ -17,11 +17,5 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
     return <OrderNotFound backHref="/admin/orders" backLabel="Back to registry" />;
   }
 
-  return (
-    <AdminOrderDetailClient
-      orderIdStr={id}
-      initialOrder={orderRes.order}
-      initialServices={initialServices}
-    />
-  );
+  return <AdminOrderDetailClient orderIdStr={id} initialOrder={orderRes.order} initialServices={initialServices} />;
 }

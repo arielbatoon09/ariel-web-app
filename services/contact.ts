@@ -5,12 +5,7 @@ import { verifyReCaptchaAction } from "./recaptcha";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { resend } from "@/lib/email";
 
-export async function sendContactMessageAction(input: {
-  name: string;
-  email: string;
-  message: string;
-  recaptchaToken: string;
-}) {
+export async function sendContactMessageAction(input: { name: string; email: string; message: string; recaptchaToken: string }) {
   try {
     // 1. Apply Rate Limiting (max 3 contact submissions per minute per IP/Email)
     const rateLimit = await checkRateLimit("rate_limit:contact", 3, 60, input.email);
@@ -38,10 +33,11 @@ export async function sendContactMessageAction(input: {
       from: fromEmail,
       to: toEmail,
       subject: `New Contact Form Submission from ${input.name}`,
-      text: `You have received a new message from your website contact form:\n\n` +
-            `Name: ${input.name}\n` +
-            `Email: ${input.email}\n\n` +
-            `Message:\n${input.message}\n`,
+      text:
+        `You have received a new message from your website contact form:\n\n` +
+        `Name: ${input.name}\n` +
+        `Email: ${input.email}\n\n` +
+        `Message:\n${input.message}\n`,
       replyTo: input.email,
     });
 

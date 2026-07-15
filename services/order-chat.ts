@@ -106,11 +106,7 @@ export async function getOrderMessagesAction(orderId: string) {
 /**
  * Post a new text/file message in the order chat.
  */
-export async function sendOrderMessageAction(
-  orderId: string,
-  message: string,
-  attachment?: { url: string; name: string }
-) {
+export async function sendOrderMessageAction(orderId: string, message: string, attachment?: { url: string; name: string }) {
   try {
     const currentUser = await getCurrentSessionUser();
     if (!currentUser) {
@@ -172,11 +168,7 @@ export async function sendOrderMessageAction(
 /**
  * Admin action to mark order as delivered and attach deliverables.
  */
-export async function deliverOrderAction(
-  orderId: string,
-  deliveryMessage: string,
-  attachment?: { url: string; name: string }
-) {
+export async function deliverOrderAction(orderId: string, deliveryMessage: string, attachment?: { url: string; name: string }) {
   try {
     const currentUser = await getCurrentSessionUser();
     if (!currentUser) {
@@ -201,7 +193,8 @@ export async function deliverOrderAction(
       orderId,
       senderId: null,
       senderRole: "system",
-      message: "📢 PROJECT DELIVERED: The administrator has submitted final deliverables. Order status is now 'Delivered'. Waiting for client approval.",
+      message:
+        "📢 PROJECT DELIVERED: The administrator has submitted final deliverables. Order status is now 'Delivered'. Waiting for client approval.",
     });
 
     // 3. Post the delivery message with the actual deliverables

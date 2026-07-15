@@ -105,10 +105,7 @@ export function DashboardSkeleton({ variant = "table" }: DashboardSkeletonProps)
 
         {/* Table rows */}
         {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="grid grid-cols-5 gap-4 border-b border-neutral-200 px-4 py-3.5 last:border-0 dark:border-neutral-800"
-          >
+          <div key={i} className="grid grid-cols-5 gap-4 border-b border-neutral-200 px-4 py-3.5 last:border-0 dark:border-neutral-800">
             {Array.from({ length: 5 }).map((_, j) => (
               <Skeleton key={j} className="h-4 w-full rounded-none" style={{ opacity: 1 - i * 0.07 }} />
             ))}

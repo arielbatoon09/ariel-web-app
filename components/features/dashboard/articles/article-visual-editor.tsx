@@ -71,7 +71,13 @@ export function ArticleVisualEditor({
             <span className="block font-mono text-[9px] tracking-wider text-neutral-400 uppercase">Cover Image</span>
             {formData.imageSrc ? (
               <div className="group relative aspect-[16/5] w-full overflow-hidden border border-dashed border-neutral-300 bg-neutral-100 transition-all duration-300 dark:border-neutral-700 dark:bg-neutral-900">
-                <Image src={formData.imageSrc} alt="Article Cover Preview" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px" className="object-cover" />
+                <Image
+                  src={formData.imageSrc}
+                  alt="Article Cover Preview"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                  className="object-cover"
+                />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center gap-3 bg-neutral-950/40 opacity-0 transition-opacity group-hover:opacity-100">
                   <Button

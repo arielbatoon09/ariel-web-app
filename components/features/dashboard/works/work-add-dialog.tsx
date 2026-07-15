@@ -29,9 +29,7 @@ export function WorkAddDialog() {
   const createWorkMutation = useCreateWorkMutation();
   const { data: categoriesData = [] } = useCategoriesQuery();
 
-  const activeWorkCategories = categoriesData.filter(
-    (c) => (c.target === "works" || c.target === "both") && !c.disabled
-  );
+  const activeWorkCategories = categoriesData.filter((c) => (c.target === "works" || c.target === "both") && !c.disabled);
 
   const form = useForm({
     defaultValues: {
@@ -193,7 +191,7 @@ export function WorkAddDialog() {
                     <div className="flex flex-wrap gap-2 pt-1">
                       {activeWorkCategories.length === 0 ? (
                         <div className="flex w-full flex-col gap-2">
-                          <p className="text-[10px] text-neutral-450 uppercase">No active portfolio categories found in DB.</p>
+                          <p className="text-neutral-450 text-[10px] uppercase">No active portfolio categories found in DB.</p>
                           <Button
                             type="button"
                             variant="outline"

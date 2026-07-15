@@ -249,7 +249,7 @@ function OrderDetailDialogContent({ id, open, onOpenChange }: { id: string; open
             <Link
               href={`/admin/order/${order.id}`}
               onClick={() => onOpenChange(false)}
-              className="inline-flex h-9 items-center justify-center rounded-none bg-purple-650 px-4 font-mono text-[10px] text-white uppercase tracking-wider hover:bg-purple-700"
+              className="bg-purple-650 inline-flex h-9 items-center justify-center rounded-none px-4 font-mono text-[10px] tracking-wider text-white uppercase hover:bg-purple-700"
             >
               Project Board & Chat
             </Link>

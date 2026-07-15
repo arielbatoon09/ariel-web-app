@@ -66,7 +66,10 @@ export async function insertOrderQuery(data: {
   };
 }
 
-export async function updateOrderStatusQuery(id: string, status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested") {
+export async function updateOrderStatusQuery(
+  id: string,
+  status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested"
+) {
   const [updated] = await db
     .update(orders)
     .set({

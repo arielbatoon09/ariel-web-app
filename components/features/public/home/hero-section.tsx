@@ -122,7 +122,8 @@ export function HeroSection() {
                 Building Quality Software.
               </h1>
               <p className="max-w-2xl font-sans text-base leading-relaxed text-neutral-500 md:text-lg dark:text-neutral-400">
-                Full-Stack Software Engineer designing and building scalable MVPs, web applications, mobile apps, and AI-powered solutions for ambitious startups, businesses, and global clients.
+                Full-Stack Software Engineer designing and building scalable MVPs, web applications, mobile apps, and AI-powered solutions for
+                ambitious startups, businesses, and global clients.
               </p>
             </div>
 

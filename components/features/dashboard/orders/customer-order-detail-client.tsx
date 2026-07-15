@@ -13,11 +13,7 @@ import { getChatAttachmentPresignedUrlAction } from "@/services/media";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Order, Service } from "@/schemas/dashboard";
-import {
-  OrderCompactBar,
-  OrderDetailBrackets,
-  OrderDetailsDialog,
-} from "@/components/features/dashboard/orders/order-detail-shared";
+import { OrderCompactBar, OrderDetailBrackets, OrderDetailsDialog } from "@/components/features/dashboard/orders/order-detail-shared";
 import { OrderChatPanel } from "@/components/features/dashboard/orders/order-chat-panel";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 
@@ -114,9 +110,7 @@ export function CustomerOrderDetailClient({ orderIdStr, initialOrder, initialSer
     return (
       <div className="space-y-6 py-4">
         <div className="border border-red-300 bg-red-50/50 p-6 dark:border-red-900/50 dark:bg-red-950/20">
-          <p className="font-mono text-xs text-red-500">
-            ERROR: {orderError.message || "Access denied or order not found."}
-          </p>
+          <p className="font-mono text-xs text-red-500">ERROR: {orderError.message || "Access denied or order not found."}</p>
         </div>
       </div>
     );
@@ -127,13 +121,13 @@ export function CustomerOrderDetailClient({ orderIdStr, initialOrder, initialSer
       <>
         <Button
           variant="outline"
-          className="h-8 rounded-none border-dashed border-rose-400 font-mono text-[10px] uppercase text-rose-500 hover:bg-rose-50 dark:border-rose-800"
+          className="h-8 rounded-none border-dashed border-rose-400 font-mono text-[10px] text-rose-500 uppercase hover:bg-rose-50 dark:border-rose-800"
           onClick={() => setIsRevisionOpen(true)}
         >
           Revise
         </Button>
         <Button
-          className="h-8 rounded-none bg-green-600 font-mono text-[10px] uppercase text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
+          className="h-8 rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
           onClick={handleApproveDelivery}
         >
           Approve
@@ -183,8 +177,8 @@ export function CustomerOrderDetailClient({ orderIdStr, initialOrder, initialSer
           order.status === "completed"
             ? "The order is officially completed. Thank you! Contact info.arielbatoon@gmail.com if you have any questions."
             : order.status === "cancelled"
-            ? "This order has been cancelled."
-            : "Chat unlocks once your payment reference is verified by our engineer."
+              ? "This order has been cancelled."
+              : "Chat unlocks once your payment reference is verified by our engineer."
         }
       />
 
@@ -237,10 +231,7 @@ export function CustomerOrderDetailClient({ orderIdStr, initialOrder, initialSer
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  className="rounded-none bg-rose-600 font-mono text-[10px] uppercase text-white hover:bg-rose-700"
-                >
+                <Button type="submit" className="rounded-none bg-rose-600 font-mono text-[10px] text-white uppercase hover:bg-rose-700">
                   Submit Request
                 </Button>
               </div>

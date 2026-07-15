@@ -66,7 +66,7 @@ export function OrderChatPanel({
     <div className={cn("relative flex min-h-0 flex-1 flex-col border border-neutral-300 bg-background dark:border-neutral-700", className)}>
       <OrderDetailBrackets />
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4 space-y-4">
+      <div className="flex min-h-0 flex-1 flex-col space-y-4 overflow-y-auto p-4">
         {isLoading ? (
           <div className="flex flex-1 items-center justify-center">
             <Loader2 className="size-5 animate-spin text-neutral-400" />
@@ -87,9 +87,7 @@ export function OrderChatPanel({
                   key={msg.id}
                   className="mx-auto max-w-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-center dark:border-neutral-800 dark:bg-neutral-900/30"
                 >
-                  <p className="font-mono text-[10px] leading-relaxed text-neutral-600 dark:text-neutral-400">
-                    {msg.message}
-                  </p>
+                  <p className="font-mono text-[10px] leading-relaxed text-neutral-600 dark:text-neutral-400">{msg.message}</p>
                 </div>
               );
             }
@@ -114,7 +112,7 @@ export function OrderChatPanel({
 
                 {msg.attachmentUrl &&
                   (isImageFile(msg.attachmentUrl, msg.attachmentName) ? (
-                    <div className="mt-3 max-w-[280px] overflow-hidden border border-neutral-250 bg-background dark:border-neutral-800">
+                    <div className="border-neutral-250 mt-3 max-w-[280px] overflow-hidden border bg-background dark:border-neutral-800">
                       <a
                         href={msg.attachmentUrl}
                         target="_blank"
@@ -122,16 +120,10 @@ export function OrderChatPanel({
                         className="relative block aspect-video w-full bg-neutral-100 dark:bg-neutral-900"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={msg.attachmentUrl}
-                          alt={msg.attachmentName || "attachment"}
-                          className="h-full w-full object-cover"
-                        />
+                        <img src={msg.attachmentUrl} alt={msg.attachmentName || "attachment"} className="h-full w-full object-cover" />
                       </a>
                       <div className="flex items-center justify-between border-t border-neutral-200 bg-neutral-50/50 px-2 py-1.5 dark:border-neutral-800 dark:bg-neutral-950/20">
-                        <span className="max-w-[200px] truncate font-mono text-[9px] text-neutral-500">
-                          {msg.attachmentName}
-                        </span>
+                        <span className="max-w-[200px] truncate font-mono text-[9px] text-neutral-500">{msg.attachmentName}</span>
                         <a href={msg.attachmentUrl} download className="text-neutral-500 hover:text-foreground">
                           <Download className="size-3" />
                         </a>
@@ -141,9 +133,7 @@ export function OrderChatPanel({
                     <div className="mt-3 flex items-center justify-between border border-dashed border-neutral-300 bg-background p-2 dark:border-neutral-700">
                       <div className="flex items-center gap-2 overflow-hidden">
                         <Paperclip className="size-3.5 shrink-0 text-neutral-400" />
-                        <span className="truncate font-mono text-[10px] text-neutral-500">
-                          {msg.attachmentName || "attachment"}
-                        </span>
+                        <span className="truncate font-mono text-[10px] text-neutral-500">{msg.attachmentName || "attachment"}</span>
                       </div>
                       <a
                         href={msg.attachmentUrl}

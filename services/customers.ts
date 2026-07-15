@@ -73,7 +73,7 @@ export async function createCustomerAction(input: CreateCustomerInput) {
           phone: input.phone || null,
         })
         .where(eq(users.id, insertedUser.id));
-      
+
       // Fetch the updated record
       const updatedUser = await getUserById(insertedUser.id);
       if (updatedUser) {
@@ -99,10 +99,7 @@ export async function createCustomerAction(input: CreateCustomerInput) {
 }
 
 async function invalidateCustomersCache() {
-  await Promise.all([
-    redisDel("admin:customers"),
-    redisDel("admin:overview"),
-  ]);
+  await Promise.all([redisDel("admin:customers"), redisDel("admin:overview")]);
 }
 
 export async function getCustomersAction() {

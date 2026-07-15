@@ -7,11 +7,7 @@ export async function getArticlesQuery() {
 }
 
 export async function getPublishedArticlesQuery() {
-  return await db
-    .select()
-    .from(articles)
-    .where(eq(articles.status, "published"))
-    .orderBy(desc(articles.createdAt), asc(articles.title));
+  return await db.select().from(articles).where(eq(articles.status, "published")).orderBy(desc(articles.createdAt), asc(articles.title));
 }
 
 export async function getArticleByIdQuery(id: number) {

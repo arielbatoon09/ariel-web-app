@@ -3,7 +3,15 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/error-utils";
-import { getWorksAction, getWorkByIdAction, createWorkAction, updateWorkAction, toggleWorkStatusAction, deleteWorksAction, toggleWorkFeaturedAction } from "@/services/works";
+import {
+  getWorksAction,
+  getWorkByIdAction,
+  createWorkAction,
+  updateWorkAction,
+  toggleWorkStatusAction,
+  deleteWorksAction,
+  toggleWorkFeaturedAction,
+} from "@/services/works";
 import type { Project } from "@/schemas/dashboard";
 
 export const WORKS_QUERY_KEY = ["works"];
@@ -137,11 +145,7 @@ export function useToggleWorkFeaturedMutation() {
       return { id: payload.id, isFeatured: payload.isFeatured };
     },
     onSuccess: (data) => {
-      toast.success(
-        data.isFeatured
-          ? "Project added to Top 3 featured works!"
-          : "Project removed from featured works."
-      );
+      toast.success(data.isFeatured ? "Project added to Top 3 featured works!" : "Project removed from featured works.");
       queryClient.invalidateQueries({ queryKey: WORKS_QUERY_KEY });
       queryClient.invalidateQueries({ queryKey: [...WORKS_QUERY_KEY, data.id] });
     },

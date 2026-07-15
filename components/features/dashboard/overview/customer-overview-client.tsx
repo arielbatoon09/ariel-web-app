@@ -53,14 +53,8 @@ export function CustomerOverviewClient() {
   return (
     <div className="space-y-8 py-4">
       <CustomerOverviewHeader displayName={profileName || user?.email || "Valued Client"} />
-      <CustomerOverviewMetrics
-        activeProjectsCount={activeProjectsCount}
-        totalOrdersCount={orders.length}
-      />
-      <CustomerOverviewTable
-        orders={orders}
-        services={services}
-      />
+      <CustomerOverviewMetrics activeProjectsCount={activeProjectsCount} totalOrdersCount={orders.length} />
+      <CustomerOverviewTable orders={orders} services={services} />
     </div>
   );
 }

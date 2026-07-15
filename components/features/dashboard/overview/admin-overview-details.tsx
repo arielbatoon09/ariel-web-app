@@ -9,11 +9,7 @@ interface AdminOverviewDetailsProps {
   recentCustomers: Customer[];
 }
 
-export function AdminOverviewDetails({
-  orders,
-  transactions,
-  recentCustomers,
-}: AdminOverviewDetailsProps) {
+export function AdminOverviewDetails({ orders, transactions, recentCustomers }: AdminOverviewDetailsProps) {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
       {/* Recent Orders Panel */}
@@ -29,7 +25,7 @@ export function AdminOverviewDetails({
           <h3 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">Recent Orders</h3>
           <Link
             href="/admin/orders"
-            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:text-foreground hover:cursor-pointer"
+            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:cursor-pointer hover:text-foreground"
           >
             Manage Orders
             <ArrowRight className="size-3 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -52,11 +48,10 @@ export function AdminOverviewDetails({
                 <span className="font-mono text-xs font-medium">₱{order.totalAmount.toLocaleString()}</span>
                 <span
                   className={cn(
-                    "ml-2.5 rounded px-1.5 py-0.5 font-mono text-[9px] uppercase border inline-flex items-center",
+                    "ml-2.5 inline-flex items-center rounded border px-1.5 py-0.5 font-mono text-[9px] uppercase",
                     order.status === "completed" &&
                       "border-green-200 bg-green-50 text-green-600 dark:border-green-900/30 dark:bg-green-950/15 dark:text-green-400",
-                    order.status === "delivered" &&
-                      "border-green-500/30 bg-green-500/5 text-green-600 dark:border-green-500/20 dark:text-green-400",
+                    order.status === "delivered" && "border-green-500/30 bg-green-500/5 text-green-600 dark:border-green-500/20 dark:text-green-400",
                     order.status === "in-progress" &&
                       "border-blue-200 bg-blue-50 text-blue-600 dark:border-blue-900/30 dark:bg-blue-950/15 dark:text-blue-400",
                     order.status === "revision_requested" &&
@@ -72,9 +67,7 @@ export function AdminOverviewDetails({
               </div>
             </div>
           ))}
-          {orders.length === 0 && (
-            <p className="py-6 text-center text-neutral-450 font-mono">No orders registered yet.</p>
-          )}
+          {orders.length === 0 && <p className="text-neutral-450 py-6 text-center font-mono">No orders registered yet.</p>}
         </div>
       </div>
 
@@ -91,7 +84,7 @@ export function AdminOverviewDetails({
           <h3 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">Recent Payments</h3>
           <Link
             href="/admin/transactions"
-            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:text-foreground hover:cursor-pointer"
+            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:cursor-pointer hover:text-foreground"
           >
             Audit Logs
             <ArrowRight className="size-3 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -105,7 +98,7 @@ export function AdminOverviewDetails({
               className="flex items-center justify-between border-b border-neutral-200 pb-3 last:border-b-0 last:pb-0 dark:border-neutral-800"
             >
               <div>
-                <p className="font-mono text-[10px] text-foreground font-bold">{tx.referenceNumber || tx.id}</p>
+                <p className="font-mono text-[10px] font-bold text-foreground">{tx.referenceNumber || tx.id}</p>
                 <p className="font-mono text-[9px] text-neutral-400 dark:text-neutral-500">{tx.date.split("T")[0]}</p>
               </div>
               <div className="text-right">
@@ -121,9 +114,7 @@ export function AdminOverviewDetails({
               </div>
             </div>
           ))}
-          {transactions.length === 0 && (
-            <p className="py-6 text-center text-neutral-455 font-mono">No payment records found.</p>
-          )}
+          {transactions.length === 0 && <p className="text-neutral-455 py-6 text-center font-mono">No payment records found.</p>}
         </div>
       </div>
 
@@ -140,7 +131,7 @@ export function AdminOverviewDetails({
           <h3 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">Recent Customers</h3>
           <Link
             href="/admin/customers"
-            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:text-foreground hover:cursor-pointer"
+            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:cursor-pointer hover:text-foreground"
           >
             Manage Users
             <ArrowRight className="size-3 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -172,9 +163,7 @@ export function AdminOverviewDetails({
               </div>
             </div>
           ))}
-          {recentCustomers.length === 0 && (
-            <p className="py-6 text-center text-neutral-455 font-mono">No customers registered.</p>
-          )}
+          {recentCustomers.length === 0 && <p className="text-neutral-455 py-6 text-center font-mono">No customers registered.</p>}
         </div>
       </div>
     </div>

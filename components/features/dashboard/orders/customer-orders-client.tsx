@@ -39,7 +39,7 @@ export function CustomerOrdersClient({ initialOrders, initialServices }: Custome
         );
       case "delivered":
         return (
-          <span className="inline-flex items-center gap-1 font-mono text-[10px] text-green-600 font-bold uppercase animate-pulse dark:text-green-400">
+          <span className="inline-flex animate-pulse items-center gap-1 font-mono text-[10px] font-bold text-green-600 uppercase dark:text-green-400">
             <AlertCircle className="size-3" /> Delivered (Action Required)
           </span>
         );
@@ -51,16 +51,12 @@ export function CustomerOrdersClient({ initialOrders, initialServices }: Custome
         );
       case "completed":
         return (
-          <span className="inline-flex items-center gap-1 font-mono text-[10px] text-green-550 uppercase">
+          <span className="text-green-550 inline-flex items-center gap-1 font-mono text-[10px] uppercase">
             <CheckCircle2 className="size-3" /> Completed
           </span>
         );
       default:
-        return (
-          <span className="inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 uppercase">
-            {status}
-          </span>
-        );
+        return <span className="inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 uppercase">{status}</span>;
     }
   };
 
@@ -107,14 +103,10 @@ export function CustomerOrdersClient({ initialOrders, initialServices }: Custome
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div className="space-y-1.5">
                     <div className="flex flex-wrap items-center gap-3">
-                      <span className="font-mono text-xs font-bold text-neutral-400">
-                        REF #{order.referenceNumber || order.id}
-                      </span>
+                      <span className="font-mono text-xs font-bold text-neutral-400">REF #{order.referenceNumber || order.id}</span>
                       {getStatusBadge(order.status)}
                     </div>
-                    <h3 className="font-sans text-base font-bold text-foreground">
-                      {getServiceName(order.serviceId)}
-                    </h3>
+                    <h3 className="font-sans text-base font-bold text-foreground">{getServiceName(order.serviceId)}</h3>
                     <div className="flex items-center gap-4 font-mono text-[11px] text-neutral-500 dark:text-neutral-400">
                       <span>Total: ₱{order.totalAmount.toLocaleString()}</span>
                       <span>•</span>
@@ -126,7 +118,7 @@ export function CustomerOrdersClient({ initialOrders, initialServices }: Custome
                     <Link
                       href={`/customer/order/${order.id}`}
                       className={cn(
-                        "inline-flex h-9 items-center justify-center gap-1.5 px-4 font-mono text-[10px] uppercase tracking-wider transition-all duration-200",
+                        "inline-flex h-9 items-center justify-center gap-1.5 px-4 font-mono text-[10px] tracking-wider uppercase transition-all duration-200",
                         hasActionRequired
                           ? "bg-green-600 text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
                           : "border border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white dark:border-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-100 dark:hover:text-neutral-900"

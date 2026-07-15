@@ -92,7 +92,10 @@ export function ContactFormSection() {
                       const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                       return (
                         <Field data-invalid={isInvalid}>
-                          <FieldLabel htmlFor={field.name} className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                          <FieldLabel
+                            htmlFor={field.name}
+                            className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500"
+                          >
                             Your Name
                           </FieldLabel>
                           <Input
@@ -104,7 +107,9 @@ export function ContactFormSection() {
                             onBlur={field.handleBlur}
                             className="h-11 rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                           />
-                          {isInvalid && <FieldError className="text-[10px] text-red-500 mt-1 font-mono">{field.state.meta.errors.join(", ")}</FieldError>}
+                          {isInvalid && (
+                            <FieldError className="mt-1 font-mono text-[10px] text-red-500">{field.state.meta.errors.join(", ")}</FieldError>
+                          )}
                         </Field>
                       );
                     }}
@@ -115,7 +120,10 @@ export function ContactFormSection() {
                       const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                       return (
                         <Field data-invalid={isInvalid}>
-                          <FieldLabel htmlFor={field.name} className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                          <FieldLabel
+                            htmlFor={field.name}
+                            className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500"
+                          >
                             Email Address
                           </FieldLabel>
                           <Input
@@ -128,7 +136,9 @@ export function ContactFormSection() {
                             onBlur={field.handleBlur}
                             className="h-11 rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                           />
-                          {isInvalid && <FieldError className="text-[10px] text-red-500 mt-1 font-mono">{field.state.meta.errors.join(", ")}</FieldError>}
+                          {isInvalid && (
+                            <FieldError className="mt-1 font-mono text-[10px] text-red-500">{field.state.meta.errors.join(", ")}</FieldError>
+                          )}
                         </Field>
                       );
                     }}
@@ -139,7 +149,10 @@ export function ContactFormSection() {
                       const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                       return (
                         <Field data-invalid={isInvalid}>
-                          <FieldLabel htmlFor={field.name} className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+                          <FieldLabel
+                            htmlFor={field.name}
+                            className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase dark:text-neutral-500"
+                          >
                             Project Details & Message
                           </FieldLabel>
                           <Textarea
@@ -151,7 +164,9 @@ export function ContactFormSection() {
                             onBlur={field.handleBlur}
                             className="min-h-[180px] rounded-none border-dashed border-neutral-300 bg-transparent focus-visible:border-neutral-900 dark:border-neutral-700 dark:focus-visible:border-neutral-100"
                           />
-                          {isInvalid && <FieldError className="text-[10px] text-red-500 mt-1 font-mono">{field.state.meta.errors.join(", ")}</FieldError>}
+                          {isInvalid && (
+                            <FieldError className="mt-1 font-mono text-[10px] text-red-500">{field.state.meta.errors.join(", ")}</FieldError>
+                          )}
                         </Field>
                       );
                     }}

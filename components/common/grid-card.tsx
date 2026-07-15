@@ -84,12 +84,12 @@ export function GridCard({
         ) : showEmptyImageState ? (
           link ? (
             <Link href={link.href} className="block cursor-pointer">
-              <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/30 dark:bg-neutral-900/40 flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-600 gap-1.5 select-none">
+              <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 flex aspect-[16/10] w-full flex-col items-center justify-center gap-1.5 overflow-hidden rounded border border-dashed bg-neutral-100/30 text-neutral-400 select-none dark:bg-neutral-900/40 dark:text-neutral-600">
                 <span className="font-mono text-[9px] tracking-wider uppercase">No Banner Image</span>
               </div>
             </Link>
           ) : (
-            <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 aspect-[16/10] w-full overflow-hidden rounded border border-dashed bg-neutral-100/30 dark:bg-neutral-900/40 flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-600 gap-1.5 select-none">
+            <div className="border-neutral-250 dark:border-neutral-850 relative mb-2 flex aspect-[16/10] w-full flex-col items-center justify-center gap-1.5 overflow-hidden rounded border border-dashed bg-neutral-100/30 text-neutral-400 select-none dark:bg-neutral-900/40 dark:text-neutral-600">
               <span className="font-mono text-[9px] tracking-wider uppercase">No Banner Image</span>
             </div>
           )

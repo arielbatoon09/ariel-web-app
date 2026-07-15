@@ -19,12 +19,10 @@ export function OrderNotFound({ backHref, backLabel }: OrderNotFoundProps) {
           <p className="font-sans text-base font-bold text-foreground">Order Not Found</p>
           <p className="font-mono text-[10px] text-red-500 uppercase">Access denied or invalid reference</p>
         </div>
-        <p className="font-sans text-xs text-neutral-500">
-          This order may not exist, or you may not have permission to view it.
-        </p>
+        <p className="font-sans text-xs text-neutral-500">This order may not exist, or you may not have permission to view it.</p>
         <Link
           href={backHref}
-          className="inline-flex h-9 items-center gap-1.5 border border-dashed border-neutral-300 px-4 font-mono text-[10px] uppercase tracking-wider text-neutral-500 hover:border-neutral-500 hover:text-foreground dark:border-neutral-700"
+          className="inline-flex h-9 items-center gap-1.5 border border-dashed border-neutral-300 px-4 font-mono text-[10px] tracking-wider text-neutral-500 uppercase hover:border-neutral-500 hover:text-foreground dark:border-neutral-700"
         >
           <ArrowLeft className="size-3.5" /> {backLabel}
         </Link>

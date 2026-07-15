@@ -25,7 +25,11 @@ interface DashboardSidebarProps {
   };
 }
 
-export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel Batoon", email: "ariel@batoon.com", avatarUrl: null } }: DashboardSidebarProps) {
+export function DashboardSidebar({
+  role,
+  navItems,
+  userProfile = { name: "Ariel Batoon", email: "ariel@batoon.com", avatarUrl: null },
+}: DashboardSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useAuthStore();
@@ -79,16 +83,16 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
       {/* Main Sidebar Wrapper */}
       <aside
         className={cn(
-          "fixed top-0 bottom-0 right-0 left-auto z-50 flex w-64 flex-col justify-between border-l border-neutral-300 bg-neutral-50/50 backdrop-blur-md transition-transform duration-300 ease-out dark:border-neutral-700 dark:bg-neutral-950/30",
+          "fixed top-0 right-0 bottom-0 left-auto z-50 flex w-64 flex-col justify-between border-l border-neutral-300 bg-neutral-50/50 backdrop-blur-md transition-transform duration-300 ease-out dark:border-neutral-700 dark:bg-neutral-950/30",
           isOpen ? "translate-x-0" : "translate-x-full",
-          "lg:left-0 lg:right-auto lg:border-r lg:border-l-0 lg:translate-x-0 lg:sticky lg:h-screen"
+          "lg:sticky lg:right-auto lg:left-0 lg:h-screen lg:translate-x-0 lg:border-r lg:border-l-0"
         )}
       >
         {/* Dynamic Intersection Plus Markers */}
-        <div className="pointer-events-none absolute top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2 text-[10px] font-light text-neutral-300 select-none dark:text-neutral-700 lg:left-auto lg:right-0 lg:translate-x-1/2">
+        <div className="pointer-events-none absolute top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2 text-[10px] font-light text-neutral-300 select-none lg:right-0 lg:left-auto lg:translate-x-1/2 dark:text-neutral-700">
           +
         </div>
-        <div className="pointer-events-none absolute left-0 bottom-0 z-20 -translate-x-1/2 translate-y-1/2 text-[10px] font-light text-neutral-300 select-none dark:text-neutral-700 lg:left-auto lg:right-0 lg:translate-x-1/2">
+        <div className="pointer-events-none absolute bottom-0 left-0 z-20 -translate-x-1/2 translate-y-1/2 text-[10px] font-light text-neutral-300 select-none lg:right-0 lg:left-auto lg:translate-x-1/2 dark:text-neutral-700">
           +
         </div>
 
@@ -160,13 +164,7 @@ export function DashboardSidebar({ role, navItems, userProfile = { name: "Ariel 
             <div className="flex items-center gap-3">
               <div className="flex size-8 items-center justify-center overflow-hidden border border-neutral-300 bg-neutral-100 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400">
                 {userProfile.avatarUrl ? (
-                  <Image
-                    src={userProfile.avatarUrl}
-                    alt={userProfile.name}
-                    width={32}
-                    height={32}
-                    className="h-full w-full object-cover"
-                  />
+                  <Image src={userProfile.avatarUrl} alt={userProfile.name} width={32} height={32} className="h-full w-full object-cover" />
                 ) : (
                   <User className="size-4" />
                 )}

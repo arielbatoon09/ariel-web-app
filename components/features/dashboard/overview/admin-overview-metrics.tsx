@@ -7,12 +7,7 @@ interface AdminOverviewMetricsProps {
   articlesCount: number;
 }
 
-export function AdminOverviewMetrics({
-  totalSales,
-  activeOrdersCount,
-  worksCount,
-  articlesCount,
-}: AdminOverviewMetricsProps) {
+export function AdminOverviewMetrics({ totalSales, activeOrdersCount, worksCount, articlesCount }: AdminOverviewMetricsProps) {
   const stats = [
     {
       label: "Total Sales",

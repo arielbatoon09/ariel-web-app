@@ -24,7 +24,6 @@ export function OrderTable() {
     return services.find((s) => s.id === serviceId)?.name || "Unknown Package";
   };
 
-
   const columns = [
     {
       header: "Order ID",
@@ -70,19 +69,17 @@ export function OrderTable() {
       accessorKey: (item: Order) => (
         <span
           className={cn(
-            "inline-flex items-center rounded px-2 py-0.5 font-mono text-[9px] tracking-wider uppercase border",
+            "inline-flex items-center rounded border px-2 py-0.5 font-mono text-[9px] tracking-wider uppercase",
             item.status === "completed" &&
               "border-green-200 bg-green-50 text-green-600 dark:border-green-900/40 dark:bg-green-950/20 dark:text-green-400",
-            item.status === "delivered" &&
-              "border-green-500/30 bg-green-500/5 text-green-600 dark:border-green-500/20 dark:text-green-400",
+            item.status === "delivered" && "border-green-500/30 bg-green-500/5 text-green-600 dark:border-green-500/20 dark:text-green-400",
             item.status === "in-progress" &&
               "border-blue-200 bg-blue-50 text-blue-600 dark:border-blue-900/40 dark:bg-blue-950/20 dark:text-blue-400",
             item.status === "pending" &&
               "border-yellow-200 bg-yellow-50 text-yellow-600 dark:border-yellow-900/40 dark:bg-yellow-950/20 dark:text-yellow-400",
             item.status === "revision_requested" &&
               "border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-400",
-            item.status === "cancelled" &&
-              "border-red-200 bg-red-50 text-red-600 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400"
+            item.status === "cancelled" && "border-red-200 bg-red-50 text-red-600 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400"
           )}
         >
           {item.status.replace("_", " ")}

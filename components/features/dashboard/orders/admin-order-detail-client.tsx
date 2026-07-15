@@ -5,21 +5,13 @@ import { useState, useRef, useEffect } from "react";
 import { useOrderDetailQuery, useUpdateOrderStatusMutation } from "@/hooks/use-orders";
 import { useServicesQuery } from "@/hooks/use-services";
 import { useUpdateTransactionStatusMutation } from "@/hooks/use-transactions";
-import {
-  useOrderChatQuery,
-  useSendOrderMessageMutation,
-  useDeliverOrderMutation,
-} from "@/hooks/use-order-chat";
+import { useOrderChatQuery, useSendOrderMessageMutation, useDeliverOrderMutation } from "@/hooks/use-order-chat";
 import { getChatAttachmentPresignedUrlAction } from "@/services/media";
 import { Gift, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import type { Order, Service } from "@/schemas/dashboard";
-import {
-  OrderCompactBar,
-  OrderDetailBrackets,
-  OrderDetailsDialog,
-} from "@/components/features/dashboard/orders/order-detail-shared";
+import { OrderCompactBar, OrderDetailBrackets, OrderDetailsDialog } from "@/components/features/dashboard/orders/order-detail-shared";
 import { OrderChatPanel } from "@/components/features/dashboard/orders/order-chat-panel";
 
 interface AdminOrderDetailClientProps {
@@ -165,9 +157,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
     return (
       <div className="space-y-6 py-4">
         <div className="border border-red-300 bg-red-50/50 p-6 dark:border-red-900/50 dark:bg-red-950/20">
-          <p className="font-mono text-xs text-red-500">
-            ERROR: {orderError.message || "Order not found or access denied."}
-          </p>
+          <p className="font-mono text-xs text-red-500">ERROR: {orderError.message || "Order not found or access denied."}</p>
         </div>
       </div>
     );
@@ -188,14 +178,14 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
         <Button
           disabled={updateStatusMutation.isPending || updateTxStatusMutation.isPending}
           onClick={handleVerifyOrder}
-          className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] uppercase text-white dark:bg-neutral-100 dark:text-neutral-900"
+          className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] text-white uppercase dark:bg-neutral-100 dark:text-neutral-900"
         >
           {updateStatusMutation.isPending || updateTxStatusMutation.isPending ? "..." : "Verify"}
         </Button>
       )}
       {(order.status === "in-progress" || order.status === "revision_requested") && (
         <Button
-          className="h-8 rounded-none bg-green-600 font-mono text-[10px] uppercase text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
+          className="h-8 rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
           onClick={() => setIsDeliveryOpen(true)}
         >
           <Gift className="mr-1 size-3" />
@@ -245,7 +235,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
           <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
             <DialogHeader className="space-y-1 text-left">
               <DialogTitle className="font-sans text-base font-bold text-foreground">Submit Project Deliverables</DialogTitle>
-              <DialogDescription className="text-[10px] text-neutral-450 uppercase">
+              <DialogDescription className="text-neutral-450 text-[10px] uppercase">
                 Submit final outputs and files for client approval
               </DialogDescription>
             </DialogHeader>
@@ -257,7 +247,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                 value={deliveryMessage}
                 onChange={(e) => setDeliveryMessage(e.target.value)}
                 placeholder="Write a message explaining what files are delivered, instructions to run, or next steps..."
-                className="min-h-[120px] w-full border border-dashed border-neutral-300 p-3 font-mono text-xs outline-none transition-all duration-200 focus:border-solid focus:border-neutral-900 focus:ring-0 dark:border-neutral-700 dark:focus:border-neutral-100"
+                className="min-h-[120px] w-full border border-dashed border-neutral-300 p-3 font-mono text-xs transition-all duration-200 outline-none focus:border-solid focus:border-neutral-900 focus:ring-0 dark:border-neutral-700 dark:focus:border-neutral-100"
                 required
               />
 
@@ -269,19 +259,17 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                   className="hidden"
                   accept=".pdf,.zip,.png,.jpg,.jpeg,.json"
                 />
-                
+
                 {deliveryAttachment ? (
                   <div className="flex items-center justify-between border border-dashed border-green-500 bg-green-500/5 p-3 dark:border-green-500/30">
                     <div className="flex items-center gap-2 overflow-hidden">
-                      <span className="text-green-600 dark:text-green-400 font-bold">✓</span>
-                      <span className="truncate font-mono text-[10px] text-foreground font-bold">
-                        {deliveryAttachment.name}
-                      </span>
+                      <span className="font-bold text-green-600 dark:text-green-400">✓</span>
+                      <span className="truncate font-mono text-[10px] font-bold text-foreground">{deliveryAttachment.name}</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => setDeliveryAttachment(null)}
-                      className="text-neutral-450 hover:text-foreground text-[10px] font-mono uppercase"
+                      className="text-neutral-450 font-mono text-[10px] uppercase hover:text-foreground"
                     >
                       Remove
                     </button>
@@ -292,7 +280,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                     variant="outline"
                     disabled={isDelivering}
                     onClick={() => deliveryFileInputRef.current?.click()}
-                    className="h-9 w-full rounded-none border border-dashed border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 font-mono text-[10px] uppercase"
+                    className="h-9 w-full rounded-none border border-dashed border-neutral-300 font-mono text-[10px] uppercase hover:bg-neutral-50 dark:border-neutral-700"
                   >
                     <Paperclip className="mr-1.5 size-3.5" />
                     Attach Project Archive
@@ -300,7 +288,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                 )}
               </div>
 
-              <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-850">
+              <div className="dark:border-neutral-850 flex justify-end gap-2 border-t border-dashed border-neutral-200 pt-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -316,7 +304,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                 <Button
                   type="submit"
                   disabled={!deliveryMessage.trim() || isDelivering}
-                  className="h-8 rounded-none bg-green-600 font-mono text-[10px] uppercase text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
+                  className="h-8 rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
                 >
                   {isDelivering ? "Uploading..." : "Deliver Project"}
                 </Button>
@@ -333,9 +321,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
             <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
               <DialogHeader className="space-y-1 text-left">
                 <DialogTitle className="font-sans text-base font-bold text-foreground">Review Payment</DialogTitle>
-                <DialogDescription className="text-[10px] text-neutral-450 uppercase">
-                  Verify transaction details and receipt
-                </DialogDescription>
+                <DialogDescription className="text-neutral-450 text-[10px] uppercase">Verify transaction details and receipt</DialogDescription>
               </DialogHeader>
             </div>
 
@@ -358,16 +344,14 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                   </div>
                   <div>
                     <span className="text-neutral-450 block text-[9px] uppercase">Submitted</span>
-                    <span className="font-bold text-foreground">
-                      {transaction.createdAt ? transaction.createdAt.split("T")[0] : "-"}
-                    </span>
+                    <span className="font-bold text-foreground">{transaction.createdAt ? transaction.createdAt.split("T")[0] : "-"}</span>
                   </div>
                 </div>
 
                 {transaction.screenshotUrl && (
                   <div>
                     <span className="text-neutral-450 mb-2 block text-[9px] uppercase">Receipt Screenshot</span>
-                    <div className="relative mx-auto w-full h-full overflow-hidden border border-dashed border-neutral-300 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900">
+                    <div className="relative mx-auto h-full w-full overflow-hidden border border-dashed border-neutral-300 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900">
                       <Image height={500} width={500} src={transaction.screenshotUrl} alt="Receipt" className="h-full w-full object-contain" />
                     </div>
                   </div>
@@ -382,7 +366,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                     type="button"
                     variant="outline"
                     disabled={updateTxStatusMutation.isPending || updateStatusMutation.isPending}
-                    className="h-8 rounded-none border-dashed font-mono text-[10px] uppercase text-rose-500 hover:bg-rose-50 dark:border-rose-800"
+                    className="h-8 rounded-none border-dashed font-mono text-[10px] text-rose-500 uppercase hover:bg-rose-50 dark:border-rose-800"
                     onClick={handleRejectPayment}
                   >
                     Reject Payment
@@ -390,7 +374,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
                   <Button
                     type="button"
                     disabled={updateTxStatusMutation.isPending || updateStatusMutation.isPending}
-                    className="h-8 rounded-none bg-green-600 font-mono text-[10px] uppercase text-white hover:bg-green-700"
+                    className="h-8 rounded-none bg-green-600 font-mono text-[10px] text-white uppercase hover:bg-green-700"
                     onClick={handleApprovePayment}
                   >
                     Approve Payment
@@ -399,7 +383,7 @@ export function AdminOrderDetailClient({ orderIdStr, initialOrder, initialServic
               ) : (
                 <Button
                   type="button"
-                  className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] uppercase text-white dark:bg-neutral-100 dark:text-neutral-900"
+                  className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] text-white uppercase dark:bg-neutral-100 dark:text-neutral-900"
                   onClick={() => setIsPaymentModalOpen(false)}
                 >
                   Close

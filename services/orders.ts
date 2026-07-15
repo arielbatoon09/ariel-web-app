@@ -70,7 +70,7 @@ export async function getOrderByIdAction(id: string) {
     const role = await getUserRoleByUserId(dbUser.id);
     const isAdmin = role === "admin";
     const emailMatches = order.customerEmail.toLowerCase() === currentUser.email?.toLowerCase();
-    
+
     // Auto-link order if email matches but userId is null in database
     if (!order.userId && emailMatches) {
       await db.update(orders).set({ userId: dbUser.id, updatedAt: new Date() }).where(eq(orders.id, id));
@@ -88,13 +88,15 @@ export async function getOrderByIdAction(id: string) {
     return {
       success: true,
       order,
-      transaction: transaction ? {
-        ...transaction,
-        id: transaction.id.toString(),
-        orderId: transaction.orderId.toString(),
-        status: transaction.status as "successful" | "failed" | "pending",
-        createdAt: transaction.createdAt.toISOString(),
-      } : null,
+      transaction: transaction
+        ? {
+            ...transaction,
+            id: transaction.id.toString(),
+            orderId: transaction.orderId.toString(),
+            status: transaction.status as "successful" | "failed" | "pending",
+            createdAt: transaction.createdAt.toISOString(),
+          }
+        : null,
     };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to fetch order details.") };
@@ -192,7 +194,10 @@ export async function createOrderAction(data: {
 }
 
 // 4. Update order status (Admin only)
-export async function updateOrderStatusAction(id: string, status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested") {
+export async function updateOrderStatusAction(
+  id: string,
+  status: "pending" | "in-progress" | "completed" | "cancelled" | "delivered" | "revision_requested"
+) {
   const auth = await checkAdminAccess();
   if (!auth.authorized) {
     return { success: false, error: auth.error };
@@ -250,12 +255,7 @@ export async function getCustomerOrdersAction() {
     const matchedOrders = await db
       .select()
       .from(orders)
-      .where(
-        or(
-          eq(orders.userId, dbUserId),
-          eq(orders.customerEmail, customerEmail)
-        )
-      )
+      .where(or(eq(orders.userId, dbUserId), eq(orders.customerEmail, customerEmail)))
       .orderBy(desc(orders.createdAt));
 
     // Map to frontend expectation

@@ -409,7 +409,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                   placeholder="Please write down your project description, main pain points, feature requirements, or any other details you want us to handle..."
                   rows={8}
                   required
-                  className="min-h-[160px] w-full resize-y rounded-none border border-dashed border-neutral-300 bg-background/50 p-3 font-sans text-xs outline-none transition-all duration-200 focus:border-solid focus:border-neutral-900 focus:ring-0 dark:border-neutral-700 dark:focus:border-neutral-100"
+                  className="min-h-[160px] w-full resize-y rounded-none border border-dashed border-neutral-300 bg-background/50 p-3 font-sans text-xs transition-all duration-200 outline-none focus:border-solid focus:border-neutral-900 focus:ring-0 dark:border-neutral-700 dark:focus:border-neutral-100"
                 />
               </Field>
             </div>

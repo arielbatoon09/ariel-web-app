@@ -23,7 +23,7 @@ export function CustomerOverviewTable({ orders, services }: CustomerOverviewTabl
         {orders.length > 0 && (
           <Link
             href="/customer/orders"
-            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:text-foreground hover:cursor-pointer"
+            className="group inline-flex items-center gap-1 font-mono text-[10px] text-neutral-400 transition-colors hover:cursor-pointer hover:text-foreground"
           >
             All Orders
             <ArrowRight className="size-3 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -45,18 +45,13 @@ export function CustomerOverviewTable({ orders, services }: CustomerOverviewTabl
             </thead>
             <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
               {orders.slice(0, 5).map((order) => (
-                <tr
-                  key={order.id}
-                  className="hover:bg-neutral-100/50 dark:hover:bg-neutral-900/20"
-                >
+                <tr key={order.id} className="hover:bg-neutral-100/50 dark:hover:bg-neutral-900/20">
                   <td className="dark:text-neutral-150 p-4 font-mono font-bold text-neutral-900">
                     <Link href={`/customer/order/${order.id}`} className="hover:underline">
                       {order.id.slice(0, 8)}...
                     </Link>
                   </td>
-                  <td className="p-4 font-medium text-neutral-800 dark:text-neutral-200">
-                    {getServiceName(order.serviceId)}
-                  </td>
+                  <td className="p-4 font-medium text-neutral-800 dark:text-neutral-200">{getServiceName(order.serviceId)}</td>
                   <td className="p-4 text-neutral-500">{order.createdAt.split("T")[0]}</td>
                   <td className="p-4">
                     <span
@@ -90,7 +85,7 @@ export function CustomerOverviewTable({ orders, services }: CustomerOverviewTabl
               ))}
               {orders.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-neutral-450 font-mono">
+                  <td colSpan={5} className="text-neutral-450 py-8 text-center font-mono">
                     No order records found.
                   </td>
                 </tr>

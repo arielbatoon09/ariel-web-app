@@ -28,9 +28,7 @@ export function AdminHeader() {
   const pathParts = pathname.split("/").filter(Boolean);
 
   const isEditorOrOrdersPage =
-    (pathParts[1] === "works" && pathParts.length > 2) ||
-    (pathParts[1] === "articles" && pathParts.length > 2) ||
-    pathParts[1] === "order";
+    (pathParts[1] === "works" && pathParts.length > 2) || (pathParts[1] === "articles" && pathParts.length > 2) || pathParts[1] === "order";
 
   if (isEditorOrOrdersPage) return null;
 

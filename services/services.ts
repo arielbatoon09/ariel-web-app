@@ -36,10 +36,7 @@ async function checkAdminAccess() {
 }
 
 async function invalidateServicesCache() {
-  await Promise.all([
-    redisDel("admin:services"),
-    redisDel("admin:overview"),
-  ]);
+  await Promise.all([redisDel("admin:services"), redisDel("admin:overview")]);
 }
 
 // 1. Get all services (Public/Admin)

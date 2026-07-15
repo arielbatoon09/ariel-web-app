@@ -84,9 +84,7 @@ export const metadata = {
     description:
       "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
     creator: "@arielbatoon",
-    images: [
-      "https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png",
-    ],
+    images: ["https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png"],
   },
 
   icons: {

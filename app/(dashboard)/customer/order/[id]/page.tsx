@@ -17,11 +17,5 @@ export default async function CustomerOrderDetailPage({ params }: PageProps) {
     return <OrderNotFound backHref="/customer/orders" backLabel="Back to list" />;
   }
 
-  return (
-    <CustomerOrderDetailClient
-      orderIdStr={id}
-      initialOrder={orderRes.order}
-      initialServices={initialServices}
-    />
-  );
+  return <CustomerOrderDetailClient orderIdStr={id} initialOrder={orderRes.order} initialServices={initialServices} />;
 }

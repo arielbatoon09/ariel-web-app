@@ -37,10 +37,7 @@ async function checkAdminAccess() {
 }
 
 async function invalidateArticlesCache() {
-  await Promise.all([
-    redisDel("admin:articles"),
-    redisDel("admin:overview"),
-  ]);
+  await Promise.all([redisDel("admin:articles"), redisDel("admin:overview")]);
 }
 
 // 1. Get all articles (Public)

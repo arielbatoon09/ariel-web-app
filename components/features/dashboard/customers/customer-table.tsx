@@ -20,64 +20,66 @@ export function CustomerTable() {
   const [customerToBlock, setCustomerToBlock] = useState<Customer | null>(null);
   const [confirmType, setConfirmType] = useState<"delete" | "block" | null>(null);
 
-  const columns = useMemo(() => [
-    {
-      header: "Name",
-      accessorKey: ((item: Customer) => {
-        const initials = item.name
-          ? item.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase()
-          : "?";
+  const columns = useMemo(
+    () => [
+      {
+        header: "Name",
+        accessorKey: ((item: Customer) => {
+          const initials = item.name
+            ? item.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase()
+            : "?";
 
-        return (
-          <div className="flex items-center gap-2.5">
-            <div className="relative flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-neutral-300 bg-neutral-200 font-mono text-[10px] font-bold text-neutral-600 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 select-none uppercase">
-              {item.avatarUrl ? (
-                <Image src={item.avatarUrl} alt={item.name} fill sizes="32px" className="object-cover" />
-              ) : (
-                initials
-              )}
+          return (
+            <div className="flex items-center gap-2.5">
+              <div className="relative flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-neutral-300 bg-neutral-200 font-mono text-[10px] font-bold text-neutral-600 uppercase select-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400">
+                {item.avatarUrl ? <Image src={item.avatarUrl} alt={item.name} fill sizes="32px" className="object-cover" /> : initials}
+              </div>
+              <span className="font-sans font-bold text-foreground">{item.name}</span>
             </div>
-            <span className="font-sans font-bold text-foreground">{item.name}</span>
-          </div>
-        );
-      }) as (item: Customer) => React.ReactNode,
-    },
-    {
-      header: "Email",
-      accessorKey: "email" as const,
-      className: "font-mono text-neutral-500 dark:text-neutral-400",
-    },
-    {
-      header: "Role",
-      accessorKey: ((item: Customer) => <span className="font-sans text-xs">{item.role === "admin" ? "Admin" : "Customer"}</span>) as (
-        item: Customer
-      ) => React.ReactNode,
-    },
-    {
-      header: "Status",
-      accessorKey: ((item: Customer) => (
-        <span className="inline-flex items-center gap-1.5 font-sans text-xs">
-          <span className={cn("size-1.5 rounded-full", item.disabled ? "bg-red-500" : "bg-green-500")} />
-          {item.disabled ? "Blocked" : "Active"}
-        </span>
-      )) as (item: Customer) => React.ReactNode,
-    },
-    {
-      header: "Joined At",
-      accessorKey: "joinedAt" as const,
-      className: "font-mono text-neutral-400 dark:text-neutral-500",
-    },
-  ], []);
+          );
+        }) as (item: Customer) => React.ReactNode,
+      },
+      {
+        header: "Email",
+        accessorKey: "email" as const,
+        className: "font-mono text-neutral-500 dark:text-neutral-400",
+      },
+      {
+        header: "Role",
+        accessorKey: ((item: Customer) => <span className="font-sans text-xs">{item.role === "admin" ? "Admin" : "Customer"}</span>) as (
+          item: Customer
+        ) => React.ReactNode,
+      },
+      {
+        header: "Status",
+        accessorKey: ((item: Customer) => (
+          <span className="inline-flex items-center gap-1.5 font-sans text-xs">
+            <span className={cn("size-1.5 rounded-full", item.disabled ? "bg-red-500" : "bg-green-500")} />
+            {item.disabled ? "Blocked" : "Active"}
+          </span>
+        )) as (item: Customer) => React.ReactNode,
+      },
+      {
+        header: "Joined At",
+        accessorKey: "joinedAt" as const,
+        className: "font-mono text-neutral-400 dark:text-neutral-500",
+      },
+    ],
+    []
+  );
 
-  const handleViewDetails = useCallback((customer: Customer) => {
-    setSelectedCustomerId(customer.id);
-    setIsDetailsOpen(true);
-  }, [setSelectedCustomerId, setIsDetailsOpen]);
+  const handleViewDetails = useCallback(
+    (customer: Customer) => {
+      setSelectedCustomerId(customer.id);
+      setIsDetailsOpen(true);
+    },
+    [setSelectedCustomerId, setIsDetailsOpen]
+  );
 
   const handleToggleBlock = useCallback((customer: Customer) => {
     setCustomerToBlock(customer);

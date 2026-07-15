@@ -20,9 +20,7 @@ export function AdminOverviewClient() {
 
   // Calculations
   const totalSales = useMemo(() => {
-    return transactions
-      .filter((tx: Transaction) => tx.status === "successful")
-      .reduce((sum: number, tx: Transaction) => sum + tx.amount, 0);
+    return transactions.filter((tx: Transaction) => tx.status === "successful").reduce((sum: number, tx: Transaction) => sum + tx.amount, 0);
   }, [transactions]);
 
   const activeOrdersCount = useMemo(() => {
@@ -30,9 +28,7 @@ export function AdminOverviewClient() {
   }, [orders]);
 
   const recentCustomers = useMemo(() => {
-    return [...customers]
-      .sort((a, b) => new Date(b.joinedAt).getTime() - new Date(a.joinedAt).getTime())
-      .slice(0, 3);
+    return [...customers].sort((a, b) => new Date(b.joinedAt).getTime() - new Date(a.joinedAt).getTime()).slice(0, 3);
   }, [customers]);
 
   if (isLoading) {
@@ -46,17 +42,8 @@ export function AdminOverviewClient() {
   return (
     <div className="space-y-8">
       <AdminOverviewHeader />
-      <AdminOverviewMetrics
-        totalSales={totalSales}
-        activeOrdersCount={activeOrdersCount}
-        worksCount={works.length}
-        articlesCount={articles.length}
-      />
-      <AdminOverviewDetails
-        orders={orders}
-        transactions={transactions}
-        recentCustomers={recentCustomers}
-      />
+      <AdminOverviewMetrics totalSales={totalSales} activeOrdersCount={activeOrdersCount} worksCount={works.length} articlesCount={articles.length} />
+      <AdminOverviewDetails orders={orders} transactions={transactions} recentCustomers={recentCustomers} />
     </div>
   );
 }

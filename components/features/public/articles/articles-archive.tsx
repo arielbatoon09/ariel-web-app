@@ -58,10 +58,7 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
     [allArticles]
   );
 
-  const getCategoriesLabel = useCallback(
-    (slugs: string[]) => resolveCategories(slugs, categories),
-    [categories]
-  );
+  const getCategoriesLabel = useCallback((slugs: string[]) => resolveCategories(slugs, categories), [categories]);
 
   const dynamicCategories = useMemo(() => {
     return [

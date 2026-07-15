@@ -35,9 +35,9 @@ export const ORDER_WORKFLOW_STEPS = [
 export function getTimelineStepStatus(stepIndex: number, currentStatus: Order["status"]) {
   const statuses = ["pending", "in-progress", "delivered", "completed"];
   const normalized = currentStatus === "revision_requested" ? "in-progress" : currentStatus;
-  
+
   if (normalized === "completed") return "completed";
-  
+
   const currentIdx = statuses.indexOf(normalized);
 
   if (currentIdx > stepIndex) return "completed";
@@ -60,8 +60,8 @@ export function OrderDetailBrackets({ accent = "neutral" }: { accent?: "neutral"
     accent === "purple"
       ? "border-purple-500 dark:border-purple-400"
       : accent === "green"
-      ? "border-green-500 dark:border-green-400"
-      : "border-neutral-400 dark:border-neutral-500";
+        ? "border-green-500 dark:border-green-400"
+        : "border-neutral-400 dark:border-neutral-500";
 
   return (
     <>
@@ -122,16 +122,9 @@ export function OrderStatusBadge({ status }: { status: Order["status"] }) {
 
 export function OrderHorizontalTimeline({ status, embedded = false }: { status: Order["status"]; embedded?: boolean }) {
   return (
-    <div
-      className={cn(
-        "relative bg-background",
-        embedded ? "p-0" : "border border-neutral-300 p-4 dark:border-neutral-700 md:p-5"
-      )}
-    >
+    <div className={cn("relative bg-background", embedded ? "p-0" : "border border-neutral-300 p-4 md:p-5 dark:border-neutral-700")}>
       {!embedded && <OrderDetailBrackets />}
-      {!embedded && (
-        <p className="font-mono text-[9px] text-neutral-450 uppercase tracking-widest">Order Progress</p>
-      )}
+      {!embedded && <p className="text-neutral-450 font-mono text-[9px] tracking-widest uppercase">Order Progress</p>}
       <div className={cn("overflow-x-auto pb-1", !embedded && "mt-4")}>
         <div className="flex min-w-[520px] items-start justify-between gap-2">
           {ORDER_WORKFLOW_STEPS.map((step, index) => {
@@ -166,13 +159,13 @@ export function OrderHorizontalTimeline({ status, embedded = false }: { status: 
                 </div>
                 <p
                   className={cn(
-                    "mt-2 font-sans text-[11px] font-bold leading-tight",
+                    "mt-2 font-sans text-[11px] leading-tight font-bold",
                     stepStatus === "active" ? "text-foreground" : "text-neutral-500"
                   )}
                 >
                   {step.label}
                 </p>
-                <p className="mt-0.5 font-mono text-[8px] text-neutral-450 uppercase">{step.hint}</p>
+                <p className="text-neutral-450 mt-0.5 font-mono text-[8px] uppercase">{step.hint}</p>
               </div>
             );
           })}
@@ -202,19 +195,11 @@ export function OrderWorkflowPipeline({ status }: { status: Order["status"] }) {
               <div
                 className={cn(
                   "flex size-7 shrink-0 items-center justify-center rounded-full border bg-background font-mono text-[10px] transition-all duration-300",
-                  stepStatus === "completed" && "border-green-600 text-green-600 bg-green-50/50 dark:bg-green-950/10",
-                  stepStatus === "active" &&
-                    activeColor === "amber" &&
-                    "border-amber-500 font-bold text-amber-500",
-                  stepStatus === "active" &&
-                    activeColor === "blue" &&
-                    "border-blue-500 font-bold text-blue-500",
-                  stepStatus === "active" &&
-                    activeColor === "purple" &&
-                    "border-purple-500 font-bold text-purple-500",
-                  stepStatus === "active" &&
-                    activeColor === "green" &&
-                    "border-green-650 bg-green-50 text-green-650 dark:bg-green-950/20",
+                  stepStatus === "completed" && "border-green-600 bg-green-50/50 text-green-600 dark:bg-green-950/10",
+                  stepStatus === "active" && activeColor === "amber" && "border-amber-500 font-bold text-amber-500",
+                  stepStatus === "active" && activeColor === "blue" && "border-blue-500 font-bold text-blue-500",
+                  stepStatus === "active" && activeColor === "purple" && "border-purple-500 font-bold text-purple-500",
+                  stepStatus === "active" && activeColor === "green" && "border-green-650 text-green-650 bg-green-50 dark:bg-green-950/20",
                   stepStatus === "upcoming" && "border-neutral-250 text-neutral-400"
                 )}
               >
@@ -228,7 +213,7 @@ export function OrderWorkflowPipeline({ status }: { status: Order["status"] }) {
               </div>
               <div>
                 <p className="font-sans text-xs font-bold text-foreground">{step.label}</p>
-                <p className="font-mono text-[9px] text-neutral-450">{step.hint}</p>
+                <p className="text-neutral-450 font-mono text-[9px]">{step.hint}</p>
               </div>
             </div>
           );
@@ -267,8 +252,8 @@ export function OrderRequirementsBrief({ requirements, className, embedded = fal
     <>
       {isEmpty ? (
         <div className="flex flex-col items-center justify-center gap-2 border border-dashed border-neutral-300 py-8 text-center dark:border-neutral-700">
-          <FileText className="size-5 text-neutral-350" />
-          <p className="font-mono text-[10px] text-neutral-450 uppercase">No requirements provided</p>
+          <FileText className="text-neutral-350 size-5" />
+          <p className="text-neutral-450 font-mono text-[10px] uppercase">No requirements provided</p>
           <p className="max-w-sm font-sans text-xs text-neutral-500">
             No written brief was submitted at checkout. Use the project chat to gather scope details.
           </p>
@@ -281,7 +266,7 @@ export function OrderRequirementsBrief({ requirements, className, embedded = fal
               embedded ? "max-h-[50vh]" : !isExpanded && isLong ? "max-h-40" : "max-h-72"
             )}
           >
-            <p className="whitespace-pre-wrap font-sans text-xs leading-relaxed text-foreground">{content}</p>
+            <p className="font-sans text-xs leading-relaxed whitespace-pre-wrap text-foreground">{content}</p>
             {!embedded && !isExpanded && isLong && (
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-neutral-50 to-transparent dark:from-neutral-900/80" />
             )}
@@ -290,7 +275,7 @@ export function OrderRequirementsBrief({ requirements, className, embedded = fal
             <button
               type="button"
               onClick={() => setIsExpanded((prev) => !prev)}
-              className="mt-3 inline-flex items-center gap-1 font-mono text-[10px] text-neutral-500 uppercase tracking-wider hover:text-foreground"
+              className="mt-3 inline-flex items-center gap-1 font-mono text-[10px] tracking-wider text-neutral-500 uppercase hover:text-foreground"
             >
               {isExpanded ? (
                 <>
@@ -313,7 +298,7 @@ export function OrderRequirementsBrief({ requirements, className, embedded = fal
       <>
         {!isEmpty && (
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[9px] text-neutral-450 uppercase">
+            <span className="text-neutral-450 font-mono text-[9px] uppercase">
               {wordCount} words · {lineCount} lines
             </span>
             <Button
@@ -343,19 +328,19 @@ export function OrderRequirementsBrief({ requirements, className, embedded = fal
     <>
       <div className={cn("relative border border-neutral-300 bg-background dark:border-neutral-700", className)}>
         <OrderDetailBrackets />
-        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-neutral-200 p-4 dark:border-neutral-800 md:p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-neutral-200 p-4 md:p-5 dark:border-neutral-800">
           <div className="flex items-start gap-3">
             <div className="flex size-8 shrink-0 items-center justify-center border border-dashed border-neutral-300 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/40">
               <FileText className="size-3.5 text-neutral-500" />
             </div>
             <div>
               <h3 className="font-sans text-sm font-bold text-foreground">Initial Requirements</h3>
-              <p className="font-mono text-[10px] text-neutral-450 uppercase">Project brief submitted at checkout</p>
+              <p className="text-neutral-450 font-mono text-[10px] uppercase">Project brief submitted at checkout</p>
             </div>
           </div>
           {!isEmpty && (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[9px] text-neutral-450 uppercase">
+              <span className="text-neutral-450 font-mono text-[9px] uppercase">
                 {wordCount} words · {lineCount} lines
               </span>
               <Button
@@ -397,35 +382,23 @@ export function OrderRequirementsBrief({ requirements, className, embedded = fal
           <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
             <DialogHeader className="space-y-1 text-left">
               <DialogTitle className="font-sans text-base font-bold text-foreground">Full Project Brief</DialogTitle>
-              <DialogDescription className="text-[10px] text-neutral-450 uppercase">
-                Initial requirements · {wordCount} words
-              </DialogDescription>
+              <DialogDescription className="text-neutral-450 text-[10px] uppercase">Initial requirements · {wordCount} words</DialogDescription>
             </DialogHeader>
-            <button
-              type="button"
-              onClick={() => setIsDialogOpen(false)}
-              className="text-neutral-400 hover:text-foreground"
-              aria-label="Close"
-            >
+            <button type="button" onClick={() => setIsDialogOpen(false)} className="text-neutral-400 hover:text-foreground" aria-label="Close">
               <X className="size-4" />
             </button>
           </div>
           <div className="max-h-[calc(85vh-120px)] overflow-y-auto px-6 py-4">
-            <p className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-foreground">{content}</p>
+            <p className="font-sans text-sm leading-relaxed whitespace-pre-wrap text-foreground">{content}</p>
           </div>
           <div className="flex justify-end gap-2 border-t border-dashed border-neutral-200 px-6 py-4 dark:border-neutral-800">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCopy}
-              className="h-8 rounded-none border-dashed font-mono text-[10px] uppercase"
-            >
+            <Button type="button" variant="outline" onClick={handleCopy} className="h-8 rounded-none border-dashed font-mono text-[10px] uppercase">
               {copied ? "Copied" : "Copy Brief"}
             </Button>
             <Button
               type="button"
               onClick={() => setIsDialogOpen(false)}
-              className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] uppercase text-white dark:bg-neutral-100 dark:text-neutral-900"
+              className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] text-white uppercase dark:bg-neutral-100 dark:text-neutral-900"
             >
               Close
             </Button>
@@ -446,52 +419,52 @@ interface OrderAgreementInfoProps {
 export function OrderAgreementInfo({ order, variant, service, paymentMethod }: OrderAgreementInfoProps) {
   return (
     <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-2 font-mono text-xs">
+        <span className="text-neutral-450 uppercase">Package Price:</span>
+        <span className="col-span-2 font-sans font-bold text-foreground">₱{order.totalAmount.toLocaleString()}</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2 font-mono text-xs">
+        <span className="text-neutral-450 uppercase">Order Date:</span>
+        <span className="col-span-2 font-sans font-bold text-foreground">{formatOrderDate(order.createdAt)}</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2 font-mono text-xs">
+        <span className="text-neutral-450 uppercase">Reference:</span>
+        <span className="col-span-2">
+          <code className="border border-neutral-200 bg-neutral-50 px-1.5 py-0.5 text-[10px] dark:border-neutral-800 dark:bg-neutral-900">
+            {order.referenceNumber || order.id}
+          </code>
+        </span>
+      </div>
+      {variant === "admin" ? (
         <div className="grid grid-cols-3 gap-2 font-mono text-xs">
-          <span className="text-neutral-450 uppercase">Package Price:</span>
-          <span className="col-span-2 font-sans font-bold text-foreground">₱{order.totalAmount.toLocaleString()}</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2 font-mono text-xs">
-          <span className="text-neutral-450 uppercase">Order Date:</span>
-          <span className="col-span-2 font-sans font-bold text-foreground">{formatOrderDate(order.createdAt)}</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2 font-mono text-xs">
-          <span className="text-neutral-450 uppercase">Reference:</span>
-          <span className="col-span-2">
-            <code className="border border-neutral-200 bg-neutral-50 px-1.5 py-0.5 text-[10px] dark:border-neutral-800 dark:bg-neutral-900">
-              {order.referenceNumber || order.id}
-            </code>
+          <span className="text-neutral-450 uppercase">Client:</span>
+          <span className="col-span-2 font-sans font-bold text-foreground">
+            {order.customerName}
+            <span className="mt-0.5 block text-[11px] font-normal text-neutral-500">{order.customerEmail}</span>
           </span>
         </div>
-        {variant === "admin" ? (
-          <div className="grid grid-cols-3 gap-2 font-mono text-xs">
-            <span className="text-neutral-450 uppercase">Client:</span>
-            <span className="col-span-2 font-sans font-bold text-foreground">
-              {order.customerName}
-              <span className="mt-0.5 block text-[11px] font-normal text-neutral-500">{order.customerEmail}</span>
-            </span>
-          </div>
-        ) : (
-          <div className="grid grid-cols-3 gap-2 font-mono text-xs">
-            <span className="text-neutral-450 uppercase">Payment:</span>
-            <span className="col-span-2 font-sans font-bold text-foreground uppercase">{paymentMethod || "Manual GCash / Maya"}</span>
-          </div>
-        )}
-        {order.addOnsSelected.length > 0 && (
-          <div className="border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">
-            <span className="font-mono text-[9px] text-neutral-450 uppercase">Add-ons Selected</span>
-            <ul className="mt-2 space-y-1">
-              {order.addOnsSelected.map((addonId) => {
-                const addon = service?.addOns.find((a) => a.id === addonId);
-                return (
-                  <li key={addonId} className="flex justify-between font-mono text-[10px] text-neutral-600 dark:text-neutral-400">
-                    <span>• {addon?.name || addonId}</span>
-                    {addon && <span>+₱{addon.price.toLocaleString()}</span>}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
+      ) : (
+        <div className="grid grid-cols-3 gap-2 font-mono text-xs">
+          <span className="text-neutral-450 uppercase">Payment:</span>
+          <span className="col-span-2 font-sans font-bold text-foreground uppercase">{paymentMethod || "Manual GCash / Maya"}</span>
+        </div>
+      )}
+      {order.addOnsSelected.length > 0 && (
+        <div className="border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">
+          <span className="text-neutral-450 font-mono text-[9px] uppercase">Add-ons Selected</span>
+          <ul className="mt-2 space-y-1">
+            {order.addOnsSelected.map((addonId) => {
+              const addon = service?.addOns.find((a) => a.id === addonId);
+              return (
+                <li key={addonId} className="flex justify-between font-mono text-[10px] text-neutral-600 dark:text-neutral-400">
+                  <span>• {addon?.name || addonId}</span>
+                  {addon && <span>+₱{addon.price.toLocaleString()}</span>}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -506,17 +479,9 @@ interface OrderCompactBarProps {
   actions?: React.ReactNode;
 }
 
-export function OrderCompactBar({
-  order,
-  serviceName,
-  backHref,
-  backLabel,
-  onRefresh,
-  onOpenDetails,
-  actions,
-}: OrderCompactBarProps) {
+export function OrderCompactBar({ order, serviceName, backHref, backLabel, onRefresh, onOpenDetails, actions }: OrderCompactBarProps) {
   return (
-    <div className="relative shrink-0 border border-neutral-300 bg-neutral-50/50 px-3 py-2.5 backdrop-blur-md dark:border-neutral-700 dark:bg-neutral-900/40 md:px-4">
+    <div className="relative shrink-0 border border-neutral-300 bg-neutral-50/50 px-3 py-2.5 backdrop-blur-md md:px-4 dark:border-neutral-700 dark:bg-neutral-900/40">
       <OrderDetailBrackets />
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex min-w-0 flex-1 items-center gap-2 md:gap-3">
@@ -532,7 +497,7 @@ export function OrderCompactBar({
               <h1 className="truncate font-sans text-sm font-bold text-foreground md:text-base">{serviceName}</h1>
               <OrderStatusBadge status={order.status} />
             </div>
-            <p className="truncate font-mono text-[10px] text-neutral-450">
+            <p className="text-neutral-450 truncate font-mono text-[10px]">
               REF #{order.referenceNumber || order.id} · ₱{order.totalAmount.toLocaleString()}
             </p>
           </div>
@@ -581,9 +546,7 @@ export function OrderDetailsDialog({ open, onOpenChange, order, service, variant
         <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
           <DialogHeader className="space-y-1 text-left">
             <DialogTitle className="font-sans text-base font-bold text-foreground">Order Information</DialogTitle>
-            <DialogDescription className="text-[10px] text-neutral-450 uppercase">
-              Progress, details, and project brief
-            </DialogDescription>
+            <DialogDescription className="text-neutral-450 text-[10px] uppercase">Progress, details, and project brief</DialogDescription>
           </DialogHeader>
         </div>
 
@@ -608,7 +571,7 @@ export function OrderDetailsDialog({ open, onOpenChange, order, service, variant
           <Button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] uppercase text-white dark:bg-neutral-100 dark:text-neutral-900"
+            className="h-8 rounded-none bg-neutral-900 font-mono text-[10px] text-white uppercase dark:bg-neutral-100 dark:text-neutral-900"
           >
             Close
           </Button>

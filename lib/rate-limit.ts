@@ -17,12 +17,7 @@ interface RateLimitResult {
  * @param windowSeconds Duration of the window in seconds
  * @param identifier Optional identifier to throttle (e.g. email address)
  */
-export async function checkRateLimit(
-  key: string,
-  limit: number,
-  windowSeconds: number,
-  identifier?: string
-): Promise<RateLimitResult> {
+export async function checkRateLimit(key: string, limit: number, windowSeconds: number, identifier?: string): Promise<RateLimitResult> {
   if (!redis) {
     // Fail-open if Redis is down
     console.warn(`[Rate Limit] Redis not initialized. Skipping rate limit check for ${key}.`);
@@ -49,7 +44,7 @@ export async function checkRateLimit(
       if (!idResult.success) {
         return idResult;
       }
-      
+
       // Return the more restrictive count
       return {
         success: true,
@@ -69,11 +64,7 @@ export async function checkRateLimit(
 /**
  * Helper to execute a sliding window log check on a specific Redis key.
  */
-async function checkSlidingWindow(
-  redisKey: string,
-  limit: number,
-  windowSeconds: number
-): Promise<RateLimitResult> {
+async function checkSlidingWindow(redisKey: string, limit: number, windowSeconds: number): Promise<RateLimitResult> {
   if (!redis) {
     return { success: true, limit, remaining: limit, reset: 0 };
   }

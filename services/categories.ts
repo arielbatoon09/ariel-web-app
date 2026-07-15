@@ -23,10 +23,7 @@ async function verifyAdminAccess() {
 }
 
 async function invalidateCategoriesCache() {
-  await Promise.all([
-    redisDel("admin:categories"),
-    redisDel("admin:overview"),
-  ]);
+  await Promise.all([redisDel("admin:categories"), redisDel("admin:overview")]);
 }
 
 export async function getCategoriesAction() {

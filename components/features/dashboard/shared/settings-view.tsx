@@ -196,14 +196,9 @@ export function SettingsView() {
   }
 
   const displayAvatarUrl = avatarPreviewUrl || avatarUrl;
-  const isProfileChanged =
-    fullName !== initialFullName ||
-    phone !== initialPhone ||
-    avatarFile !== null;
+  const isProfileChanged = fullName !== initialFullName || phone !== initialPhone || avatarFile !== null;
 
-  const isPasswordValid =
-    password.length >= 6 &&
-    password === confirmPassword;
+  const isPasswordValid = password.length >= 6 && password === confirmPassword;
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -213,7 +208,7 @@ export function SettingsView() {
         <h3 className="border-b border-neutral-200 pb-3 font-sans text-sm font-bold tracking-widest text-foreground uppercase dark:border-neutral-800">
           Profile Settings
         </h3>
-        
+
         <form onSubmit={handleUpdateProfile} className="mt-4 space-y-4 font-mono text-xs">
           {/* Avatar Upload Block */}
           <div className="flex flex-col items-center gap-4 border-b border-dashed border-neutral-200 pb-5 dark:border-neutral-800">
@@ -229,35 +224,25 @@ export function SettingsView() {
               ) : (
                 <User className="size-8 transition-opacity duration-300 group-hover:opacity-75" />
               )}
-              
+
               <button
                 type="button"
                 disabled={isSavingProfile || isUploadingAvatar}
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 hover:cursor-pointer group-hover:opacity-100 disabled:hover:cursor-not-allowed"
+                className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:cursor-pointer disabled:hover:cursor-not-allowed"
               >
-                {isUploadingAvatar ? (
-                  <Loader2 className="size-5 animate-spin text-white" />
-                ) : (
-                  <Camera className="size-5 text-white" />
-                )}
+                {isUploadingAvatar ? <Loader2 className="size-5 animate-spin text-white" /> : <Camera className="size-5 text-white" />}
               </button>
             </div>
-            
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleAvatarChange}
-              accept="image/*"
-              className="hidden"
-            />
+
+            <input type="file" ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" className="hidden" />
             <div className="text-center">
               <Button
                 type="button"
                 variant="outline"
                 disabled={isSavingProfile || isUploadingAvatar}
                 onClick={() => fileInputRef.current?.click()}
-                className="h-7 rounded-none border-dashed font-mono text-[9px] uppercase transition-all duration-300 hover:bg-neutral-150"
+                className="hover:bg-neutral-150 h-7 rounded-none border-dashed font-mono text-[9px] uppercase transition-all duration-300"
               >
                 {isUploadingAvatar ? "Uploading..." : "Upload New Avatar"}
               </Button>
@@ -306,7 +291,7 @@ export function SettingsView() {
             <button
               type="submit"
               disabled={!isProfileChanged || isSavingProfile || isUploadingAvatar}
-              className="h-9 px-6 rounded-none bg-neutral-900 font-mono text-[10px] tracking-wider uppercase text-white transition-colors duration-300 hover:bg-neutral-800 hover:cursor-pointer dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-neutral-900 dark:disabled:hover:bg-neutral-100"
+              className="h-9 rounded-none bg-neutral-900 px-6 font-mono text-[10px] tracking-wider text-white uppercase transition-colors duration-300 hover:cursor-pointer hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-neutral-900 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 dark:disabled:hover:bg-neutral-100"
             >
               {isSavingProfile || isUploadingAvatar ? (
                 <>
@@ -360,7 +345,7 @@ export function SettingsView() {
             <button
               type="submit"
               disabled={!isPasswordValid || isSavingPassword}
-              className="h-9 px-6 rounded-none bg-neutral-900 font-mono text-[10px] tracking-wider uppercase text-white transition-colors duration-300 hover:bg-neutral-800 hover:cursor-pointer dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-neutral-900 dark:disabled:hover:bg-neutral-100"
+              className="h-9 rounded-none bg-neutral-900 px-6 font-mono text-[10px] tracking-wider text-white uppercase transition-colors duration-300 hover:cursor-pointer hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-neutral-900 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 dark:disabled:hover:bg-neutral-100"
             >
               {isSavingPassword ? (
                 <>
