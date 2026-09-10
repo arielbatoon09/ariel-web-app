@@ -54,8 +54,7 @@ export default function PrivacyPage() {
                     site collected through cookies.
                   </li>
                   <li>
-                    <strong>Communication Logs:</strong> The content of messages and feedback you share with us through email or integrated live chat
-                    tools.
+                    <strong>Communication Logs:</strong> The content of messages and feedback you share with us through email or contact forms.
                   </li>
                 </ul>
               </section>
@@ -73,13 +72,10 @@ export default function PrivacyPage() {
 
               <section className="space-y-3">
                 <h2 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">4. Third-Party Integrations</h2>
-                <p>Our website utilizes third-party tools to facilitate support, analytics, and interactive scheduling:</p>
+                <p>Our website utilizes third-party tools to facilitate analytics and scheduling:</p>
                 <ul className="list-disc space-y-1.5 pl-5">
                   <li>
-                    <strong>Crisp Chat:</strong> Provides live chat support. You can view their privacy policy on their official site.
-                  </li>
-                  <li>
-                    <strong>Cal.com:</strong> Handles scheduling for initial discovery and booking calls.
+                    <strong>Vercel Analytics:</strong> Helps measure website traffic and performance.
                   </li>
                 </ul>
                 <p>These third parties have their own privacy policies governing their collection and storage of user data.</p>

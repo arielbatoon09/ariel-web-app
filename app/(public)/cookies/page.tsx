@@ -40,7 +40,6 @@ export default function CookiesPage() {
                 <p>We use cookies to enhance your experience when using our site. Specifically, cookies allow us to:</p>
                 <ul className="list-disc space-y-1.5 pl-5">
                   <li>Remember your interface preference settings (such as light or dark theme choice).</li>
-                  <li>Support interactive chat features (via Crisp Chat) so you can communicate with us easily.</li>
                   <li>Analyze website traffic and behavior patterns to help improve our content and performance.</li>
                 </ul>
               </section>
@@ -75,16 +74,12 @@ export default function CookiesPage() {
               <section className="space-y-3">
                 <h2 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">4. Third-Party Cookies</h2>
                 <p>
-                  Please note that third parties (such as live chat providers or scheduling services) may also place cookies on your device. We do not
-                  control these cookies. Third-party tools on our website include:
+                  Please note that third parties (such as analytics providers) may also place cookies on your device. We do not control these cookies.
+                  Third-party tools on our website include:
                 </p>
                 <ul className="list-disc space-y-1.5 pl-5">
                   <li>
-                    <strong>Crisp Chat:</strong> Set cookies to enable persistence in chat sessions so that your conversation history is preserved
-                    during your visits.
-                  </li>
-                  <li>
-                    <strong>Cal.com:</strong> May set cookies when rendering inline booking pages to manage session booking states.
+                    <strong>Vercel Analytics:</strong> May set cookies or similar technologies to help measure site traffic and performance.
                   </li>
                 </ul>
               </section>
@@ -96,8 +91,8 @@ export default function CookiesPage() {
                   control cookies through their settings. You can configure your browser to block all cookies or to alert you when a cookie is placed.
                 </p>
                 <p>
-                  Please note that if you choose to disable cookies, some features of this website (such as the interactive live chat support or theme
-                  toggle memory) may not function as intended.
+                  Please note that if you choose to disable cookies, some features of this website (such as theme toggle memory) may not function as
+                  intended.
                 </p>
               </section>
             </div>

@@ -111,7 +111,6 @@ export const metadata = {
   },
 };
 
-import { CrispChat } from "@/components/common/crisp-chat";
 import { CookiesBanner } from "@/components/common/cookies-banner";
 import { QueryProvider } from "@/components/context/query-provider";
 
@@ -125,7 +124,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               {children}
               <Analytics />
               <Toaster />
-              <CrispChat />
               <CookiesBanner />
             </TooltipProvider>
           </QueryProvider>

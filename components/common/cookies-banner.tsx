@@ -71,7 +71,7 @@ export function CookiesBanner() {
             </div>
 
             <p className="font-sans text-xs leading-relaxed text-muted-foreground">
-              I use cookies to understand website traffic and power support tools like live chat. Read our{" "}
+              I use cookies to understand website traffic and improve your experience. Read our{" "}
               <Link href="/privacy" className="text-foreground underline underline-offset-4 hover:text-neutral-400">
                 Privacy Policy
               </Link>
