@@ -274,3 +274,45 @@ export const orderMessages = pgTable(
   },
   (table) => [index("order_messages_order_id_idx").on(table.orderId)]
 );
+
+export type BookingWeeklyHour = {
+  dayOfWeek: number; // 0 = Sunday … 6 = Saturday
+  enabled: boolean;
+  startTime: string; // "09:00"
+  endTime: string; // "17:30"
+};
+
+/** Singleton calendar config (id = 1). Controls allowed days, daily hours, and slot length. */
+export const bookingSettings = pgTable("booking_settings", {
+  id: serial("id").primaryKey(),
+  slotDurationMinutes: integer("slot_duration_minutes").default(30).notNull(), // 15 | 30 | 60
+  timezone: text("timezone").default("Asia/Manila").notNull(),
+  weeklyHours: jsonb("weekly_hours").$type<BookingWeeklyHour[]>().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const discoveryBookings = pgTable(
+  "discovery_bookings",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: integer("user_id").references(() => users.id, { onDelete: "set null" }),
+    guestName: text("guest_name").notNull(),
+    guestEmail: text("guest_email").notNull(),
+    guestPhone: text("guest_phone"),
+    inquiry: text("inquiry").notNull(),
+    scheduledStart: timestamp("scheduled_start", { withTimezone: true }).notNull(),
+    scheduledEnd: timestamp("scheduled_end", { withTimezone: true }).notNull(),
+    timezone: text("timezone").notNull(),
+    status: text("status").default("pending").notNull(), // pending, confirmed, cancelled, completed, no_show
+    adminNotes: text("admin_notes"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("discovery_bookings_status_idx").on(table.status),
+    index("discovery_bookings_scheduled_start_idx").on(table.scheduledStart),
+    index("discovery_bookings_guest_email_idx").on(table.guestEmail),
+    index("discovery_bookings_user_id_idx").on(table.userId),
+  ]
+);

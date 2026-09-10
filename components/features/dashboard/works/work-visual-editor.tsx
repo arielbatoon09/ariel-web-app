@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2, Target, CheckCircle2, Cpu, ChevronDown, ChevronUp } from "lucide-react";
 import type { Project, SeoMeta } from "@/schemas/dashboard";
 import { MediaPickerDialog } from "@/components/common/media-picker-dialog";
+import { RichTextarea } from "@/components/ui/textarea";
 import { useCustomersQuery } from "@/hooks/use-customers";
 import { useCategoriesQuery } from "@/hooks/use-categories";
 
@@ -27,7 +28,10 @@ export function WorkVisualEditor({
   handleFieldChange,
   handleSeoFieldChange,
   handleCaseStudyFieldChange,
+  handleFeatureChange,
   handleResultChange,
+  addFeature,
+  removeFeature,
   addResult,
   removeResult,
 }: WorkVisualEditorProps) {
@@ -334,43 +338,93 @@ export function WorkVisualEditor({
         </div>
 
         {/* Section 2: Challenge & Solution */}
-        <div className="grid grid-cols-1 gap-12 border-t border-dashed border-neutral-200 pt-12 lg:grid-cols-12 dark:border-neutral-800">
-          <div className="space-y-10 lg:col-span-8">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 text-foreground">
-                <Target className="size-4.5 text-neutral-400" />
-                <h2 className="font-sans text-lg font-bold tracking-tight">The Challenge</h2>
-              </div>
-              <textarea
-                value={formData.caseStudy.challenge}
-                onChange={(e) => handleCaseStudyFieldChange("challenge", e.target.value)}
-                className="focus:ring-dashed focus:ring-neutral-450 w-full resize-none rounded border-none bg-transparent p-1 font-sans text-sm leading-relaxed text-neutral-600 outline-none focus:ring-1 dark:text-neutral-400"
-                rows={4}
-              />
+        <div className="space-y-10 border-t border-dashed border-neutral-200 pt-12 dark:border-neutral-800">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-foreground">
+              <Target className="size-4.5 text-neutral-400" />
+              <h2 className="font-sans text-lg font-bold tracking-tight">The Challenge</h2>
             </div>
-
-            <div className="space-y-3 border-t border-dashed border-neutral-200 pt-4 dark:border-neutral-800">
-              <div className="flex items-center gap-2 text-foreground">
-                <CheckCircle2 className="size-4.5 text-neutral-400" />
-                <h2 className="font-sans text-lg font-bold tracking-tight">The Engineering Solution</h2>
-              </div>
-              <textarea
-                value={formData.caseStudy.solution}
-                onChange={(e) => handleCaseStudyFieldChange("solution", e.target.value)}
-                className="focus:ring-dashed focus:ring-neutral-450 w-full resize-none rounded border-none bg-transparent p-1 font-sans text-sm leading-relaxed text-neutral-600 outline-none focus:ring-1 dark:text-neutral-400"
-                rows={4}
-              />
-            </div>
+            <RichTextarea
+              value={formData.caseStudy.challenge}
+              onChange={(val) => handleCaseStudyFieldChange("challenge", val)}
+              placeholder="Describe the core challenge..."
+              className="w-full rounded-none border-dashed border-neutral-300 bg-background/50 dark:border-neutral-700"
+            />
           </div>
-          <div className="hidden lg:col-span-4 lg:block" />
+
+          <div className="space-y-3 border-t border-dashed border-neutral-200 pt-8 dark:border-neutral-800">
+            <div className="flex items-center gap-2 text-foreground">
+              <CheckCircle2 className="size-4.5 text-neutral-400" />
+              <h2 className="font-sans text-lg font-bold tracking-tight">The Engineering Solution</h2>
+            </div>
+            <RichTextarea
+              value={formData.caseStudy.solution}
+              onChange={(val) => handleCaseStudyFieldChange("solution", val)}
+              placeholder="Describe the technical architecture and solution..."
+              className="w-full rounded-none border-dashed border-neutral-300 bg-background/50 dark:border-neutral-700"
+            />
+          </div>
         </div>
 
-        {/* Section 3: Technical Features */}
+        {/* Section 3: Key Technical Features */}
         <div className="space-y-6 border-t border-dashed border-neutral-200 pt-12 dark:border-neutral-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-foreground">
               <Cpu className="size-4.5 text-neutral-400" />
-              <h2 className="font-sans text-lg font-bold tracking-tight">Key Architecture & Features</h2>
+              <h2 className="font-sans text-lg font-bold tracking-tight">Key Technical Features</h2>
+            </div>
+            <Button variant="outline" size="sm" onClick={addFeature} className="h-7 rounded-none border-dashed px-2.5 font-mono text-[9px] uppercase">
+              <Plus className="mr-1 size-3" /> Add Feature
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {formData.caseStudy.features.map((feature, idx) => (
+              <div
+                key={idx}
+                className="group relative space-y-3 border border-dashed border-neutral-300 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-900/40"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] tracking-wider text-neutral-400 uppercase">{String(idx + 1).padStart(2, "0")}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeFeature(idx)}
+                    className="text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-500"
+                    title="Remove feature"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </button>
+                </div>
+                <input
+                  value={feature.title}
+                  onChange={(e) => handleFeatureChange(idx, "title", e.target.value)}
+                  className="focus:ring-dashed focus:ring-neutral-450 w-full rounded border-none bg-transparent p-0.5 font-sans text-sm font-bold text-foreground outline-none focus:ring-1"
+                  placeholder="Feature title"
+                />
+                <textarea
+                  value={feature.description}
+                  onChange={(e) => handleFeatureChange(idx, "description", e.target.value)}
+                  className="focus:ring-dashed focus:ring-neutral-450 w-full resize-none rounded border-none bg-transparent p-0.5 font-sans text-xs leading-relaxed text-neutral-600 outline-none focus:ring-1 dark:text-neutral-400"
+                  placeholder="Feature description..."
+                  rows={3}
+                />
+              </div>
+            ))}
+          </div>
+
+          {formData.caseStudy.features.length === 0 && (
+            <p className="font-mono text-xs text-neutral-400">
+              No features yet. Click &quot;Add Feature&quot; to document key technical capabilities.
+            </p>
+          )}
+        </div>
+
+        {/* Section 4: Measurable Impact */}
+        <div className="space-y-6 border-t border-dashed border-neutral-200 pt-12 dark:border-neutral-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-foreground">
+              <CheckCircle2 className="size-4.5 text-neutral-400" />
+              <h2 className="font-sans text-lg font-bold tracking-tight">Measurable Impact</h2>
             </div>
             <Button variant="outline" size="sm" onClick={addResult} className="h-7 rounded-none border-dashed px-2.5 font-mono text-[9px] uppercase">
               <Plus className="mr-1 size-3" /> Add Outcome
@@ -385,8 +439,10 @@ export function WorkVisualEditor({
                   value={result}
                   onChange={(e) => handleResultChange(idx, e.target.value)}
                   className="focus:ring-dashed focus:ring-neutral-450 w-full rounded border-none bg-transparent p-0.5 text-xs text-neutral-600 outline-none focus:ring-1 md:text-sm dark:text-neutral-400"
+                  placeholder="Outcome / measurable result..."
                 />
                 <button
+                  type="button"
                   onClick={() => removeResult(idx)}
                   className="absolute top-1 right-0 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-500"
                 >
@@ -396,7 +452,6 @@ export function WorkVisualEditor({
             ))}
           </div>
         </div>
-        <div className="hidden lg:col-span-4 lg:block" />
       </div>
 
       {/* Section 4: SEO Metadata Settings */}

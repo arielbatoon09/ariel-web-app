@@ -2,10 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getWorkBySlugQuery, getWorksQuery } from "@/data/works";
 import { getCategoriesQuery } from "@/data/categories";
-import { CaseStudyHero } from "@/components/features/public/works/case-study-hero";
-import { CaseStudyDetails } from "@/components/features/public/works/case-study-details";
-import { CaseStudyOutcomes } from "@/components/features/public/works/case-study-outcomes";
-import { CtaSection } from "@/components/common/cta-section";
+import { CaseStudyView } from "@/components/features/public/works/case-study-view";
+import { JsonLd } from "@/components/common/json-ld";
+import { workJsonLd } from "@/constants/seo";
 import type { Project } from "@/constants/projects";
 
 interface PageProps {
@@ -42,7 +41,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     metadata.keywords = project.seo.keywords.split(",").map((k) => k.trim());
   }
 
-  // Open Graph / Social Sharing
   const ogTitle = project.seo?.ogTitle || project.seo?.title || `${project.title} | Case Study`;
   const ogDesc = project.seo?.ogDescription || project.seo?.description || project.description;
   const ogImg = project.seo?.ogImage || project.imageSrc;
@@ -84,10 +82,8 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <CaseStudyHero project={mappedProject} categoryNames={categoryNames} />
-      <CaseStudyDetails caseStudy={mappedProject.caseStudy} />
-      <CaseStudyOutcomes caseStudy={mappedProject.caseStudy} />
-      <CtaSection />
+      <JsonLd data={workJsonLd({ ...mappedProject, seo: project.seo })} />
+      <CaseStudyView project={mappedProject} categoryNames={categoryNames} />
     </div>
   );
 }

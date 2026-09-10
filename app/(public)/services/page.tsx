@@ -1,4 +1,6 @@
 import { ServicesList } from "@/components/features/public/services/services-list";
+import { JsonLd } from "@/components/common/json-ld";
+import { servicesJsonLd } from "@/constants/seo";
 import { getServicesQuery } from "@/data/services";
 
 export const revalidate = 60;
@@ -13,40 +15,11 @@ export const metadata = {
 };
 
 export default async function ServicesPage() {
-  // Fetch services directly on the server
   const dbServices = await getServicesQuery();
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: "Software Development Services Cebu",
-    provider: {
-      "@type": "Person",
-      name: "Ariel Batoon",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Cebu City",
-        addressRegion: "Cebu",
-        addressCountry: "PH",
-      },
-    },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Software Engineering Packages",
-      itemListElement: dbServices.map((s) => ({
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: s.name,
-          description: s.description,
-        },
-      })),
-    },
-  };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={servicesJsonLd(dbServices)} />
       <div className="min-h-screen bg-background">
         <ServicesList initialServices={dbServices} />
       </div>

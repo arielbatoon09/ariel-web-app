@@ -21,7 +21,7 @@ export function AboutExperienceTimelineSection() {
                     "absolute top-1 -left-10 flex size-4 items-center justify-center border border-dashed text-[8px] font-bold transition-all duration-300 select-none",
                     isPresent
                       ? "scale-105 border-solid border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-black"
-                      : "border-neutral-400 bg-background text-neutral-400 dark:border-neutral-600 dark:text-neutral-500 group-hover:scale-110 group-hover:border-neutral-900 group-hover:bg-neutral-50 group-hover:text-foreground dark:group-hover:border-white dark:group-hover:bg-neutral-900"
+                      : "border-neutral-400 bg-background text-neutral-400 group-hover:scale-110 group-hover:border-neutral-900 group-hover:bg-neutral-50 group-hover:text-foreground dark:border-neutral-600 dark:text-neutral-500 dark:group-hover:border-white dark:group-hover:bg-neutral-900"
                   )}
                 >
                   +
@@ -53,9 +53,11 @@ export function AboutExperienceTimelineSection() {
                           rIdx > 0 && "border-neutral-250 mt-6 border-t border-dashed pt-6 dark:border-neutral-800"
                         )}
                       >
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
+                        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
                           <h5 className="font-sans text-sm font-bold text-foreground/80">{role.title}</h5>
-                          <span className="w-fit border border-dashed border-neutral-300 px-2 py-0.5 font-mono text-[9px] text-neutral-400 uppercase dark:border-neutral-700">{role.period}</span>
+                          <span className="w-fit border border-dashed border-neutral-300 px-2 py-0.5 font-mono text-[9px] text-neutral-400 uppercase dark:border-neutral-700">
+                            {role.period}
+                          </span>
                         </div>
 
                         <p className="max-w-3xl font-sans text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{role.description}</p>

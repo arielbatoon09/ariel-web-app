@@ -1,5 +1,7 @@
 import { getServiceBySlugQuery } from "@/data/services";
 import { ServiceDetailView } from "@/components/features/public/services/service-detail-view";
+import { JsonLd } from "@/components/common/json-ld";
+import { serviceDetailJsonLd } from "@/constants/seo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -45,6 +47,7 @@ export default async function PublicServiceDetailPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd data={serviceDetailJsonLd(service)} />
       <ServiceDetailView service={service} />
     </div>
   );

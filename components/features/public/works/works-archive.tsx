@@ -88,7 +88,7 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
           <div className="space-y-12">
             {/* Project Cards Grid */}
             <div className="grid animate-in grid-cols-1 border-t border-l border-dashed border-neutral-300 duration-300 fade-in md:grid-cols-2 lg:grid-cols-3 dark:border-neutral-700">
-              {paginatedItems.map((project: Project) => (
+              {paginatedItems.map((project: Project, index: number) => (
                 <GridCard
                   key={project.id}
                   tag={getCategoriesLabel(project.categories)}
@@ -101,6 +101,7 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
                     label: "View Project Details",
                   }}
                   showEmptyImageState={true}
+                  priority={currentPage === 1 && index === 0}
                 />
               ))}
             </div>

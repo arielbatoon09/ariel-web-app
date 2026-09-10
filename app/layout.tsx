@@ -118,7 +118,7 @@ import { QueryProvider } from "@/components/context/query-provider";
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning className={cn("antialiased", fontMono.variable, "font-sans", geistSans.variable)}>
-      <body className="flex min-h-screen flex-col">
+      <body className="flex min-h-screen flex-col" suppressHydrationWarning>
         <ThemeProvider>
           <QueryProvider>
             <TooltipProvider>

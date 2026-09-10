@@ -25,6 +25,7 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
   watermark?: string;
   showHoverLine?: boolean;
   children?: React.ReactNode;
+  priority?: boolean;
 }
 
 export function GridCard({
@@ -47,12 +48,13 @@ export function GridCard({
   watermark,
   showHoverLine,
   children,
+  priority = false,
   ...props
 }: GridCardProps) {
   return (
     <div
       className={cn(
-        "group relative flex flex-col justify-between border-r border-b border-dashed border-neutral-300 bg-neutral-50 p-5 md:p-6 transition-colors duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:bg-neutral-900/90",
+        "group relative flex flex-col justify-between border-r border-b border-dashed border-neutral-300 bg-neutral-50 p-5 transition-colors duration-300 hover:bg-neutral-100 md:p-6 dark:border-neutral-700 dark:bg-neutral-900/60 dark:hover:bg-neutral-900/90",
         className
       )}
       {...props}
@@ -90,8 +92,11 @@ export function GridCard({
                     src={imageSrc}
                     alt={title || ""}
                     fill
-                    sizes="(max-w-768px) 100vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                    priority={priority}
+                    loading={priority ? "eager" : "lazy"}
+                    fetchPriority={priority ? "high" : "auto"}
                   />
                 </div>
               </Link>
@@ -101,8 +106,11 @@ export function GridCard({
                   src={imageSrc}
                   alt={title || ""}
                   fill
-                  sizes="(max-w-768px) 100vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  priority={priority}
+                  loading={priority ? "eager" : "lazy"}
+                  fetchPriority={priority ? "high" : "auto"}
                 />
               </div>
             )
@@ -122,7 +130,12 @@ export function GridCard({
 
           {/* Optional Icon Block */}
           {icon && (
-            <div className={cn("flex size-8 items-center justify-center rounded border border-dashed border-neutral-300 text-neutral-500 transition-all duration-300 group-hover:border-neutral-400 group-hover:text-foreground dark:border-neutral-700 dark:text-neutral-400 dark:group-hover:border-neutral-600", iconClassName)}>
+            <div
+              className={cn(
+                "flex size-8 items-center justify-center rounded border border-dashed border-neutral-300 text-neutral-500 transition-all duration-300 group-hover:border-neutral-400 group-hover:text-foreground dark:border-neutral-700 dark:text-neutral-400 dark:group-hover:border-neutral-600",
+                iconClassName
+              )}
+            >
               {icon}
             </div>
           )}
@@ -154,7 +167,11 @@ export function GridCard({
                 </div>
               )}
 
-              {description && <p className={cn("text-xs leading-relaxed text-neutral-500 dark:text-neutral-400", truncate && "line-clamp-4", descriptionClassName)}>{description}</p>}
+              {description && (
+                <p className={cn("text-xs leading-relaxed text-neutral-500 dark:text-neutral-400", truncate && "line-clamp-4", descriptionClassName)}>
+                  {description}
+                </p>
+              )}
             </div>
           )}
         </div>

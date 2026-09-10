@@ -4,6 +4,8 @@ import { getArticleBySlugQuery, getArticlesQuery } from "@/data/articles";
 import { getCategoriesQuery } from "@/data/categories";
 import { ArticleHero } from "@/components/features/public/articles/article-hero";
 import { ArticleContent } from "@/components/features/public/articles/article-content";
+import { JsonLd } from "@/components/common/json-ld";
+import { articleJsonLd } from "@/constants/seo";
 import type { Article } from "@/schemas/dashboard";
 
 interface PageProps {
@@ -82,6 +84,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
 
   return (
     <>
+      <JsonLd data={articleJsonLd(article)} />
       <ArticleHero article={article} categoryNames={categoryNames} />
       <ArticleContent article={article} />
     </>

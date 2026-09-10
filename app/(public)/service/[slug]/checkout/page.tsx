@@ -1,5 +1,7 @@
 import { getServiceBySlugQuery } from "@/data/services";
 import { CheckoutView } from "@/components/features/public/services/checkout-view";
+import { JsonLd } from "@/components/common/json-ld";
+import { serviceCheckoutJsonLd } from "@/constants/seo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -34,6 +36,7 @@ export default async function PublicServiceCheckoutPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd data={serviceCheckoutJsonLd(service)} />
       <CheckoutView service={service} />
     </div>
   );

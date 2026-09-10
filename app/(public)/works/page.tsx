@@ -1,4 +1,6 @@
 import { WorksArchive } from "@/components/features/public/works/works-archive";
+import { JsonLd } from "@/components/common/json-ld";
+import { worksJsonLd } from "@/constants/seo";
 import { getWorksQuery } from "@/data/works";
 import { getCategoriesQuery } from "@/data/categories";
 import type { Project } from "@/schemas/dashboard";
@@ -36,26 +38,9 @@ export default async function WorksPage() {
       slug: c.slug,
     }));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    name: "Ariel Batoon Software Portfolio",
-    author: {
-      "@type": "Person",
-      name: "Ariel Batoon",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Cebu City",
-        addressRegion: "Cebu",
-        addressCountry: "PH",
-      },
-    },
-    description: "A collection of SaaS products, high-performance web systems, and mobile applications developed for clients globally.",
-  };
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={worksJsonLd()} />
       <div className="min-h-screen bg-background">
         <WorksArchive initialProjects={publishedProjects} categories={activeWorksCategories} />
       </div>

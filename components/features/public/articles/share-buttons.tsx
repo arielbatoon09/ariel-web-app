@@ -7,9 +7,10 @@ import { Link2, Check } from "lucide-react";
 
 interface ShareButtonsProps {
   title: string;
+  label?: string;
 }
 
-export function ShareButtons({}: ShareButtonsProps) {
+export function ShareButtons({ label = "Share this article:" }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -37,9 +38,8 @@ export function ShareButtons({}: ShareButtonsProps) {
   if (!mounted) {
     return (
       <div className="flex flex-col gap-4 border-t border-dashed border-neutral-300 pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-700">
-        <span className="text-neutral-450 font-mono text-[10px] tracking-wider uppercase dark:text-neutral-500">Share this article:</span>
+        <span className="text-neutral-450 font-mono text-[10px] tracking-wider uppercase dark:text-neutral-500">{label}</span>
         <div className="flex items-center gap-2">
-          {/* Skeleton placeholders with exact dimensions during SSR */}
           <div className="h-8 w-[100px] border border-dashed border-neutral-300 opacity-50 dark:border-neutral-700" />
           <div className="h-8 w-[100px] border border-dashed border-neutral-300 opacity-50 dark:border-neutral-700" />
           <div className="h-8 w-[96px] border border-dashed border-neutral-300 opacity-50 dark:border-neutral-700" />
@@ -50,7 +50,7 @@ export function ShareButtons({}: ShareButtonsProps) {
 
   return (
     <div className="flex flex-col gap-4 border-t border-dashed border-neutral-300 pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-700">
-      <span className="text-neutral-450 font-mono text-[10px] tracking-wider uppercase dark:text-neutral-500">Share this article:</span>
+      <span className="text-neutral-450 font-mono text-[10px] tracking-wider uppercase dark:text-neutral-500">{label}</span>
       <div className="flex items-center gap-2">
         <Link
           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl())}`}

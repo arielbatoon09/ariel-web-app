@@ -1,5 +1,7 @@
 import { Section } from "@/components/common/section";
 import { ContactFormSection } from "@/components/features/public/contact/contact-form-section";
+import { JsonLd } from "@/components/common/json-ld";
+import { contactJsonLd } from "@/constants/seo";
 
 export const metadata = {
   title: "Contact | Hire Web Developer Cebu City",
@@ -10,27 +12,9 @@ export const metadata = {
 };
 
 export default function ContactPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ContactPage",
-    mainEntity: {
-      "@type": "Person",
-      name: "Ariel Batoon",
-      jobTitle: "Full-Stack Software Engineer",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Cebu City",
-        addressRegion: "Cebu",
-        addressCountry: "PH",
-      },
-      telephone: "+639688540898",
-      email: "ariel.batoon.dev@gmail.com",
-    },
-  };
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={contactJsonLd()} />
       <div className="min-h-screen bg-background">
         {/* Contact Hero Header */}
         <Section containerClassName="pt-6 md:pt-10 pb-6 md:pb-10" showBottomLine={true} showTopLine={false}>

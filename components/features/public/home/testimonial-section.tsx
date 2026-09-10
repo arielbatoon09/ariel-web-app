@@ -125,7 +125,7 @@ export function TestimonialSection() {
             {TESTIMONIALS.map((item) => (
               <GridCard
                 key={item.id}
-                className="testimonial-card w-[280px] shrink-0 snap-start select-none border border-dashed border-neutral-300 sm:w-[360px] md:w-[420px] p-5 md:p-8"
+                className="testimonial-card w-[280px] shrink-0 snap-start border border-dashed border-neutral-300 p-5 select-none sm:w-[360px] md:w-[420px] md:p-8"
               >
                 <div className="flex h-full flex-col justify-between space-y-6">
                   <div className="space-y-4">

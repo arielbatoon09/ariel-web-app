@@ -14,10 +14,7 @@ export function AboutPhilosophySection() {
           {PHILOSOPHIES.map((phi, idx) => {
             const IconComponent = lucideIconMap[phi.iconName] || Cpu;
             return (
-              <GridCard
-                key={idx}
-                className="flex flex-row items-start gap-4 space-y-0 border border-dashed border-neutral-300 p-5 md:p-6"
-              >
+              <GridCard key={idx} className="flex flex-row items-start gap-4 space-y-0 border border-dashed border-neutral-300 p-5 md:p-6">
                 <div className="shrink-0 border border-dashed border-neutral-300 bg-neutral-100/50 p-2 dark:border-neutral-700 dark:bg-neutral-950/20">
                   <IconComponent className="size-5 text-neutral-500" />
                 </div>

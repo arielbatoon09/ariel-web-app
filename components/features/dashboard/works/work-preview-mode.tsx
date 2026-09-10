@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Monitor, Tablet, Smartphone } from "lucide-react";
 import { PreviewFrame } from "@/components/features/dashboard/shared/preview-frame";
-import { CaseStudyHero } from "@/components/features/public/works/case-study-hero";
-import { CaseStudyDetails } from "@/components/features/public/works/case-study-details";
-import { CaseStudyOutcomes } from "@/components/features/public/works/case-study-outcomes";
-import { CtaSection } from "@/components/common/cta-section";
+import { CaseStudyView } from "@/components/features/public/works/case-study-view";
 import { PublicHeader } from "@/components/common/public-header";
 import { PublicFooter } from "@/components/common/public-footer";
+import { useCategoriesQuery } from "@/hooks/use-categories";
 import type { Project } from "@/schemas/dashboard";
+import type { Project as PublicProject } from "@/constants/projects";
 
 interface WorkPreviewModeProps {
   formData: Project;
@@ -18,10 +17,20 @@ interface WorkPreviewModeProps {
 
 export function WorkPreviewMode({ formData }: WorkPreviewModeProps) {
   const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const { data: categoriesData = [] } = useCategoriesQuery();
+
+  const categoryNames = useMemo(() => {
+    return (formData.categories || [])
+      .map((slug) => categoriesData.find((c) => c.slug === slug))
+      .filter((match) => !!match && !match.disabled)
+      .map((match) => match!.name)
+      .join(" • ");
+  }, [formData.categories, categoriesData]);
+
+  const previewProject = formData as unknown as PublicProject;
 
   return (
     <div className="space-y-4">
-      {/* Device Switcher Bar */}
       <div className="flex items-center justify-between border border-dashed border-neutral-300 bg-neutral-50/50 px-4 py-2 font-mono text-xs dark:border-neutral-700 dark:bg-neutral-900/20">
         <span className="text-neutral-450 text-[10px] uppercase dark:text-neutral-500">Device Viewport:</span>
         <div className="flex items-center gap-1">
@@ -60,7 +69,6 @@ export function WorkPreviewMode({ formData }: WorkPreviewModeProps) {
         </span>
       </div>
 
-      {/* Viewport Frame */}
       <div className="flex justify-center border border-dashed border-neutral-300 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900/60">
         <PreviewFrame
           className={`h-[70vh] max-w-full border border-neutral-300 bg-background shadow-2xl transition-all duration-300 dark:border-neutral-800 ${
@@ -73,10 +81,7 @@ export function WorkPreviewMode({ formData }: WorkPreviewModeProps) {
           <div className="flex min-h-screen flex-col bg-background">
             <PublicHeader />
             <main className="flex-1">
-              <CaseStudyHero project={formData} />
-              <CaseStudyDetails caseStudy={formData.caseStudy} />
-              <CaseStudyOutcomes caseStudy={formData.caseStudy} />
-              <CtaSection />
+              <CaseStudyView project={previewProject} categoryNames={categoryNames} />
             </main>
             <PublicFooter />
           </div>

@@ -125,8 +125,7 @@ export const EXPERIENCES: Experience[] = [
       {
         title: "WordPress Developer (Contract) — TheWebsiteBuilders",
         period: "2023",
-        description:
-          "Partnered directly with this Australian company to build, deploy, and maintain custom business websites.",
+        description: "Partnered directly with this Australian company to build, deploy, and maintain custom business websites.",
         highlights: [
           "Developed responsive and performance-optimized websites using custom WordPress themes.",
           "Managed server setup, hosting environments, DNS routing, and secure website deployments.",
@@ -136,8 +135,7 @@ export const EXPERIENCES: Experience[] = [
       {
         title: "WordPress Developer (Contract) — N2Seo",
         period: "2025",
-        description:
-          "Collaborated with a Texas-based private company on developing secure, SEO-friendly custom websites.",
+        description: "Collaborated with a Texas-based private company on developing secure, SEO-friendly custom websites.",
         highlights: [
           "Created private websites built on WordPress optimized for fast loading speeds and search rankings.",
           "Handled server management, domain migrations, DNS record configuration, and production deployments.",

@@ -153,6 +153,53 @@ export const CustomerSchema = z.object({
   avatarUrl: z.string().optional().nullable(),
 });
 
+export const BookingWeeklyHourSchema = z.object({
+  dayOfWeek: z.number().int().min(0).max(6),
+  enabled: z.boolean(),
+  startTime: z.string().regex(/^\d{2}:\d{2}$/, "Use HH:mm format"),
+  endTime: z.string().regex(/^\d{2}:\d{2}$/, "Use HH:mm format"),
+});
+
+export const BookingSettingsSchema = z.object({
+  id: z.number().optional(),
+  slotDurationMinutes: z.union([z.literal(15), z.literal(30), z.literal(60)]),
+  timezone: z.string().min(1, "Timezone is required"),
+  weeklyHours: z.array(BookingWeeklyHourSchema).length(7),
+});
+
+export const UpdateBookingSettingsSchema = BookingSettingsSchema.omit({ id: true });
+
+export const DiscoveryBookingSchema = z.object({
+  id: z.string().min(1),
+  userId: z.string().nullable().optional(),
+  guestName: z.string().min(1),
+  guestEmail: z.string().email(),
+  guestPhone: z.string().nullable().optional(),
+  inquiry: z.string().min(1),
+  scheduledStart: z.string().min(1),
+  scheduledEnd: z.string().min(1),
+  timezone: z.string().min(1),
+  status: z.enum(["pending", "confirmed", "cancelled", "completed", "no_show"]),
+  adminNotes: z.string().nullable().optional(),
+  createdAt: z.string().min(1),
+  updatedAt: z.string().optional(),
+});
+
+export const CreateBookingSchema = z.object({
+  guestName: z.string().min(2, "Name is required"),
+  guestEmail: z.string().email("Must be a valid email address"),
+  guestPhone: z.string().optional(),
+  inquiry: z.string().min(10, "Please share a bit more about your inquiry").max(500, "Inquiry must be 500 characters or less"),
+  scheduledStartIso: z.string().min(1, "Time slot is required"),
+  recaptchaToken: z.string().min(1, "Security check is required"),
+});
+
+export const UpdateBookingStatusSchema = z.object({
+  id: z.string().min(1),
+  status: z.enum(["pending", "confirmed", "cancelled", "completed", "no_show"]),
+  adminNotes: z.string().nullable().optional(),
+});
+
 // Infer TS Types
 export type Category = z.infer<typeof CategorySchema>;
 export type SeoMeta = z.infer<typeof SeoMetaSchema>;
@@ -164,3 +211,5 @@ export type Order = z.infer<typeof OrderSchema>;
 export type Transaction = z.infer<typeof TransactionSchema>;
 export type CustomerActivity = z.infer<typeof CustomerActivitySchema>;
 export type Customer = z.infer<typeof CustomerSchema>;
+export type BookingSettings = z.infer<typeof BookingSettingsSchema>;
+export type DiscoveryBooking = z.infer<typeof DiscoveryBookingSchema>;

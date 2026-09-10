@@ -1,4 +1,6 @@
 import { ArticlesArchive } from "@/components/features/public/articles/articles-archive";
+import { JsonLd } from "@/components/common/json-ld";
+import { articlesJsonLd } from "@/constants/seo";
 import { getArticlesQuery } from "@/data/articles";
 import { getCategoriesQuery } from "@/data/categories";
 import type { Article } from "@/schemas/dashboard";
@@ -34,26 +36,9 @@ export default async function ArticlesPage() {
       slug: c.slug,
     }));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    name: "Ariel Batoon Engineering Insights",
-    description: "Technical insights on Next.js, database designs, and frontend rendering performance.",
-    publisher: {
-      "@type": "Person",
-      name: "Ariel Batoon",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Cebu City",
-        addressRegion: "Cebu",
-        addressCountry: "PH",
-      },
-    },
-  };
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={articlesJsonLd()} />
       <div className="min-h-screen bg-background">
         <ArticlesArchive initialArticles={publishedArticles} categories={activeArticleCategories} />
       </div>

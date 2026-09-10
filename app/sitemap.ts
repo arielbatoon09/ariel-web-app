@@ -7,18 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://arielbatoon.com";
 
   // Static routes
-  const staticPaths = [
-    "",
-    "/about",
-    "/articles",
-    "/book",
-    "/contact",
-    "/cookies",
-    "/privacy",
-    "/services",
-    "/terms",
-    "/works",
-  ];
+  const staticPaths = ["", "/about", "/articles", "/book", "/contact", "/cookies", "/privacy", "/services", "/terms", "/works"];
 
   const staticUrls: MetadataRoute.Sitemap = staticPaths.map((path) => ({
     url: `${baseUrl}${path}`,
