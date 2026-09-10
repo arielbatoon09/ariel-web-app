@@ -85,8 +85,8 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
       <div className="space-y-10">
         <SectionHeading
           label="Writing & Insights"
-          title="Architectural thinking, code design, and tech strategy."
-          description="Explore high-level concepts, detailed engineering posts, and strategy guides aimed at optimizing software development, integrating artificial intelligence, and constructing modular designs."
+          title="Notes on building software."
+          description="Short posts on engineering, architecture, and shipping products."
         />
 
         <ArchiveFilterBar

@@ -31,8 +31,8 @@ export function ServicesList({ initialServices }: ServicesListProps) {
       <div className="space-y-12">
         <SectionHeading
           label="Services & Pricing"
-          title="Professional software engineering. Tailored to your goals."
-          description="Select the scope and pricing model that matches your current product needs. All packages are built using high-performance engineering standards, clean source code, and responsive design."
+          title="Clear packages. Clear scope."
+          description="Pick a package that fits your build — or reach out for custom work."
           action={<ArchiveLayoutToggle layout={layout} onLayoutChange={setLayout} />}
         />
 
