@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { r2Client } from "@/lib/r2/client";
+import { buildR2ObjectKey, buildR2PublicUrl, getR2BucketName } from "@/lib/r2/paths";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -147,13 +148,13 @@ export async function getAvatarPresignedUrlAction(filename: string, contentType:
       return { success: false, error: "Only image files are allowed as profile avatars." };
     }
 
-    const bucketName = process.env.R2_BUCKET_NAME;
+    const bucketName = getR2BucketName();
     if (!bucketName) {
       return { success: false, error: "Cloudflare R2 Bucket Name is not configured." };
     }
 
     const cleanFilename = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const key = `avatars/${user.id}/${cleanFilename}`;
+    const key = buildR2ObjectKey("avatars", user.id, cleanFilename);
 
     const command = new PutObjectCommand({
       Bucket: bucketName,
@@ -162,9 +163,7 @@ export async function getAvatarPresignedUrlAction(filename: string, contentType:
     });
 
     const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 600 });
-
-    const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
-    const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-placeholder.r2.dev/${key}`;
+    const cdnUrl = buildR2PublicUrl(key);
 
     return {
       success: true,

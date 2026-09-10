@@ -1,6 +1,7 @@
 "use server";
 
 import { r2Client } from "@/lib/r2/client";
+import { buildR2ObjectKey, buildR2PublicUrl, getR2BucketName } from "@/lib/r2/paths";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getCurrentSessionUser } from "@/data/auth";
@@ -312,14 +313,14 @@ export async function getPresignedUploadUrlAction(filename: string, contentType:
     const authCheck = await checkAdminAccess();
     if (!authCheck.authorized) return { success: false, error: authCheck.error };
 
-    const bucketName = process.env.R2_BUCKET_NAME;
+    const bucketName = getR2BucketName();
     if (!bucketName) {
       return { success: false, error: "Cloudflare R2 Bucket Name is not configured." };
     }
 
     const uniqueId = Math.random().toString(36).substring(2, 15) + "_" + Date.now();
     const cleanFilename = filename.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const key = `${folder}/${uniqueId}-${cleanFilename}`;
+    const key = buildR2ObjectKey(folder, `${uniqueId}-${cleanFilename}`);
 
     const command = new PutObjectCommand({
       Bucket: bucketName,
@@ -328,9 +329,7 @@ export async function getPresignedUploadUrlAction(filename: string, contentType:
     });
 
     const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 300 });
-
-    const r2PublicUrl = process.env.R2_PUBLIC_URL || process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
-    const cdnUrl = r2PublicUrl ? `${r2PublicUrl}/${bucketName}/${key}` : `https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/${key}`;
+    const cdnUrl = buildR2PublicUrl(key);
 
     return { success: true, presignedUrl, key, url: cdnUrl };
   } catch (err: unknown) {

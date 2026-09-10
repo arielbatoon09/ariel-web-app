@@ -132,7 +132,7 @@ export const mediaAssets = pgTable(
     url: text("url").notNull(),
     mimeType: text("mime_type").notNull(),
     size: integer("size").notNull(), // in bytes
-    folder: text("folder").notNull(), // e.g. "media/2026"
+    folder: text("folder").notNull(), // e.g. "ariel-web-app/media/2026"
     altText: text("alt_text"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
