@@ -59,19 +59,28 @@ export function CaseStudyHero({ project, categoryNames }: CaseStudyHeroProps) {
             <ParameterRow icon={<User className="size-3.5" />} label="Role:" value={caseStudy.role} />
             <ParameterRow icon={<Calendar className="size-3.5" />} label="Timeline:" value={caseStudy.timeline} />
             <ParameterRow icon={<Building2 className="size-3.5" />} label="Client:" value={caseStudy.client || "N/A"} />
-            <ParameterRow
-              icon={<Globe className="size-3.5" />}
-              label="GitHub:"
-              value={
-                caseStudy.githubUrl ? (
+            {caseStudy.liveUrl ? (
+              <ParameterRow
+                icon={<ExternalLink className="size-3.5" />}
+                label="Live Demo:"
+                value={
+                  <Link href={caseStudy.liveUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+                    Visit site
+                  </Link>
+                }
+              />
+            ) : null}
+            {caseStudy.githubUrl ? (
+              <ParameterRow
+                icon={<Globe className="size-3.5" />}
+                label="GitHub:"
+                value={
                   <Link href={caseStudy.githubUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
                     Repository
                   </Link>
-                ) : (
-                  "N/A"
-                )
-              }
-            />
+                }
+              />
+            ) : null}
             <div className="border-neutral-250 border-t border-dashed pt-2 dark:border-neutral-800">
               <ParameterRow
                 icon={<Cpu className="size-3.5" />}
