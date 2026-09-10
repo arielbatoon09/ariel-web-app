@@ -8,9 +8,9 @@ import type { Article } from "@/schemas/dashboard";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Articles & Insights | Web Engineering Blog Cebu",
+  title: "Articles & Insights",
   description:
-    "Read technical articles on React Performance, Next.js optimization, and API architecture written by Ariel Batoon, software engineer in Cebu City.",
+    "Articles and insights by Ariel Batoon on Next.js, React performance, API architecture, and modern software engineering.",
   alternates: {
     canonical: "/articles",
   },

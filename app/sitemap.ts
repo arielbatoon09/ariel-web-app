@@ -2,34 +2,32 @@ import type { MetadataRoute } from "next";
 import { getArticlesQuery } from "@/data/articles";
 import { getWorksQuery } from "@/data/works";
 import { getServicesQuery } from "@/data/services";
+import { SITE_URL } from "@/constants/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://arielbatoon.com";
+  const baseUrl = SITE_URL;
 
-  // Static routes
-  const staticPaths = ["", "/about", "/articles", "/book", "/contact", "/cookies", "/privacy", "/services", "/terms", "/works"];
+  const staticPaths = ["", "/about", "/works", "/articles", "/services", "/book", "/contact", "/cookies", "/privacy", "/terms"];
 
   const staticUrls: MetadataRoute.Sitemap = staticPaths.map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: path === "" ? 1.0 : 0.8,
+    changeFrequency: path === "" || path === "/articles" || path === "/works" ? "weekly" : "monthly",
+    priority: path === "" ? 1.0 : path === "/about" || path === "/works" || path === "/articles" || path === "/services" ? 0.9 : 0.7,
   }));
 
-  // Dynamic routes
   const [articles, works, servicesList] = await Promise.all([
     getArticlesQuery().catch(() => []),
     getWorksQuery().catch(() => []),
     getServicesQuery().catch(() => []),
   ]);
 
-  // Filter articles and works by status === "published"
   const articleUrls: MetadataRoute.Sitemap = articles
     .filter((article) => article.status === "published")
     .map((article) => ({
       url: `${baseUrl}/article/${article.slug}`,
       lastModified: article.updatedAt ? new Date(article.updatedAt) : new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "weekly" as const,
       priority: 0.7,
     }));
 
@@ -38,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .map((project) => ({
       url: `${baseUrl}/work/${project.slug}`,
       lastModified: project.updatedAt ? new Date(project.updatedAt) : new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "weekly" as const,
       priority: 0.7,
     }));
 
@@ -47,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .map((service) => ({
       url: `${baseUrl}/service/${service.slug}`,
       lastModified: service.updatedAt ? new Date(service.updatedAt) : new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as const,
       priority: 0.6,
     }));
 

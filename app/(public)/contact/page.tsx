@@ -4,8 +4,9 @@ import { JsonLd } from "@/components/common/json-ld";
 import { contactJsonLd } from "@/constants/seo";
 
 export const metadata = {
-  title: "Contact | Hire Web Developer Cebu City",
-  description: "Send a message or schedule a live project scoping call with Ariel Batoon, software developer based in Cebu City, Philippines.",
+  title: "Contact",
+  description:
+    "Contact Ariel Batoon — send a message or book a discovery call to discuss your project with a Cebu-based full-stack software engineer.",
   alternates: {
     canonical: "/contact",
   },

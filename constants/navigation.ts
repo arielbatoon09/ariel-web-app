@@ -21,7 +21,7 @@ export const NAV_LINKS: NavLink[] = [
 ];
 
 export const SOCIALS: SocialLink[] = [
-  { label: "GitHub", href: "https://github.com/arielbatoon09?tab=repositories" },
+  { label: "GitHub", href: "https://github.com/arielbatoon09" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/arielbatoon" },
   { label: "Facebook", href: "https://www.facebook.com/itsarielbatoon" },
 ];

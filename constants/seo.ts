@@ -1,8 +1,18 @@
 import { CONTACT_INFO, SOCIALS } from "@/constants/navigation";
 
-export const SITE_URL = "https://arielbatoon.com";
+/** Canonical site origin — always use www. */
+export const SITE_URL = "https://www.arielbatoon.com";
+
+export const SITE_NAME = "Ariel Batoon";
+export const SITE_TAGLINE = "Full-Stack Software Engineer & Indie Builder";
+export const PERSON_IMAGE = `${SITE_URL}/ariel-batoon-profile-day.png`;
+export const OG_IMAGE =
+  "https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png";
 
 const telephone = CONTACT_INFO.phone.replace(/\s+/g, "");
+
+export const PERSON_ID = `${SITE_URL}/#person`;
+export const WEBSITE_ID = `${SITE_URL}/#website`;
 
 export const postalAddress = {
   "@type": "PostalAddress",
@@ -15,9 +25,14 @@ export const postalAddress = {
 
 export const person = {
   "@type": "Person",
+  "@id": PERSON_ID,
   name: "Ariel Batoon",
+  alternateName: ["Ariel Batoon Software Engineer", "Ariel Batoon Cebu"],
   jobTitle: "Full-Stack Software Engineer",
+  description:
+    "Full-stack software engineer and indie builder based in Cebu City, Philippines. Builds scalable AI-powered MVPs, web apps, and mobile applications.",
   url: SITE_URL,
+  image: PERSON_IMAGE,
   email: CONTACT_INFO.email,
   telephone,
   address: {
@@ -26,6 +41,15 @@ export const person = {
     addressRegion: "Cebu",
     addressCountry: "PH",
   },
+  knowsAbout: [
+    "Software Engineering",
+    "Full-Stack Web Development",
+    "React Native Mobile App Development",
+    "Next.js",
+    "Node.js",
+    "PostgreSQL",
+    "Generative AI",
+  ],
   sameAs: SOCIALS.map((social) => social.href.split("?")[0]),
 } as const;
 
@@ -34,33 +58,64 @@ type JsonLdOffer = {
   description: string | null;
 };
 
+/** Homepage graph: WebSite + Person + ProfessionalService for name/entity recognition. */
 export function homeJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: "Ariel Batoon — Software Engineer",
-    image: `${SITE_URL}/icons/ab-logo-text-dark.png`,
-    url: SITE_URL,
-    telephone,
-    priceRange: "$$$",
-    address: postalAddress,
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 10.3312,
-      longitude: 123.8986,
-    },
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      opens: "00:00",
-      closes: "23:59",
-    },
-    sameAs: person.sameAs,
-    areaServed: [
-      { "@type": "AdministrativeArea", name: "Cebu City" },
-      { "@type": "Country", name: "Philippines" },
-      { "@type": "Country", name: "United States" },
-      { "@type": "Country", name: "Singapore" },
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": WEBSITE_ID,
+        name: SITE_NAME,
+        url: SITE_URL,
+        description:
+          "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.",
+        publisher: { "@id": PERSON_ID },
+        inLanguage: "en-PH",
+      },
+      {
+        ...person,
+        worksFor: {
+          "@type": "Organization",
+          name: SITE_NAME,
+          url: SITE_URL,
+        },
+        homeLocation: {
+          "@type": "Place",
+          name: "Cebu City, Philippines",
+          address: postalAddress,
+        },
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": `${SITE_URL}/#business`,
+        name: "Ariel Batoon — Software Engineering",
+        image: PERSON_IMAGE,
+        url: SITE_URL,
+        telephone,
+        priceRange: "$$$",
+        address: postalAddress,
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 10.3312,
+          longitude: 123.8986,
+        },
+        openingHoursSpecification: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "00:00",
+          closes: "23:59",
+        },
+        sameAs: person.sameAs,
+        founder: { "@id": PERSON_ID },
+        employee: { "@id": PERSON_ID },
+        areaServed: [
+          { "@type": "AdministrativeArea", name: "Cebu City" },
+          { "@type": "Country", name: "Philippines" },
+          { "@type": "Country", name: "United States" },
+          { "@type": "Country", name: "Singapore" },
+        ],
+      },
     ],
   };
 }
@@ -69,18 +124,12 @@ export function aboutJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "AboutPage",
+    name: "About Ariel Batoon",
+    url: `${SITE_URL}/about`,
+    isPartOf: { "@id": WEBSITE_ID },
     mainEntity: {
       ...person,
       url: `${SITE_URL}/about`,
-      knowsAbout: [
-        "Software Engineering",
-        "Full-Stack Web Development",
-        "React Native Mobile App Development",
-        "Next.js",
-        "Node.js",
-        "PostgreSQL",
-        "Database Scoping",
-      ],
       alumniOf: {
         "@type": "EducationalOrganization",
         name: "Bachelor of Science in Information Technology (Software Engineering)",
@@ -93,6 +142,9 @@ export function contactJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "ContactPage",
+    name: "Contact Ariel Batoon",
+    url: `${SITE_URL}/contact`,
+    isPartOf: { "@id": WEBSITE_ID },
     mainEntity: person,
   };
 }
@@ -101,8 +153,9 @@ export function servicesJsonLd(offers: JsonLdOffer[]) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Software Development Services Cebu",
-    provider: person,
+    name: "Software Development Services — Ariel Batoon",
+    provider: { "@id": PERSON_ID },
+    url: `${SITE_URL}/services`,
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Software Engineering Packages",
@@ -122,19 +175,22 @@ export function articlesJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Ariel Batoon Engineering Insights",
-    description: "Technical insights on Next.js, database designs, and frontend rendering performance.",
-    publisher: person,
+    name: "Articles & Insights — Ariel Batoon",
+    description: "Technical insights on Next.js, database designs, and frontend rendering performance by Ariel Batoon.",
+    url: `${SITE_URL}/articles`,
+    publisher: { "@id": PERSON_ID },
+    author: { "@id": PERSON_ID },
   };
 }
 
 export function worksJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    name: "Ariel Batoon Software Portfolio",
-    author: person,
-    description: "A collection of SaaS products, high-performance web systems, and mobile applications developed for clients globally.",
+    "@type": "CollectionPage",
+    name: "Works & Projects — Ariel Batoon",
+    url: `${SITE_URL}/works`,
+    author: { "@id": PERSON_ID },
+    description: "A collection of SaaS products, high-performance web systems, and mobile applications developed by Ariel Batoon.",
   };
 }
 
@@ -169,17 +225,18 @@ export function webPageJsonLd({
     url: absoluteUrl(path),
     isPartOf: {
       "@type": "WebSite",
-      name: "Ariel Batoon",
+      "@id": WEBSITE_ID,
+      name: SITE_NAME,
       url: SITE_URL,
     },
-    author: person,
+    author: { "@id": PERSON_ID },
   };
 }
 
 export function bookJsonLd() {
   return {
     ...webPageJsonLd({
-      name: "Book a Free 30-Min Discovery Call",
+      name: "Book a Discovery Call with Ariel Batoon",
       description:
         "Select a convenient time on the calendar to discuss your project, technical requirements, or potential collaborations with Ariel Batoon.",
       path: "/book",
@@ -187,8 +244,8 @@ export function bookJsonLd() {
     mainEntity: {
       "@type": "Service",
       name: "Discovery Call",
-      description: "Free 30-minute project discovery and scoping call.",
-      provider: person,
+      description: "Free project discovery and scoping call with Ariel Batoon.",
+      provider: { "@id": PERSON_ID },
     },
   };
 }
@@ -214,9 +271,10 @@ export function articleJsonLd(article: {
     datePublished: article.date,
     author: {
       "@type": "Person",
+      "@id": PERSON_ID,
       name: article.author,
     },
-    publisher: person,
+    publisher: { "@id": PERSON_ID },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": absoluteUrl(url),
@@ -247,7 +305,7 @@ export function workJsonLd(project: {
     description: project.description,
     image: image ? absoluteUrl(image) : undefined,
     url: absoluteUrl(url),
-    author: person,
+    author: { "@id": PERSON_ID },
     keywords: project.tags.join(", "),
     ...(project.caseStudy?.client ? { about: project.caseStudy.client } : {}),
     ...(project.caseStudy?.liveUrl ? { sameAs: [project.caseStudy.liveUrl] } : {}),
@@ -267,7 +325,7 @@ export function serviceDetailJsonLd(service: {
     "@type": "Service",
     name: service.name,
     description: service.description,
-    provider: person,
+    provider: { "@id": PERSON_ID },
     image: service.imageSrc ? absoluteUrl(service.imageSrc) : undefined,
     url: `${SITE_URL}/service/${service.slug}`,
     offers: {

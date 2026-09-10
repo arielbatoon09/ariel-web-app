@@ -8,9 +8,9 @@ import type { Project } from "@/schemas/dashboard";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Portfolio | Creative Works & Projects Cebu",
+  title: "Works & Projects",
   description:
-    "Browse software projects engineered by Ariel Batoon in Cebu. Custom SaaS dashboards, performance-driven web apps, and native mobile apps.",
+    "Works and projects by Ariel Batoon — SaaS products, performance-driven web apps, and mobile applications shipped for clients worldwide.",
   alternates: {
     canonical: "/works",
   },

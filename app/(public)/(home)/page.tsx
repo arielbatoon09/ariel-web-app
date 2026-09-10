@@ -9,11 +9,19 @@ import { JsonLd } from "@/components/common/json-ld";
 import { homeJsonLd } from "@/constants/seo";
 
 export const metadata = {
-  title: "Software Engineer & Indie Builder in Cebu City",
+  title: {
+    absolute: "Ariel Batoon — Full-Stack Software Engineer & Indie Builder",
+  },
   description:
-    "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+    "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.",
   alternates: {
     canonical: "/",
+  },
+  openGraph: {
+    title: "Ariel Batoon — Full-Stack Software Engineer & Indie Builder",
+    description:
+      "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.",
+    url: "/",
   },
 };
 

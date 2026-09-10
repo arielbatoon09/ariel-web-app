@@ -34,8 +34,8 @@ export default function PrivacyPage() {
                   Welcome to the website of Ariel Batoon (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;). We respect your privacy and are
                   committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when
                   you visit our website at{" "}
-                  <Link href="https://arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
-                    arielbatoon.com
+                  <Link href="https://www.arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
+                    www.arielbatoon.com
                   </Link>{" "}
                   and utilize our freelance software engineering and consultancy services.
                 </p>

@@ -4,9 +4,9 @@ import { JsonLd } from "@/components/common/json-ld";
 import { bookJsonLd } from "@/constants/seo";
 
 export const metadata = {
-  title: "Book a Call | Ariel Batoon",
+  title: "Book a Discovery Call",
   description:
-    "Select a convenient time on the calendar to discuss your project, technical requirements, or potential collaborations with Ariel Batoon.",
+    "Book a free discovery call with Ariel Batoon to discuss your project, technical requirements, or collaboration ideas.",
   alternates: {
     canonical: "/book",
   },

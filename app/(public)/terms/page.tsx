@@ -32,8 +32,8 @@ export default function TermsPage() {
                 <h2 className="font-mono text-xs font-bold tracking-wider text-foreground uppercase">1. Agreement to Terms</h2>
                 <p>
                   By accessing or using our website at{" "}
-                  <Link href="https://arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
-                    arielbatoon.com
+                  <Link href="https://www.arielbatoon.com" className="text-foreground underline underline-offset-4 hover:text-neutral-500">
+                    www.arielbatoon.com
                   </Link>
                   , you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree to all of these terms, please do
                   not access or use the site.

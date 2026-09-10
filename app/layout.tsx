@@ -5,6 +5,9 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/context/theme-provider";
+import { CookiesBanner } from "@/components/common/cookies-banner";
+import { QueryProvider } from "@/components/context/query-provider";
+import { OG_IMAGE, SITE_TAGLINE, SITE_URL } from "@/constants/seo";
 
 import { Analytics } from "@vercel/analytics/next";
 
@@ -15,19 +18,21 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 });
 
+const DEFAULT_DESCRIPTION =
+  "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.";
+
 export const metadata = {
-  metadataBase: new URL("https://www.arielbatoon.com"),
+  metadataBase: new URL(SITE_URL),
   robots: {
     index: true,
     follow: true,
   },
   title: {
-    default: "Ariel Batoon — Software Engineer",
+    default: `Ariel Batoon — ${SITE_TAGLINE}`,
     template: "Ariel Batoon — %s",
   },
 
-  description:
-    "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+  description: DEFAULT_DESCRIPTION,
 
   keywords: [
     "Ariel Batoon",
@@ -51,23 +56,27 @@ export const metadata = {
   authors: [
     {
       name: "Ariel Batoon",
-      url: "https://arielbatoon.com",
+      url: SITE_URL,
     },
   ],
 
   creator: "Ariel Batoon",
+  publisher: "Ariel Batoon",
+
+  alternates: {
+    canonical: "/",
+  },
 
   openGraph: {
     type: "website",
     locale: "en_PH",
-    url: "https://arielbatoon.com",
+    url: SITE_URL,
     siteName: "Ariel Batoon",
-    title: "Ariel Batoon | Full-Stack Software Engineer & Indie Builder",
-    description:
-      "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+    title: `Ariel Batoon — ${SITE_TAGLINE}`,
+    description: DEFAULT_DESCRIPTION,
     images: [
       {
-        url: "https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png",
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
         alt: "Ariel Batoon - Full-Stack Software Engineer",
@@ -77,11 +86,10 @@ export const metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Ariel Batoon | Full-Stack Software Engineer & Indie Builder",
-    description:
-      "Full-Stack Software Engineer and Indie Builder based in Cebu, Philippines. Building scalable AI-powered MVPs, web, and mobile apps worldwide.",
+    title: `Ariel Batoon — ${SITE_TAGLINE}`,
+    description: DEFAULT_DESCRIPTION,
     creator: "@arielbatoon",
-    images: ["https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png"],
+    images: [OG_IMAGE],
   },
 
   icons: {
@@ -110,9 +118,6 @@ export const metadata = {
     ],
   },
 };
-
-import { CookiesBanner } from "@/components/common/cookies-banner";
-import { QueryProvider } from "@/components/context/query-provider";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

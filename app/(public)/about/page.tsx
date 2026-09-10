@@ -9,15 +9,17 @@ import { JsonLd } from "@/components/common/json-ld";
 import { aboutJsonLd } from "@/constants/seo";
 
 export const metadata = {
-  title: "About Me & Professional Bio",
-  description: "Learn more about Ariel Batoon, a Cebu-based Software Engineer specializing in Full-stack architecture.",
+  title: "About & Experience",
+  description:
+    "About Ariel Batoon — full-stack software engineer and indie builder in Cebu City. Background, experience, tech stack, and certifications.",
   alternates: {
     canonical: "/about",
   },
   openGraph: {
-    title: "About Me & Professional Bio",
-    description: "Learn more about Ariel Batoon, a Cebu-based Software Engineer specializing in Full-stack architecture.",
-    url: "https://arielbatoon.com/about",
+    title: "About Ariel Batoon",
+    description:
+      "About Ariel Batoon — full-stack software engineer and indie builder in Cebu City. Background, experience, tech stack, and certifications.",
+    url: "/about",
     images: [
       {
         url: "/ariel-batoon-profile-night.png",
