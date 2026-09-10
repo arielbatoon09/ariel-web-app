@@ -14,7 +14,7 @@ interface CaseStudyHeroProps {
 
 export function CaseStudyHero({ project, categoryNames }: CaseStudyHeroProps) {
   const { caseStudy } = project;
-  const eyebrow = [project.tag, categoryNames].filter(Boolean).join(" · ");
+  const eyebrow = categoryNames || "";
   const galleryImages = project.gallery && project.gallery.length > 0 ? project.gallery : project.imageSrc ? [project.imageSrc] : [];
 
   return (
