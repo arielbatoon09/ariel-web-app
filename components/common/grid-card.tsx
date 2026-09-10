@@ -49,7 +49,7 @@ function CardImage({
 
   const shellClass = cn(
     "border-neutral-250 dark:border-neutral-850 relative overflow-hidden rounded border border-dashed",
-    isList ? "h-full min-h-[7.5rem] w-24 sm:w-32 md:w-44 lg:w-52" : "mb-2 aspect-[16/10] w-full bg-neutral-100/50 dark:bg-neutral-900/80"
+    isList ? "h-full min-h-[7.5rem] w-24 sm:w-32 md:w-44 lg:w-52" : "mb-4 aspect-[16/10] w-full bg-neutral-100/50 dark:bg-neutral-900/80"
   );
 
   const media = imageSrc ? (
@@ -158,7 +158,7 @@ export function GridCard({
           ) : null}
 
           <div className={cn("flex min-w-0 flex-1 flex-col justify-between", isList ? "gap-3" : "space-y-4")}>
-            <div className="space-y-3 md:space-y-4">
+            <div className="space-y-3">
               {icon && (
                 <div
                   className={cn(
@@ -170,20 +170,24 @@ export function GridCard({
                 </div>
               )}
 
-              {(number || tag) && (
-                <div className="flex flex-wrap items-center gap-2.5">
-                  {number && <span className="font-mono text-[10px] text-neutral-400 dark:text-neutral-500">{number}</span>}
-                  {number && tag && <div className="hidden h-2.5 w-[1px] bg-neutral-300 sm:block dark:bg-neutral-800" />}
-                  {tag && <span className="font-mono text-[9px] tracking-wider text-neutral-500 uppercase dark:text-neutral-400">{tag}</span>}
-                </div>
-              )}
+              {(number || tag || title) && (
+                <div className="space-y-1">
+                  {(number || tag) && (
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      {number && <span className="font-mono text-[10px] text-neutral-400 dark:text-neutral-500">{number}</span>}
+                      {number && tag && <div className="hidden h-2.5 w-[1px] bg-neutral-300 sm:block dark:bg-neutral-800" />}
+                      {tag && <span className="font-mono text-[9px] tracking-wider text-neutral-500 uppercase dark:text-neutral-400">{tag}</span>}
+                    </div>
+                  )}
 
-              {(title || description) && (
-                <div className="space-y-2">
                   {title && (
                     <h3 className={cn("font-sans text-base font-bold tracking-tight text-foreground sm:text-lg", titleClassName)}>{title}</h3>
                   )}
+                </div>
+              )}
 
+              {(price || deliveryTime || description) && (
+                <div className="space-y-2">
                   {(price || deliveryTime) && (
                     <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-neutral-500 dark:text-neutral-400">
                       {price && <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100">{price}</span>}
