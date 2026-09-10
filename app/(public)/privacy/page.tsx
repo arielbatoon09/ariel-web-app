@@ -2,13 +2,13 @@ import Link from "next/link";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { JsonLd } from "@/components/common/json-ld";
-import { webPageJsonLd } from "@/constants/seo";
+import { webPageJsonLd, absoluteCanonical, absoluteTitle } from "@/constants/seo";
 
 export const metadata = {
-  title: "Privacy Policy | Ariel Batoon - Software Engineer",
-  description: "Privacy Policy for Ariel Batoon's website and software services. Last updated July 6, 2026.",
+  title: absoluteTitle("Privacy Policy | Ariel Batoon Software Engineer"),
+  description: "How Ariel Batoon collects, uses, and protects personal data on this website and related software services.",
   alternates: {
-    canonical: "/privacy",
+    canonical: absoluteCanonical("/privacy"),
   },
 };
 

@@ -1,14 +1,13 @@
 import { Section } from "@/components/common/section";
 import { BookCallSection } from "@/components/features/public/book/book-call-section";
 import { JsonLd } from "@/components/common/json-ld";
-import { bookJsonLd } from "@/constants/seo";
+import { bookJsonLd, absoluteCanonical, absoluteTitle } from "@/constants/seo";
 
 export const metadata = {
-  title: "Book a Discovery Call",
-  description:
-    "Book a free discovery call with Ariel Batoon to discuss your project, technical requirements, or collaboration ideas.",
+  title: absoluteTitle("Book a Discovery Call with Ariel Batoon — Free Consult"),
+  description: "Book a free discovery call with Ariel Batoon to discuss project scope, technical needs, and next steps for your build.",
   alternates: {
-    canonical: "/book",
+    canonical: absoluteCanonical("/book"),
   },
 };
 

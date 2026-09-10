@@ -2,6 +2,7 @@ import { getServiceBySlugQuery } from "@/data/services";
 import { ServiceDetailView } from "@/components/features/public/services/service-detail-view";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { absoluteCanonical, absoluteTitle, clipMetaDescription } from "@/constants/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -14,19 +15,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!service) {
     return {
-      title: "Service Package Not Found | Software Engineering Cebu",
-      description: "The requested software design pricing package does not exist.",
+      title: absoluteTitle("Service Not Found | Ariel Batoon"),
+      description: "The requested software package could not be found. Browse available services from Ariel Batoon instead.",
     };
   }
 
-  const cleanDesc = service.description.length > 150 ? `${service.description.substring(0, 150)}...` : service.description;
+  const path = `/services/${slug}`;
+  const title = `${service.name} | Software Package by Ariel Batoon`;
+  const description = clipMetaDescription(
+    `${service.name} by Ariel Batoon — ₱${service.price.toLocaleString()} with ${service.deliveryTime} delivery. ${service.description}`
+  );
 
   return {
-    title: `${service.name} Package Cebu | Software Development & MVP`,
-    description: `Explore details for the ${service.name} package. Base Price: ₱${service.price.toLocaleString()} with ${service.deliveryTime} delivery. ${cleanDesc}`,
+    title: absoluteTitle(title),
+    description,
+    alternates: {
+      canonical: absoluteCanonical(path),
+    },
     openGraph: {
-      title: `${service.name} Package Cebu | Software Development & MVP`,
-      description: cleanDesc,
+      title,
+      description,
+      url: absoluteCanonical(path),
       type: "website",
     },
   };

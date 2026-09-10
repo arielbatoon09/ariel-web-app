@@ -7,12 +7,14 @@ import { GridCard } from "@/components/common/grid-card";
 import { ArchiveFilterBar } from "@/components/common/archive-filter-bar";
 import { ArchivePagination } from "@/components/common/archive-pagination";
 import { useArchiveFilter } from "@/hooks/use-archive-filter";
+import { useListingLayout } from "@/hooks/use-listing-layout";
 import { useArticlesQuery } from "@/hooks/use-articles";
 import type { Article } from "@/schemas/dashboard";
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import { BookOpen, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConnectDialog } from "@/components/common/connect-dialog";
+import { cn } from "@/lib/utils";
 
 interface ArticleCategory {
   id: string;
@@ -36,6 +38,7 @@ function resolveCategories(slugs: string[], categories: ArticleCategory[]): stri
 
 export function ArticlesArchive({ initialArticles, categories }: ArticlesArchiveProps) {
   const { data: allArticles = initialArticles } = useArticlesQuery(initialArticles);
+  const { layout, setLayout } = useListingLayout();
 
   const articles = useMemo(
     () =>
@@ -80,14 +83,12 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
   return (
     <Section id="articles-archive" containerClassName="pt-6 md:pt-10 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-10">
-        {/* Section Heading */}
         <SectionHeading
           label="Writing & Insights"
           title="Architectural thinking, code design, and tech strategy."
           description="Explore high-level concepts, detailed engineering posts, and strategy guides aimed at optimizing software development, integrating artificial intelligence, and constructing modular designs."
         />
 
-        {/* Filter Control Center */}
         <ArchiveFilterBar
           categories={dynamicCategories}
           activeCategory={activeCategory}
@@ -95,16 +96,23 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           searchPlaceholder="Search articles..."
+          layout={layout}
+          onLayoutChange={setLayout}
         />
 
-        {/* Grid Results Section */}
         {paginatedItems.length > 0 ? (
           <div className="space-y-12">
-            {/* Articles Cards Grid */}
-            <div className="grid animate-in grid-cols-1 border-t border-l border-dashed border-neutral-300 duration-300 fade-in md:grid-cols-2 lg:grid-cols-3 dark:border-neutral-700">
+            <div
+              className={cn(
+                "animate-in border-t border-l border-dashed border-neutral-300 duration-300 fade-in dark:border-neutral-700",
+                "grid grid-cols-1",
+                layout === "grid" && "md:grid-cols-2 lg:grid-cols-3"
+              )}
+            >
               {paginatedItems.map((article: Article) => (
                 <GridCard
                   key={article.id}
+                  variant={layout}
                   tag={getCategoriesLabel(article.categories)}
                   number={`${article.date} • ${article.readTime}`}
                   title={article.title}
@@ -118,7 +126,6 @@ export function ArticlesArchive({ initialArticles, categories }: ArticlesArchive
               ))}
             </div>
 
-            {/* Pagination Controls */}
             <ArchivePagination currentPage={currentPage} totalPages={totalPages} totalItems={filteredItems.length} onPageChange={setCurrentPage} />
           </div>
         ) : (

@@ -6,8 +6,45 @@ export const SITE_URL = "https://www.arielbatoon.com";
 export const SITE_NAME = "Ariel Batoon";
 export const SITE_TAGLINE = "Full-Stack Software Engineer & Indie Builder";
 export const PERSON_IMAGE = `${SITE_URL}/ariel-batoon-profile-day.png`;
-export const OG_IMAGE =
-  "https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png";
+export const OG_IMAGE = "https://pub-b7ccab85e4b540fcaab7ba577789da5d.r2.dev/ariel-web-app/manual/ariel-batoon-banner-logo.png";
+
+/** SERP-friendly limits (Google typically shows ~50–60 title chars / ~70–155 description chars). */
+export const SEO_TITLE_MAX = 60;
+export const SEO_DESC_MIN = 70;
+export const SEO_DESC_MAX = 155;
+
+export const DEFAULT_META_DESCRIPTION =
+  "I'm Ariel Batoon, a Cebu-based full-stack engineer building AI-powered MVPs, web apps, and mobile products worldwide.";
+
+/** Build an absolute canonical URL for the given path (must match the live page URL). */
+export function absoluteCanonical(path = "/"): string {
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path.split("?")[0].replace(/\/$/, "") || SITE_URL;
+  }
+  if (!path || path === "/") return SITE_URL;
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  return `${SITE_URL}${normalized.replace(/\/$/, "")}`;
+}
+
+/** Clip meta descriptions to the SERP-safe range without cutting mid-word when possible. */
+export function clipMetaDescription(text: string, max = SEO_DESC_MAX): string {
+  const cleaned = text.replace(/\s+/g, " ").trim();
+  if (cleaned.length <= max) return cleaned;
+
+  const slice = cleaned.slice(0, max - 1);
+  const lastSpace = slice.lastIndexOf(" ");
+  const clipped = (lastSpace > 40 ? slice.slice(0, lastSpace) : slice).trimEnd();
+  return `${clipped.replace(/[.,;:!?-]+$/, "")}…`;
+}
+
+/** Prefer absolute titles so the layout template does not shorten sitelink page titles. */
+export function absoluteTitle(title: string) {
+  const cleaned = title.replace(/\s+/g, " ").trim();
+  if (cleaned.length <= SEO_TITLE_MAX) return { absolute: cleaned };
+  const slice = cleaned.slice(0, SEO_TITLE_MAX - 1);
+  const lastSpace = slice.lastIndexOf(" ");
+  return { absolute: `${(lastSpace > 30 ? slice.slice(0, lastSpace) : slice).trimEnd()}…` };
+}
 
 const telephone = CONTACT_INFO.phone.replace(/\s+/g, "");
 
@@ -68,8 +105,7 @@ export function homeJsonLd() {
         "@id": WEBSITE_ID,
         name: SITE_NAME,
         url: SITE_URL,
-        description:
-          "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.",
+        description: DEFAULT_META_DESCRIPTION,
         publisher: { "@id": PERSON_ID },
         inLanguage: "en-PH",
       },

@@ -7,11 +7,13 @@ import { GridCard } from "@/components/common/grid-card";
 import { ArchiveFilterBar } from "@/components/common/archive-filter-bar";
 import { ArchivePagination } from "@/components/common/archive-pagination";
 import { useArchiveFilter } from "@/hooks/use-archive-filter";
+import { useListingLayout } from "@/hooks/use-listing-layout";
 import { useWorksQuery } from "@/hooks/use-works";
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import { FolderX, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConnectDialog } from "@/components/common/connect-dialog";
+import { cn } from "@/lib/utils";
 import type { Project } from "@/schemas/dashboard";
 
 interface WorksCategory {
@@ -36,6 +38,7 @@ function resolveCategories(slugs: string[], categories: WorksCategory[]): string
 
 export function WorksArchive({ initialProjects, categories }: WorksArchiveProps) {
   const { data: allProjects = initialProjects } = useWorksQuery(initialProjects);
+  const { layout, setLayout } = useListingLayout();
 
   const projects = useMemo(
     () =>
@@ -66,14 +69,12 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
   return (
     <Section id="archive" containerClassName="pt-6 md:pt-10 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-10">
-        {/* Section Heading */}
         <SectionHeading
           label="Portfolio"
-          title="Digital products engineered to scale and convert."
-          description="Explore a curated collection of custom SaaS platforms, mobile apps, and enterprise AI integrations built to deliver high performance, solve complex problems, and drive business growth."
+          title="Selected work I've shipped."
+          description="A curated set of public projects across web, mobile, and AI. Client work under NDA is not listed here."
         />
 
-        {/* Filter Control Center */}
         <ArchiveFilterBar
           categories={dynamicCategories}
           activeCategory={activeCategory}
@@ -81,16 +82,24 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           searchPlaceholder="Search projects..."
+          layout={layout}
+          onLayoutChange={setLayout}
         />
 
-        {/* Grid Results Section */}
         {paginatedItems.length > 0 ? (
           <div className="space-y-12">
-            {/* Project Cards Grid */}
-            <div className="grid animate-in grid-cols-1 border-t border-l border-dashed border-neutral-300 duration-300 fade-in md:grid-cols-2 lg:grid-cols-3 dark:border-neutral-700">
+            <div
+              className={cn(
+                "animate-in border-t border-l border-dashed border-neutral-300 duration-300 fade-in dark:border-neutral-700",
+                // Mobile always single-column list; desktop grid when selected
+                "grid grid-cols-1",
+                layout === "grid" && "md:grid-cols-2 lg:grid-cols-3"
+              )}
+            >
               {paginatedItems.map((project: Project, index: number) => (
                 <GridCard
                   key={project.id}
+                  variant={layout}
                   tag={getCategoriesLabel(project.categories)}
                   title={project.title}
                   description={project.description}
@@ -106,7 +115,6 @@ export function WorksArchive({ initialProjects, categories }: WorksArchiveProps)
               ))}
             </div>
 
-            {/* Pagination Controls */}
             <ArchivePagination currentPage={currentPage} totalPages={totalPages} totalItems={filteredItems.length} onPageChange={setCurrentPage} />
           </div>
         ) : (

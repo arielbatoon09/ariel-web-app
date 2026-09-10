@@ -2,13 +2,13 @@ import Link from "next/link";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { JsonLd } from "@/components/common/json-ld";
-import { webPageJsonLd } from "@/constants/seo";
+import { webPageJsonLd, absoluteCanonical, absoluteTitle } from "@/constants/seo";
 
 export const metadata = {
-  title: "Terms and Conditions | Ariel Batoon - Software Engineer",
-  description: "Terms and conditions for visiting the Ariel Batoon website and booking services. Last updated July 6, 2026.",
+  title: absoluteTitle("Terms and Conditions | Ariel Batoon Software Engineer"),
+  description: "Terms for using Ariel Batoon's website, booking discovery calls, and purchasing software development services.",
   alternates: {
-    canonical: "/terms",
+    canonical: absoluteCanonical("/terms"),
   },
 };
 

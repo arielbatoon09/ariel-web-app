@@ -5,7 +5,7 @@ import { getCategoriesQuery } from "@/data/categories";
 import { ArticleHero } from "@/components/features/public/articles/article-hero";
 import { ArticleContent } from "@/components/features/public/articles/article-content";
 import { JsonLd } from "@/components/common/json-ld";
-import { articleJsonLd } from "@/constants/seo";
+import { articleJsonLd, absoluteCanonical, absoluteTitle, clipMetaDescription } from "@/constants/seo";
 import type { Article } from "@/schemas/dashboard";
 
 interface PageProps {
@@ -30,11 +30,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = await getArticleBySlugQuery(resolvedParams.slug);
   if (!article || article.status !== "published") return {};
 
+  const path = `/article/${resolvedParams.slug}`;
+  const title = article.seo?.title || `${article.title} | Ariel Batoon`;
+  const description = clipMetaDescription(article.seo?.description || article.description);
+
   const metadata: Metadata = {
-    title: article.seo?.title || `${article.title} | Ariel Batoon`,
-    description: article.seo?.description || article.description,
+    title: absoluteTitle(title),
+    description,
     alternates: {
-      canonical: article.seo?.canonicalUrl || `/article/${resolvedParams.slug}`,
+      canonical: absoluteCanonical(article.seo?.canonicalUrl || path),
     },
   };
 
@@ -42,20 +46,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     metadata.keywords = article.seo.keywords.split(",").map((k) => k.trim());
   }
 
-  const ogTitle = article.seo?.ogTitle || article.seo?.title || `${article.title} | Ariel Batoon`;
-  const ogDesc = article.seo?.ogDescription || article.seo?.description || article.description;
+  const ogTitle = article.seo?.ogTitle || title;
+  const ogDesc = clipMetaDescription(article.seo?.ogDescription || description);
   const ogImg = article.seo?.ogImage || article.imageSrc;
 
   metadata.openGraph = {
     title: ogTitle,
     description: ogDesc,
     type: "article",
+    url: absoluteCanonical(article.seo?.canonicalUrl || path),
     images: ogImg ? [{ url: ogImg }] : [],
   };
-
-  if (article.seo?.canonicalUrl) {
-    metadata.openGraph.url = article.seo.canonicalUrl;
-  }
 
   return metadata;
 }

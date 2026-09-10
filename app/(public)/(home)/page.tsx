@@ -6,22 +6,22 @@ import { RecentBlogsSection } from "@/components/features/public/home/recent-blo
 import { FaqSection } from "@/components/features/public/home/faq-section";
 import { BookCallSection } from "@/components/features/public/home/book-call-section";
 import { JsonLd } from "@/components/common/json-ld";
-import { homeJsonLd } from "@/constants/seo";
+import { absoluteCanonical, DEFAULT_META_DESCRIPTION, homeJsonLd, SITE_TAGLINE } from "@/constants/seo";
+
+const HOME_TITLE = `Ariel Batoon — ${SITE_TAGLINE}`;
 
 export const metadata = {
   title: {
-    absolute: "Ariel Batoon — Full-Stack Software Engineer & Indie Builder",
+    absolute: HOME_TITLE,
   },
-  description:
-    "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.",
+  description: DEFAULT_META_DESCRIPTION,
   alternates: {
-    canonical: "/",
+    canonical: absoluteCanonical("/"),
   },
   openGraph: {
-    title: "Ariel Batoon — Full-Stack Software Engineer & Indie Builder",
-    description:
-      "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.",
-    url: "/",
+    title: HOME_TITLE,
+    description: DEFAULT_META_DESCRIPTION,
+    url: absoluteCanonical("/"),
   },
 };
 

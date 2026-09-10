@@ -1,14 +1,13 @@
 import { Section } from "@/components/common/section";
 import { ContactFormSection } from "@/components/features/public/contact/contact-form-section";
 import { JsonLd } from "@/components/common/json-ld";
-import { contactJsonLd } from "@/constants/seo";
+import { contactJsonLd, absoluteCanonical, absoluteTitle } from "@/constants/seo";
 
 export const metadata = {
-  title: "Contact",
-  description:
-    "Contact Ariel Batoon — send a message or book a discovery call to discuss your project with a Cebu-based full-stack software engineer.",
+  title: absoluteTitle("Contact Ariel Batoon — Hire a Software Engineer in Cebu"),
+  description: "Message Ariel Batoon or book a call to scope your web, mobile, or AI project with a Cebu-based full-stack engineer.",
   alternates: {
-    canonical: "/contact",
+    canonical: absoluteCanonical("/contact"),
   },
 };
 

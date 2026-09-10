@@ -1,13 +1,13 @@
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { JsonLd } from "@/components/common/json-ld";
-import { webPageJsonLd } from "@/constants/seo";
+import { webPageJsonLd, absoluteCanonical, absoluteTitle } from "@/constants/seo";
 
 export const metadata = {
-  title: "Cookies Policy | Ariel Batoon - Software Engineer",
-  description: "Cookies Policy for Ariel Batoon's website. Understand what cookies we use and how to manage them. Last updated July 6, 2026.",
+  title: absoluteTitle("Cookies Policy | Ariel Batoon Software Engineer"),
+  description: "Learn which cookies Ariel Batoon's site uses for preferences and analytics, and how you can manage consent.",
   alternates: {
-    canonical: "/cookies",
+    canonical: absoluteCanonical("/cookies"),
   },
 };
 

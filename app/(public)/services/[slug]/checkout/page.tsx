@@ -2,6 +2,7 @@ import { getServiceBySlugQuery } from "@/data/services";
 import { CheckoutView } from "@/components/features/public/services/checkout-view";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { absoluteCanonical, absoluteTitle, clipMetaDescription } from "@/constants/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -13,14 +14,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!service) {
     return {
-      title: "Service Package Not Found | Software Engineering Cebu",
-      description: "The requested software design pricing package does not exist.",
+      title: absoluteTitle("Checkout Not Found | Ariel Batoon"),
+      description: "The requested checkout page could not be found. Browse available software packages from Ariel Batoon.",
     };
   }
 
+  const path = `/services/${slug}/checkout`;
+  const title = `Checkout ${service.name} | Ariel Batoon`;
+  const description = clipMetaDescription(
+    `Complete your order for the ${service.name} package with Ariel Batoon. Secure checkout for software development services.`
+  );
+
   return {
-    title: `Checkout - ${service.name} | Software Engineering Cebu`,
-    description: `Complete your orders for the ${service.name} package.`,
+    title: absoluteTitle(title),
+    description,
+    alternates: {
+      canonical: absoluteCanonical(path),
+    },
+    openGraph: {
+      title,
+      description,
+      url: absoluteCanonical(path),
+    },
   };
 }
 

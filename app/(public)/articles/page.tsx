@@ -1,6 +1,6 @@
 import { ArticlesArchive } from "@/components/features/public/articles/articles-archive";
 import { JsonLd } from "@/components/common/json-ld";
-import { articlesJsonLd } from "@/constants/seo";
+import { articlesJsonLd, absoluteCanonical, absoluteTitle } from "@/constants/seo";
 import { getArticlesQuery } from "@/data/articles";
 import { getCategoriesQuery } from "@/data/categories";
 import type { Article } from "@/schemas/dashboard";
@@ -8,11 +8,10 @@ import type { Article } from "@/schemas/dashboard";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Articles & Insights",
-  description:
-    "Articles and insights by Ariel Batoon on Next.js, React performance, API architecture, and modern software engineering.",
+  title: absoluteTitle("Articles & Insights by Ariel Batoon — Engineering Blog"),
+  description: "Read Ariel Batoon's practical notes on Next.js, React performance, APIs, and modern full-stack software engineering.",
   alternates: {
-    canonical: "/articles",
+    canonical: absoluteCanonical("/articles"),
   },
 };
 

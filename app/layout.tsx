@@ -7,7 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/context/theme-provider";
 import { CookiesBanner } from "@/components/common/cookies-banner";
 import { QueryProvider } from "@/components/context/query-provider";
-import { OG_IMAGE, SITE_TAGLINE, SITE_URL } from "@/constants/seo";
+import { OG_IMAGE, SITE_TAGLINE, SITE_URL, DEFAULT_META_DESCRIPTION } from "@/constants/seo";
 
 import { Analytics } from "@vercel/analytics/next";
 
@@ -18,9 +18,6 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 });
 
-const DEFAULT_DESCRIPTION =
-  "I'm Ariel Batoon — a full-stack software engineer and indie builder in Cebu City, Philippines. I build scalable AI-powered MVPs, web, and mobile apps worldwide.";
-
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   robots: {
@@ -29,10 +26,10 @@ export const metadata = {
   },
   title: {
     default: `Ariel Batoon — ${SITE_TAGLINE}`,
-    template: "Ariel Batoon — %s",
+    template: "%s",
   },
 
-  description: DEFAULT_DESCRIPTION,
+  description: DEFAULT_META_DESCRIPTION,
 
   keywords: [
     "Ariel Batoon",
@@ -63,17 +60,13 @@ export const metadata = {
   creator: "Ariel Batoon",
   publisher: "Ariel Batoon",
 
-  alternates: {
-    canonical: "/",
-  },
-
   openGraph: {
     type: "website",
     locale: "en_PH",
     url: SITE_URL,
     siteName: "Ariel Batoon",
     title: `Ariel Batoon — ${SITE_TAGLINE}`,
-    description: DEFAULT_DESCRIPTION,
+    description: DEFAULT_META_DESCRIPTION,
     images: [
       {
         url: OG_IMAGE,
@@ -87,7 +80,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: `Ariel Batoon — ${SITE_TAGLINE}`,
-    description: DEFAULT_DESCRIPTION,
+    description: DEFAULT_META_DESCRIPTION,
     creator: "@arielbatoon",
     images: [OG_IMAGE],
   },

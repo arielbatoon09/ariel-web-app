@@ -4,7 +4,7 @@ import { getWorkBySlugQuery, getWorksQuery } from "@/data/works";
 import { getCategoriesQuery } from "@/data/categories";
 import { CaseStudyView } from "@/components/features/public/works/case-study-view";
 import { JsonLd } from "@/components/common/json-ld";
-import { workJsonLd } from "@/constants/seo";
+import { workJsonLd, absoluteCanonical, absoluteTitle, clipMetaDescription } from "@/constants/seo";
 import type { Project } from "@/constants/projects";
 
 interface PageProps {
@@ -29,11 +29,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const project = await getWorkBySlugQuery(resolvedParams.slug);
   if (!project || project.status !== "published") return {};
 
+  const path = `/work/${resolvedParams.slug}`;
+  const title = project.seo?.title || `${project.title} | Case Study by Ariel Batoon`;
+  const description = clipMetaDescription(project.seo?.description || project.description);
+
   const metadata: Metadata = {
-    title: project.seo?.title || `${project.title} | Case Study`,
-    description: project.seo?.description || project.description,
+    title: absoluteTitle(title),
+    description,
     alternates: {
-      canonical: project.seo?.canonicalUrl || `/work/${resolvedParams.slug}`,
+      canonical: absoluteCanonical(project.seo?.canonicalUrl || path),
     },
   };
 
@@ -41,20 +45,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     metadata.keywords = project.seo.keywords.split(",").map((k) => k.trim());
   }
 
-  const ogTitle = project.seo?.ogTitle || project.seo?.title || `${project.title} | Case Study`;
-  const ogDesc = project.seo?.ogDescription || project.seo?.description || project.description;
+  const ogTitle = project.seo?.ogTitle || title;
+  const ogDesc = clipMetaDescription(project.seo?.ogDescription || description);
   const ogImg = project.seo?.ogImage || project.imageSrc;
 
   metadata.openGraph = {
     title: ogTitle,
     description: ogDesc,
     type: "article",
+    url: absoluteCanonical(project.seo?.canonicalUrl || path),
     images: ogImg ? [{ url: ogImg }] : [],
   };
-
-  if (project.seo?.canonicalUrl) {
-    metadata.openGraph.url = project.seo.canonicalUrl;
-  }
 
   return metadata;
 }

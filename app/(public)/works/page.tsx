@@ -1,6 +1,6 @@
 import { WorksArchive } from "@/components/features/public/works/works-archive";
 import { JsonLd } from "@/components/common/json-ld";
-import { worksJsonLd } from "@/constants/seo";
+import { worksJsonLd, absoluteCanonical, absoluteTitle } from "@/constants/seo";
 import { getWorksQuery } from "@/data/works";
 import { getCategoriesQuery } from "@/data/categories";
 import type { Project } from "@/schemas/dashboard";
@@ -8,11 +8,10 @@ import type { Project } from "@/schemas/dashboard";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Works & Projects",
-  description:
-    "Works and projects by Ariel Batoon — SaaS products, performance-driven web apps, and mobile applications shipped for clients worldwide.",
+  title: absoluteTitle("Works & Projects by Ariel Batoon — Software Portfolio"),
+  description: "Browse Ariel Batoon's shipped SaaS products, web platforms, and mobile apps built for clients across the Philippines and abroad.",
   alternates: {
-    canonical: "/works",
+    canonical: absoluteCanonical("/works"),
   },
 };
 

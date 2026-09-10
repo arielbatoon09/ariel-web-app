@@ -6,11 +6,13 @@ import { SectionHeading } from "@/components/common/section-heading";
 import { Button } from "@/components/ui/button";
 import { Layers, ArrowUpRight } from "lucide-react";
 import { useServicesQuery } from "@/hooks/use-services";
+import { useListingLayout } from "@/hooks/use-listing-layout";
 import type { Service } from "@/schemas/dashboard";
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import { ConnectDialog } from "@/components/common/connect-dialog";
-
+import { ArchiveLayoutToggle } from "@/components/common/archive-layout-toggle";
 import { GridCard } from "@/components/common/grid-card";
+import { cn } from "@/lib/utils";
 
 interface ServicesListProps {
   initialServices: Service[];
@@ -18,6 +20,7 @@ interface ServicesListProps {
 
 export function ServicesList({ initialServices }: ServicesListProps) {
   const { data: dbServices = initialServices } = useServicesQuery(initialServices);
+  const { layout, setLayout } = useListingLayout();
 
   const activeServices = useMemo(() => {
     return dbServices.filter((s) => !s.disabled);
@@ -26,18 +29,25 @@ export function ServicesList({ initialServices }: ServicesListProps) {
   return (
     <Section id="services-list" containerClassName="pt-6 md:pt-10 pb-12 md:pb-16" showTopLine={false} showBottomLine={true}>
       <div className="space-y-12">
-        {/* Section Heading */}
         <SectionHeading
           label="Services & Pricing"
           title="Professional software engineering. Tailored to your goals."
           description="Select the scope and pricing model that matches your current product needs. All packages are built using high-performance engineering standards, clean source code, and responsive design."
+          action={<ArchiveLayoutToggle layout={layout} onLayoutChange={setLayout} />}
         />
 
         {activeServices.length > 0 ? (
-          <div className="grid animate-in grid-cols-1 border-t border-l border-dashed border-neutral-300 duration-300 fade-in md:grid-cols-2 dark:border-neutral-700">
+          <div
+            className={cn(
+              "animate-in border-t border-l border-dashed border-neutral-300 duration-300 fade-in dark:border-neutral-700",
+              "grid grid-cols-1",
+              layout === "grid" && "md:grid-cols-2"
+            )}
+          >
             {activeServices.map((pkg) => (
               <GridCard
                 key={pkg.id}
+                variant={layout}
                 title={pkg.name}
                 description={pkg.description}
                 imageSrc={pkg.imageSrc ?? undefined}
