@@ -14,20 +14,24 @@ const globalForDb = globalThis as unknown as {
   pgClient: PgClient | undefined;
 };
 
+const isDev = process.env.NODE_ENV !== "production";
+
 /**
- * Reuse one client across Next.js HMR reloads in dev.
- * Transaction pooler (port 6543): keep max low + prepare: false.
+ * Dev: max 1 + global singleton avoids HMR connection leaks (EMAXCONN).
+ * Prod/build: small pool + connect_timeout so SSG cannot hang for 60s+.
+ * Transaction pooler (6543): prepare must stay false.
  */
 export const client =
   globalForDb.pgClient ??
   postgres(connectionString, {
     prepare: false,
-    max: 1,
+    max: isDev ? 1 : 5,
+    connect_timeout: 10,
     idle_timeout: 20,
     max_lifetime: 60 * 30,
   });
 
-if (process.env.NODE_ENV !== "production") {
+if (isDev) {
   globalForDb.pgClient = client;
 }
 

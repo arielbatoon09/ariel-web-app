@@ -1,6 +1,7 @@
 import { db } from "@/drizzle";
 import { articles } from "@/drizzle/schema";
 import { eq, inArray, desc, asc } from "drizzle-orm";
+import { cache } from "react";
 
 export async function getArticlesQuery() {
   return await db.select().from(articles).orderBy(desc(articles.createdAt));
@@ -15,10 +16,10 @@ export async function getArticleByIdQuery(id: number) {
   return article || null;
 }
 
-export async function getArticleBySlugQuery(slug: string) {
+export const getArticleBySlugQuery = cache(async (slug: string) => {
   const [article] = await db.select().from(articles).where(eq(articles.slug, slug)).limit(1);
   return article || null;
-}
+});
 
 export async function insertArticleQuery(data: typeof articles.$inferInsert) {
   const [inserted] = await db.insert(articles).values(data).returning();

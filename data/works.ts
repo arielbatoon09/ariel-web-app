@@ -1,6 +1,7 @@
 import { db } from "@/drizzle";
 import { works } from "@/drizzle/schema";
 import { eq, inArray, desc, and } from "drizzle-orm";
+import { cache } from "react";
 
 export async function getWorksQuery() {
   return await db.select().from(works).orderBy(desc(works.createdAt));
@@ -23,10 +24,10 @@ export async function getWorkByIdQuery(id: number) {
   return work || null;
 }
 
-export async function getWorkBySlugQuery(slug: string) {
+export const getWorkBySlugQuery = cache(async (slug: string) => {
   const [work] = await db.select().from(works).where(eq(works.slug, slug)).limit(1);
   return work || null;
-}
+});
 
 export async function insertWorkQuery(data: typeof works.$inferInsert) {
   const [inserted] = await db.insert(works).values(data).returning();

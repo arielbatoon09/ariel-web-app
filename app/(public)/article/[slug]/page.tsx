@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getArticleBySlugQuery, getArticlesQuery } from "@/data/articles";
+import { getArticleBySlugQuery } from "@/data/articles";
 import { getCategoriesQuery } from "@/data/categories";
 import { ArticleHero } from "@/components/features/public/articles/article-hero";
 import { ArticleContent } from "@/components/features/public/articles/article-content";
@@ -15,15 +15,12 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const articles = await getArticlesQuery();
-  return articles
-    .filter((a) => a.status === "published")
-    .map((article) => ({
-      slug: article.slug,
-    }));
+  // Same as work pages: avoid 60s SSG timeouts against the Supabase pooler.
+  return [];
 }
 
 export const dynamicParams = true;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;

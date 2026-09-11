@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getWorkBySlugQuery, getWorksQuery } from "@/data/works";
+import { getWorkBySlugQuery } from "@/data/works";
 import { getCategoriesQuery } from "@/data/categories";
 import { CaseStudyView } from "@/components/features/public/works/case-study-view";
 import { JsonLd } from "@/components/common/json-ld";
@@ -14,15 +14,14 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const projects = await getWorksQuery();
-  return projects
-    .filter((p) => p.status === "published")
-    .map((project) => ({
-      slug: project.slug,
-    }));
+  // Skip build-time pre-render: Supabase pooler waits were exceeding Next's 60s
+  // static-generation limit per `/work/[slug]` page. Pages still generate on
+  // first request via dynamicParams + ISR (revalidate).
+  return [];
 }
 
 export const dynamicParams = true;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
