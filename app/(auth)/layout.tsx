@@ -49,6 +49,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                 alt="ab logo"
                 width={200}
                 height={200}
+                style={{ width: "auto" }}
                 priority
               />
               <Image
@@ -57,6 +58,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                 alt="ab logo"
                 width={160}
                 height={160}
+                style={{ width: "auto" }}
                 priority
               />
             </div>

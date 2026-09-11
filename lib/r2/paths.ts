@@ -14,9 +14,7 @@ export function getR2RootPrefix() {
 }
 
 export function buildR2ObjectKey(...segments: (string | number)[]) {
-  const parts = [getR2RootPrefix(), ...segments]
-    .map((segment) => String(segment).replace(/^\/+|\/+$/g, ""))
-    .filter(Boolean);
+  const parts = [getR2RootPrefix(), ...segments].map((segment) => String(segment).replace(/^\/+|\/+$/g, "")).filter(Boolean);
   return parts.join("/");
 }
 

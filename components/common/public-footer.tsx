@@ -30,6 +30,7 @@ export function PublicFooter() {
                   alt="ab logo"
                   width={80}
                   height={80}
+                  style={{ width: "auto" }}
                   priority
                 />
                 <Image
@@ -38,6 +39,7 @@ export function PublicFooter() {
                   alt="ab logo"
                   width={80}
                   height={80}
+                  style={{ width: "auto" }}
                   priority
                 />
               </div>

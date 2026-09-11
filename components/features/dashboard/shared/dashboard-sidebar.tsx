@@ -52,6 +52,7 @@ export function DashboardSidebar({
               alt="ab logo"
               width={60}
               height={60}
+              style={{ width: "auto" }}
               priority
             />
             <Image
@@ -60,6 +61,7 @@ export function DashboardSidebar({
               alt="ab logo"
               width={60}
               height={60}
+              style={{ width: "auto" }}
               priority
             />
           </div>
@@ -108,6 +110,7 @@ export function DashboardSidebar({
                     alt="ab logo"
                     width={80}
                     height={80}
+                    style={{ width: "auto" }}
                     priority
                   />
                   <Image
@@ -116,6 +119,7 @@ export function DashboardSidebar({
                     alt="ab logo"
                     width={80}
                     height={80}
+                    style={{ width: "auto" }}
                     priority
                   />
                 </div>

@@ -42,6 +42,7 @@ export function PublicHeader() {
                 alt="ab logo"
                 width={80}
                 height={80}
+                style={{ width: "auto" }}
                 priority
               />
               <Image
@@ -50,6 +51,7 @@ export function PublicHeader() {
                 alt="ab logo"
                 width={80}
                 height={80}
+                style={{ width: "auto" }}
                 priority
               />
             </div>
@@ -120,6 +122,7 @@ export function PublicHeader() {
                             alt="ab logo"
                             width={80}
                             height={80}
+                            style={{ width: "auto" }}
                             priority
                           />
                           <Image
@@ -128,6 +131,7 @@ export function PublicHeader() {
                             alt="ab logo"
                             width={80}
                             height={80}
+                            style={{ width: "auto" }}
                             priority
                           />
                         </div>

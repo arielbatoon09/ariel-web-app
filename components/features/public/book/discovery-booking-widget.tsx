@@ -152,6 +152,7 @@ export function DiscoveryBookingWidget({ compact = false }: { compact?: boolean 
                 alt="Ariel Batoon logo"
                 width={80}
                 height={48}
+                style={{ width: "auto" }}
                 priority
               />
               <Image
@@ -160,6 +161,7 @@ export function DiscoveryBookingWidget({ compact = false }: { compact?: boolean 
                 alt="Ariel Batoon logo"
                 width={80}
                 height={48}
+                style={{ width: "auto" }}
                 priority
               />
             </div>
