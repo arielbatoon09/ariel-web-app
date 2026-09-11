@@ -355,14 +355,16 @@ export function serviceDetailJsonLd(service: {
   price: number;
   deliveryTime: string;
   imageSrc?: string | null;
+  cardImageSrc?: string | null;
 }) {
+  const image = service.imageSrc || service.cardImageSrc;
   return {
     "@context": "https://schema.org",
     "@type": "Service",
     name: service.name,
     description: service.description,
     provider: { "@id": PERSON_ID },
-    image: service.imageSrc ? absoluteUrl(service.imageSrc) : undefined,
+    image: image ? absoluteUrl(image) : undefined,
     url: `${SITE_URL}/service/${service.slug}`,
     offers: {
       "@type": "Offer",

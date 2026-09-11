@@ -22,6 +22,34 @@
       "when": 1789026627390,
       "tag": "0002_fuzzy_outlaw_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789100000000,
+      "tag": "0003_service_discount",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789144368134,
+      "tag": "0004_striped_senator_kelly",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789145000000,
+      "tag": "0005_service_card_image",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789144949280,
+      "tag": "0006_melted_sister_grimm",
+      "breakpoints": true
     }
   ]
 }

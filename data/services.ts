@@ -26,10 +26,13 @@ export async function insertServiceQuery(data: {
   slug: string;
   description: string;
   price: number;
+  discountType?: "percent" | "fixed" | null;
+  discountValue?: number;
   deliveryTime: string;
   features: string[];
   addOns: Array<{ id: string; name: string; price: number; description: string }>;
   imageSrc?: string | null;
+  cardImageSrc?: string | null;
 }) {
   const [inserted] = await db
     .insert(services)
@@ -38,10 +41,13 @@ export async function insertServiceQuery(data: {
       slug: data.slug,
       description: data.description,
       price: data.price,
+      discountType: data.discountType ?? null,
+      discountValue: data.discountValue ?? 0,
       deliveryTime: data.deliveryTime,
       features: data.features,
       addOns: data.addOns,
       imageSrc: data.imageSrc,
+      cardImageSrc: data.cardImageSrc,
     })
     .returning();
 
@@ -58,10 +64,13 @@ export async function updateServiceQuery(
     slug?: string;
     description?: string;
     price?: number;
+    discountType?: "percent" | "fixed" | null;
+    discountValue?: number;
     deliveryTime?: string;
     features?: string[];
     addOns?: Array<{ id: string; name: string; price: number; description: string }>;
     imageSrc?: string | null;
+    cardImageSrc?: string | null;
     disabled?: boolean;
   }
 ) {

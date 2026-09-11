@@ -15,6 +15,17 @@ import {
 import type { Service } from "@/schemas/dashboard";
 import { revalidateServicesPaths } from "@/lib/revalidate-cms";
 import { redisGet, redisSet, redisDel } from "@/lib/redis";
+import { normalizeDiscountType } from "@/lib/pricing";
+
+function normalizeServiceDiscountFields<T extends { discountType?: unknown; discountValue?: number | null }>(data: T) {
+  if (!("discountType" in data) && !("discountValue" in data)) {
+    return data;
+  }
+
+  const discountType = normalizeDiscountType(data.discountType);
+  const discountValue = discountType ? Math.max(0, Math.round(Number(data.discountValue ?? 0))) : 0;
+  return { ...data, discountType, discountValue };
+}
 
 async function checkAdminAccess() {
   const currentUser = await getCurrentSessionUser();
@@ -49,7 +60,8 @@ export async function getServicesAction() {
     }
 
     const servicesList = await getServicesQuery();
-    await redisSet(cacheKey, servicesList, 3600); // 1 hour TTL
+    // Don't cache forever-ish stale pricing — short TTL so discounts show quickly
+    await redisSet(cacheKey, servicesList, 60);
     return {
       success: true,
       services: servicesList,
@@ -99,7 +111,7 @@ export async function createServiceAction(data: Omit<Service, "id">) {
   }
 
   try {
-    const newService = await insertServiceQuery(data);
+    const newService = await insertServiceQuery(normalizeServiceDiscountFields(data));
     revalidateServicesPaths(newService.slug);
     await invalidateServicesCache();
     return {
@@ -120,7 +132,7 @@ export async function updateServiceAction(id: string, data: Partial<Service>) {
 
   try {
     const existing = await getServiceByIdQuery(id);
-    const updated = await updateServiceQuery(id, data);
+    const updated = await updateServiceQuery(id, normalizeServiceDiscountFields(data));
     if (!updated) {
       return { success: false, error: "Service not found or update failed." };
     }

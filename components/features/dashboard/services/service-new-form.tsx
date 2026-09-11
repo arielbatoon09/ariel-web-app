@@ -1,32 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import { useCreateServiceMutation } from "@/hooks/use-services";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { RichTextarea } from "@/components/ui/textarea";
 import { ArrowLeft, Loader2, Plus, Trash2, Settings } from "lucide-react";
 import { toast } from "sonner";
+import { ServiceImageField } from "@/components/features/dashboard/services/service-image-field";
+import { stripHtml } from "@/lib/pricing";
 
-import { MediaPickerDialog } from "@/components/common/media-picker-dialog";
-
-const serviceFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  slug: z.string().min(2, "Slug must be at least 2 characters."),
-  description: z.string().min(5, "Description must be at least 5 characters."),
-  price: z.number().min(0, "Price must be positive."),
-  deliveryTime: z.string().min(1, "Delivery time is required."),
-  imageSrc: z.string(),
-});
+const serviceFormSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters."),
+    slug: z.string().min(2, "Slug must be at least 2 characters."),
+    description: z.string().refine((v) => stripHtml(v).length >= 5, "Description must be at least 5 characters."),
+    price: z.number().min(0, "Price must be positive."),
+    discountType: z.enum(["none", "percent", "fixed"]),
+    discountValue: z.number().min(0, "Discount must be 0 or greater."),
+    deliveryTime: z.string().min(1, "Delivery time is required."),
+    imageSrc: z.string(),
+    cardImageSrc: z.string(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.discountType === "percent" && data.discountValue > 100) {
+      ctx.addIssue({ code: "custom", message: "Percentage discount cannot exceed 100.", path: ["discountValue"] });
+    }
+    if (data.discountType === "fixed" && data.discountValue >= data.price) {
+      ctx.addIssue({ code: "custom", message: "Sale price must be lower than the base price.", path: ["discountValue"] });
+    }
+  });
 
 export function ServiceNewForm() {
   const router = useRouter();
   const createServiceMutation = useCreateServiceMutation();
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [isBannerPickerOpen, setIsBannerPickerOpen] = useState(false);
+  const [isCardPickerOpen, setIsCardPickerOpen] = useState(false);
 
   // Features state
   const [features, setFeatures] = useState<string[]>(["Custom Web Application", "Responsive Styling", "Database Integration"]);
@@ -38,15 +51,27 @@ export function ServiceNewForm() {
   const [addonPrice, setAddonPrice] = useState<number>(15000);
   const [addonDesc, setAddonDesc] = useState("");
 
+  // Keep latest staged lists available to TanStack Form's onSubmit (avoids stale closures)
+  const featuresRef = useRef(features);
+  const addOnsRef = useRef(addOns);
+
+  useEffect(() => {
+    featuresRef.current = features;
+  }, [features]);
+
+  useEffect(() => {
+    addOnsRef.current = addOns;
+  }, [addOns]);
+
   const handleAddFeature = () => {
     if (newFeatureText.trim()) {
-      setFeatures([...features, newFeatureText.trim()]);
+      setFeatures((prev) => [...prev, newFeatureText.trim()]);
       setNewFeatureText("");
     }
   };
 
   const handleRemoveFeature = (idx: number) => {
-    setFeatures(features.filter((_, i) => i !== idx));
+    setFeatures((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const handleAddAddon = () => {
@@ -60,7 +85,7 @@ export function ServiceNewForm() {
       price: addonPrice,
       description: addonDesc.trim(),
     };
-    setAddOns([...addOns, newAddon]);
+    setAddOns((prev) => [...prev, newAddon]);
     setAddonName("");
     setAddonPrice(15000);
     setAddonDesc("");
@@ -68,7 +93,7 @@ export function ServiceNewForm() {
   };
 
   const handleRemoveAddon = (id: string) => {
-    setAddOns(addOns.filter((a) => a.id !== id));
+    setAddOns((prev) => prev.filter((a) => a.id !== id));
   };
 
   const form = useForm({
@@ -77,8 +102,11 @@ export function ServiceNewForm() {
       slug: "",
       description: "",
       price: 150000,
+      discountType: "none" as "none" | "percent" | "fixed",
+      discountValue: 0,
       deliveryTime: "3 - 4 Weeks",
       imageSrc: "",
+      cardImageSrc: "",
     },
     validators: {
       onSubmit: serviceFormSchema,
@@ -90,10 +118,13 @@ export function ServiceNewForm() {
           slug: value.slug,
           description: value.description,
           price: value.price,
+          discountType: value.discountType === "none" ? null : value.discountType,
+          discountValue: value.discountType === "none" ? 0 : value.discountValue,
           deliveryTime: value.deliveryTime,
-          features: features.filter(Boolean),
-          addOns: addOns,
+          features: featuresRef.current.filter(Boolean),
+          addOns: addOnsRef.current,
           imageSrc: value.imageSrc,
+          cardImageSrc: value.cardImageSrc,
         },
         {
           onSuccess: () => {
@@ -204,16 +235,12 @@ export function ServiceNewForm() {
                     <FieldLabel htmlFor={field.name} className="text-[10px] tracking-widest text-neutral-400 uppercase">
                       Description
                     </FieldLabel>
-                    <textarea
-                      id={field.name}
-                      name={field.name}
+                    <RichTextarea
                       value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
+                      onChange={(val) => field.handleChange(val)}
                       disabled={isPending}
                       placeholder="Write a clear summary of what this package offers..."
-                      rows={4}
-                      className="w-full resize-none rounded-none border border-dashed border-neutral-300 bg-background/50 p-2.5 outline-none focus:border-solid focus:border-neutral-900 dark:border-neutral-700"
+                      className="min-h-[140px] w-full rounded-none border-dashed border-neutral-300 bg-background/50 dark:border-neutral-700"
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
                   </Field>
@@ -221,58 +248,40 @@ export function ServiceNewForm() {
               }}
             </form.Field>
 
-            {/* Image Banner */}
-            <form.Field name="imageSrc">
-              {(field) => (
-                <div className="space-y-2">
-                  <span className="block text-[10px] tracking-widest text-neutral-400 uppercase">Banner Image</span>
-                  {field.state.value ? (
-                    <div className="relative border border-dashed border-neutral-300 bg-background/50 p-2 dark:border-neutral-700">
-                      <div className="relative aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
-                        <Image src={field.state.value} alt="Banner Preview" className="object-cover" fill unoptimized />
-                      </div>
-                      <div className="mt-2 flex items-center gap-1.5 font-mono text-[10px] text-neutral-400">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          onClick={() => setIsPickerOpen(true)}
-                          className="h-7 rounded-none px-2 font-mono text-[9px] text-neutral-500 uppercase hover:bg-neutral-100 hover:text-foreground dark:hover:bg-neutral-800"
-                        >
-                          Change Image
-                        </Button>
-                        <span>|</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          onClick={() => field.handleChange("")}
-                          className="h-7 rounded-none px-2 font-mono text-[9px] text-red-500 uppercase hover:bg-red-500/10 hover:text-red-600"
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => setIsPickerOpen(true)}
-                      className="flex cursor-pointer flex-col items-center justify-center space-y-1.5 border border-dashed border-neutral-300 bg-background/50 py-6 text-center text-neutral-400 hover:border-neutral-500 dark:border-neutral-700"
-                    >
-                      <Plus className="size-4" />
-                      <span className="font-mono text-[9px] tracking-wider uppercase">Select Banner Image</span>
-                    </div>
-                  )}
-
-                  <MediaPickerDialog
-                    open={isPickerOpen}
-                    onOpenChange={setIsPickerOpen}
-                    selectedUrl={field.state.value || ""}
-                    onSelect={(url) => {
-                      field.handleChange(url);
-                      setIsPickerOpen(false);
-                    }}
+            {/* Images */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <form.Field name="imageSrc">
+                {(field) => (
+                  <ServiceImageField
+                    label="Detail Banner"
+                    hint="Used on the package page. Prefer 1254 × 1254."
+                    value={field.state.value}
+                    onChange={(url) => field.handleChange(url)}
+                    open={isBannerPickerOpen}
+                    onOpenChange={setIsBannerPickerOpen}
+                    disabled={isPending}
+                    previewClassName="aspect-[16/10] max-w-full"
+                    emptyLabel="Select Banner Image"
                   />
-                </div>
-              )}
-            </form.Field>
+                )}
+              </form.Field>
+
+              <form.Field name="cardImageSrc">
+                {(field) => (
+                  <ServiceImageField
+                    label="Card Image"
+                    hint="Used on the services listing cards."
+                    value={field.state.value}
+                    onChange={(url) => field.handleChange(url)}
+                    open={isCardPickerOpen}
+                    onOpenChange={setIsCardPickerOpen}
+                    disabled={isPending}
+                    previewClassName="aspect-[16/10] max-w-full"
+                    emptyLabel="Select Card Image"
+                  />
+                )}
+              </form.Field>
+            </div>
 
             <div className="grid grid-cols-2 gap-4">
               {/* Price */}
@@ -324,6 +333,66 @@ export function ServiceNewForm() {
                   );
                 }}
               </form.Field>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <form.Field name="discountType">
+                {(field) => (
+                  <Field>
+                    <FieldLabel htmlFor={field.name} className="text-[10px] tracking-widest text-neutral-400 uppercase">
+                      Discount Type
+                    </FieldLabel>
+                    <select
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => {
+                        const next = e.target.value as "none" | "percent" | "fixed";
+                        field.handleChange(next);
+                        if (next === "none") {
+                          form.setFieldValue("discountValue", 0);
+                        }
+                      }}
+                      disabled={isPending}
+                      className="h-9 w-full rounded-none border border-dashed border-neutral-300 bg-background/50 px-2 font-mono text-xs outline-none focus:border-solid focus:border-neutral-900 dark:border-neutral-700"
+                    >
+                      <option value="none">No discount</option>
+                      <option value="percent">Percentage (%)</option>
+                      <option value="fixed">Fixed sale price (PHP)</option>
+                    </select>
+                  </Field>
+                )}
+              </form.Field>
+
+              <form.Subscribe selector={(state) => state.values.discountType}>
+                {(discountType) => (
+                  <form.Field name="discountValue">
+                    {(field) => {
+                      const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel htmlFor={field.name} className="text-[10px] tracking-widest text-neutral-400 uppercase">
+                            {discountType === "percent" ? "Discount %" : discountType === "fixed" ? "Sale Price (PHP)" : "Discount Value"}
+                          </FieldLabel>
+                          <Input
+                            id={field.name}
+                            name={field.name}
+                            type="number"
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(Number(e.target.value))}
+                            disabled={isPending || discountType === "none"}
+                            placeholder={discountType === "percent" ? "e.g. 15" : "e.g. 7999"}
+                            className="h-9 rounded-none border-dashed border-neutral-300 bg-background/50 focus-visible:border-solid focus-visible:border-neutral-900 focus-visible:ring-0 disabled:opacity-50 dark:border-neutral-700"
+                          />
+                          {isInvalid && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
+                        </Field>
+                      );
+                    }}
+                  </form.Field>
+                )}
+              </form.Subscribe>
             </div>
 
             {/* Features list */}

@@ -20,6 +20,7 @@ import { useAuthStore } from "@/hooks/use-auth-store";
 import { getCurrentUserProfileAction } from "@/services/auth";
 import { ReCaptchaV2 } from "@/components/common/recaptcha-v2";
 import { verifyReCaptchaAction } from "@/services/recaptcha";
+import { formatPhp, getServiceOrderTotal, getServicePricing } from "@/lib/pricing";
 
 interface CheckoutViewProps {
   service: Service;
@@ -50,7 +51,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
   const [customerPhone, setCustomerPhone] = useState("");
   const [requirements, setRequirements] = useState("");
   const [selectedAddons, setSelectedAddons] = useState<string[]>(initialAddons);
-  const [paymentMethod, setPaymentMethod] = useState<"gcash" | "maya" | "bpi" | "wise">("gcash");
+  const [paymentMethod, setPaymentMethod] = useState<"gcash" | "maya" | "wise">("gcash");
   const [referenceNumber, setReferenceNumber] = useState("");
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
 
@@ -92,16 +93,11 @@ export function CheckoutView({ service }: CheckoutViewProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdOrder, setCreatedOrder] = useState<Order | null>(null);
+  const [paidAmount, setPaidAmount] = useState<number | null>(null);
 
-  // Recalculate total amount
-  const totalAmount = useMemo(() => {
-    const base = service.price;
-    const addonsTotal = selectedAddons.reduce((sum, id) => {
-      const addon = service.addOns.find((a) => a.id === id);
-      return sum + (addon?.price || 0);
-    }, 0);
-    return base + addonsTotal;
-  }, [service, selectedAddons]);
+  // Recalculate total amount (discounted base + selected add-ons)
+  const pricing = useMemo(() => getServicePricing(service), [service]);
+  const totalAmount = useMemo(() => getServiceOrderTotal(service, selectedAddons), [service, selectedAddons]);
 
   const toggleAddon = (id: string) => {
     setSelectedAddons((current) => (current.includes(id) ? current.filter((x) => x !== id) : [...current, id]));
@@ -180,35 +176,29 @@ export function CheckoutView({ service }: CheckoutViewProps) {
       // Generate a persistent Order Reference Code for user tracking
       const orderRefCode = `ORD-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
-      // 3. Save order to database
-      const orderRes = await createOrder.mutateAsync({
+      // 3. Save order — server recomputes discounted total from DB (ignore client prices)
+      const { order: created, quote } = await createOrder.mutateAsync({
         serviceId: service.id,
-        serviceName: service.name,
-        serviceBasePrice: service.price,
         customerName,
         customerEmail,
         addOnsSelected: selectedAddons,
-        addOns: selectedAddons.map((id) => {
-          const addon = service.addOns.find((a) => a.id === id);
-          return { name: addon?.name ?? id, price: addon?.price ?? 0 };
-        }),
-        totalAmount,
         recaptchaToken: recaptchaToken || "",
         referenceNumber: orderRefCode,
         customerPhone: customerPhone || undefined,
         requirements: requirements || undefined,
       });
 
-      // 4. Save transaction linked to order
+      // 4. Save transaction linked to order (amount from trusted server quote)
       await createTransaction.mutateAsync({
-        orderId: orderRes.id,
-        amount: totalAmount,
+        orderId: created.id,
+        amount: quote?.totalAmount ?? totalAmount,
         paymentMethod: paymentMethod.toUpperCase(),
         referenceNumber: referenceNumber.trim(),
         screenshotUrl,
       });
 
-      setCreatedOrder(orderRes);
+      setCreatedOrder(created);
+      setPaidAmount(quote?.totalAmount ?? created.totalAmount ?? totalAmount);
       setIsSuccess(true);
     } catch (err: unknown) {
       toast.error(getErrorMessage(err, "Something went wrong during checkout."));
@@ -262,7 +252,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                 )}
                 <div className="flex items-center justify-between">
                   <span>Amount Deposited:</span>
-                  <span className="text-sm font-bold text-foreground">₱{totalAmount.toLocaleString()}</span>
+                  <span className="text-sm font-bold text-foreground">{formatPhp(paidAmount ?? totalAmount)}</span>
                 </div>
                 <div className="flex items-center justify-between border-t border-dashed border-neutral-300 pt-3 dark:border-neutral-700">
                   <span>Account Setup:</span>
@@ -467,12 +457,11 @@ export function CheckoutView({ service }: CheckoutViewProps) {
 
               <div className="space-y-4">
                 <span className="block font-mono text-[9px] tracking-wider text-neutral-400 uppercase">Select Payment Channel</span>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {(
                     [
                       { id: "gcash", label: "GCash" },
                       { id: "maya", label: "Maya" },
-                      { id: "bpi", label: "BPI Bank" },
                       { id: "wise", label: "Wise" },
                     ] as const
                   ).map((method) => (
@@ -499,13 +488,13 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                   {paymentMethod === "gcash" && (
                     <div className="space-y-1">
                       <p>
-                        GCash Account Number: <strong className="text-foreground">0917 123 4567</strong>
-                      </p>
-                      <p>
                         Account Name: <strong className="text-foreground">Ariel Batoon</strong>
                       </p>
+                      <p>
+                        GCash Number: <strong className="text-foreground">0967 421 4639</strong>
+                      </p>
                       <p className="mt-2 text-[10px] text-neutral-400">
-                        Please send the exact amount of <strong>₱{totalAmount.toLocaleString()}</strong>, then copy the Reference Number and
+                        Please send the exact amount of <strong>{formatPhp(totalAmount)}</strong>, then copy the Reference Number and
                         screenshot the receipt.
                       </p>
                     </div>
@@ -513,43 +502,27 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                   {paymentMethod === "maya" && (
                     <div className="space-y-1">
                       <p>
-                        Maya Account Number: <strong className="text-foreground">0917 123 4567</strong>
-                      </p>
-                      <p>
-                        Account Name: <strong className="text-foreground">Ariel Batoon</strong>
-                      </p>
-                      <p className="mt-2 text-[10px] text-neutral-400">
-                        Please transfer <strong>₱{totalAmount.toLocaleString()}</strong> and record your Maya receipt confirmation details.
-                      </p>
-                    </div>
-                  )}
-                  {paymentMethod === "bpi" && (
-                    <div className="space-y-1">
-                      <p>
-                        BPI Account Number: <strong className="text-foreground">1234-5678-90</strong>
-                      </p>
-                      <p>
                         Account Name: <strong className="text-foreground">Ariel Batoon</strong>
                       </p>
                       <p>
-                        Account Type: <strong className="text-foreground">Savings</strong>
+                        Maya Number: <strong className="text-foreground">0967 421 4639</strong>
                       </p>
                       <p className="mt-2 text-[10px] text-neutral-400">
-                        Please transfer BPI-to-BPI or via Instapay. Total: <strong>₱{totalAmount.toLocaleString()}</strong>.
+                        Please transfer <strong>{formatPhp(totalAmount)}</strong> and record your Maya receipt confirmation details.
                       </p>
                     </div>
                   )}
                   {paymentMethod === "wise" && (
                     <div className="space-y-1">
                       <p>
-                        Wise Email: <strong className="text-foreground">arielbatoon09@gmail.com</strong>
-                      </p>
-                      <p>
                         Account Name: <strong className="text-foreground">Ariel Batoon</strong>
                       </p>
+                      <p>
+                        Wise Email: <strong className="text-foreground">info.arielbatoon@gmail.com</strong>
+                      </p>
                       <p className="mt-2 text-[10px] text-neutral-400">
-                        Internationals can send transfer through Wise directly to our local bank or email. Total:{" "}
-                        <strong>₱{totalAmount.toLocaleString()}</strong>.
+                        Internationals can send transfer through Wise to this email. Total:{" "}
+                        <strong>{formatPhp(totalAmount)}</strong>.
                       </p>
                     </div>
                   )}
@@ -614,7 +587,21 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                   </div>
                   <div className="space-y-1">
                     <span className="text-neutral-450">Base Rate</span>
-                    <div className="text-xs font-bold text-foreground">₱{service.price.toLocaleString()}</div>
+                    <div className="space-y-0.5">
+                      {pricing.discounted ? (
+                        <>
+                          <div className="text-[10px] text-neutral-400 line-through">{formatPhp(pricing.listPrice)}</div>
+                          <div className="text-xs font-bold text-foreground">{formatPhp(pricing.basePrice)}</div>
+                          {pricing.discountLabel ? (
+                            <div className="font-mono text-[9px] font-bold tracking-wider text-emerald-600 uppercase dark:text-emerald-400">
+                              {pricing.discountLabel}
+                            </div>
+                          ) : null}
+                        </>
+                      ) : (
+                        <div className="text-xs font-bold text-foreground">{formatPhp(pricing.basePrice)}</div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -629,7 +616,7 @@ export function CheckoutView({ service }: CheckoutViewProps) {
                         return (
                           <div key={id} className="flex items-center justify-between font-sans text-[10px] text-neutral-600 dark:text-neutral-400">
                             <span className="truncate pr-2">✓ {addon.name}</span>
-                            <span className="shrink-0 font-mono font-semibold text-foreground">+₱{addon.price.toLocaleString()}</span>
+                            <span className="shrink-0 font-mono font-semibold text-foreground">+{formatPhp(addon.price)}</span>
                           </div>
                         );
                       })}
@@ -642,9 +629,15 @@ export function CheckoutView({ service }: CheckoutViewProps) {
 
               {/* Checkout Pricing footer */}
               <div className="space-y-4 border-t border-dashed border-neutral-300 pt-4 dark:border-neutral-700">
+                {pricing.discounted ? (
+                  <div className="flex justify-between font-mono text-[10px] text-neutral-400">
+                    <span>Before discount</span>
+                    <span className="line-through">{formatPhp(pricing.listPrice + (totalAmount - pricing.basePrice))}</span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between font-mono text-xs font-bold text-foreground">
                   <span>Investment Total:</span>
-                  <span>₱{totalAmount.toLocaleString()}</span>
+                  <span>{formatPhp(totalAmount)}</span>
                 </div>
 
                 <ReCaptchaV2 onChange={setRecaptchaToken} />

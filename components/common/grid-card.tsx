@@ -9,6 +9,8 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode;
   title?: string;
   description?: string;
+  /** Render `description` as HTML (e.g. package rich text). */
+  descriptionAsHtml?: boolean;
   imageSrc?: string;
   tags?: string[];
   link?: {
@@ -18,7 +20,7 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
   titleClassName?: string;
   descriptionClassName?: string;
   iconClassName?: string;
-  price?: string;
+  price?: React.ReactNode;
   deliveryTime?: string;
   truncate?: boolean;
   showEmptyImageState?: boolean;
@@ -28,6 +30,10 @@ interface GridCardProps extends React.HTMLAttributes<HTMLDivElement> {
   priority?: boolean;
   /** `grid` = stacked card. `list` = horizontal row with image matching content height. */
   variant?: "grid" | "list";
+  /** CSS aspect-ratio for grid images. Defaults to landscape `16/10`. Use `1/1` for square package art. */
+  imageAspectRatio?: string;
+  /** How the image fills the frame. Use `contain` to show the full image without cropping. */
+  imageFit?: "cover" | "contain";
 }
 
 function CardImage({
@@ -37,6 +43,8 @@ function CardImage({
   isList,
   showEmptyImageState,
   priority,
+  imageAspectRatio,
+  imageFit,
 }: {
   imageSrc?: string;
   title?: string;
@@ -44,26 +52,38 @@ function CardImage({
   isList: boolean;
   showEmptyImageState?: boolean;
   priority: boolean;
+  imageAspectRatio: string;
+  imageFit: "cover" | "contain";
 }) {
   if (!imageSrc && !showEmptyImageState) return null;
 
   const shellClass = cn(
     "border-neutral-250 dark:border-neutral-850 relative overflow-hidden rounded border border-dashed",
-    isList ? "h-full min-h-[7.5rem] w-24 sm:w-32 md:w-44 lg:w-52" : "mb-4 aspect-[16/10] w-full bg-neutral-100/50 dark:bg-neutral-900/80"
+    isList
+      ? "h-full min-h-[7.5rem] w-24 sm:w-32 md:w-44 lg:w-52"
+      : "mb-4 w-full bg-neutral-100/50 dark:bg-neutral-900/80"
   );
 
   const media = imageSrc ? (
-    <div className={cn(shellClass, isList && "bg-neutral-100/50 dark:bg-neutral-900/80")}>
-      <Image
-        src={imageSrc}
-        alt={title || ""}
-        fill
-        sizes={isList ? "(max-width: 768px) 128px, 208px" : "(max-width: 768px) 100vw, 33vw"}
-        className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-        priority={priority}
-        loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
-      />
+    <div
+      className={cn(shellClass, isList && "bg-neutral-100/50 dark:bg-neutral-900/80")}
+      style={!isList ? { aspectRatio: imageAspectRatio } : undefined}
+    >
+      <div className={cn("absolute inset-0", imageFit === "contain" && "inset-2")}>
+        <Image
+          src={imageSrc}
+          alt={title || ""}
+          fill
+          sizes={isList ? "(max-width: 768px) 128px, 208px" : "(max-width: 768px) 100vw, 33vw"}
+          className={cn(
+            "object-center",
+            imageFit === "contain" ? "object-contain" : "object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+          )}
+          priority={priority}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+        />
+      </div>
     </div>
   ) : (
     <div
@@ -71,6 +91,7 @@ function CardImage({
         shellClass,
         "flex flex-col items-center justify-center gap-1.5 bg-neutral-100/30 text-neutral-400 select-none dark:bg-neutral-900/40 dark:text-neutral-600"
       )}
+      style={!isList ? { aspectRatio: imageAspectRatio } : undefined}
     >
       <span className="font-mono text-[9px] tracking-wider uppercase">No Banner</span>
     </div>
@@ -93,6 +114,7 @@ export function GridCard({
   icon,
   title,
   description,
+  descriptionAsHtml = false,
   imageSrc,
   tags,
   link,
@@ -109,6 +131,8 @@ export function GridCard({
   children,
   priority = false,
   variant = "grid",
+  imageAspectRatio = "16 / 10",
+  imageFit = "cover",
   ...props
 }: GridCardProps) {
   const isList = variant === "list";
@@ -153,6 +177,8 @@ export function GridCard({
                 isList={isList}
                 showEmptyImageState={showEmptyImageState}
                 priority={priority}
+                imageAspectRatio={imageAspectRatio}
+                imageFit={imageFit}
               />
             </div>
           ) : null}
@@ -201,19 +227,32 @@ export function GridCard({
                     </div>
                   )}
 
-                  {description && (
-                    <p
-                      className={cn(
-                        "text-xs leading-relaxed text-neutral-500 dark:text-neutral-400",
-                        truncate && "line-clamp-4",
-                        isList && !truncate && "line-clamp-3",
-                        !isList && !truncate && "line-clamp-4",
-                        descriptionClassName
-                      )}
-                    >
-                      {description}
-                    </p>
-                  )}
+                  {description &&
+                    (descriptionAsHtml ? (
+                      <div
+                        className={cn(
+                          "prose prose-neutral dark:prose-invert max-w-none text-xs leading-relaxed text-neutral-500 dark:text-neutral-400",
+                          "[&_ol]:my-0 [&_p]:my-0 [&_ul]:my-0 [&_li]:my-0.5 [&_ol]:list-decimal [&_ul]:list-disc",
+                          truncate && "line-clamp-4",
+                          isList && !truncate && "line-clamp-3",
+                          !isList && !truncate && "line-clamp-4",
+                          descriptionClassName
+                        )}
+                        dangerouslySetInnerHTML={{ __html: description }}
+                      />
+                    ) : (
+                      <p
+                        className={cn(
+                          "text-xs leading-relaxed text-neutral-500 dark:text-neutral-400",
+                          truncate && "line-clamp-4",
+                          isList && !truncate && "line-clamp-3",
+                          !isList && !truncate && "line-clamp-4",
+                          descriptionClassName
+                        )}
+                      >
+                        {description}
+                      </p>
+                    ))}
                 </div>
               )}
             </div>

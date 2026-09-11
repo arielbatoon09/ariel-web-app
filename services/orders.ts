@@ -5,12 +5,14 @@ import { getCurrentSessionUser } from "@/data/auth";
 import { getUserByAuthId } from "@/data/users";
 import { getUserRoleByUserId } from "@/data/roles";
 import { getOrdersQuery, getOrderByIdQuery, insertOrderQuery, updateOrderStatusQuery, deleteOrdersQuery } from "@/data/orders";
+import { getServiceByIdQuery } from "@/data/services";
 import { resend } from "@/lib/email";
 import { orderConfirmationHtml, orderConfirmationText } from "@/lib/emails/order-confirmation";
 import { db } from "@/drizzle";
 import { transactions, orders } from "@/drizzle/schema";
 import { eq, desc, or } from "drizzle-orm";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { buildServiceOrderQuote } from "@/lib/pricing";
 import { verifyReCaptchaAction } from "./recaptcha";
 
 async function checkAdminAccess() {
@@ -104,15 +106,12 @@ export async function getOrderByIdAction(id: string) {
 }
 
 // 3. Create order (Public - guest or logged-in user checkout)
+// Prices are computed server-side from the DB service record (client amounts are ignored).
 export async function createOrderAction(data: {
   serviceId: string;
-  serviceName: string;
-  serviceBasePrice: number;
   customerName: string;
   customerEmail: string;
   addOnsSelected: string[];
-  addOns: Array<{ name: string; price: number }>;
-  totalAmount: number;
   recaptchaToken: string;
   referenceNumber?: string;
   customerPhone?: string;
@@ -137,6 +136,17 @@ export async function createOrderAction(data: {
       };
     }
 
+    // 3. Load service + compute trusted quote (discountType percent|fixed from DB)
+    const service = await getServiceByIdQuery(data.serviceId);
+    if (!service) {
+      return { success: false, error: "Service package not found." };
+    }
+    if (service.disabled) {
+      return { success: false, error: "This service package is no longer available." };
+    }
+
+    const quote = buildServiceOrderQuote(service, data.addOnsSelected);
+
     let userId: string | null = null;
     const currentUser = await getCurrentSessionUser();
     if (currentUser) {
@@ -152,8 +162,8 @@ export async function createOrderAction(data: {
       customerName: data.customerName,
       customerEmail: data.customerEmail,
       status: "pending",
-      addOnsSelected: data.addOnsSelected,
-      totalAmount: data.totalAmount,
+      addOnsSelected: quote.addOnsSelected,
+      totalAmount: quote.totalAmount,
       referenceNumber: data.referenceNumber,
       customerPhone: data.customerPhone,
       requirements: data.requirements,
@@ -164,11 +174,11 @@ export async function createOrderAction(data: {
       const emailPayload = {
         customerName: data.customerName,
         customerEmail: data.customerEmail,
-        serviceName: data.serviceName,
-        serviceBasePrice: data.serviceBasePrice,
+        serviceName: quote.serviceName,
+        serviceBasePrice: quote.serviceBasePrice,
         referenceNumber: newOrder.referenceNumber ?? "",
-        totalAmount: data.totalAmount,
-        addOns: data.addOns,
+        totalAmount: quote.totalAmount,
+        addOns: quote.addOns.map(({ name, price }) => ({ name, price })),
         requirements: data.requirements,
         isNewClient: !userId, // treat logged-out users as new clients
       };
@@ -187,6 +197,7 @@ export async function createOrderAction(data: {
     return {
       success: true,
       order: newOrder,
+      quote,
     };
   } catch (err: unknown) {
     return { success: false, error: getErrorMessage(err, "Failed to create order.") };

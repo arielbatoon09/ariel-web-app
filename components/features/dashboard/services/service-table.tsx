@@ -6,6 +6,7 @@ import { DataTable } from "@/components/common/data-table";
 import type { Service } from "@/schemas/dashboard";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { useDashboardStore } from "@/hooks/use-dashboard-store";
+import { stripHtml, getServicePricing } from "@/lib/pricing";
 
 export function ServiceTable() {
   const { setSelectedServiceId, setIsServiceDetailsOpen } = useDashboardStore();
@@ -38,13 +39,32 @@ export function ServiceTable() {
               </span>
             )}
           </div>
-          <p className="line-clamp-2 max-w-md text-xs leading-relaxed text-neutral-400 dark:text-neutral-500">{item.description}</p>
+          <p className="line-clamp-2 max-w-md text-xs leading-relaxed text-neutral-400 dark:text-neutral-500">{stripHtml(item.description)}</p>
         </div>
       ),
     },
     {
       header: "Base Price",
-      accessorKey: (item: Service) => <span className="font-mono text-xs text-foreground">₱{item.price.toLocaleString()}</span>,
+      accessorKey: (item: Service) => {
+        const pricing = getServicePricing(item);
+        return (
+          <div className="space-y-0.5">
+            {pricing.discounted ? (
+              <>
+                <span className="block font-mono text-[10px] text-neutral-400 line-through">₱{pricing.listPrice.toLocaleString()}</span>
+                <span className="font-mono text-xs text-foreground">₱{pricing.basePrice.toLocaleString()}</span>
+                {pricing.discountLabel ? (
+                  <span className="block font-mono text-[9px] font-bold tracking-wider text-emerald-600 uppercase dark:text-emerald-400">
+                    {pricing.discountLabel}
+                  </span>
+                ) : null}
+              </>
+            ) : (
+              <span className="font-mono text-xs text-foreground">₱{item.price.toLocaleString()}</span>
+            )}
+          </div>
+        );
+      },
     },
     {
       header: "Timeline",

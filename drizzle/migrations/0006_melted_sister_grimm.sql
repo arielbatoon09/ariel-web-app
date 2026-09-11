@@ -1,0 +1,1 @@
+ALTER TABLE "services" ADD COLUMN "card_image_src" text;

@@ -103,10 +103,13 @@ export const ServiceSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   description: z.string().min(1, "Description is required"),
   price: z.number().min(0, "Price must be positive"),
+  discountType: z.enum(["percent", "fixed"]).nullable().optional(),
+  discountValue: z.number().min(0).optional().default(0),
   deliveryTime: z.string().min(1, "Delivery time is required"),
   features: z.array(z.string()).min(1, "At least one feature is required"),
   addOns: z.array(ServiceAddOnSchema).default([]),
   imageSrc: z.string().optional().nullable(),
+  cardImageSrc: z.string().optional().nullable(),
   disabled: z.boolean().optional(),
 });
 

@@ -44,13 +44,9 @@ export function useCreateOrderMutation() {
   return useMutation({
     mutationFn: async (data: {
       serviceId: string;
-      serviceName: string;
-      serviceBasePrice: number;
       customerName: string;
       customerEmail: string;
       addOnsSelected: string[];
-      addOns: Array<{ name: string; price: number }>;
-      totalAmount: number;
       recaptchaToken: string;
       referenceNumber?: string;
       customerPhone?: string;
@@ -60,7 +56,7 @@ export function useCreateOrderMutation() {
       if (!res.success || !res.order) {
         throw new Error(res.error || "Failed to submit order.");
       }
-      return res.order;
+      return { order: res.order, quote: res.quote };
     },
     onSuccess: () => {
       toast.success("Order placed successfully!");

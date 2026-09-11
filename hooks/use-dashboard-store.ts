@@ -133,6 +133,8 @@ const INITIAL_SERVICES: Service[] = [
     description:
       "Validate your ideas with a fast-to-market, feature-complete Minimal Viable Product (MVP) designed to impress users and pitch to investors.",
     price: 150000,
+    discountType: null,
+    discountValue: 0,
     deliveryTime: "3 - 4 Weeks",
     features: [
       "Responsive Web App or Hybrid Mobile App",
@@ -153,6 +155,8 @@ const INITIAL_SERVICES: Service[] = [
     description:
       "A full-scale, secure, and highly optimized Software-as-a-Service (SaaS) web application ready for production, high user traffic, and operational scale.",
     price: 350000,
+    discountType: null,
+    discountValue: 0,
     deliveryTime: "6 - 8 Weeks",
     features: [
       "High-performance Next.js or React web application",
@@ -173,6 +177,8 @@ const INITIAL_SERVICES: Service[] = [
     description:
       "Inject intelligent capabilities into your workflow, including vector search engines, retrieval-augmented generation (RAG), and autonomous agents.",
     price: 200000,
+    discountType: null,
+    discountValue: 0,
     deliveryTime: "4 - 6 Weeks",
     features: [
       "Integration of Large Language Models (OpenAI, Gemini, Anthropic)",

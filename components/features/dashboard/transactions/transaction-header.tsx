@@ -6,7 +6,7 @@ export function TransactionHeader() {
   return (
     <ManagementHeader
       title="Transactions Audit"
-      description="Audit incoming receipts, reference numbers, and verification statuses for manual BPI, GCash, Maya, and Wise transfers."
+      description="Audit incoming receipts, reference numbers, and verification statuses for manual GCash, Maya, and Wise transfers."
     />
   );
 }

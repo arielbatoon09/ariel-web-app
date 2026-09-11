@@ -9,6 +9,7 @@ import { Clock, CheckCircle2, ArrowRight, ShieldCheck, Check, Sparkles, Layers }
 import { cn } from "@/lib/utils";
 import { BannerShowcase } from "@/components/common/banner-showcase";
 import { BackButton } from "@/components/common/back-button";
+import { formatPhp, getServiceOrderTotal, getServicePricing } from "@/lib/pricing";
 
 interface ServiceDetailViewProps {
   service: Service;
@@ -17,16 +18,10 @@ interface ServiceDetailViewProps {
 export function ServiceDetailView({ service }: ServiceDetailViewProps) {
   const router = useRouter();
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const pricing = useMemo(() => getServicePricing(service), [service]);
 
-  // Recalculate running total
-  const totalAmount = useMemo(() => {
-    const base = service.price;
-    const addonsTotal = selectedAddons.reduce((sum, id) => {
-      const addon = service.addOns.find((a) => a.id === id);
-      return sum + (addon?.price || 0);
-    }, 0);
-    return base + addonsTotal;
-  }, [service, selectedAddons]);
+  // Recalculate running total (discounted base + selected add-ons)
+  const totalAmount = useMemo(() => getServiceOrderTotal(service, selectedAddons), [service, selectedAddons]);
 
   const toggleAddon = (id: string) => {
     setSelectedAddons((current) => (current.includes(id) ? current.filter((x) => x !== id) : [...current, id]));
@@ -43,7 +38,7 @@ export function ServiceDetailView({ service }: ServiceDetailViewProps) {
         {/* Banner image if configured */}
         {service.imageSrc && (
           <div className="border border-dashed border-neutral-300 p-2 dark:border-neutral-700">
-            <BannerShowcase src={service.imageSrc} alt={`${service.name} Banner`} className="aspect-[16/6] md:aspect-[16/4.5]" />
+            <BannerShowcase src={service.imageSrc} alt={`${service.name} Banner`} fit="contain" className="border-0" />
           </div>
         )}
 
@@ -53,14 +48,14 @@ export function ServiceDetailView({ service }: ServiceDetailViewProps) {
             <span className="border border-dashed border-emerald-500 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-bold tracking-widest text-emerald-500 uppercase">
               Available Package
             </span>
-            <span className="border-neutral-350 text-neutral-450 dark:border-neutral-650 border border-dashed px-2 py-0.5 font-mono text-[10px] uppercase">
-              PKG-{service.id.slice(0, 4)}
-            </span>
           </div>
           <h1 className="bg-gradient-to-r from-foreground to-neutral-500 bg-clip-text font-sans text-2xl font-bold tracking-tight text-foreground text-transparent md:text-4xl">
             {service.name}
           </h1>
-          <p className="max-w-3xl font-sans text-xs leading-relaxed whitespace-pre-wrap text-neutral-500 md:text-sm">{service.description}</p>
+          <div
+            className="prose prose-neutral dark:prose-invert max-w-3xl font-sans text-xs leading-relaxed text-neutral-500 md:text-sm dark:text-neutral-400 [&_li]:my-1 [&_ol]:list-decimal [&_ul]:list-disc"
+            dangerouslySetInnerHTML={{ __html: service.description }}
+          />
         </div>
 
         {/* Specifications Grid */}
@@ -134,7 +129,21 @@ export function ServiceDetailView({ service }: ServiceDetailViewProps) {
                   </div>
                   <div className="space-y-1">
                     <span className="text-neutral-450">Base Rate</span>
-                    <div className="text-xs font-bold text-foreground">₱{service.price.toLocaleString()}</div>
+                    <div className="space-y-0.5">
+                      {pricing.discounted ? (
+                        <>
+                          <div className="text-[10px] text-neutral-400 line-through">{formatPhp(pricing.listPrice)}</div>
+                          <div className="text-xs font-bold text-foreground">{formatPhp(pricing.basePrice)}</div>
+                          {pricing.discountLabel ? (
+                            <div className="font-mono text-[9px] font-bold tracking-wider text-emerald-600 uppercase dark:text-emerald-400">
+                              {pricing.discountLabel}
+                            </div>
+                          ) : null}
+                        </>
+                      ) : (
+                        <div className="text-xs font-bold text-foreground">{formatPhp(pricing.basePrice)}</div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -188,9 +197,17 @@ export function ServiceDetailView({ service }: ServiceDetailViewProps) {
 
               {/* Checkout Pricing footer */}
               <div className="space-y-4 border-t border-dashed border-neutral-300 pt-4 dark:border-neutral-700">
+                {pricing.discounted ? (
+                  <div className="flex justify-between font-mono text-[10px] text-neutral-400">
+                    <span>List price + add-ons</span>
+                    <span className="line-through">
+                      {formatPhp(pricing.listPrice + (totalAmount - pricing.basePrice))}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between font-mono text-xs font-bold text-foreground">
                   <span>Investment Total:</span>
-                  <span>₱{totalAmount.toLocaleString()}</span>
+                  <span>{formatPhp(totalAmount)}</span>
                 </div>
 
                 <Button
